@@ -1,0 +1,557 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2106="http://util.internal.synchronizer.deployment.carbon.wso2.org/xsd" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://org.apache.synapse/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:tns="http://services.synchronizer.deployment.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax2104="http://synchronizer.deployment.carbon.wso2.org/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://services.synchronizer.deployment.carbon.wso2.org">
+    <wsdl:documentation>DeploymentSynchronizerAdmin</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://util.internal.synchronizer.deployment.carbon.wso2.org/xsd">
+            <xs:complexType name="DeploymentSynchronizerConfiguration">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="autoCheckout" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="autoCommit" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="enabled" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="period" type="xs:long"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="repositoryConfigParameters" nillable="true" type="ax2106:RepositoryConfigParameter"/>
+                    <xs:element minOccurs="0" name="repositoryType" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="serverBasedConfiguration" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="useEventing" type="xs:boolean"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="RepositoryConfigParameter">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="masked" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="maxlength" type="xs:int"/>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="required" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="type" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="value" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://synchronizer.deployment.carbon.wso2.org/xsd">
+            <xs:complexType name="DeploymentSynchronizerException">
+                <xs:sequence/>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2107="http://util.internal.synchronizer.deployment.carbon.wso2.org/xsd" xmlns:ax2105="http://synchronizer.deployment.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.synapse/xsd">
+            <xs:import namespace="http://synchronizer.deployment.carbon.wso2.org/xsd"/>
+            <xs:import namespace="http://util.internal.synchronizer.deployment.carbon.wso2.org/xsd"/>
+            <xs:element name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="DeploymentSynchronizerException" nillable="true" type="ax2105:DeploymentSynchronizerException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateSynchronizerForCarbonRepository">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="config" nillable="true" type="ax2107:DeploymentSynchronizerConfiguration"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="synchronizerEnabledForCarbonRepository">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="synchronizerEnabledForCarbonRepositoryResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSynchronizerConfigurationForCarbonRepository">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSynchronizerConfigurationForCarbonRepositoryResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2107:DeploymentSynchronizerConfiguration"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRepositoryTypes">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRepositoryTypesResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getParamsByRepositoryType">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="repositoryType" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getParamsByRepositoryTypeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax2107:RepositoryConfigParameter"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getLastCommitTime">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getLastCommitTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getLastCheckoutTime">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getLastCheckoutTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="enableSynchronizerForCarbonRepository">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="config" nillable="true" type="ax2107:DeploymentSynchronizerConfiguration"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="disableSynchronizerForCarbonRepository">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="commit">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="checkout">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getRepositoryTypesRequest">
+        <wsdl:part name="parameters" element="ns:getRepositoryTypes"/>
+    </wsdl:message>
+    <wsdl:message name="getRepositoryTypesResponse">
+        <wsdl:part name="parameters" element="ns:getRepositoryTypesResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getSynchronizerConfigurationForCarbonRepositoryRequest">
+        <wsdl:part name="parameters" element="ns:getSynchronizerConfigurationForCarbonRepository"/>
+    </wsdl:message>
+    <wsdl:message name="getSynchronizerConfigurationForCarbonRepositoryResponse">
+        <wsdl:part name="parameters" element="ns:getSynchronizerConfigurationForCarbonRepositoryResponse"/>
+    </wsdl:message>
+    <wsdl:message name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+        <wsdl:part name="parameters" element="ns:DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+    </wsdl:message>
+    <wsdl:message name="updateSynchronizerForCarbonRepositoryRequest">
+        <wsdl:part name="parameters" element="ns:updateSynchronizerForCarbonRepository"/>
+    </wsdl:message>
+    <wsdl:message name="disableSynchronizerForCarbonRepositoryRequest">
+        <wsdl:part name="parameters" element="ns:disableSynchronizerForCarbonRepository"/>
+    </wsdl:message>
+    <wsdl:message name="checkoutRequest">
+        <wsdl:part name="parameters" element="ns:checkout"/>
+    </wsdl:message>
+    <wsdl:message name="synchronizerEnabledForCarbonRepositoryRequest">
+        <wsdl:part name="parameters" element="ns:synchronizerEnabledForCarbonRepository"/>
+    </wsdl:message>
+    <wsdl:message name="synchronizerEnabledForCarbonRepositoryResponse">
+        <wsdl:part name="parameters" element="ns:synchronizerEnabledForCarbonRepositoryResponse"/>
+    </wsdl:message>
+    <wsdl:message name="commitRequest">
+        <wsdl:part name="parameters" element="ns:commit"/>
+    </wsdl:message>
+    <wsdl:message name="getParamsByRepositoryTypeRequest">
+        <wsdl:part name="parameters" element="ns:getParamsByRepositoryType"/>
+    </wsdl:message>
+    <wsdl:message name="getParamsByRepositoryTypeResponse">
+        <wsdl:part name="parameters" element="ns:getParamsByRepositoryTypeResponse"/>
+    </wsdl:message>
+    <wsdl:message name="enableSynchronizerForCarbonRepositoryRequest">
+        <wsdl:part name="parameters" element="ns:enableSynchronizerForCarbonRepository"/>
+    </wsdl:message>
+    <wsdl:message name="getLastCheckoutTimeRequest">
+        <wsdl:part name="parameters" element="ns:getLastCheckoutTime"/>
+    </wsdl:message>
+    <wsdl:message name="getLastCheckoutTimeResponse">
+        <wsdl:part name="parameters" element="ns:getLastCheckoutTimeResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getLastCommitTimeRequest">
+        <wsdl:part name="parameters" element="ns:getLastCommitTime"/>
+    </wsdl:message>
+    <wsdl:message name="getLastCommitTimeResponse">
+        <wsdl:part name="parameters" element="ns:getLastCommitTimeResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="DeploymentSynchronizerAdminPortType">
+        <wsdl:operation name="getRepositoryTypes">
+            <wsdl:input message="tns:getRepositoryTypesRequest" wsaw:Action="urn:getRepositoryTypes"/>
+            <wsdl:output message="tns:getRepositoryTypesResponse" wsaw:Action="urn:getRepositoryTypesResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getSynchronizerConfigurationForCarbonRepository">
+            <wsdl:input message="tns:getSynchronizerConfigurationForCarbonRepositoryRequest" wsaw:Action="urn:getSynchronizerConfigurationForCarbonRepository"/>
+            <wsdl:output message="tns:getSynchronizerConfigurationForCarbonRepositoryResponse" wsaw:Action="urn:getSynchronizerConfigurationForCarbonRepositoryResponse"/>
+            <wsdl:fault message="tns:DeploymentSynchronizerAdminDeploymentSynchronizerException" name="DeploymentSynchronizerAdminDeploymentSynchronizerException" wsaw:Action="urn:getSynchronizerConfigurationForCarbonRepositoryDeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateSynchronizerForCarbonRepository">
+            <wsdl:input message="tns:updateSynchronizerForCarbonRepositoryRequest" wsaw:Action="urn:updateSynchronizerForCarbonRepository"/>
+            <wsdl:fault message="tns:DeploymentSynchronizerAdminDeploymentSynchronizerException" name="DeploymentSynchronizerAdminDeploymentSynchronizerException" wsaw:Action="urn:updateSynchronizerForCarbonRepositoryDeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+        </wsdl:operation>
+        <wsdl:operation name="disableSynchronizerForCarbonRepository">
+            <wsdl:input message="tns:disableSynchronizerForCarbonRepositoryRequest" wsaw:Action="urn:disableSynchronizerForCarbonRepository"/>
+            <wsdl:fault message="tns:DeploymentSynchronizerAdminDeploymentSynchronizerException" name="DeploymentSynchronizerAdminDeploymentSynchronizerException" wsaw:Action="urn:disableSynchronizerForCarbonRepositoryDeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+        </wsdl:operation>
+        <wsdl:operation name="checkout">
+            <wsdl:input message="tns:checkoutRequest" wsaw:Action="urn:checkout"/>
+            <wsdl:fault message="tns:DeploymentSynchronizerAdminDeploymentSynchronizerException" name="DeploymentSynchronizerAdminDeploymentSynchronizerException" wsaw:Action="urn:checkoutDeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+        </wsdl:operation>
+        <wsdl:operation name="synchronizerEnabledForCarbonRepository">
+            <wsdl:input message="tns:synchronizerEnabledForCarbonRepositoryRequest" wsaw:Action="urn:synchronizerEnabledForCarbonRepository"/>
+            <wsdl:output message="tns:synchronizerEnabledForCarbonRepositoryResponse" wsaw:Action="urn:synchronizerEnabledForCarbonRepositoryResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="commit">
+            <wsdl:input message="tns:commitRequest" wsaw:Action="urn:commit"/>
+            <wsdl:fault message="tns:DeploymentSynchronizerAdminDeploymentSynchronizerException" name="DeploymentSynchronizerAdminDeploymentSynchronizerException" wsaw:Action="urn:commitDeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getParamsByRepositoryType">
+            <wsdl:input message="tns:getParamsByRepositoryTypeRequest" wsaw:Action="urn:getParamsByRepositoryType"/>
+            <wsdl:output message="tns:getParamsByRepositoryTypeResponse" wsaw:Action="urn:getParamsByRepositoryTypeResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="enableSynchronizerForCarbonRepository">
+            <wsdl:input message="tns:enableSynchronizerForCarbonRepositoryRequest" wsaw:Action="urn:enableSynchronizerForCarbonRepository"/>
+            <wsdl:fault message="tns:DeploymentSynchronizerAdminDeploymentSynchronizerException" name="DeploymentSynchronizerAdminDeploymentSynchronizerException" wsaw:Action="urn:enableSynchronizerForCarbonRepositoryDeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getLastCheckoutTime">
+            <wsdl:input message="tns:getLastCheckoutTimeRequest" wsaw:Action="urn:getLastCheckoutTime"/>
+            <wsdl:output message="tns:getLastCheckoutTimeResponse" wsaw:Action="urn:getLastCheckoutTimeResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getLastCommitTime">
+            <wsdl:input message="tns:getLastCommitTimeRequest" wsaw:Action="urn:getLastCommitTime"/>
+            <wsdl:output message="tns:getLastCommitTimeResponse" wsaw:Action="urn:getLastCommitTimeResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="DeploymentSynchronizerAdminSoap11Binding" type="tns:DeploymentSynchronizerAdminPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getRepositoryTypes">
+            <soap:operation soapAction="urn:getRepositoryTypes" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSynchronizerConfigurationForCarbonRepository">
+            <soap:operation soapAction="urn:getSynchronizerConfigurationForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="updateSynchronizerForCarbonRepository">
+            <soap:operation soapAction="urn:updateSynchronizerForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="disableSynchronizerForCarbonRepository">
+            <soap:operation soapAction="urn:disableSynchronizerForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="checkout">
+            <soap:operation soapAction="urn:checkout" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="synchronizerEnabledForCarbonRepository">
+            <soap:operation soapAction="urn:synchronizerEnabledForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="commit">
+            <soap:operation soapAction="urn:commit" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getParamsByRepositoryType">
+            <soap:operation soapAction="urn:getParamsByRepositoryType" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="enableSynchronizerForCarbonRepository">
+            <soap:operation soapAction="urn:enableSynchronizerForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getLastCheckoutTime">
+            <soap:operation soapAction="urn:getLastCheckoutTime" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getLastCommitTime">
+            <soap:operation soapAction="urn:getLastCommitTime" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="DeploymentSynchronizerAdminSoap12Binding" type="tns:DeploymentSynchronizerAdminPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getRepositoryTypes">
+            <soap12:operation soapAction="urn:getRepositoryTypes" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSynchronizerConfigurationForCarbonRepository">
+            <soap12:operation soapAction="urn:getSynchronizerConfigurationForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap12:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="updateSynchronizerForCarbonRepository">
+            <soap12:operation soapAction="urn:updateSynchronizerForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap12:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="disableSynchronizerForCarbonRepository">
+            <soap12:operation soapAction="urn:disableSynchronizerForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap12:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="checkout">
+            <soap12:operation soapAction="urn:checkout" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap12:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="synchronizerEnabledForCarbonRepository">
+            <soap12:operation soapAction="urn:synchronizerEnabledForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="commit">
+            <soap12:operation soapAction="urn:commit" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap12:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getParamsByRepositoryType">
+            <soap12:operation soapAction="urn:getParamsByRepositoryType" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="enableSynchronizerForCarbonRepository">
+            <soap12:operation soapAction="urn:enableSynchronizerForCarbonRepository" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DeploymentSynchronizerAdminDeploymentSynchronizerException">
+                <soap12:fault use="literal" name="DeploymentSynchronizerAdminDeploymentSynchronizerException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getLastCheckoutTime">
+            <soap12:operation soapAction="urn:getLastCheckoutTime" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getLastCommitTime">
+            <soap12:operation soapAction="urn:getLastCommitTime" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="DeploymentSynchronizerAdminHttpBinding" type="tns:DeploymentSynchronizerAdminPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="getRepositoryTypes">
+            <http:operation location="getRepositoryTypes"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSynchronizerConfigurationForCarbonRepository">
+            <http:operation location="getSynchronizerConfigurationForCarbonRepository"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="updateSynchronizerForCarbonRepository">
+            <http:operation location="updateSynchronizerForCarbonRepository"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="disableSynchronizerForCarbonRepository">
+            <http:operation location="disableSynchronizerForCarbonRepository"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="checkout">
+            <http:operation location="checkout"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="synchronizerEnabledForCarbonRepository">
+            <http:operation location="synchronizerEnabledForCarbonRepository"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="commit">
+            <http:operation location="commit"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getParamsByRepositoryType">
+            <http:operation location="getParamsByRepositoryType"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="enableSynchronizerForCarbonRepository">
+            <http:operation location="enableSynchronizerForCarbonRepository"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getLastCheckoutTime">
+            <http:operation location="getLastCheckoutTime"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getLastCommitTime">
+            <http:operation location="getLastCommitTime"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="DeploymentSynchronizerAdmin">
+        <wsdl:port name="DeploymentSynchronizerAdminHttpsSoap11Endpoint" binding="tns:DeploymentSynchronizerAdminSoap11Binding">
+            <soap:address location="https://localhost:8243/services/DeploymentSynchronizerAdmin.DeploymentSynchronizerAdminHttpsSoap11Endpoint"/>
+        </wsdl:port>
+        <wsdl:port name="DeploymentSynchronizerAdminHttpsSoap12Endpoint" binding="tns:DeploymentSynchronizerAdminSoap12Binding">
+            <soap12:address location="https://localhost:8243/services/DeploymentSynchronizerAdmin.DeploymentSynchronizerAdminHttpsSoap12Endpoint"/>
+        </wsdl:port>
+        <wsdl:port name="DeploymentSynchronizerAdminHttpsEndpoint" binding="tns:DeploymentSynchronizerAdminHttpBinding">
+            <http:address location="https://localhost:8243/services/DeploymentSynchronizerAdmin.DeploymentSynchronizerAdminHttpsEndpoint"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<html>
+    <head>
+        <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
+        <title>Service Discovery Admin UI - User Guide</title>
+        <link href="../../admin/css/documentation.css" rel="stylesheet" type="text/css" media="all"/>
+    </head>
+    <body>
+        <h1>Service Discovery (WS-Discovery)</h1>
+        <p>
+            Web Services Dynamic Discovery protocol (WS-Discovery) is a standard mechanism for locating
+            services and service endpoints in a SOA. The simplest and most common scenario for WS-Discovery
+            is a Web Services client searching for one or more target services. The protocol specification
+            outlines two modes of operation for WS-Discovery.
+        </p>
+        <ul>
+            <li>Ad-hoc mode: Uses UDP multicast to advertise and discover services</li>
+            <li>Managed mode: Uses HTTP unicast to advertise and discover services</li>
+        </ul>
+        <p>
+            WSO2 Carbon provides a complete implementation of the WS-Discovery managed mode. With WS-Discovery
+            components for WSO2 Carbon, any Carbon server can act as a WS-Discovery client, a WS-Discovery proxy
+            or a WS-Discovery target service. Discovered services and related metadata are stored in a governance
+            registry using governance interface of WSO2 Carbon. Therefore such information is also accessible via
+            the service governance UI of Carbon as well.
+        </p>
+        <p></p>
+        <h2>
+            WS-Discovery Admin UI
+        </h2>
+        <p>
+            The WS-Discovery Admin UI for Carbon can be used to enable or disable WS-Discovery in server
+            applications which hosts web services. Once WS-Discovery has been enabled in a server product,
+            it will start publishing its service information to the specified WS-Discovery proxy. Whenever
+            a service gets updated or undeployed, the service state information will be sent to the discovery
+            proxy. Also when the server is shutdown, a series of status messages (BYE messages) are sent to
+            the discovery proxy. This ensures that the information stored in the WS-Discovery proxy are in-sync
+            with the actual staes of the services and endpoints.
+        </p>
+        <p>
+            If the specified WS-Discovery proxy cannot be reached for some reasons, the server will throw some
+            exceptions, but the server along with all the deployed services will continue to function as
+            usual. WS-Discovery does not get in the way of regular server operations.
+        </p>
+        <p>
+            To access the Service Discovery Admin UI select Configure > Service Discovery from the left
+            navigation panel of the Carbon management console. The following page will be displayed.
+        </p>
+        <div class="image">
+            <img src="images/service_discovery.png" alt="Service Discovery"/>
+        </div>
+        <p>Figure 1: Service Discovery Admin UI</p>
+        <p></p>
+        <h2>
+            Enabling Service Discovery
+        </h2>
+        <p>
+            To enable WS-Discovery for the server, simply enter the URL (endpoint) of the remote
+            discovery proxy and click on "Enable". This will immediately activate service discovery
+            mode and a series of HELLO messages will be sent to the specified discovery proxy. From
+            here onwards all the service state updates will be communicated to the discovery proxy.
+        </p>
+        <p>
+            The "Discovery Proxy Status" field indicates whether the specified discovery proxy
+            is reachable or not. 
+        </p>
+        <h2>
+            Disabling Service Discovery
+        </h2>
+        <p>
+            Click on the "Disable" button to stop service discovery. If you also checked the "Send
+            BYE on Disable" checkbox, a series of BYE messages will be sent to the discovery proxy.
+        </p>
+        <div class="image">
+            <img src="images/discovery_enabled.png" alt="Disable Service Discovery"/>
+        </div>
+        <p>Figure 2: Service Discovery Admin UI (Enabled)</p>
+    </body>
+</html>

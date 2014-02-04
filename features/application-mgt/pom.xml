@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ ~ Copyright (c) WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~      http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+-->
+        
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.wso2.carbon</groupId>
+        <artifactId>carbon-features</artifactId>
+        <version>4.3.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>application-mgt-features</artifactId>
+    <packaging>pom</packaging>
+    <name>WSO2 Carbon - Application Management Feature Aggregator Module</name>
+    <url>http://wso2.org</url>
+
+            <modules>
+                <module>org.wso2.carbon.application.mgt.server.feature</module>
+                <module>org.wso2.carbon.application.mgt.ui.feature</module>
+                <module>org.wso2.carbon.application.mgt.feature</module>
+		<module>org.wso2.carbon.application.mgt.webapp.server.feature</module>
+                <module>org.wso2.carbon.application.mgt.webapp.ui.feature</module>
+                <module>org.wso2.carbon.application.mgt.webapp.feature</module>
+
+<!--                <module>org.wso2.carbon.application.mgt.synapse.server.feature</module>
+                <module>org.wso2.carbon.application.mgt.synapse.ui.feature</module>
+                <module>org.wso2.carbon.application.mgt.synapse.feature</module>
+                <module>org.wso2.carbon.application.mgt.bpel.server.feature</module>
+                <module>org.wso2.carbon.application.mgt.bpel.ui.feature</module>
+                <module>org.wso2.carbon.application.mgt.bpel.feature</module>
+                <module>org.wso2.carbon.application.mgt.humantask.server.feature</module>
+                <module>org.wso2.carbon.application.mgt.humantask.ui.feature</module>
+                <module>org.wso2.carbon.application.mgt.humantask.feature</module>
+-->
+            </modules>
+
+    <dependencyManagement>
+        <dependencies>
+	    	<dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.bpel.skeleton</artifactId>
+                <version>${wso2carbon.version.bpel}</version>
+            </dependency>
+	    	<dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.humantask.skeleton</artifactId>
+                <version>${wso2carbon.version.humantask}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.upload</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.ui</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.stub</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.synapse</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.synapse.ui</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.synapse.stub</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.bpel</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.bpel.ui</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.bpel.stub</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.humantask</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.humantask.ui</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.humantask.stub</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+	    <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.webapp</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.webapp.ui</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.mgt.webapp.stub</artifactId>
+                <version>${wso2carbon.version.app-mgt}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <properties>
+        <wso2carbon.version.app-mgt>${wso2carbon.version}</wso2carbon.version.app-mgt>
+	    <wso2carbon.version.bpel>${wso2carbon.version}</wso2carbon.version.bpel>
+		<wso2carbon.version.humantask>${wso2carbon.version}</wso2carbon.version.humantask>
+    </properties>
+
+</project>
+
