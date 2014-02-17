@@ -21,8 +21,9 @@
 
     <parent>
         <groupId>org.wso2.carbon</groupId>
-        <artifactId>carbon-features</artifactId>
+        <artifactId>carbon-commons</artifactId>
         <version>4.3.0-SNAPSHOT</version>
+	<relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -39,7 +40,7 @@
                 <module>org.wso2.carbon.application.mgt.webapp.ui.feature</module>
                 <module>org.wso2.carbon.application.mgt.webapp.feature</module>
 
-<!--                <module>org.wso2.carbon.application.mgt.synapse.server.feature</module>
+                <module>org.wso2.carbon.application.mgt.synapse.server.feature</module>
                 <module>org.wso2.carbon.application.mgt.synapse.ui.feature</module>
                 <module>org.wso2.carbon.application.mgt.synapse.feature</module>
                 <module>org.wso2.carbon.application.mgt.bpel.server.feature</module>
@@ -48,109 +49,83 @@
                 <module>org.wso2.carbon.application.mgt.humantask.server.feature</module>
                 <module>org.wso2.carbon.application.mgt.humantask.ui.feature</module>
                 <module>org.wso2.carbon.application.mgt.humantask.feature</module>
--->
+
             </modules>
 
-    <dependencyManagement>
         <dependencies>
 	    	<dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.bpel.skeleton</artifactId>
-                <version>${wso2carbon.version.bpel}</version>
             </dependency>
 	    	<dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.humantask.skeleton</artifactId>
-                <version>${wso2carbon.version.humantask}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.upload</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.ui</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.stub</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.synapse</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.synapse.ui</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.synapse.stub</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.bpel</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.bpel.ui</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.bpel.stub</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.humantask</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.humantask.ui</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.humantask.stub</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
 	    <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.webapp</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.webapp.ui</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.webapp.stub</artifactId>
-                <version>${wso2carbon.version.app-mgt}</version>
             </dependency>
         </dependencies>
-    </dependencyManagement>
-
-    <properties>
-        <wso2carbon.version.app-mgt>${wso2carbon.version}</wso2carbon.version.app-mgt>
-	    <wso2carbon.version.bpel>${wso2carbon.version}</wso2carbon.version.bpel>
-		<wso2carbon.version.humantask>${wso2carbon.version}</wso2carbon.version.humantask>
-    </properties>
 
 </project>
 

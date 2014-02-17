@@ -21,8 +21,9 @@
 
     <parent>
         <groupId>org.wso2.carbon</groupId>
-        <artifactId>carbon-components</artifactId>
+        <artifactId>carbon-commons</artifactId>
         <version>4.3.0-SNAPSHOT</version>
+	<relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -35,65 +36,46 @@
                 <module>org.wso2.carbon.discovery.admin.ui</module>
                 <module>org.wso2.carbon.discovery.core</module>
 		<module>org.wso2.carbon.discovery.ui</module>
-<!--
                 <module>org.wso2.carbon.discovery.proxy</module>
 		<module>org.wso2.carbon.discovery.mediation.ext</module>
                 <module>org.wso2.carbon.discovery.module</module>
--->
             </modules>
 
-    <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.apache.ws.commons.axiom</groupId>
                 <artifactId>axiom-api</artifactId>
-                <version>${axiom.version.ws-discovery}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.core</artifactId>
-                <version>${wso2carbon.version.ws-discovery}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.utils</artifactId>
-                <version>${wso2carbon.version.ws-discovery}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.ui</artifactId>
-                <version>${wso2carbon.version.ws-discovery}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.mediation.registry</artifactId>
-                <version>${wso2carbon.version.ws-discovery}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.governance.api</artifactId>
-                <version>${wso2carbon.version.ws-discovery}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.rampart.wso2</groupId>
                 <artifactId>rampart-core</artifactId>
-                <version>${rampart.version.ws-discovery}</version>
             </dependency>
             <dependency>
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
-                <version>${xmlunit.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
-    </dependencyManagement>
-
-    <properties>
-        <wso2carbon.version.ws-discovery>${wso2carbon.version}</wso2carbon.version.ws-discovery>
-        <axiom.version.ws-discovery>${axiom.version}</axiom.version.ws-discovery>
-        <rampart.version.ws-discovery>${rampart.wso2.version}</rampart.version.ws-discovery>
-        <xmlunit.version>1.1</xmlunit.version>
-    </properties>
 
 </project>
 

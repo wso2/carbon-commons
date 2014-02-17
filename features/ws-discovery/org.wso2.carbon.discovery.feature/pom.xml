@@ -38,31 +38,31 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.core.feature</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
+	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.ui.feature</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
+	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
 	<dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.proxy.feature</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
+	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.client.feature</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
+	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
 	<dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.mediation.ext.feature</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
+	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
     </dependencies>
@@ -85,10 +85,10 @@
                             <propertiesFile>../../../etc/feature.properties</propertiesFile>
                             <includedFeatures>
                                 <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.discovery.core.feature</includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.discovery.ui.feature:4.3.0-SNAPSHOT</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.discovery.ui.feature:${project.version}</includedFeatureDef>
 				<includedFeatureDef>org.wso2.carbon:org.wso2.carbon.discovery.proxy.feature</includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.discovery.client.feature:${wso2carbon.version.discovery}</includedFeatureDef>
-				<includedFeatureDef>org.wso2.carbon:org.wso2.carbon.discovery.mediation.ext.feature:${wso2carbon.version.discovery}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.discovery.client.feature:${project.version}</includedFeatureDef>
+				<includedFeatureDef>org.wso2.carbon:org.wso2.carbon.discovery.mediation.ext.feature:${project.version}</includedFeatureDef>
                             </includedFeatures>
                         </configuration>
                     </execution>

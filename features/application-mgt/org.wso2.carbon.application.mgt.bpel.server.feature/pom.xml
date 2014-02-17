@@ -41,12 +41,10 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.bpel</artifactId>
-            <version>${wso2carbon.version}</version>
         </dependency>
 	<dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.bpel.skeleton</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
     
@@ -74,7 +72,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.application.mgt.bpel</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.bpel.skeleton:${wso2carbon.version.4.3.0-SNAPSHOT}</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.bpel.skeleton:${previous.version}</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>
@@ -87,7 +85,4 @@
             </plugin>
         </plugins>
     </build>
-	<properties>
-		<wso2carbon.version.4.3.0-SNAPSHOT>4.3.0-SNAPSHOT</wso2carbon.version.4.3.0-SNAPSHOT>
-	</properties>
 </project>
