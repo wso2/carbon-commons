@@ -156,7 +156,7 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.mediation.initializer</artifactId>
-            <version>${previous.version}</version>
+            <version>4.2.2</version>
         </dependency>
 
 	<dependency>
