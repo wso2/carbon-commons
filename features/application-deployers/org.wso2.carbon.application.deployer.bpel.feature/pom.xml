@@ -38,7 +38,6 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.deployer.bpel</artifactId>
-            <version>${app-deployer.bpel.version}</version>
         </dependency>
     </dependencies>
     
@@ -73,8 +72,5 @@
         </plugins>
     </build>
 
-    <properties>
-        <app-deployer.bpel.version>4.3.0-SNAPSHOT</app-deployer.bpel.version>
-    </properties>
 
 </project>

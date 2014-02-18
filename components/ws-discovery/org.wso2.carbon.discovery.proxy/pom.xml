@@ -68,21 +68,15 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.core</artifactId>
-            <version>${carbon.platform.version}</version>
         </dependency>
         <dependency>
              <groupId>org.wso2.carbon</groupId>
              <artifactId>org.wso2.carbon.utils</artifactId>
-             <version>${carbon.platform.version}</version>
          </dependency>
     </dependencies>
     
-    <properties>
-        <carbon.platform.patch.version.421>4.3.0-SNAPSHOT</carbon.platform.patch.version.421>
-    </properties>
 </project>

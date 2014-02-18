@@ -37,7 +37,6 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.deployer.bam</artifactId>
-            <version>${app-deployer.bam.version}</version>
         </dependency>
     </dependencies>
     
@@ -72,8 +71,5 @@
         </plugins>
     </build>
 
-    <properties>
-        <app-deployer.bam.version>${wso2carbon.version}</app-deployer.bam.version>
-    </properties>
 
 </project>

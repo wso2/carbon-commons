@@ -37,7 +37,6 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.deployer.cep</artifactId>
-            <version>${app-deployer.cep.version}</version>
         </dependency>
     </dependencies>
 
@@ -72,8 +71,5 @@
         </plugins>
     </build>
 
-    <properties>
-        <app-deployer.cep.version>${project.version}</app-deployer.cep.version>
-    </properties>
 
 </project>

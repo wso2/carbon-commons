@@ -187,6 +187,19 @@
 
 	<dependency>
             <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.deployer.brs</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+	<dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.deployer.gadget</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+	<dependency>
+            <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.bpel.skeleton</artifactId>
             <version>${older.version}</version>
         </dependency>
@@ -201,6 +214,24 @@
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.deployer.humantask</artifactId>
 	    <version>${previous.version}</version>
+        </dependency>
+
+	<dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.deployer.cep</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+	<dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.deployer.bam</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+	<dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.deployer.mashup</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -372,7 +403,7 @@
 	    <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.discovery.core</artifactId>
-                <version>${older.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -600,7 +631,7 @@
         <axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
 
         <carbon.p2.plugin.version>1.5.3</carbon.p2.plugin.version>
-	<wso2carbon.version.svnclient>1.6.18.wso2v1</wso2carbon.version.svnclient>
+	<wso2carbon.version.svnclient>1.6.18.wso2v2</wso2carbon.version.svnclient>
 	<xmlunit.version>1.1</xmlunit.version>
 
         <!-- Carbon platform version comes here-->
