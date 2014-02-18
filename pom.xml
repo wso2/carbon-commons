@@ -399,11 +399,33 @@
                 <artifactId>org.wso2.carbon.discovery.stub</artifactId>
                 <version>${project.version}</version>
             </dependency>
+	   <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.adc.repositoryinformation.service.stub</artifactId>
+		<version>${project.version}</version>
+        </dependency>
+
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.discovery.admin.ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
+	   <dependency>
+            <groupId>org.eclipse.jgit.wso2</groupId>
+            <artifactId>org.eclipse.jgit</artifactId>
+            <version>2.3.1.wso2v2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.49.wso2v1</version>
+        </dependency>
+ <dependency>
+            <groupId>com.gitblit</groupId>
+            <artifactId>gitblit</artifactId>
+            <version>1.2.0.wso2v1</version>
+        </dependency>
+
         </dependencies>
     </dependencyManagement>
 
