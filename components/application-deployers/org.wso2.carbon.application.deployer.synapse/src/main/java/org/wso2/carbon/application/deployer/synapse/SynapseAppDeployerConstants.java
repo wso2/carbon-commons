@@ -51,4 +51,8 @@ public class SynapseAppDeployerConstants {
 
     public static final String MAIN_SEQ_FILE = "main.xml";
     public static final String FAULT_SEQ_FILE = "fault.xml";
+
+    public static final String CLASS_MEDIATOR_EXTENSION = "jar";
+    public static final java.lang.String ARTIFACT_EXTENSION = "xml";
 }
+

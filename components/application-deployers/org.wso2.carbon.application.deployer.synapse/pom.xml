@@ -42,10 +42,6 @@ rg.wso2.carbon:org.wso2.carbon.application.deployer.synapse:bundle:4.3.0-SNAPSHO
             <groupId>org.apache.synapse</groupId>
             <artifactId>synapse-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.mediation.initializer</artifactId>
-        </dependency>
     </dependencies>
 
     <build>

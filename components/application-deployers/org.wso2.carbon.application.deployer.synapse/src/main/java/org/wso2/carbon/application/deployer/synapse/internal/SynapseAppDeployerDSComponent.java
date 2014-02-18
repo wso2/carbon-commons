@@ -27,7 +27,6 @@ import org.wso2.carbon.application.deployer.AppDeployerUtils;
 import org.wso2.carbon.application.deployer.Feature;
 import org.wso2.carbon.application.deployer.handler.AppDeploymentHandler;
 import org.wso2.carbon.application.deployer.synapse.SynapseAppDeployer;
-import org.wso2.carbon.mediation.initializer.services.SynapseEnvironmentService;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -36,10 +35,6 @@ import java.util.Map;
 
 /**
  * @scr.component name="application.deployer.synapse" immediate="true"
- * @scr.reference name="synapse.env.service"
- * interface="org.wso2.carbon.mediation.initializer.services.SynapseEnvironmentService"
- * cardinality="0..n" policy="dynamic" bind="setSynapseEnvironmentService"
- * unbind="unsetSynapseEnvironmentService"
  */
 
 public class SynapseAppDeployerDSComponent {
@@ -76,36 +71,6 @@ public class SynapseAppDeployerDSComponent {
             appHandlerRegistration.unregister();
         }
     }
-
-
-    /**
-     * Here we receive an event about the creation of a SynapseEnvironment. If this is
-     * SuperTenant we have to wait until all the other constraints are met and actual
-     * initialization is done in the activate method. Otherwise we have to do the activation here.
-     *
-     * @param synapseEnvironmentService SynapseEnvironmentService which contains information
-     *                                  about the new Synapse Instance
-     */
-    protected void setSynapseEnvironmentService(
-            SynapseEnvironmentService synapseEnvironmentService) {
-
-        DataHolder.getInstance().addSynapseEnvironmentService(
-                synapseEnvironmentService.getTenantId(),
-                synapseEnvironmentService);
-    }
-
-    /**
-     * Here we receive an event about Destroying a SynapseEnvironment. This can be the super tenant
-     * destruction or a tenant destruction.
-     *
-     * @param synapseEnvironmentService synapseEnvironment
-     */
-    protected void unsetSynapseEnvironmentService(
-            SynapseEnvironmentService synapseEnvironmentService) {
-        DataHolder.getInstance().removeSynapseEnvironmentService(
-                synapseEnvironmentService.getTenantId());
-    }
-
 
     public static Map<String, List<Feature>> getRequiredFeatures() {
         return requiredFeatures;
