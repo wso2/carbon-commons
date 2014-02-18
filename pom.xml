@@ -201,12 +201,24 @@
 	<dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.bpel.skeleton</artifactId>
-            <version>${older.version}</version>
+	    <exclusions>
+                        <exclusion>
+                                <groupId>org.apache.ode.wso2</groupId>
+                                <artifactId>ode</artifactId>
+                        </exclusion>
+                </exclusions>
+            <version>${previous.version}</version>
         </dependency>
 	
 	<dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.bpel</artifactId>
+		<exclusions>
+			<exclusion>
+				<groupId>org.apache.ode.wso2</groupId>
+				<artifactId>ode</artifactId>
+			</exclusion>
+		</exclusions>
             <version>${older.version}</version>
         </dependency>
 
