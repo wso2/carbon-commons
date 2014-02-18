@@ -38,10 +38,6 @@ rg.wso2.carbon:org.wso2.carbon.application.deployer.synapse:bundle:4.3.0-SNAPSHO
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.deployer</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.synapse</groupId>
-            <artifactId>synapse-core</artifactId>
-        </dependency>
     </dependencies>
 
     <build>
@@ -69,6 +65,7 @@ rg.wso2.carbon:org.wso2.carbon.application.deployer.synapse:bundle:4.3.0-SNAPSHO
                         <Import-Package>
                             org.wso2.carbon.application.deployer.*,
                             org.apache.commons.logging.*,
+                            org.apache.synapse.deployers.*,
                             *;resolution:=optional
                         </Import-Package>
                         <WSO2-Application-Deployer>Synapse App Deployer</WSO2-Application-Deployer>

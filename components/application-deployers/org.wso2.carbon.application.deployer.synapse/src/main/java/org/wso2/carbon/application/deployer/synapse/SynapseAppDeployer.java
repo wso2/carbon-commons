@@ -25,7 +25,6 @@ import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.synapse.deployers.AbstractSynapseArtifactDeployer;
 import org.wso2.carbon.application.deployer.AppDeployerConstants;
 import org.wso2.carbon.application.deployer.AppDeployerUtils;
 import org.wso2.carbon.application.deployer.CarbonApplication;
@@ -36,6 +35,7 @@ import org.wso2.carbon.application.deployer.synapse.internal.SynapseAppDeployerD
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -159,8 +159,12 @@ public class SynapseAppDeployer implements AppDeploymentHandler {
                             log.error("Unable to delete " + artifactInRepo.getAbsolutePath());
                         }
                     } else {
-                        ((AbstractSynapseArtifactDeployer) deployer).
-                                undeploySynapseArtifact(artifactName);
+                        // use reflection to avoid having synapse as a dependency
+
+                        Class[] paramString = new Class[1];
+                        paramString[0] = String.class;
+                        Method method = deployer.getClass().getDeclaredMethod("undeploySynapseArtifact", paramString);
+                        method.invoke(deployer, artifactName);
                     }
 
                     artifact.setDeploymentStatus(AppDeployerConstants.DEPLOYMENT_STATUS_PENDING);
