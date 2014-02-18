@@ -401,6 +401,51 @@
             </dependency>
 		
 	    <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.deployment.synchronizer.server.feature</artifactId>
+	    <version>${project.version}</version>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.deployment.synchronizer.subversion.feature</artifactId>
+	    <version>${project.version}</version>
+            <type>zip</type>
+        </dependency>
+
+	<dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.discovery.core.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.discovery.ui.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.discovery.proxy.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.discovery.client.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.discovery.mediation.ext.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+
+
+	    <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.discovery.core</artifactId>
                 <version>${project.version}</version>
@@ -436,6 +481,84 @@
 		<version>${project.version}</version>
         </dependency>
 
+	<dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.deployment.synchronizer.git</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+	<dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.synapse.server.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.synapse.ui.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+
+	  <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.webapp.server.feature</artifactId>
+	    <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.webapp.ui.feature</artifactId>
+	    <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+
+	    <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.server.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.ui.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+
+	   <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.humantask.server.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.humantask.ui.feature</artifactId>
+                <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+
+	<dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.bpel.server.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.application.mgt.bpel.ui.feature</artifactId>
+            <version>${project.version}</version>
+            <type>zip</type>
+            </dependency>
+
+	   <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.webapp.mgt</artifactId>
+	    <version>${project.version}</version>
+        </dependency>
+
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.discovery.admin.ui</artifactId>
@@ -444,17 +567,17 @@
 	   <dependency>
             <groupId>org.eclipse.jgit.wso2</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
-            <version>2.3.1.wso2v2</version>
+            <version>${jgit.version}</version>
         </dependency>
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
-            <version>0.1.49.wso2v1</version>
+            <version>${jsch.version}</version>
         </dependency>
  <dependency>
             <groupId>com.gitblit</groupId>
             <artifactId>gitblit</artifactId>
-            <version>1.2.0.wso2v1</version>
+            <version>${gitblit.version}</version>
         </dependency>
 
         </dependencies>
@@ -634,6 +757,9 @@
 	<wso2carbon.version.svnclient>1.6.18.wso2v2</wso2carbon.version.svnclient>
 	<xmlunit.version>1.1</xmlunit.version>
 
+	<jgit.version>2.3.1.wso2v2</jgit.version>
+	<jsch.version>0.1.49.wso2v1</jsch.version>
+	<gitblit.version>1.2.0.wso2v1</gitblit.version>
         <!-- Carbon platform version comes here-->
         <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
         <carbon.platform.package.export.version>4.3.0-SNAPSHOT

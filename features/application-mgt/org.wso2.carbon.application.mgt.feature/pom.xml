@@ -42,13 +42,11 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.mgt.server.feature</artifactId>
-            <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.mgt.ui.feature</artifactId>
-            <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
     </dependencies>

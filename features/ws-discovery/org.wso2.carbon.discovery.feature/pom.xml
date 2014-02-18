@@ -38,31 +38,26 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.core.feature</artifactId>
-	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.ui.feature</artifactId>
-	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
 	<dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.proxy.feature</artifactId>
-	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.client.feature</artifactId>
-	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
 	<dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.discovery.mediation.ext.feature</artifactId>
-	    <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
     </dependencies>

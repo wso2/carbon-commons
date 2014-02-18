@@ -38,27 +38,22 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.deployment.synchronizer.git</artifactId>
-    	    <version>4.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jgit.wso2</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
-            <version>2.3.1.wso2v2</version>
         </dependency>
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
-            <version>0.1.49.wso2v1</version>
-        </dependency>
+	</dependency>
 	<dependency>
 	    <groupId>com.gitblit</groupId>
 	    <artifactId>gitblit</artifactId>
-            <version>1.2.0.wso2v1</version>
 	</dependency>
 	<dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.adc.repositoryinformation.service.stub</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -85,14 +80,14 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.deployment.synchronizer.git:4.3.0-SNAPSHOT</bundleDef>
-                                <bundleDef>org.eclipse.jgit.wso2:org.eclipse.jgit:2.3.1.wso2v2</bundleDef>
-                                <bundleDef>com.jcraft:jsch:0.1.49.wso2v1</bundleDef>
-				<bundleDef>com.gitblit:gitblit:1.2.0.wso2v1</bundleDef>
-				<bundleDef>org.wso2.carbon:org.wso2.carbon.adc.repositoryinformation.service.stub:4.3.0-SNAPSHOT</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.deployment.synchronizer.git:${project.version}</bundleDef>
+                                <bundleDef>org.eclipse.jgit.wso2:org.eclipse.jgit:${jgit.version}</bundleDef>
+                                <bundleDef>com.jcraft:jsch:${jsch.version}</bundleDef>
+				<bundleDef>com.gitblit:gitblit:${gitblit.version}</bundleDef>
+				<bundleDef>org.wso2.carbon:org.wso2.carbon.adc.repositoryinformation.service.stub:${project.version}</bundleDef>
                             </bundles>
 			    <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.deployment.synchronizer.server:4.3.0-SNAPSHOT</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.deployment.synchronizer.server:${project.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>

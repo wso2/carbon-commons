@@ -40,13 +40,11 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.mgt.bpel.server.feature</artifactId>
-            <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.mgt.bpel.ui.feature</artifactId>
-            <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
     </dependencies>
