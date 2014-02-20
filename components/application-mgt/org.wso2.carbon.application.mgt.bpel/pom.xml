@@ -23,7 +23,7 @@
         <groupId>org.wso2.carbon</groupId>
         <artifactId>application-mgt</artifactId>
         <version>4.3.0-SNAPSHOT</version>
-	<relativePath>../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -31,7 +31,8 @@
     <artifactId>org.wso2.carbon.application.mgt.bpel</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - BPEL Applications BE</name>
-    <description>org.wso2.carbon.application.mgt.bpel provides the carbon app mgt functionalities specific to bpel artifacts
+    <description>org.wso2.carbon.application.mgt.bpel provides the carbon app mgt functionalities specific to bpel
+        artifacts
     </description>
     <url>http://wso2.org</url>
 
@@ -69,7 +70,7 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                
+
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -78,7 +79,8 @@
                         <Private-Package>org.wso2.carbon.application.mgt.bpel.internal</Private-Package>
                         <Import-Package>
                             org.wso2.carbon.application.deployer.*,
-                            org.wso2.carbon.bpel.skeleton.ode.integration.mgt.services.*; version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.bpel.skeleton.ode.integration.mgt.services.*;
+                            version="${carbon.platform.package.import.version.range}",
                             *;resolution:=optional
                         </Import-Package>
                         <Export-Package>
@@ -90,5 +92,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>
