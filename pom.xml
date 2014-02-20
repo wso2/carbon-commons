@@ -19,11 +19,13 @@
 	<module>service-stubs/org.wso2.carbon.application.mgt.webapp.stub</module>
 	<module>service-stubs/org.wso2.carbon.deployment.synchronizer.stub</module>
 	<module>service-stubs/org.wso2.carbon.discovery.stub</module>
+	<module>service-stubs/org.wso2.carbon.identity.entitlement.stub</module>
 
 	<module>components/application-deployers</module>
 	<module>components/deployment-synchronizer</module>
 	<module>components/application-mgt</module>
 	<module>components/ws-discovery</module>
+	<module>components/entitlement-commons</module>
 	
 	<module>features/application-deployers</module>
 	<module>features/application-mgt</module>
@@ -592,6 +594,18 @@
             <version>${gitblit.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>slf4j.wso2</groupId>
+            <artifactId>slf4j</artifactId>
+            <version>${slf4j.wso2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>libthrift.wso2</groupId>
+            <artifactId>libthrift</artifactId>
+            <version>${libthrift.wso2.version}</version>
+        </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -807,6 +821,10 @@
 
         <!-- Rampart Version -->
         <rampart.wso2.version>1.6.1.wso2v9</rampart.wso2.version>
+
+        <slf4j.wso2.version>1.5.10.wso2v1</slf4j.wso2.version>
+
+        <libthrift.wso2.version>0.8.0.wso2v1</libthrift.wso2.version>
 
         <!-- JSON Version -->
         <orbit.version.json>2.0.0.wso2v1</orbit.version.json>
