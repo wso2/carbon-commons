@@ -20,6 +20,10 @@
 	<module>service-stubs/org.wso2.carbon.deployment.synchronizer.stub</module>
 	<module>service-stubs/org.wso2.carbon.discovery.stub</module>
         <module>service-stubs/org.wso2.carbon.idp.mgt.stub</module>
+        <module>service-stubs/org.wso2.carbon.identity.sso.saml.stub</module>
+        <module>service-stubs/org.wso2.carbon.identity.authenticator.saml2.sso.stub</module>
+        <module>service-stubs/org.wso2.carbon.security.mgt.stub</module>
+        <module>service-stubs/org.wso2.carbon.identity.oauth.stub</module>
 	<module>service-stubs/org.wso2.carbon.identity.entitlement.stub</module>
 
 	<module>components/application-deployers</module>
@@ -27,12 +31,17 @@
 	<module>components/application-mgt</module>
 	<module>components/ws-discovery</module>
         <module>components/idp-mgt</module>
+        <module>components/authenticators/saml2-sso-authenticator</module>
+        <module>components/security-mgt</module>
 	<module>components/entitlement-commons</module>
-	
-	<module>features/application-deployers</module>
-	<module>features/application-mgt</module>
-	<module>features/deployment-synchronizer</module>
-	<module>features/ws-discovery</module>
+
+        <module>features/application-deployers</module>
+        <module>features/application-mgt</module>
+        <module>features/deployment-synchronizer</module>
+        <module>features/ws-discovery</module>
+        <module>features/idp-mgt</module>
+        <module>features/security-mgt</module>
+        <module>features/authenticators/saml2-sso-authenticator</module>
     </modules>
 
 
@@ -79,6 +88,16 @@
                 <artifactId>org.wso2.carbon.user.mgt</artifactId>
                 <version>${previous.version}</version>
             </dependency>
+           <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.user.mgt.common</artifactId>
+               <version>${previous.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.user.mgt.ui</artifactId>
+               <version>${previous.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.ui</artifactId>
@@ -89,6 +108,11 @@
                 <artifactId>org.wso2.carbon.utils</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>javax.cache.wso2</artifactId>
+            <version>${carbon.platform.version}</version>
+        </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -298,6 +322,16 @@
             <dependency>
                 <groupId>org.apache.rampart.wso2</groupId>
                 <artifactId>rampart-core</artifactId>
+                <version>${rampart.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rampart.wso2</groupId>
+                <artifactId>rampart-policy</artifactId>
+                <version>${rampart.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rampart.wso2</groupId>
+                <artifactId>rampart-trust</artifactId>
                 <version>${rampart.wso2.version}</version>
             </dependency>
 
@@ -630,11 +664,11 @@
                 <artifactId>org.wso2.carbon.user.api</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
-            <dependency>
+            <!--dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.security.mgt</artifactId>
                 <version>${previous.version}</version>
-            </dependency>
+            </dependency-->
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.stratos.common</artifactId>
@@ -678,6 +712,93 @@
                 <artifactId>org.wso2.carbon.idp.mgt.ui.feature</artifactId>
                 <version>${project.version}</version>
                 <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.sso.saml.stub</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.stub</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.feature</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.server.feature</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.ui.feature</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>backport-util-concurrent.wso2</groupId>
+                <artifactId>backport-util-concurrent</artifactId>
+                <version>${orbit.version.backport.util}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.security.mgt.stub</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.security.mgt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.security.mgt.ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.security.mgt.feature</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.security.mgt.server.feature</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.security.mgt.ui.feature</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.oauth.stub</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -918,6 +1039,7 @@
         <commons-beanutils.version>1.8.3</commons-beanutils.version>
         <commons-digester.version>1.8</commons-digester.version>
         <commons-codec.version>1.3</commons-codec.version>
+	<orbit.version.backport.util>3.1.0.wso2v1</orbit.version.backport.util>
 
 
         <!-- Jasper Reports Version -->
