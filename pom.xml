@@ -286,7 +286,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.registry.eventing</artifactId>
-                <version>${previous.version}</version>
+                <version>${carbon.platform.version}</version>
             </dependency>
 
             <dependency>
@@ -316,7 +316,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.governance.api</artifactId>
-                <version>${previous.version}</version>
+                <version>${carbon.platform.version}</version>
             </dependency>
 
             <dependency>
