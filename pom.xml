@@ -664,11 +664,11 @@
                 <artifactId>org.wso2.carbon.user.api</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
-            <!--dependency>
+            <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.security.mgt</artifactId>
                 <version>${previous.version}</version>
-            </dependency-->
+            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.stratos.common</artifactId>
@@ -766,11 +766,11 @@
                 <artifactId>org.wso2.carbon.security.mgt.stub</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
+            <!--dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.security.mgt</artifactId>
                 <version>${project.version}</version>
-            </dependency>
+            </dependency-->
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.security.mgt.ui</artifactId>
