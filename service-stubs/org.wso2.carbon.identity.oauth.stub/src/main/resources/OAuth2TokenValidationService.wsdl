@@ -1,0 +1,119 @@
+
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax2336="http://dto.oauth2.identity.carbon.wso2.org/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://oauth2.identity.carbon.wso2.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://oauth2.identity.carbon.wso2.org">
+    <wsdl:documentation>OAuth2TokenValidationService</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema xmlns:ns="http://org.apache.axis2/xsd" xmlns:ax2337="http://dto.oauth2.identity.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
+            <xs:import namespace="http://dto.oauth2.identity.carbon.wso2.org/xsd"></xs:import>
+            <xs:element name="validate">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="validationReqDTO" nillable="true" type="ax2337:OAuth2TokenValidationRequestDTO"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="validateResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2337:OAuth2TokenValidationResponseDTO"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://dto.oauth2.identity.carbon.wso2.org/xsd">
+            <xs:complexType name="OAuth2TokenValidationRequestDTO">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="accessToken" nillable="true" type="ax2336:OAuth2TokenValidationRequestDTO_OAuth2AccessToken"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="context" nillable="true" type="ax2336:OAuth2TokenValidationRequestDTO_TokenValidationContextParam"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="requiredClaimURIs" nillable="true" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OAuth2TokenValidationRequestDTO_OAuth2AccessToken">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="identifier" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="tokenType" nillable="true" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OAuth2TokenValidationRequestDTO_TokenValidationContextParam">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="key" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="value" nillable="true" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OAuth2TokenValidationResponseDTO">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="authorizationContextToken" nillable="true" type="ax2336:OAuth2TokenValidationResponseDTO_AuthorizationContextToken"></xs:element>
+                    <xs:element minOccurs="0" name="authorizedUser" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="errorMsg" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="expiryTime" type="xs:long"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="scope" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="valid" type="xs:boolean"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OAuth2TokenValidationResponseDTO_AuthorizationContextToken">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="tokenString" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="tokenType" nillable="true" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="validateRequest">
+        <wsdl:part name="parameters" element="ns1:validate"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="validateResponse">
+        <wsdl:part name="parameters" element="ns1:validateResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="OAuth2TokenValidationServicePortType">
+        <wsdl:operation name="validate">
+            <wsdl:input message="tns:validateRequest" wsaw:Action="urn:validate"></wsdl:input>
+            <wsdl:output message="tns:validateResponse" wsaw:Action="urn:validateResponse"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="OAuth2TokenValidationServiceSoap11Binding" type="tns:OAuth2TokenValidationServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap:binding>
+        <wsdl:operation name="validate">
+            <soap:operation soapAction="urn:validate" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="OAuth2TokenValidationServiceSoap12Binding" type="tns:OAuth2TokenValidationServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap12:binding>
+        <wsdl:operation name="validate">
+            <soap12:operation soapAction="urn:validate" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="OAuth2TokenValidationServiceHttpBinding" type="tns:OAuth2TokenValidationServicePortType">
+        <http:binding verb="POST"></http:binding>
+        <wsdl:operation name="validate">
+            <http:operation location="validate"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="OAuth2TokenValidationService">
+        <wsdl:port name="OAuth2TokenValidationServiceHttpsSoap11Endpoint" binding="tns:OAuth2TokenValidationServiceSoap11Binding">
+            <soap:address location="https://localhost:9443/services/OAuth2TokenValidationService.OAuth2TokenValidationServiceHttpsSoap11Endpoint/"></soap:address>
+        </wsdl:port>
+        <wsdl:port name="OAuth2TokenValidationServiceHttpsSoap12Endpoint" binding="tns:OAuth2TokenValidationServiceSoap12Binding">
+            <soap12:address location="https://localhost:9443/services/OAuth2TokenValidationService.OAuth2TokenValidationServiceHttpsSoap12Endpoint/"></soap12:address>
+        </wsdl:port>
+        <wsdl:port name="OAuth2TokenValidationServiceHttpsEndpoint" binding="tns:OAuth2TokenValidationServiceHttpBinding">
+            <http:address location="https://localhost:9443/services/OAuth2TokenValidationService.OAuth2TokenValidationServiceHttpsEndpoint/"></http:address>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
