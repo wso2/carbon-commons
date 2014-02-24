@@ -11,6 +11,7 @@
     <url>http://wso2.org</url>
 
     <modules>
+        <module>service-stubs/org.wso2.carbon.security.mgt.stub</module>
 	<module>service-stubs/org.wso2.carbon.adc.repositoryinformation.service.stub</module>
 	<module>service-stubs/org.wso2.carbon.application.mgt.bpel.stub</module>
 	<module>service-stubs/org.wso2.carbon.application.mgt.humantask.stub</module>
@@ -22,25 +23,24 @@
         <module>service-stubs/org.wso2.carbon.idp.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.sso.saml.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.authenticator.saml2.sso.stub</module>
-        <module>service-stubs/org.wso2.carbon.security.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.oauth.stub</module>
 	<module>service-stubs/org.wso2.carbon.identity.entitlement.stub</module>
 
+        <module>components/security-mgt</module>
 	<module>components/application-deployers</module>
 	<module>components/deployment-synchronizer</module>
 	<module>components/application-mgt</module>
 	<module>components/ws-discovery</module>
         <module>components/idp-mgt</module>
         <module>components/authenticators/saml2-sso-authenticator</module>
-        <module>components/security-mgt</module>
 	<module>components/entitlement-commons</module>
 
+        <module>features/security-mgt</module>
         <module>features/application-deployers</module>
         <module>features/application-mgt</module>
         <module>features/deployment-synchronizer</module>
         <module>features/ws-discovery</module>
         <module>features/idp-mgt</module>
-        <module>features/security-mgt</module>
         <module>features/authenticators/saml2-sso-authenticator</module>
     </modules>
 
@@ -664,11 +664,11 @@
                 <artifactId>org.wso2.carbon.user.api</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
-            <dependency>
+            <!--dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.security.mgt</artifactId>
                 <version>${previous.version}</version>
-            </dependency>
+            </dependency-->
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.stratos.common</artifactId>
@@ -766,11 +766,11 @@
                 <artifactId>org.wso2.carbon.security.mgt.stub</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <!--dependency>
+            <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.security.mgt</artifactId>
                 <version>${project.version}</version>
-            </dependency-->
+            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.security.mgt.ui</artifactId>
