@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.core.common.AuthenticationException;
 import org.wso2.carbon.identity.authenticator.saml2.sso.stub.SAML2SSOAuthenticationServiceStub;
 import org.wso2.carbon.identity.authenticator.saml2.sso.stub.types.AuthnReqDTO;
+import org.wso2.carbon.registry.core.utils.UUIDGenerator;
 import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.ServerConstants;
 
@@ -82,6 +83,13 @@ public class SAML2SSOAuthenticationClient {
         if (result) {
             String cookie = (String) stub._getServiceClient().getServiceContext().getProperty(
                     HTTPConstants.COOKIE_STRING);
+            if (cookie == null) {
+                // For local transport - the cookie will be null.
+                // This generated cookie cannot be used for any form authentication with the backend.
+                // This is done to be backward compatible.
+                cookie = UUIDGenerator.generateUUID();
+            }
+
             session.setAttribute(ServerConstants.ADMIN_SERVICE_AUTH_TOKEN, cookie);
         }
     }
