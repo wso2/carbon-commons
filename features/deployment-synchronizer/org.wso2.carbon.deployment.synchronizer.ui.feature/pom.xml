@@ -23,7 +23,7 @@
         <groupId>org.wso2.carbon</groupId>
         <artifactId>deployment-synchronizer-feature</artifactId>
         <version>4.3.0-SNAPSHOT</version>
-	<relativePath>../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -32,7 +32,8 @@
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Deployment Synchronizer UI Feature</name>
     <url>http://wso2.org</url>
-    <description>This feature contains the bundles required for Front-end Deploymeny Synchronizer functionality</description>
+    <description>This feature contains the bundles required for Front-end Deploymeny Synchronizer functionality
+    </description>
 
     <dependencies>
         <dependency>
@@ -72,7 +73,7 @@
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.deployment.synchronizer.stub</bundleDef>
                             </bundles>
                             <importFeatures>
-				<importFeatureDef>org.wso2.carbon.core.ui:${wso2carbon.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.ui:${wso2carbon.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>
@@ -80,5 +81,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>
