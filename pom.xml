@@ -800,6 +800,35 @@
                 <artifactId>org.wso2.carbon.identity.oauth.stub</artifactId>
                 <version>${project.version}</version>
             </dependency>
+
+        <dependency>
+            <groupId>org.springframework.ws.wso2</groupId>
+            <artifactId>spring.framework</artifactId>
+            <version>${spring.framework.wso2.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-api</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-udp</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-transports-http-jetty</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+
         </dependencies>
     </dependencyManagement>
 
@@ -1014,6 +1043,9 @@
 
         <!-- Xerces Version -->
         <xercesImpl.version>2.8.1</xercesImpl.version>
+
+        <cxf.version>2.7.10</cxf.version>
+        <spring.framework.wso2.version>3.1.0.wso2v1</spring.framework.wso2.version>
 
         <!-- Servet Version -->
         <version.javax.servlet.jsp>2.2.0.v201112011158</version.javax.servlet.jsp>
