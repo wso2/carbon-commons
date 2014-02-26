@@ -12,28 +12,31 @@
 
     <modules>
         <module>service-stubs/org.wso2.carbon.security.mgt.stub</module>
-	<module>service-stubs/org.wso2.carbon.adc.repositoryinformation.service.stub</module>
-	<module>service-stubs/org.wso2.carbon.application.mgt.bpel.stub</module>
-	<module>service-stubs/org.wso2.carbon.application.mgt.humantask.stub</module>
-	<module>service-stubs/org.wso2.carbon.application.mgt.stub</module>
-	<module>service-stubs/org.wso2.carbon.application.mgt.synapse.stub</module>
-	<module>service-stubs/org.wso2.carbon.application.mgt.webapp.stub</module>
-	<module>service-stubs/org.wso2.carbon.deployment.synchronizer.stub</module>
-	<module>service-stubs/org.wso2.carbon.discovery.stub</module>
+        <module>service-stubs/org.wso2.carbon.adc.repositoryinformation.service.stub</module>
+        <module>service-stubs/org.wso2.carbon.application.mgt.bpel.stub</module>
+        <module>service-stubs/org.wso2.carbon.application.mgt.humantask.stub</module>
+        <module>service-stubs/org.wso2.carbon.application.mgt.stub</module>
+        <module>service-stubs/org.wso2.carbon.application.mgt.synapse.stub</module>
+        <module>service-stubs/org.wso2.carbon.application.mgt.webapp.stub</module>
+        <module>service-stubs/org.wso2.carbon.deployment.synchronizer.stub</module>
+        <module>service-stubs/org.wso2.carbon.discovery.stub</module>
         <module>service-stubs/org.wso2.carbon.idp.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.sso.saml.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.authenticator.saml2.sso.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.oauth.stub</module>
-	<module>service-stubs/org.wso2.carbon.identity.entitlement.stub</module>
+        <module>service-stubs/org.wso2.carbon.identity.entitlement.stub</module>
+        <module>service-stubs/org.wso2.carbon.transport.jms.stub</module>
+        <module>service-stubs/org.wso2.carbon.transport.mgt.stub</module>
 
         <module>components/security-mgt</module>
-	<module>components/application-deployers</module>
-	<module>components/deployment-synchronizer</module>
-	<module>components/application-mgt</module>
-	<module>components/ws-discovery</module>
+        <module>components/application-deployers</module>
+        <module>components/deployment-synchronizer</module>
+        <module>components/application-mgt</module>
+        <module>components/ws-discovery</module>
         <module>components/idp-mgt</module>
         <module>components/authenticators/saml2-sso-authenticator</module>
-	<module>components/entitlement-commons</module>
+        <module>components/entitlement-commons</module>
+        <module>components/transport-mgt</module>
 
         <module>features/security-mgt</module>
         <module>features/application-deployers</module>
@@ -42,6 +45,7 @@
         <module>features/ws-discovery</module>
         <module>features/idp-mgt</module>
         <module>features/authenticators/saml2-sso-authenticator</module>
+        <module>features/transport-mgt</module>
     </modules>
 
 
@@ -88,15 +92,15 @@
                 <artifactId>org.wso2.carbon.user.mgt</artifactId>
                 <version>${previous.version}</version>
             </dependency>
-           <dependency>
+            <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.user.mgt.common</artifactId>
-               <version>${previous.version}</version>
+                <version>${previous.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.user.mgt.ui</artifactId>
-               <version>${previous.version}</version>
+                <version>${previous.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -108,11 +112,11 @@
                 <artifactId>org.wso2.carbon.utils</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>javax.cache.wso2</artifactId>
-            <version>${carbon.platform.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>javax.cache.wso2</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
@@ -138,6 +142,18 @@
                 <groupId>commons-logging</groupId>
                 <artifactId>commons-logging</artifactId>
                 <version>${commons-logging.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.synapse</groupId>
+                <artifactId>synapse-nhttp-transport</artifactId>
+                <version>${synapse-nhttp-transport.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-lang.wso2</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${orbit.version.commons.lang}</version>
             </dependency>
 
             <dependency>
@@ -347,11 +363,6 @@
                 <artifactId>org.wso2.carbon.mediation.registry</artifactId>
                 <version>${previous.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.governance.api</artifactId>
-                <version>${carbon.platform.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -418,6 +429,11 @@
                 <artifactId>org.wso2.carbon.application.mgt.humantask.stub</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.mgt.stub</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -476,19 +492,7 @@
 
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.discovery.core.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.discovery.ui.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.discovery.proxy.feature</artifactId>
                 <version>${project.version}</version>
                 <type>zip</type>
             </dependency>
@@ -498,13 +502,6 @@
                 <version>${project.version}</version>
                 <type>zip</type>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.discovery.mediation.ext.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-
 
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -513,23 +510,13 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.discovery.proxy</artifactId>
-                <version>${older.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.discovery.module</artifactId>
-                <version>${older.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.discovery.mediation.ext</artifactId>
-                <version>${older.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.discovery.ui</artifactId>
-                <version>${older.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -574,6 +561,20 @@
                 <version>${project.version}</version>
                 <type>zip</type>
             </dependency>
+
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.mgt.server.feature</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.mgt.ui.feature</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -641,17 +642,17 @@
                 <version>${gitblit.version}</version>
             </dependency>
 
-        <dependency>
-            <groupId>slf4j.wso2</groupId>
-            <artifactId>slf4j</artifactId>
-            <version>${slf4j.wso2.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>slf4j.wso2</groupId>
+                <artifactId>slf4j</artifactId>
+                <version>${slf4j.wso2.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>libthrift.wso2</groupId>
-            <artifactId>libthrift</artifactId>
-            <version>${libthrift.wso2.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>libthrift.wso2</groupId>
+                <artifactId>libthrift</artifactId>
+                <version>${libthrift.wso2.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>opensaml.wso2</groupId>
@@ -801,33 +802,116 @@
                 <version>${project.version}</version>
             </dependency>
 
-        <dependency>
-            <groupId>org.springframework.ws.wso2</groupId>
-            <artifactId>spring.framework</artifactId>
-            <version>${spring.framework.wso2.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.springframework.ws.wso2</groupId>
+                <artifactId>spring.framework</artifactId>
+                <version>${spring.framework.wso2.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-api</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-udp</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-api</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-udp</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
 
-        <dependency>
-            <groupId>org.apache.cxf</groupId>
-            <artifactId>cxf-rt-transports-http-jetty</artifactId>
-            <version>${cxf.version}</version>
-        </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http-jetty</artifactId>
+                <version>${cxf.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.mgt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.mgt.stub</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.mgt.ui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.http</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.https</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.jms</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.jms.stub</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.mail</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.vfs</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.fix</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.tcp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.udp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.nhttp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.transport.local</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.statistics</artifactId>
+                <version>${previous.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.service.mgt</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>
@@ -1071,7 +1155,7 @@
         <commons-beanutils.version>1.8.3</commons-beanutils.version>
         <commons-digester.version>1.8</commons-digester.version>
         <commons-codec.version>1.3</commons-codec.version>
-	<orbit.version.backport.util>3.1.0.wso2v1</orbit.version.backport.util>
+        <orbit.version.backport.util>3.1.0.wso2v1</orbit.version.backport.util>
 
 
         <!-- Jasper Reports Version -->
@@ -1106,6 +1190,7 @@
         <opensaml2.wso2.version>2.4.1.wso2v1</opensaml2.wso2.version>
         <wss4j.version>1.5.11.wso2v1</wss4j.version>
 
+        <synapse-nhttp-transport.version>2.1.1-wso2v8</synapse-nhttp-transport.version>
     </properties>
 
     <repositories>
