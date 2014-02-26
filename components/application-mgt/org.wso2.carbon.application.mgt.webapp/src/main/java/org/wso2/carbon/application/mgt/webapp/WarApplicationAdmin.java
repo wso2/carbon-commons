@@ -18,33 +18,21 @@
 
 package org.wso2.carbon.application.mgt.webapp;
 
-import org.apache.catalina.Container;
-import org.apache.catalina.core.StandardWrapper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.application.deployer.AppDeployerUtils;
 import org.wso2.carbon.application.deployer.CarbonApplication;
 import org.wso2.carbon.application.deployer.config.Artifact;
 import org.wso2.carbon.application.deployer.webapp.WARCappDeployer;
 import org.wso2.carbon.application.mgt.webapp.internal.WarAppServiceComponent;
 import org.wso2.carbon.core.AbstractAdmin;
-import org.wso2.carbon.utils.CarbonUtils;
-import org.wso2.carbon.utils.NetworkUtils;
-import org.wso2.carbon.webapp.mgt.WebApplication;
-import org.wso2.carbon.webapp.mgt.WebApplicationsHolder;
 
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WarApplicationAdmin extends AbstractAdmin {
 
     private static final Log log = LogFactory.getLog(WarApplicationAdmin.class);
-
-    public static final String STARTED = "Started";
-    public static final String STOPPED = "Stopped";
-    public static final String FAULTY = "Faulty";
 
     /**
      * Gives a WarMetadata list which includes all web applications deployed through the
@@ -100,57 +88,14 @@ public class WarApplicationAdmin extends AbstractAdmin {
      * @return - if webapp found - WarCappMetadata instance, else null
      */
     private WarCappMetadata getWebappMetadata(String fileName) {
-        // metadata instance to return
-        WarCappMetadata warCappMetadata = null;
+        // webapp metadata display of capp is deprecated.
+        WarCappMetadata warCappMetadata = new WarCappMetadata();
+        warCappMetadata.setWebappFileName(fileName);
+        warCappMetadata.setContext(null);
+        warCappMetadata.setState(null);
+        warCappMetadata.setHostName(null);
+        warCappMetadata.setHttpPort(-1);
 
-        // get the webapp holder instance from config context
-        WebApplicationsHolder holder = (WebApplicationsHolder) getConfigContext().
-                        getProperty(CarbonConstants.WEB_APPLICATIONS_HOLDER);
-
-        // first search in the started webapps
-        String state = STARTED;
-        WebApplication webApplication = holder.getStartedWebapps().get(fileName);
-
-        // if it is null, try searching stopped webapps
-        if (webApplication == null) {
-            state = STOPPED;
-            webApplication = holder.getStoppedWebapps().get(fileName);
-        }
-
-        // if it is still null, try searching faulty webapps
-        if (webApplication == null) {
-            state = FAULTY;
-            webApplication = holder.getFaultyWebapps().get(fileName);
-        }
-
-        // if we could find a web app for the given file name, create the Metadata instance
-        if (webApplication != null) {
-            warCappMetadata = new WarCappMetadata();
-            String appContext = webApplication.getContextName();
-            for (Container container : webApplication.getContext().findChildren()) {
-                if(((StandardWrapper) container).getServletClass().equals("org.apache.cxf.transport.servlet.CXFServlet")) {
-                    appContext += (((StandardWrapper) container).findMappings())[0];
-                }
-            }
-            if(appContext.endsWith("/*")) {
-                appContext = appContext.substring(0, appContext.indexOf("/*"));
-            }
-            warCappMetadata.setContext(appContext);
-            warCappMetadata.setState(state);
-            warCappMetadata.setWebappFileName(webApplication.getWebappFile().getName());
-
-            try {
-                warCappMetadata.setHostName(NetworkUtils.getLocalHostname());
-            } catch (SocketException e) {
-                log.error("Error occurred while getting local hostname", e);
-            }
-
-            int httpPort = CarbonUtils.getTransportProxyPort(getConfigContext(), "http");
-            if (httpPort == -1) {
-                httpPort = CarbonUtils.getTransportPort(getConfigContext(), "http");
-            }
-            warCappMetadata.setHttpPort(httpPort);
-        }
         return warCappMetadata;
     }
 
