@@ -63,7 +63,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.transport.nhttp:4.2.2</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.transport.nhttp:${project.version}</bundleDef>
                             </bundles>
                             <importBundles>
                             </importBundles>
