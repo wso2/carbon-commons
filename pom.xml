@@ -213,7 +213,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.mediation.initializer</artifactId>
-                <version>${project.version}</version>
+                <version>${previous.version}</version>
             </dependency>
 
             <dependency>
@@ -363,7 +363,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.mediation.registry</artifactId>
-                <version>${wso2carbon.version}</version>
+                <version>${previous.version}</version>
             </dependency>
 
             <dependency>
@@ -471,7 +471,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.email.verification</artifactId>
-                <version>${project.version}</version>
+                <version>${previous.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
