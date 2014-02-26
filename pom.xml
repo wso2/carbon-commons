@@ -147,7 +147,7 @@
             <dependency>
                 <groupId>org.apache.synapse</groupId>
                 <artifactId>synapse-nhttp-transport</artifactId>
-                <version>${synapse-nhttp-transport.version}</version>
+                <version>${synapse.version}</version>
             </dependency>
 
             <dependency>
@@ -211,7 +211,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.mediation.initializer</artifactId>
-                <version>4.2.2</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
@@ -361,7 +361,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.mediation.registry</artifactId>
-                <version>${previous.version}</version>
+                <version>${wso2carbon.version}</version>
             </dependency>
 
             <dependency>
@@ -1110,7 +1110,7 @@
         <stratos.version>2.2.0</stratos.version>
 
         <!-- Synapse Version -->
-        <synapse.version>2.2.0-SNAPSHOT</synapse.version>
+        <synapse.version>2.1.3-wso2v1-SNAPSHOT</synapse.version>
 
         <!-- Axiom Version -->
         <axiom.wso2.version>1.2.11.wso2v5-SNAPSHOT</axiom.wso2.version>
