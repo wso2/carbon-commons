@@ -65,32 +65,14 @@
         <thead>
         <tr>
             <th width="35%"><img src="../jax-webapp-mgt/images/jax_type.gif" alt="" style="vertical-align:middle;">&nbsp;<fmt:message key="carbonapps.webapp.jax.web.application"/></th>
-            <th width="35%"><fmt:message key="carbonapps.webapp.context"/></th>
-            <th width="15%"><fmt:message key="carbonapps.webapp.state"/></th>
-            <th width="15%"><fmt:message key="carbonapps.webapp.actions"/></th>
         </tr>
         </thead>
         <tbody>
         <%
             for (WarCappMetadata data : warMetadata) {
-                String state = ("Started".equals(data.getState())) ? "started" : "stopped";
         %>
         <tr>
             <td><%= data.getWebappFileName()%></td>
-            <% if ("Faulty".equals(data.getState())) { %>
-                <td><%= data.getContext()%></td>
-            <% } else { %>
-                <td><a href="../webapp-list/webapp_info.jsp?webappFileName=<%= data.getWebappFileName()%>&webappState=<%= state%>&hostName=<%=data.getHostName()%>&httpPort=<%=data.getHttpPort()%>&webappType=jaxWebapp"><%= data.getContext()%></a></td>
-            <% } %>
-            <td><%= data.getState()%></td>
-            <td>
-                <% if ("Started".equals(data.getState())) { %>
-                <a href="<%= "http://" + data.getHostName() + ":" + data.getHttpPort() + data.getContext() %>" target="_blank" class="icon-link"
-                   style='background-image:url(../webapp-list/images/goto_url.gif)'>
-                    <fmt:message key="carbonapps.jax.webapp.find.services"/>
-                </a>
-                <% } %>
-            </td>
         </tr>
         <%
             }
