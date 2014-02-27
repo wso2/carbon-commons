@@ -65,7 +65,7 @@
                                     org.wso2.carbon:org.wso2.carbon.databridge.commons.thrift.server.feature:${wso2carbon.version}
                                 </includedFeatureDef>
                                 <includedFeatureDef>
-                                    org.wso2.carbon:org.wso2.carbon.databridge.agent.thrift.server.feature:4.2.2
+                                    org.wso2.carbon:org.wso2.carbon.databridge.agent.thrift.server.feature:${project.version}
                                 </includedFeatureDef>
                             </includedFeatures>
                         </configuration>
