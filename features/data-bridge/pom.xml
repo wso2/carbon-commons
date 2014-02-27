@@ -38,6 +38,7 @@
         <module>org.wso2.carbon.databridge.commons.server.feature</module>
         <module>org.wso2.carbon.databridge.agent.thrift.server.feature</module>
         <module>org.wso2.carbon.databridge.commons.thrift.server.feature</module>
+        <module>org.wso2.carbon.databridge.datapublisher.feature</module>
     </modules>
    
 </project>
