@@ -669,11 +669,23 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.stratos.common</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.user.mgt</artifactId>
+                    </exclusion>
+                </exclusions>
                 <version>${stratos.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.keystore.mgt</artifactId>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.wso2.carbon</groupId>
+                        <artifactId>org.wso2.carbon.security.mgt</artifactId>
+                    </exclusion>
+                </exclusions>
                 <version>${stratos.version}</version>
             </dependency>
             <dependency>
