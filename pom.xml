@@ -1187,7 +1187,7 @@
         <version.javax.servlet>3.0.0.v201112011016</version.javax.servlet>
 
         <!-- Rampart Version -->
-        <rampart.wso2.version>1.6.1.wso2v9</rampart.wso2.version>
+        <rampart.wso2.version>1.6.1.wso2v12</rampart.wso2.version>
 
         <slf4j.wso2.version>1.5.10.wso2v1</slf4j.wso2.version>
 
