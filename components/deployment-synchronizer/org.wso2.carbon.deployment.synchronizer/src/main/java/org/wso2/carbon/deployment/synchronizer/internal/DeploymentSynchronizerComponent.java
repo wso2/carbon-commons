@@ -88,11 +88,15 @@ public class DeploymentSynchronizerComponent {
 
     private void initDeploymentSynchronizerForSuperTenant() throws DeploymentSynchronizerException {
         if (!CarbonRepositoryUtils.isSynchronizerEnabled(MultitenantConstants.SUPER_TENANT_ID)) {
+            if(log.isDebugEnabled()) {
+                log.debug("Cluster artifact synchronization is disabled.");
+            }
+
             return;
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("Initializing the deployment synchronizer for super tenant");
+            log.debug("Initializing the cluster artifact synchronization for super tenant");
         }
 
         CarbonRepositoryUtils.newCarbonRepositorySynchronizer(MultitenantConstants.SUPER_TENANT_ID);
