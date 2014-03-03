@@ -27,6 +27,7 @@
         <module>service-stubs/org.wso2.carbon.identity.entitlement.stub</module>
         <module>service-stubs/org.wso2.carbon.transport.jms.stub</module>
         <module>service-stubs/org.wso2.carbon.transport.mgt.stub</module>
+	<module>service-stubs/org.wso2.carbon.datasource.stub</module>
 
         <module>components/security-mgt</module>
         <module>components/authentication</module>
@@ -39,6 +40,7 @@
         <module>components/entitlement-commons</module>
         <module>components/transport-mgt</module>
         <module>components/data-bridge</module>
+        <module>components/data-sources</module>
 
         <module>features/security-mgt</module>
         <module>features/application-deployers</module>
@@ -49,6 +51,7 @@
         <module>features/authenticators/saml2-sso-authenticator</module>
         <module>features/transport-mgt</module>
         <module>features/data-bridge</module>
+        <module>features/data-sources</module>
     </modules>
 
 
@@ -158,13 +161,21 @@
                 <artifactId>commons-lang</artifactId>
                 <version>${orbit.version.commons.lang}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.tomcat.ext</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
-
+ 	    <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.datasource</artifactId>
+                <version>${wso2carbon.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.datasource.ui</artifactId>
+                <version>${wso2carbon.version}</version>
+            </dependency>
             <dependency>
                 <groupId>wsdl4j.wso2</groupId>
                 <artifactId>wsdl4j</artifactId>
@@ -577,9 +588,22 @@
                 <version>${project.version}</version>
                 <type>zip</type>
             </dependency>
-
-
+	    <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.securevault</artifactId>
+		<version>${project.version}</version>
+            </dependency>
+ 	    <dependency>
+               <groupId>org.apache.synapse</groupId>
+               <artifactId>synapse-commons</artifactId>
+               <version>${synapse.version}</version>
+            </dependency>
             <dependency>
+               <groupId>org.wso2.carbon</groupId>
+               <artifactId>org.wso2.carbon.datasource.stub</artifactId>
+               <version>${project.version}</version>
+            </dependency>
+	    <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.server.feature</artifactId>
                 <version>${project.version}</version>
