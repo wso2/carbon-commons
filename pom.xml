@@ -31,8 +31,8 @@
 
         <module>components/security-mgt</module>
         <module>components/authentication</module>
-        <module>components/application-deployers</module>
         <module>components/data-sources</module>
+        <module>components/application-deployers</module>
         <module>components/deployment-synchronizer</module>
         <module>components/application-mgt</module>
         <module>components/ws-discovery</module>
