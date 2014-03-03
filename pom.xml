@@ -40,7 +40,7 @@
         <module>components/entitlement-commons</module>
         <module>components/transport-mgt</module>
         <module>components/data-bridge</module>
-        <--module>components/data-sources</module-->
+        <!--module>components/data-sources</module-->
 
         <module>features/security-mgt</module>
         <module>features/application-deployers</module>
