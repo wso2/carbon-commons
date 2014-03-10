@@ -47,9 +47,9 @@ public class CloudCommonServiceComponent {
                 CommonUtil.setEula(eula);
             }
             
-			packageInfos = new PackageInfoHolder();
-			context.getBundleContext().registerService(
-					PackageInfoHolder.class.getName(), packageInfos, null);
+			//packageInfos = new PackageInfoHolder();
+			//context.getBundleContext().registerService(
+			//		PackageInfoHolder.class.getName(), packageInfos, null);
 
             //Register manager configuration OSGI service
             try {

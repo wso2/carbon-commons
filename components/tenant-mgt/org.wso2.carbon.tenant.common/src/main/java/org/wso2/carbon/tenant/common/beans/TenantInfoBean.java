@@ -18,11 +18,13 @@
  */
 package org.wso2.carbon.tenant.common.beans;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Calendar;
 
 /**
  * Bean class for Tenant Information
  */
+@XmlRootElement
 public class TenantInfoBean {
 
     private String admin; //admin's user name
@@ -37,6 +39,25 @@ public class TenantInfoBean {
     Calendar createdDate;
     private String originatedService;
     private String usagePlan;
+
+
+    public TenantInfoBean(){}
+
+    /*copy constructor*/
+    public TenantInfoBean(TenantInfoBean tenantInfoBean) {
+        this.admin = tenantInfoBean.admin;
+        this.firstname = tenantInfoBean.firstname;
+        this.lastname = tenantInfoBean.lastname;
+        this.adminPassword = tenantInfoBean.adminPassword;
+        this.tenantDomain = tenantInfoBean.tenantDomain;
+        this.tenantId = tenantInfoBean.tenantId;
+        this.email = tenantInfoBean.email;
+        this.active = tenantInfoBean.active;
+        this.successKey = tenantInfoBean.successKey;
+        this.createdDate = (Calendar)tenantInfoBean.createdDate.clone();
+        this.originatedService = tenantInfoBean.originatedService;
+        this.usagePlan = tenantInfoBean.usagePlan;
+    }
 
     public String getFirstname() {
         return firstname;
