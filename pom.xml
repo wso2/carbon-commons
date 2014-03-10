@@ -28,6 +28,7 @@
         <module>service-stubs/org.wso2.carbon.transport.jms.stub</module>
         <module>service-stubs/org.wso2.carbon.transport.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.datasource.stub</module>
+        <module>service-stubs/org.wso2.carbon.tenant.mgt.stub</module>
 
         <module>components/security-mgt</module>
         <module>components/authentication</module>
