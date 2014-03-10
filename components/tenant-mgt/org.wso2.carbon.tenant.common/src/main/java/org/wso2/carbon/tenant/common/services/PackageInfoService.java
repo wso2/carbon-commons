@@ -1,9 +1,9 @@
-package org.wso2.carbon.stratos.common.services;
+package org.wso2.carbon.tenant.common.services;
 
 import java.util.List;
 
-import org.wso2.carbon.stratos.common.internal.CloudCommonServiceComponent;
-import org.wso2.carbon.stratos.common.packages.PackageInfo;
+import org.wso2.carbon.tenant.common.internal.CloudCommonServiceComponent;
+import org.wso2.carbon.tenant.common.packages.PackageInfo;
 
 public class PackageInfoService {
 

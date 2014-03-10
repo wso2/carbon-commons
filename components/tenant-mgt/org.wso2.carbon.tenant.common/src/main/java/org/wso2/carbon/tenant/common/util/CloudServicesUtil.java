@@ -1,15 +1,15 @@
-package org.wso2.carbon.stratos.common.util;
+package org.wso2.carbon.tenant.common.util;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.stratos.common.config.CloudServiceConfig;
-import org.wso2.carbon.stratos.common.config.CloudServicesDescConfig;
-import org.wso2.carbon.stratos.common.config.PermissionConfig;
-import org.wso2.carbon.stratos.common.constants.StratosConstants;
-import org.wso2.carbon.stratos.common.internal.CloudCommonServiceComponent;
+import org.wso2.carbon.tenant.common.config.CloudServiceConfig;
+import org.wso2.carbon.tenant.common.config.CloudServicesDescConfig;
+import org.wso2.carbon.tenant.common.config.PermissionConfig;
+import org.wso2.carbon.tenant.common.constants.StratosConstants;
+import org.wso2.carbon.tenant.common.internal.CloudCommonServiceComponent;
 import org.wso2.carbon.registry.core.Collection;
 import org.wso2.carbon.registry.core.RegistryConstants;
 import org.wso2.carbon.registry.core.Resource;

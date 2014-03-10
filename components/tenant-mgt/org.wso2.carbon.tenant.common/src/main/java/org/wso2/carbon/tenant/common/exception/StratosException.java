@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.stratos.common.exception;
+package org.wso2.carbon.tenant.common.exception;
 
 /**
  * This class is defined as the general Exception implementation for Stratos. This can be used

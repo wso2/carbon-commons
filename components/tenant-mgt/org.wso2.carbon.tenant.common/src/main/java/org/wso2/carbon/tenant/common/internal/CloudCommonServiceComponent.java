@@ -1,12 +1,12 @@
-package org.wso2.carbon.stratos.common.internal;
+package org.wso2.carbon.tenant.common.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.stratos.common.packages.PackageInfoHolder;
-import org.wso2.carbon.stratos.common.util.CommonUtil;
-import org.wso2.carbon.stratos.common.util.StratosConfiguration;
+import org.wso2.carbon.tenant.common.packages.PackageInfoHolder;
+import org.wso2.carbon.tenant.common.util.CommonUtil;
+import org.wso2.carbon.tenant.common.util.StratosConfiguration;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.registry.core.session.UserRegistry;

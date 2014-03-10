@@ -15,10 +15,10 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.stratos.common.test;
+package org.wso2.carbon.tenant.common.test;
 
 import junit.framework.TestCase;
-import org.wso2.carbon.stratos.common.util.CommonUtil;
+import org.wso2.carbon.tenant.common.util.CommonUtil;
 
 public class CommonTest extends TestCase {
     public void testEmailValidation() throws Exception {

@@ -1,4 +1,4 @@
-package org.wso2.carbon.stratos.common.packages;
+package org.wso2.carbon.tenant.common.packages;
 
 /*
  * Deserialize following XML

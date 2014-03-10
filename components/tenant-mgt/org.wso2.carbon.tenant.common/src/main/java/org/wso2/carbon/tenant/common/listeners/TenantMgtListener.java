@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wso2.carbon.stratos.common.listeners;
+package org.wso2.carbon.tenant.common.listeners;
 
-import org.wso2.carbon.stratos.common.beans.TenantInfoBean;
-import org.wso2.carbon.stratos.common.exception.StratosException;
+import org.wso2.carbon.tenant.common.beans.TenantInfoBean;
+import org.wso2.carbon.tenant.common.exception.StratosException;
 
 public interface TenantMgtListener {
     public void onTenantCreate(TenantInfoBean tenantInfo) throws StratosException;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wso2.carbon.stratos.common.constants;
+package org.wso2.carbon.tenant.common.constants;
 
 public class UsageConstants {
     final public static String ANY_DURATION = "anyDuration";

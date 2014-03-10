@@ -16,7 +16,7 @@
  *  under the License.
  *
  */
-package org.wso2.carbon.stratos.common.util;
+package org.wso2.carbon.tenant.common.util;
 
 import java.lang.String;
 import java.util.HashMap;

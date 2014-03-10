@@ -13,26 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.wso2.carbon.stratos.common.config;
+package org.wso2.carbon.tenant.common.config;
 
 import org.apache.axiom.om.OMElement;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import javax.xml.namespace.QName;
-import java.util.Iterator;
+import java.util.*;
 
-public class PermissionConfig {
+public class CloudServicesDescConfig {
+    private static final Log log = LogFactory.getLog(CloudServicesDescConfig.class);
     private static final String CONFIG_NS = "http://wso2.com/carbon/cloud/mgt/services";
-    private static final String PATH = "path";
-    private static final String NAME = "name";
-    String name;
-    String path;
+    private static final String CLOUD_SERVICE_ELEMENT_NAME = "cloudService";
 
-    public PermissionConfig(OMElement configEle) {
+    Map<String, CloudServiceConfig> cloudServiceConfigs;
+
+    public CloudServicesDescConfig(OMElement configEle) {
+        // as the cloud service configs are kept in an order, we use an ordered map.
+        cloudServiceConfigs = new LinkedHashMap<String, CloudServiceConfig>();
         serialize(configEle);
     }
 
     public void serialize(OMElement configEle) {
-
         Iterator configChildIt = configEle.getChildElements();
         while (configChildIt.hasNext()) {
             Object configChildObj = configChildIt.next();
@@ -40,29 +43,16 @@ public class PermissionConfig {
                 continue;
             }
             OMElement configChildEle = (OMElement)configChildObj;
-            if (new QName(CONFIG_NS, NAME, "").
+            if (new QName(CONFIG_NS, CLOUD_SERVICE_ELEMENT_NAME, "").
                     equals(configChildEle.getQName())) {
-                name = configChildEle.getText();
-            } else if (new QName(CONFIG_NS, PATH, "").
-                    equals(configChildEle.getQName())) {
-                path = configChildEle.getText();
+                CloudServiceConfig cloudServiceConfig = new CloudServiceConfig(configChildEle);
+                String name = cloudServiceConfig.getName();
+                cloudServiceConfigs.put(name, cloudServiceConfig);
             }
         }
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
+    public Map<String, CloudServiceConfig> getCloudServiceConfigs() {
+        return cloudServiceConfigs;
     }
 }

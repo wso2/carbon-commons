@@ -15,9 +15,7 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.stratos.common.constants;
-
-import java.io.File;
+package org.wso2.carbon.tenant.common.constants;
 
 public class StratosConstants {
 
