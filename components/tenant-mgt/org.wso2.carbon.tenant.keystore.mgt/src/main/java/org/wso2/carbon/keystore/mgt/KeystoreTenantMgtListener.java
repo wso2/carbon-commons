@@ -17,9 +17,9 @@
 */
 package org.wso2.carbon.keystore.mgt;
 
-import org.wso2.carbon.stratos.common.beans.TenantInfoBean;
-import org.wso2.carbon.stratos.common.exception.StratosException;
-import org.wso2.carbon.stratos.common.listeners.TenantMgtListener;
+import org.wso2.carbon.tenant.common.beans.TenantInfoBean;
+import org.wso2.carbon.tenant.common.exception.StratosException;
+import org.wso2.carbon.tenant.common.listeners.TenantMgtListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
