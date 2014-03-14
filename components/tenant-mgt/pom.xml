@@ -38,6 +38,7 @@
         <module>org.wso2.carbon.tenant.keystore.mgt</module>
         <module>org.wso2.carbon.tenant.deployment</module>
         <module>org.wso2.carbon.tenant.dispatcher</module>
+        <module>org.wso2.carbon.tenant.mgt.core</module>
 
 <!--        <module>org.wso2.carbon.tenant.mgt.core/2.2.0</module>
         <module>org.wso2.carbon.tenant.mgt/2.2.0</module>
