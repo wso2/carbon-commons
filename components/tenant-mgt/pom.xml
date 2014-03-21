@@ -39,6 +39,9 @@
         <module>org.wso2.carbon.tenant.deployment</module>
         <module>org.wso2.carbon.tenant.dispatcher</module>
         <module>org.wso2.carbon.tenant.mgt.core</module>
+        <module>org.wso2.carbon.tenant.activation</module>
+        <module>org.wso2.carbon.tenant.redirector.servlet</module>
+        <module>org.wso2.carbon.tenant.redirector.servlet.ui</module>
 
 <!--        <module>org.wso2.carbon.tenant.mgt.core/2.2.0</module>
         <module>org.wso2.carbon.tenant.mgt/2.2.0</module>

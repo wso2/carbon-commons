@@ -29,7 +29,7 @@
         <module>service-stubs/org.wso2.carbon.transport.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.datasource.stub</module>
         <module>service-stubs/org.wso2.carbon.tenant.mgt.stub</module>
-        <module>service-stubs/org.wso2.carbon.redirector.servlet.stub</module>
+        <module>service-stubs/org.wso2.carbon.tenant.redirector.servlet.stub</module>
         <module>service-stubs/org.wso2.carbon.throttling.agent.stub</module>
 
         <module>components/security-mgt</module>
@@ -1238,6 +1238,8 @@
         </carbon.platform.package.export.version>
         <carbon.platform.package.import.version.range>[4.3.0.SNAPSHOT, 4.4.0)
         </carbon.platform.package.import.version.range>
+
+        <version.javax.servlet>3.0.0.v201112011016</version.javax.servlet>
 
         <!-- Stratos Version -->
         <stratos.version>2.2.0</stratos.version>
