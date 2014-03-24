@@ -47,6 +47,8 @@
         <module>org.wso2.carbon.tenant.theme.mgt</module>
         <module>org.wso2.carbon.tenant.theme.mgt.ui</module>
         <module>org.wso2.carbon.tenant.sso.redirector.ui</module>
+        <module>org.wso2.carbon.tenant.mgt</module>
+        <module>org.wso2.carbon.tenant.mgt.ui</module>
 
 <!--        <module>org.wso2.carbon.tenant.mgt.core/2.2.0</module>
         <module>org.wso2.carbon.tenant.mgt/2.2.0</module>
