@@ -24,7 +24,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.wso2.carbon.redirector.servlet</artifactId>
+    <artifactId>org.wso2.carbon.tenant.redirector.servlet</artifactId>
     <packaging>bundle</packaging>
     <version>4.3.0-SNAPSHOT</version>
     <name>WSO2 Stratos - Tenant Specific URL redirector</name>

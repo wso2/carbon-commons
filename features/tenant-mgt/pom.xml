@@ -38,6 +38,9 @@
         <module>org.wso2.carbon.tenant.throttling.agent.feature</module>
         <module>org.wso2.carbon.tenant.usage.agent.feature</module>
         <module>org.wso2.carbon.tenant.deployment</module>
+        <module>org.wso2.carbon.tenant.common.server.feature</module>
+        <module>org.wso2.carbon.tenant.common.ui.feature</module>
+        <module>org.wso2.carbon.tenant.common.feature</module>
     </modules>
 
 </project>
