@@ -29,6 +29,7 @@
         <module>service-stubs/org.wso2.carbon.transport.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.datasource.stub</module>
         <module>service-stubs/org.wso2.carbon.tenant.mgt.stub</module>
+        <module>service-stubs/org.wso2.carbon.tenant.common.stub</module>
         <module>service-stubs/org.wso2.carbon.tenant.redirector.servlet.stub</module>
         <module>service-stubs/org.wso2.carbon.throttling.agent.stub</module>
         <module>service-stubs/org.wso2.carbon.tenant.theme.mgt.stub</module>
@@ -1015,11 +1016,6 @@
                <version>${version.equinox.osgi.services}</version>
             </dependency>
 	    <dependency>
-               <groupId>libthrift.wso2</groupId>
-               <artifactId>libthrift</artifactId>
-               <version>${libthrift.wso2.version}</version>
-            </dependency>
-	    <dependency>
                <groupId>commons-pool.wso2</groupId>
                <artifactId>commons-pool</artifactId>
                <version>${commons.pool.version}</version>
@@ -1055,6 +1051,26 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.tenant.mgt.core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.tenant.mgt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.tenant.theme.mgt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.tenant.throttling.agent</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.throttling.agent.stub</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
