@@ -31,6 +31,7 @@
         <module>service-stubs/org.wso2.carbon.tenant.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.tenant.redirector.servlet.stub</module>
         <module>service-stubs/org.wso2.carbon.throttling.agent.stub</module>
+        <module>service-stubs/org.wso2.carbon.tenant.theme.mgt.stub</module>
 
         <module>components/security-mgt</module>
         <module>components/authentication</module>
@@ -90,6 +91,11 @@
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.registry.core</artifactId>
                 <version>${carbon.platform.version}</version>
+            </dependency>
+	    <dependency>
+            	<groupId>org.wso2.carbon</groupId>
+            	<artifactId>org.wso2.carbon.registry.resource</artifactId>
+		<version>${carbon.platform.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
