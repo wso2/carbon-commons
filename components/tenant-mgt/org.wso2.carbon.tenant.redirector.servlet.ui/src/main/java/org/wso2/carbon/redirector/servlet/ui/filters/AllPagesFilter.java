@@ -18,7 +18,7 @@ package org.wso2.carbon.redirector.servlet.ui.filters;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
-import org.wso2.carbon.tenant.common.constants.StratosConstants;
+import org.wso2.carbon.stratos.common.constants.StratosConstants;
 import org.wso2.carbon.redirector.servlet.ui.clients.RedirectorServletServiceClient;
 
 import javax.servlet.*;

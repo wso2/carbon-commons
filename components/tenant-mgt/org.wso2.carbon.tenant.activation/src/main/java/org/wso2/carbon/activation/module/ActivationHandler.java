@@ -33,7 +33,7 @@ import org.wso2.carbon.activation.utils.ActivationManager;
 import org.wso2.carbon.activation.utils.Util;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.core.multitenancy.utils.TenantAxisUtils;
-import org.wso2.carbon.tenant.common.util.CloudServicesUtil;
+import org.wso2.carbon.stratos.common.util.CloudServicesUtil;
 import org.wso2.carbon.utils.ServerConstants;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;

@@ -22,9 +22,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.activation.utils.ActivationManager;
 import org.wso2.carbon.activation.utils.Util;
-import org.wso2.carbon.tenant.common.config.CloudServiceConfigParser;
-import org.wso2.carbon.tenant.common.config.CloudServicesDescConfig;
-import org.wso2.carbon.tenant.common.util.CloudServicesUtil;
+import org.wso2.carbon.stratos.common.config.CloudServiceConfigParser;
+import org.wso2.carbon.stratos.common.config.CloudServicesDescConfig;
+import org.wso2.carbon.stratos.common.util.CloudServicesUtil;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**

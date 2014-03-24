@@ -45,7 +45,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.carbon.tenant.common.*,
+                            org.wso2.carbon.stratos.common.*,
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.registry.core.*;version=1.0.1,

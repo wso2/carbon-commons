@@ -44,7 +44,7 @@ public class KeyStoreMgtServiceComponent {
     protected void activate(ComponentContext ctxt){
         KeystoreTenantMgtListener keystoreTenantMgtListener = new KeystoreTenantMgtListener();
         ctxt.getBundleContext().registerService(
-                org.wso2.carbon.tenant.common.listeners.TenantMgtListener.class.getName(),
+                org.wso2.carbon.stratos.common.listeners.TenantMgtListener.class.getName(),
                 keystoreTenantMgtListener, null);
         if (log.isDebugEnabled()) {
             log.debug("*************Stratos Keystore mgt component is activated.**************");

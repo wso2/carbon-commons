@@ -49,7 +49,7 @@
                             org.wso2.carbon.tenant.mgt.core.internal.*;-split-package:=merge-last,
                         </Private-Package>
                         <Import-Package>
-                            org.wso2.carbon.tenant.common.*,
+                            org.wso2.carbon.stratos.common.*,
                             org.wso2.carbon.registry.core.*,
                             !javax.xml.namespace,
                             javax.xml.namespace; version=0.0.0,

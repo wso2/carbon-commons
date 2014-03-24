@@ -19,7 +19,7 @@
 package org.wso2.carbon.redirector.servlet.services;
 
 import org.wso2.carbon.user.core.tenant.TenantManager;
-import org.wso2.carbon.tenant.common.constants.StratosConstants;
+import org.wso2.carbon.stratos.common.constants.StratosConstants;
 import org.wso2.carbon.redirector.servlet.util.Util;
 
 public class RedirectorServletService {

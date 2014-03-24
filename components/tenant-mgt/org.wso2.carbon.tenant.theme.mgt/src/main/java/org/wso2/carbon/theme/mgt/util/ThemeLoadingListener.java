@@ -40,6 +40,10 @@ public class ThemeLoadingListener implements TenantMgtListener {
     public void onTenantUpdate(TenantInfoBean tenantInfo) throws StratosException {
         // doing nothing
     }
+
+    public void onTenantDelete(int tenantId) {
+        // It is not required to implement this method for keystore mgt.
+    }
     
     public void onTenantRename(int tenantId, String oldDomainName,
                              String newDomainName) throws StratosException {
