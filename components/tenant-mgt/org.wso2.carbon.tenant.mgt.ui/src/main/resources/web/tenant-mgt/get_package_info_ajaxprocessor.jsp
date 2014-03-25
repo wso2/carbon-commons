@@ -26,7 +26,7 @@
 <%@ taglib uri="http://wso2.org/projects/carbon/taglibs/carbontags.jar" prefix="carbon" %>
 
 <%
-
+   try{
     String backendServerUrl = CarbonUIUtil.getServerURL(config.getServletContext(), session);
     String cookie = (String) session.getAttribute(ServerConstants.ADMIN_SERVICE_COOKIE);
     ConfigurationContext configContext =
@@ -36,4 +36,7 @@
     JSONArray packageInfoArray = client.getBillingPackagesJsonArray();
 
     out.write(packageInfoArray.toString());
+   } catch (Exception e){
+       e.getStackTrace();
+   }
 %>

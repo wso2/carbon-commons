@@ -60,6 +60,7 @@
             isUpdating = true;
             session.setAttribute("isActivatedTenant", isActive);
         } catch (Exception e) {
+            e.getStackTrace();
             CarbonUIMessage uiMsg = new CarbonUIMessage(CarbonUIMessage.ERROR, e.getMessage(), e);
             request.setAttribute(CarbonUIMessage.ID, uiMsg);
 %>

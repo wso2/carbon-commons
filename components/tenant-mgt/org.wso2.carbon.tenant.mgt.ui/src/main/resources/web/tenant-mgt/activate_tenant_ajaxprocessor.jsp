@@ -46,6 +46,7 @@
         response.sendRedirect("../tenant-mgt/view_tenants.jsp");
 
     } catch (Exception e) {
+        e.printStackTrace();
             CarbonUIMessage uiMsg = new CarbonUIMessage(CarbonUIMessage.ERROR, e.getMessage(), e);
             request.setAttribute(CarbonUIMessage.ID, uiMsg);
                  %>

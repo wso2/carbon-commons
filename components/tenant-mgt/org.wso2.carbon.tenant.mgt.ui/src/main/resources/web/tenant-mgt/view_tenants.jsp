@@ -147,6 +147,7 @@
             } catch (Exception e) {
                 String error1 = "Error in retrieving tenants";
                 request.setAttribute(CarbonUIMessage.ID, new CarbonUIMessage(error1, error1, null));
+                e.printStackTrace();
         %>
 
         <jsp:forward page="../admin/error.jsp"/>
