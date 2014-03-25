@@ -41,6 +41,7 @@
         <module>components/deployment-synchronizer</module>
         <module>components/application-mgt</module>
         <module>components/ws-discovery</module>
+        <module>components/tenant-mgt</module>
         <module>components/idp-mgt</module>
         <module>components/authenticators/saml2-sso-authenticator</module>
         <module>components/entitlement-commons</module>
@@ -52,6 +53,7 @@
         <module>features/application-mgt</module>
         <module>features/deployment-synchronizer</module>
         <module>features/ws-discovery</module>
+        <module>features/tenant-mgt</module>
         <module>features/idp-mgt</module>
         <module>features/authenticators/saml2-sso-authenticator</module>
         <module>features/transport-mgt</module>
@@ -1159,6 +1161,11 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.8</version>
                 </plugin>
             </plugins>
         </pluginManagement>

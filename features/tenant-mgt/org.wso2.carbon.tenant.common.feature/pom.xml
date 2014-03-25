@@ -30,7 +30,7 @@
     <artifactId>org.wso2.carbon.tenant.common.feature</artifactId>
     <packaging>pom</packaging>
     <version>4.3.0-SNAPSHOT</version>
-    <name>WSO2 Stratos - Common Composite Feature</name>
+    <name>WSO2 Tenant Common Composite Feature</name>
     <url>http://wso2.org</url>
     <description>This feature contains the bundles required for Common feature</description>
 
@@ -83,7 +83,4 @@
             </plugin>
         </plugins>
     </build>
-<!--    <properties>
-        <platform.stratos.version>2.2.0</platform.stratos.version>
-    </properties>-->
 </project>
