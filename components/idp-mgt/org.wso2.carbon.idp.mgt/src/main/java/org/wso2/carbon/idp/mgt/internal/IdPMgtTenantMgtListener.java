@@ -63,6 +63,10 @@ public class IdPMgtTenantMgtListener implements TenantMgtListener {
     public void onTenantInitialActivation(int tenantId) throws StratosException {
         // It is not required to implement this method for IdP mgt.
     }
+     
+    public void onTenantDelete(int tenantId) {
+ 
+    }
 
     public void onTenantActivation(int tenantId) throws StratosException {
         // It is not required to implement this method for IdP mgt.

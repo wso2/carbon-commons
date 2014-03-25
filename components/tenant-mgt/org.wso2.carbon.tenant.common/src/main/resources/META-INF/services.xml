@@ -22,7 +22,7 @@
             <transport>https</transport>
         </transports>
         <parameter name="ServiceClass" locked="false">
-            org.wso2.carbon.tenant.common.services.PackageInfoService
+            org.wso2.carbon.stratos.common.services.PackageInfoService
         </parameter>
         <parameter name="adminService" locked="ture">false</parameter>
     </service>
