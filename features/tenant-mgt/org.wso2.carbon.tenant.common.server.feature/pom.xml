@@ -110,6 +110,11 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.tenant.activation</artifactId>
+            <version>4.3.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.mgt.core</artifactId>
         </dependency>
         <dependency>
@@ -199,6 +204,7 @@
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.redirector.servlet</bundleDef>
                                 <!--<bundleDef>org.wso2.carbon:org.wso2.carbon.sample.installer:2.2.1</bundleDef>-->
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.dispatcher</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.activation</bundleDef>
                                 <!--<bundleDef>org.wso2.carbon:org.wso2.carbon.throttling.agent</bundleDef>-->
                                 <!--<bundleDef>org.wso2.carbon:org.wso2.carbon.throttling.agent.stub</bundleDef>-->
                                 <!--<bundleDef>org.wso2.carbon:org.wso2.carbon.usage.agent</bundleDef>-->
