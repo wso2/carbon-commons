@@ -77,7 +77,6 @@
         <dependency>
             <groupId>org.eclipse.equinox</groupId>
             <artifactId>javax.servlet</artifactId>
-            <version>${version.javax.servlet}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -99,7 +98,6 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.redirector.servlet.stub</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

@@ -39,14 +39,14 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                
+
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>
-                            org.wso2.carbon.keystore.mgt.internal                            
+                            org.wso2.carbon.keystore.mgt.internal
                         </Private-Package>
                         <Export-Package>
                             !org.wso2.carbon.keystore.mgt.internal,
@@ -71,12 +71,11 @@
     </build>
 
     <dependencies>
-
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>commons-codec.wso2</groupId>
             <artifactId>commons-codec</artifactId>
         </dependency>

@@ -38,13 +38,11 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.common.server.feature</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.common.ui.feature</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
             <type>zip</type>
         </dependency>
     </dependencies>
@@ -67,14 +65,14 @@
                             <propertiesFile>../../../../etc/feature.properties</propertiesFile>
                             <includedFeatures>
                                 <includedFeatureDef>
-                                    org.wso2.carbon:org.wso2.carbon.tenant.common.server.feature:4.3.0-SNAPSHOT
+                                    org.wso2.carbon:org.wso2.carbon.tenant.common.server.feature:${project.version}
                                 </includedFeatureDef>
                                 <includedFeatureDef>
-                                    org.wso2.carbon:org.wso2.carbon.tenant.common.ui.feature:4.3.0-SNAPSHOT
+                                    org.wso2.carbon:org.wso2.carbon.tenant.common.ui.feature:${project.version}
                                 </includedFeatureDef>
                             </includedFeatures>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.registry.core:4.3.0-SNAPSHOT</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.registry.core:${wso2carbon.version}</importFeatureDef>
                             </importFeatures>
 
                         </configuration>

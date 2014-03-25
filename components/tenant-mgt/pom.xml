@@ -50,12 +50,6 @@
         <module>org.wso2.carbon.tenant.mgt</module>
         <module>org.wso2.carbon.tenant.mgt.ui</module>
 
-<!--        <module>org.wso2.carbon.tenant.mgt.core/2.2.0</module>
-        <module>org.wso2.carbon.tenant.mgt/2.2.0</module>
-        <module>org.wso2.carbon.tenant.mgt.email.sender/2.2.0</module>
-        <module>org.wso2.carbon.tenant.mgt.ui/2.2.0</module>
-        <module>org.wso2.carbon.tenant.registration.ui/2.2.0</module>
--->
     </modules>
 
 </project>

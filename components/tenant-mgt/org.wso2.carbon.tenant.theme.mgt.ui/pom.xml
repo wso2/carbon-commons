@@ -18,14 +18,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-	<groupId>org.wso2.carbon</groupId>
+        <groupId>org.wso2.carbon</groupId>
         <artifactId>tenant-mgt-parent</artifactId>
         <version>4.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
+    <groupId>org.wso2.carbon</groupId>
     <artifactId>org.wso2.carbon.tenant.theme.mgt.ui</artifactId>
+    <version>4.3.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Stratos - Theme Configuration User Interface</name>
 
@@ -45,7 +47,7 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                
+
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
@@ -77,7 +79,6 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.theme.mgt.stub</artifactId>
-            <version>${carbon.platform.version}</version>
         </dependency>
         <dependency>
             <groupId>log4j</groupId>
@@ -86,32 +87,23 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.registry.common.ui</artifactId>
-            <version>${carbon.platform.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.registry.resource.ui</artifactId>
-            <version>${carbon.platform.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.registry.core</artifactId>
-            <version>${carbon.platform.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
-        <!--dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>javax.servlet</artifactId>
-            <scope>provided</scope>
-        </dependency-->
-	<dependency>
-	    <groupId>org.apache.tomcat.wso2</groupId>
+        <dependency>
+            <groupId>org.apache.tomcat.wso2</groupId>
             <artifactId>tomcat-servlet-api</artifactId>
-            <version>7.0.52.wso2v1</version>
-	</dependency>
+        </dependency>
         <dependency>
             <groupId>org.apache.axis2.wso2</groupId>
             <artifactId>axis2</artifactId>
@@ -123,32 +115,14 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.ui</artifactId>
-            <version>${carbon.platform.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.core</artifactId>
-            <version>${carbon.platform.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.batik.wso2</groupId>
             <artifactId>batik</artifactId>
-	    <version>1.7.0.wso2v1</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.wso2.carbon</groupId>-->
-            <!--<artifactId>org.wso2.carbon.registry.profiles.ui</artifactId>-->
-            <!--<version>${registry-component.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.wso2.carbon</groupId>-->
-            <!--<artifactId>org.wso2.carbon.governance.wsdltool.ui</artifactId>-->
-            <!--<version>${registry-component.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.wso2.carbon</groupId>-->
-            <!--<artifactId>org.wso2.carbon.registry.resource.ui</artifactId>-->
-            <!--<version>${registry-component.version}</version>-->
-        <!--</dependency>-->
     </dependencies>
 </project>

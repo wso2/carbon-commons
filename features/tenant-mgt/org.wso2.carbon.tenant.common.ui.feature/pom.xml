@@ -38,12 +38,10 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.redirector.servlet.ui</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.sso.redirector.ui</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
        <!-- <dependency>
             <groupId>org.wso2.carbon</groupId>
@@ -52,28 +50,23 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.mgt.stub</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
         <!--  Tenant Mgmt  -->
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.mgt.ui</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.common.stub</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.theme.mgt.ui</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.theme.mgt.stub</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
 
     </dependencies>

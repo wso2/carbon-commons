@@ -38,80 +38,47 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.common</artifactId>
-            <version>${stratos.version}</version>
         </dependency>
-
-
-        <!--<dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.stratos.landing.page.deployer</artifactId>
-            <version>${stratos.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.sample.installer</artifactId>
-            <version>2.2.1</version>
-        </dependency>
--->
-
-
 
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.dispatcher</artifactId>
-            <version>${stratos.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.redirector.servlet</artifactId>
-            <version>${carbon.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.throttling.agent.stub</artifactId>
-            <version>${carbon.version}</version>
         </dependency>
         <dependency>
             <groupId>org.quartz-scheduler.wso2</groupId>
             <artifactId>quartz</artifactId>
-            <version>2.1.1.wso2v1</version>
         </dependency>
 
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.upload</artifactId>
-            <version>${carbon.platform.version}</version>
         </dependency>
 
         <!--  Tenant Mgmt -->
         <dependency>
             <groupId>org.json.wso2</groupId>
             <artifactId>json</artifactId>
-            <version>${json.patch.version.200-wso2v1}</version>
         </dependency>
-
-
-      <!--  <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.tenant.mgt</artifactId>
-            <version>${carbon.version}</version>
-        </dependency>-->
 
         <dependency>
             <groupId>kaptcha.wso2</groupId>
             <artifactId>kaptcha</artifactId>
-            <version>${kaptcha.patch.version.230-wso2v1}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.keystore.mgt</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.activation</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
@@ -120,27 +87,22 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.captcha.mgt</artifactId>
-            <version>4.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.tenant.theme.mgt</artifactId>
-            <version>4.3.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.rampart.wso2</groupId>
             <artifactId>rampart-policy</artifactId>
-            <version>${rampart.wso2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.rampart.wso2</groupId>
             <artifactId>rampart-core</artifactId>
-            <version>${rampart.wso2.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.rampart.wso2</groupId>
             <artifactId>rampart-trust</artifactId>
-            <version>${rampart.wso2.version}</version>
         </dependency>
     </dependencies>
 
@@ -200,7 +162,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.common:${stratos.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.common:${carbon.platform.version}</bundleDef>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.redirector.servlet</bundleDef>
                                 <!--<bundleDef>org.wso2.carbon:org.wso2.carbon.sample.installer:2.2.1</bundleDef>-->
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.dispatcher</bundleDef>
@@ -217,13 +179,13 @@
 
                                 <!-- Tenant Mgmt -->
                                 <bundleDef>org.json.wso2:json</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.mgt:${stratos.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.mgt:${carbon.platform.version}</bundleDef>
                                 <bundleDef>kaptcha.wso2:kaptcha</bundleDef>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.keystore.mgt</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.mgt.core:${stratos.version}
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.mgt.core:${carbon.platform.version}
                                 </bundleDef>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.captcha.mgt</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.theme.mgt:${stratos.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tenant.theme.mgt:${carbon.platform.version}</bundleDef>
                                 <!-- End Tenant Mgmt -->
 
                             </bundles>
@@ -236,9 +198,9 @@
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.identity.authenticator.saml2.sso.server:4.3.0-SNAPSHOT
+                                    org.wso2.carbon.identity.authenticator.saml2.sso.server:${wso2carbon.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.registry.core.server:4.3.0-SNAPSHOT
+                                <importFeatureDef>org.wso2.carbon.registry.core.server:${wso2carbon.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>
@@ -248,7 +210,7 @@
         </plugins>
     </build>
 
-    <properties>
+  <!--  <properties>
         <json.patch.version.200-wso2v1>2.0.0.wso2v1</json.patch.version.200-wso2v1>
         <kaptcha.patch.version.230-wso2v1>2.3.0.wso2v1</kaptcha.patch.version.230-wso2v1>
         <carbon.version>4.3.0-SNAPSHOT</carbon.version>
@@ -257,6 +219,6 @@
         <stratos.keystore.version>4.3.0-SNAPSHOT</stratos.keystore.version>
         <stratos.activation.version>4.3.0-SNAPSHOT</stratos.activation.version>
         <rampart.wso2.version>1.6.1.wso2v12</rampart.wso2.version>
-    </properties>
+    </properties>-->
 
 </project>
