@@ -69,7 +69,7 @@ public class CarbonAppUploader extends AbstractAdmin {
             throws IOException {
 
         File tempDestFile = new File(tempDestPath, fileName);
-        File destFile = new File(destPath, fileName);
+	File destFile = new File(destPath, fileName);
         FileOutputStream fos = null;
 
         try {
@@ -79,8 +79,23 @@ public class CarbonAppUploader extends AbstractAdmin {
 
             /* File stream is copied to a temp directory in order handle hot deployment issue
                occurred in windows */
+           
             FileUtils.copyFile(tempDestFile,destFile);
         } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                }
+            } catch (IOException e) {
+                log.warn("Can't close file streams.", e);
+            }
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                log.warn("Can't close file streams.", e);
+            }
             try {
                 if (fos != null) {
                     fos.close();
