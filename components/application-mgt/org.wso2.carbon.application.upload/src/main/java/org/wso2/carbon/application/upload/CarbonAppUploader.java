@@ -16,6 +16,7 @@
 package org.wso2.carbon.application.upload;
 
 import org.apache.axis2.AxisFault;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.core.AbstractAdmin;
@@ -23,10 +24,8 @@ import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.activation.DataHandler;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.channels.FileChannel;
 
 /**
  * Carbon Application Uploader service.
@@ -70,8 +69,7 @@ public class CarbonAppUploader extends AbstractAdmin {
             throws IOException {
 
         File tempDestFile = new File(tempDestPath, fileName);
-        FileChannel out = null;
-        FileChannel in = null;
+        File destFile = new File(destPath, fileName);
         FileOutputStream fos = null;
 
         try {
@@ -81,25 +79,8 @@ public class CarbonAppUploader extends AbstractAdmin {
 
             /* File stream is copied to a temp directory in order handle hot deployment issue
                occurred in windows */
-            dataHandler.writeTo(fos);
-            out = new FileOutputStream(destPath + File.separator + fileName).getChannel();
-            in = new FileInputStream(tempDestFile).getChannel();
-            out.write(in.map(FileChannel.MapMode.READ_ONLY, 0, in.size()));
+            FileUtils.copyFile(tempDestFile,destFile);
         } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                log.warn("Can't close file streams.", e);
-            }
-            try {
-                if (in != null) {
-                    in.close();
-                }
-            } catch (IOException e) {
-                log.warn("Can't close file streams.", e);
-            }
             try {
                 if (fos != null) {
                     fos.close();
