@@ -110,8 +110,7 @@ public final class ThriftEventConverter {
         return thriftEventBundle;
     }
 
-    private static ThriftEventBundle assignMap(ThriftEventBundle thriftEventBundle,
-                                               Map<String, String> arbitraryDataMap) {
+    private static ThriftEventBundle assignMap(ThriftEventBundle thriftEventBundle, Map<String, String> arbitraryDataMap) {
         if (null != arbitraryDataMap) {
             if (!thriftEventBundle.isSetArbitraryDataMapMap()) {
                 thriftEventBundle.setArbitraryDataMapMap(new HashMap<Integer, Map<String, String>>());

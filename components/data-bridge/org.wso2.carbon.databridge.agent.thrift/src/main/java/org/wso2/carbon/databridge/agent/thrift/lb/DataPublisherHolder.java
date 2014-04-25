@@ -31,8 +31,7 @@ public class DataPublisherHolder {
 
     private AsyncDataPublisher dataPublisher;
 
-    public DataPublisherHolder(String authenticationUrl, String receiverUrl, String username,
-                               String password) {
+    public DataPublisherHolder(String authenticationUrl, String receiverUrl, String username, String password) {
         this.authenticationUrl = authenticationUrl;
         this.receiverUrl = receiverUrl;
         this.username = username;
@@ -46,7 +45,7 @@ public class DataPublisherHolder {
 
 
     public void generateDataPublisher(ConcurrentHashMap<String, String> streamDefnCache) {
-        dataPublisher = new AsyncDataPublisher(authenticationUrl, receiverUrl, username, password, agent, streamDefnCache);
+            dataPublisher = new AsyncDataPublisher(authenticationUrl, receiverUrl, username, password, agent,streamDefnCache);
     }
 
     public String getAuthenticationUrl() {

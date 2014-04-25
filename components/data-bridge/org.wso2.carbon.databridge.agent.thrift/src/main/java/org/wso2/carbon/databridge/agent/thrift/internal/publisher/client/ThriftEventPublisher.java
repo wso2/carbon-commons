@@ -29,18 +29,9 @@ import org.wso2.carbon.databridge.agent.thrift.internal.EventQueue;
 import org.wso2.carbon.databridge.agent.thrift.internal.publisher.authenticator.AgentAuthenticator;
 import org.wso2.carbon.databridge.agent.thrift.internal.utils.ThriftEventConverter;
 import org.wso2.carbon.databridge.commons.Event;
-import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlreadyDefinedException;
-import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.SessionTimeoutException;
-import org.wso2.carbon.databridge.commons.exception.StreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
+import org.wso2.carbon.databridge.commons.exception.*;
 import org.wso2.carbon.databridge.commons.thrift.data.ThriftEventBundle;
-import org.wso2.carbon.databridge.commons.thrift.exception.ThriftDifferentStreamDefinitionAlreadyDefinedException;
-import org.wso2.carbon.databridge.commons.thrift.exception.ThriftMalformedStreamDefinitionException;
-import org.wso2.carbon.databridge.commons.thrift.exception.ThriftNoStreamDefinitionExistException;
-import org.wso2.carbon.databridge.commons.thrift.exception.ThriftSessionExpiredException;
-import org.wso2.carbon.databridge.commons.thrift.exception.ThriftStreamDefinitionException;
-import org.wso2.carbon.databridge.commons.thrift.exception.ThriftUndefinedEventTypeException;
+import org.wso2.carbon.databridge.commons.thrift.exception.*;
 import org.wso2.carbon.databridge.commons.thrift.service.general.ThriftEventTransmissionService;
 import org.wso2.carbon.databridge.commons.thrift.service.secure.ThriftSecureEventTransmissionService;
 
@@ -107,7 +98,7 @@ public class ThriftEventPublisher extends EventPublisher {
 
     @Override
     protected String defineStream(Object client, String sessionId,
-                                  String streamDefinition)
+                                       String streamDefinition)
             throws DifferentStreamDefinitionAlreadyDefinedException,
                    MalformedStreamDefinitionException, EventPublisherException,
                    SessionTimeoutException, StreamDefinitionException {
@@ -132,7 +123,7 @@ public class ThriftEventPublisher extends EventPublisher {
 
     @Override
     protected String findStreamId(Object client, String currentSessionId, String name,
-                                  String version)
+                                       String version)
             throws SessionTimeoutException,
                    EventPublisherException {
         try {
@@ -152,8 +143,7 @@ public class ThriftEventPublisher extends EventPublisher {
     }
 
     @Override
-    protected boolean deleteStream(Object client, String currentSessionId, String streamId)
-            throws EventPublisherException, SessionTimeoutException {
+    protected boolean deleteStream(Object client, String currentSessionId, String streamId) throws EventPublisherException, SessionTimeoutException {
         try {
             if (client instanceof ThriftSecureEventTransmissionService.Client) {
                 return ((ThriftSecureEventTransmissionService.Client) client).deleteStreamById(currentSessionId, streamId);
@@ -168,9 +158,7 @@ public class ThriftEventPublisher extends EventPublisher {
     }
 
     @Override
-    protected boolean deleteStream(Object client, String currentSessionId, String streamName,
-                                   String streamVersion)
-            throws EventPublisherException, SessionTimeoutException {
+    protected boolean deleteStream(Object client, String currentSessionId, String streamName, String streamVersion) throws EventPublisherException, SessionTimeoutException {
         try {
             if (client instanceof ThriftSecureEventTransmissionService.Client) {
                 return ((ThriftSecureEventTransmissionService.Client) client).deleteStreamByNameVersion(currentSessionId, streamName, streamVersion);

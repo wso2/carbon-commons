@@ -18,8 +18,8 @@ package org.wso2.carbon.databridge.core.definitionstore;
 
 public interface StreamAddRemoveListener {
 
-    public void streamAdded(String streamId);
+    public void streamAdded(int tenantId, String streamId);
 
-    public void streamRemoved(String streamId);
+    public void streamRemoved(int tenantId, String streamId);
 
 }

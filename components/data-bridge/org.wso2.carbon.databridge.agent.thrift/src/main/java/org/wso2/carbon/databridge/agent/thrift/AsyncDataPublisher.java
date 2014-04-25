@@ -304,23 +304,22 @@ public class AsyncDataPublisher {
     public void publish(String streamName, String streamVersion,
                         long timeStamp,
                         Object[] metaDataArray, Object[] correlationDataArray,
-                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
-            throws AgentException {
+                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap) throws AgentException {
         if (canPublish()) {
             if (null != dataPublisher) {
                 String streamKey = DataPublisherUtil.getStreamCacheKey(streamName, streamVersion);
                 String streamId = streamIdCache.get(streamKey);
                 if (null != streamId) {
                     boolean publishSuccessful = dataPublisher.tryPublish(streamId, timeStamp, metaDataArray,
-                                                                         correlationDataArray, payloadDataArray, arbitraryDataMap);
+                                          correlationDataArray, payloadDataArray, arbitraryDataMap);
                     if (!publishSuccessful) {
                         boolean isAdded = publishDataQueue.offer(new PublishData(streamName,
-                                                                                 streamVersion,
-                                                                                 timeStamp,
-                                                                                 metaDataArray,
-                                                                                 correlationDataArray,
-                                                                                 payloadDataArray,
-                                                                                 arbitraryDataMap));
+                                streamVersion,
+                                timeStamp,
+                                metaDataArray,
+                                correlationDataArray,
+                                payloadDataArray,
+                                arbitraryDataMap));
 
                         if (isPublisherAlive.compareAndSet(false, true)) {
                             publisherService.submit(new DataPublishWorker());
@@ -413,22 +412,21 @@ public class AsyncDataPublisher {
      */
     public void publish(String streamName, String streamVersion,
                         Object[] metaDataArray, Object[] correlationDataArray,
-                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
-            throws AgentException {
+                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap) throws AgentException {
         if (canPublish()) {
             if (null != dataPublisher) {
                 String streamKey = DataPublisherUtil.getStreamCacheKey(streamName, streamVersion);
                 String streamId = streamIdCache.get(streamKey);
                 if (null != streamId) {
                     boolean publishSuccessful = dataPublisher.tryPublish(streamId, metaDataArray,
-                                                                         correlationDataArray, payloadDataArray, arbitraryDataMap);
+                                          correlationDataArray, payloadDataArray, arbitraryDataMap);
                     if (!publishSuccessful) {
                         boolean isAdded = publishDataQueue.offer(new PublishData(streamName,
-                                                                                 streamVersion,
-                                                                                 metaDataArray,
-                                                                                 correlationDataArray,
-                                                                                 payloadDataArray,
-                                                                                 arbitraryDataMap));
+                                streamVersion,
+                                metaDataArray,
+                                correlationDataArray,
+                                payloadDataArray,
+                                arbitraryDataMap));
 
                         if (isPublisherAlive.compareAndSet(false, true)) {
                             publisherService.submit(new DataPublishWorker());
@@ -504,8 +502,8 @@ public class AsyncDataPublisher {
                     boolean publishSuccessful = dataPublisher.tryPublish(event);
                     if (!publishSuccessful) {
                         boolean isAdded = publishDataQueue.offer(new PublishData(streamName,
-                                                                                 streamVersion,
-                                                                                 event));
+                                streamVersion,
+                                event));
 
                         if (isPublisherAlive.compareAndSet(false, true)) {
                             publisherService.submit(new DataPublishWorker());
@@ -565,8 +563,8 @@ public class AsyncDataPublisher {
                 if (!publishSuccessful) {
                     //receiverConnector worker is started to connect, but not yet dataPublisher is setted
                     boolean isAdded = publishDataQueue.offer(new PublishData(null,
-                                                                             null,
-                                                                             event));
+                            null,
+                            event));
 
                     if (!isAdded && log.isDebugEnabled()) {
                         log.debug("Event queue is full, and Event is not added to the queue to publish");
@@ -808,8 +806,7 @@ public class AsyncDataPublisher {
         private Agent agent;
         private boolean isReconnecting;
 
-        private ReceiverConnectionWorker(String authenticationUrl, String receiverUrl,
-                                         String username, String password, Agent agent) {
+        private ReceiverConnectionWorker(String authenticationUrl, String receiverUrl, String username, String password, Agent agent) {
             this.authenticationUrl = authenticationUrl;
             this.receiverUrl = receiverUrl;
             this.username = username;
@@ -824,8 +821,7 @@ public class AsyncDataPublisher {
         }
 
 
-        private ReceiverConnectionWorker(String receiverUrl, String username, String password,
-                                         Agent agent) {
+        private ReceiverConnectionWorker(String receiverUrl, String username, String password, Agent agent) {
             this.receiverUrl = receiverUrl;
             this.username = username;
             this.password = password;

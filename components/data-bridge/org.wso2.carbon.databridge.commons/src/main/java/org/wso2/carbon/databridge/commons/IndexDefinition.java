@@ -20,15 +20,9 @@
 
 package org.wso2.carbon.databridge.commons;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.wso2.carbon.databridge.commons.utils.IndexDefinitionConverterUtils;
+
+import java.util.*;
 
 public class IndexDefinition {
     private static final String STREAM_VERSION_KEY = "Version";
@@ -54,6 +48,7 @@ public class IndexDefinition {
     private boolean isIndexTimestamp;
     private boolean isIncrementalIndex;
 
+
     public IndexDefinition() {
     }
 
@@ -62,16 +57,41 @@ public class IndexDefinition {
             return;
         }
 
-        String[] indexData = indexDefnStr.split("\\|");
+        String secondaryIndex = IndexDefinitionConverterUtils
+                .getSecondaryIndexString(indexDefnStr);
+        String customIndex = IndexDefinitionConverterUtils.
+                getCustomIndexString(indexDefnStr);
+        String fixedIndex = IndexDefinitionConverterUtils.
+                getFixedIndexString(indexDefnStr);
+        String increIndex = IndexDefinitionConverterUtils.
+                getIncrementalIndexString(indexDefnStr);
+        String arbitraryIndex = IndexDefinitionConverterUtils.
+                getArbitraryIndexString(indexDefnStr);
 
-        Set<String> secIndexSet = new HashSet<String>(Arrays.asList(indexData[0].split(",")));
-        Set<String> custIndexSet = new HashSet<String>(Arrays.asList(indexData[1].split(",")));
-        List<String> fixedPropertiesList = Arrays.asList(indexData[2].split(","));
-        isIncrementalIndex = Boolean.parseBoolean(indexData[3]);
+        Set<String> secIndexSet = new HashSet<String>();
+        Set<String> custIndexSet = new HashSet<String>();
+        Set<String> fixedPropertiesList = new HashSet<String>();
+        Set<String> arbitraryIndexList = new HashSet<String>();
+         isIncrementalIndex = false;
 
-        List<String> arbitraryIndexList = null;       //arbitrary index field has been added later
-        if (indexData.length > 4) {
-            arbitraryIndexList = Arrays.asList(indexData[4].split(","));
+        if(secondaryIndex != null && !secondaryIndex.trim().isEmpty()){
+            secIndexSet.addAll(Arrays.asList(secondaryIndex.split(",")));
+        }
+
+        if(customIndex != null && !customIndex.trim().isEmpty()){
+            custIndexSet.addAll(Arrays.asList(customIndex.split(",")));
+        }
+
+        if(fixedIndex != null && !fixedIndex.trim().isEmpty()){
+            fixedPropertiesList.addAll(Arrays.asList(fixedIndex.split(",")));
+        }
+
+        if(increIndex != null && !increIndex.trim().isEmpty()){
+           isIncrementalIndex = Boolean.parseBoolean(increIndex);
+        }
+
+        if (arbitraryIndex != null && !arbitraryIndex.isEmpty()) {
+            arbitraryIndexList.addAll(Arrays.asList(arbitraryIndex.split(",")));
         }
 
         //order matters
@@ -146,7 +166,9 @@ public class IndexDefinition {
 
         //Non arbitary Index fieilds that are not in stream def
         for (String generalIndex : custIndexSet) {
+            if(!generalIndex.trim().equals("")){
             customIndexData.add(new Attribute(generalIndex, AttributeType.STRING));
+            }
         }
 
         if (arbitraryIndexList != null) {
@@ -156,7 +178,7 @@ public class IndexDefinition {
                 AttributeType attributeType = null;
 
                 try {
-                    attributeType = AttributeType.valueOf(data[1]);
+                    attributeType = AttributeType.valueOf(data[1].trim());
                 } catch (Exception e) {
                     attributeType = AttributeType.STRING;
                 }
@@ -179,29 +201,57 @@ public class IndexDefinition {
         if (indexDefnStr == null) {
             return;
         }
-        List<String> secIndexList = null;
-        List<String> custIndexList = null;
-        List<String> fixedSearchProps = null;
-        List<String> arbitraryIndexList = null;
+        List<String> secIndexList = new ArrayList<String>();
+        List<String> custIndexList = new ArrayList<String>();
+        List<String> fixedSearchProps = new ArrayList<String>();
+        List<String> arbitraryIndexList = new ArrayList<String>();
 
-        String[] indexData = indexDefnStr.split("\\|");
+        String secondaryIndex = IndexDefinitionConverterUtils
+                .getSecondaryIndexString(indexDefnStr);
+        String customIndex = IndexDefinitionConverterUtils.
+                getCustomIndexString(indexDefnStr);
+        String fixedIndex = IndexDefinitionConverterUtils.
+                getFixedIndexString(indexDefnStr);
+        String increIndex = IndexDefinitionConverterUtils.
+                getIncrementalIndexString(indexDefnStr);
+        String arbitraryIndexStr = IndexDefinitionConverterUtils.
+                getArbitraryIndexString(indexDefnStr);
 
-        if (!indexData[0].isEmpty()) {
-            secIndexList = Arrays.asList(indexData[0].split(","));
+        if (secondaryIndex != null && !secondaryIndex.trim().isEmpty()) {
+            secIndexList =Arrays.asList(secondaryIndex.split(","));
+        }
+
+        if (customIndex != null && !customIndex.trim().isEmpty()) {
+            custIndexList = Arrays.asList(customIndex.split(","));
+        }
+
+        if (fixedIndex != null && !fixedIndex.trim().isEmpty()) {
+            fixedSearchProps = Arrays.asList(fixedIndex.split(","));
+        }
+
+        if (increIndex != null && !increIndex.trim().isEmpty()) {
+            isIncrementalIndex = Boolean.parseBoolean(increIndex);
+        }
+
+        if (arbitraryIndexStr != null && !arbitraryIndexStr.isEmpty()) {
+            arbitraryIndexList = Arrays.asList(arbitraryIndexStr.split(","));
+        }
+
+
+        if (secIndexList != null) {
             secondaryIndexData = new ArrayList<Attribute>(secIndexList.size());
             for (String secIndex : secIndexList) {
                 String[] secIndexData = secIndex.split(":");
-                secondaryIndexData.add(new Attribute(secIndexData[0], AttributeType.valueOf(secIndexData[1])));
+                secondaryIndexData.add(new Attribute(secIndexData[0], AttributeType.valueOf(secIndexData[1].trim())));
             }
         }
 
-        if (!indexData[1].isEmpty()) {
-            custIndexList = Arrays.asList(indexData[1].split(","));
+        if (custIndexList != null) {
             customIndexData = new ArrayList<Attribute>(custIndexList.size());
             for (String custIndex : custIndexList) {
                 String[] custIndexData = custIndex.split(":");
                 String name = custIndexData[0];
-                AttributeType attributeType = AttributeType.valueOf(custIndexData[1]);
+                AttributeType attributeType = AttributeType.valueOf(custIndexData[1].trim());
 
                 customIndexData.add(new Attribute(name, attributeType));
 
@@ -239,14 +289,14 @@ public class IndexDefinition {
             }
         }
 
-        if (!indexData[2].isEmpty()) {
-            fixedSearchProps = Arrays.asList(indexData[2].split(","));
+        if (custIndexList != null) {
             fixedSearchData = new ArrayList<Attribute>(fixedSearchProps.size());
             fixedPropertiesMap = new LinkedHashMap<String, Attribute>();
             for (String fixedProperty : fixedSearchProps) {
+                if(!fixedProperty.isEmpty()){
                 String[] fixedPropertyData = fixedProperty.split(":");
                 String name = fixedPropertyData[0];
-                AttributeType attributeType = AttributeType.valueOf(fixedPropertyData[1]);
+                AttributeType attributeType = AttributeType.valueOf(fixedPropertyData[1].trim());
                 Attribute attribute = new Attribute(name, attributeType);
 
                 fixedSearchData.add(attribute);
@@ -276,23 +326,22 @@ public class IndexDefinition {
                     generalFixProps.add(name);
                 }
             }
+            }
         }
-        isIncrementalIndex = Boolean.parseBoolean(indexData[3]);
 
-        if (indexData.length > 4 && !indexData[4].isEmpty()) {          //added later
-            arbitraryIndexList = Arrays.asList(indexData[4].split(","));
+
+        if (arbitraryIndexList != null) {          //added later
             arbitraryIndexData = new ArrayList<Attribute>(arbitraryIndexList.size());
-            for (String arbitraryIndexStr : arbitraryIndexList) {
+            for (String arbitraryIndexString : arbitraryIndexList) {
                 String[] custIndexData = arbitraryIndexStr.split(":");
                 String name = custIndexData[0];
-                AttributeType attributeType = AttributeType.valueOf(custIndexData[1]);
+                AttributeType attributeType = AttributeType.valueOf(custIndexData[1].trim().split(",")[0]);
 
                 Attribute attribute = new Attribute(name, attributeType);
                 arbitraryIndexData.add(attribute);
                 if (arbitraryIndex == null) {
                     arbitraryIndex = new HashMap<String, Attribute>();
                 }
-
                 arbitraryIndex.put(name, attribute);
             }
         }
@@ -327,7 +376,7 @@ public class IndexDefinition {
     }
 
     public String indexDefnString(List<Attribute> dataList) {
-        if (dataList == null) {
+        if (dataList == null || dataList.size() == 0) {
             return null;
         }
 
@@ -340,7 +389,6 @@ public class IndexDefinition {
             }
             indexStringBuilder.append(attribute.getName())
                     .append(":").append(attribute.getType());
-            ;
             isRecordAdded = true;
         }
 
@@ -454,5 +502,7 @@ public class IndexDefinition {
     public Set<String> getGeneralFixProps() {
         return generalFixProps;
     }
+
+
 
 }

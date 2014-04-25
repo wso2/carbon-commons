@@ -30,12 +30,7 @@ import org.wso2.carbon.databridge.agent.thrift.internal.utils.AgentServerURL;
 import org.wso2.carbon.databridge.agent.thrift.lb.ReceiverStateObserver;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.StreamDefinition;
-import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
-import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlreadyDefinedException;
-import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.NoStreamDefinitionExistException;
-import org.wso2.carbon.databridge.commons.exception.StreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.TransportException;
+import org.wso2.carbon.databridge.commons.exception.*;
 import org.wso2.carbon.databridge.commons.thrift.utils.CommonThriftConstants;
 import org.wso2.carbon.databridge.commons.thrift.utils.HostAddressFinder;
 
@@ -89,7 +84,7 @@ public class DataPublisher {
      */
     public DataPublisher(String receiverUrl, String userName, String password)
             throws MalformedURLException, AgentException, AuthenticationException,
-                   TransportException {
+            TransportException {
         this(receiverUrl, userName, password, AgentHolder.getOrCreateAgent());
     }
 
@@ -113,7 +108,7 @@ public class DataPublisher {
     public DataPublisher(String authenticationUrl, String receiverUrl, String userName,
                          String password)
             throws MalformedURLException, AgentException, AuthenticationException,
-                   TransportException {
+            TransportException {
         this(authenticationUrl, receiverUrl, userName, password, AgentHolder.getOrCreateAgent());
     }
 
@@ -143,7 +138,7 @@ public class DataPublisher {
     public DataPublisher(String receiverUrl, String userName,
                          String password, Agent agent)
             throws MalformedURLException, AgentException, AuthenticationException,
-                   TransportException {
+            TransportException {
         /**
          * Only if the agent is not null, then the agent will be set to agent holder.
          * Ie, only for the first datapublisher which is setting the agent,
@@ -158,16 +153,16 @@ public class DataPublisher {
         checkHostAddress(receiverURL.getHost());
         if (receiverURL.isSecured()) {
             this.start(new ReceiverConfiguration(userName, password, receiverURL.getProtocol(),
-                                                 (receiverURL.getHost()), receiverURL.getPort(),
-                                                 receiverURL.getProtocol(),
-                                                 (receiverURL.getHost()), receiverURL.getPort(), receiverURL.isSecured()),
-                       AgentHolder.getAgent());
+                    (receiverURL.getHost()), receiverURL.getPort(),
+                    receiverURL.getProtocol(),
+                    (receiverURL.getHost()), receiverURL.getPort(), receiverURL.isSecured()),
+                    AgentHolder.getAgent());
         } else if (receiverURL.getProtocol() == ReceiverConfiguration.Protocol.TCP) {
             this.start(new ReceiverConfiguration(userName, password, receiverURL.getProtocol(),
-                                                 (receiverURL.getHost()), receiverURL.getPort(),
-                                                 receiverURL.getProtocol(),
-                                                 (receiverURL.getHost()), receiverURL.getPort() + CommonThriftConstants.SECURE_EVENT_RECEIVER_PORT_OFFSET, receiverURL.isSecured()),
-                       AgentHolder.getAgent());
+                    (receiverURL.getHost()), receiverURL.getPort(),
+                    receiverURL.getProtocol(),
+                    (receiverURL.getHost()), receiverURL.getPort() + CommonThriftConstants.SECURE_EVENT_RECEIVER_PORT_OFFSET, receiverURL.isSecured()),
+                    AgentHolder.getAgent());
         } else {
             throw new AgentException("http not supported via this constructor use https, ssl or tcp ");
         }
@@ -195,7 +190,7 @@ public class DataPublisher {
     public DataPublisher(String authenticationUrl, String receiverUrl, String userName,
                          String password, Agent agent)
             throws MalformedURLException, AgentException, AuthenticationException,
-                   TransportException {
+            TransportException {
         /**
          * Only if the agent is not null, then the agent will be set to agent holder.
          * Ie, only for the first datapublisher which is setting the agent,
@@ -214,10 +209,10 @@ public class DataPublisher {
         checkHostAddress(receiverURL.getHost());
         checkHostAddress(authenticationURL.getHost());
         this.start(new ReceiverConfiguration(userName, password, receiverURL.getProtocol(),
-                                             receiverURL.getHost(), receiverURL.getPort(),
-                                             authenticationURL.getProtocol(),
-                                             authenticationURL.getHost(), authenticationURL.getPort(), receiverURL.isSecured()),
-                   AgentHolder.getAgent());
+                receiverURL.getHost(), receiverURL.getPort(),
+                authenticationURL.getProtocol(),
+                authenticationURL.getHost(), authenticationURL.getPort(), receiverURL.isSecured()),
+                AgentHolder.getAgent());
 
     }
 
@@ -246,9 +241,7 @@ public class DataPublisher {
         AgentHolder.getAgent().shutdown(this);// to shutdown the old agent
         AgentHolder.setAgent(agent);
         start(this.dataPublisherConfiguration.getReceiverConfiguration(), agent);
-        if (null != this.receiverStateObserver) {
-            eventPublisher.registerReceiverStateObserver(receiverStateObserver);
-        }
+        if (null != this.receiverStateObserver) eventPublisher.registerReceiverStateObserver(receiverStateObserver);
     }
 
     /**
@@ -297,7 +290,7 @@ public class DataPublisher {
      */
     public String defineStream(String streamDefinition)
             throws AgentException, MalformedStreamDefinitionException, StreamDefinitionException,
-                   DifferentStreamDefinitionAlreadyDefinedException {
+            DifferentStreamDefinitionAlreadyDefinedException {
         String sessionId = dataPublisherConfiguration.getSessionId();
         return eventPublisher.defineStream(sessionId, streamDefinition);
     }
@@ -318,7 +311,7 @@ public class DataPublisher {
      */
     public String defineStream(StreamDefinition streamDefinition)
             throws AgentException, MalformedStreamDefinitionException, StreamDefinitionException,
-                   DifferentStreamDefinitionAlreadyDefinedException {
+            DifferentStreamDefinitionAlreadyDefinedException {
         String sessionId = dataPublisherConfiguration.getSessionId();
         String streamId = eventPublisher.defineStream(sessionId, gson.toJson(streamDefinition));
         try {
@@ -345,14 +338,14 @@ public class DataPublisher {
     @Deprecated
     public String findStream(String name, String version)
             throws AgentException, StreamDefinitionException, NoStreamDefinitionExistException {
-        String streamId = findStreamId(name, version);
-        if (streamId == null) {
-            throw new NoStreamDefinitionExistException("Cannot find Stream Id for " + name + " " + version);
+        String streamId= findStreamId(name,version);
+        if(streamId==null){
+            throw new NoStreamDefinitionExistException("Cannot find Stream Id for "+name+" "+version);
         }
         return streamId;
     }
 
-    /**
+ /**
      * Finding already existing stream's Id to publish data
      *
      * @param name    the stream name
@@ -475,15 +468,13 @@ public class DataPublisher {
         publish(new Event(streamId, System.currentTimeMillis(), metaDataArray, correlationDataArray, payloadDataArray));
     }
 
-    public boolean tryPublish(String streamId, Object[] metaDataArray,
-                              Object[] correlationDataArray,
-                              Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
+    public boolean tryPublish(String streamId, Object[] metaDataArray, Object[] correlationDataArray,
+                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
             throws AgentException {
         return tryPublish(new Event(streamId, System.currentTimeMillis(), metaDataArray, correlationDataArray, payloadDataArray, arbitraryDataMap));
     }
 
-    public boolean tryPublish(String streamId, long timestamp, Object[] metaDataArray,
-                              Object[] correlationDataArray,
+    public boolean tryPublish(String streamId, long timestamp, Object[] metaDataArray, Object[] correlationDataArray,
                               Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
             throws AgentException {
         return tryPublish(new Event(streamId, timestamp, metaDataArray, correlationDataArray, payloadDataArray, arbitraryDataMap));
@@ -537,8 +528,7 @@ public class DataPublisher {
      *
      */
     public void publish(String streamId, long timeStamp, Object[] metaDataArray,
-                        Object[] correlationDataArray, Object[] payloadDataArray,
-                        Map<String, String> arbitraryDataMap)
+                        Object[] correlationDataArray, Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
             throws AgentException {
         publish(new Event(streamId, timeStamp, metaDataArray, correlationDataArray, payloadDataArray, arbitraryDataMap));
     }

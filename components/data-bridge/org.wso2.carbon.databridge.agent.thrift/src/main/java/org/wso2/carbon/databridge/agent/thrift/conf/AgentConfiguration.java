@@ -174,8 +174,7 @@ public class AgentConfiguration {
         return loadBalancingDataPublisherBufferedEventSize;
     }
 
-    public void setLoadBalancingDataPublisherBufferedEventSize(
-            int loadBalancingDataPublisherBufferedEventSize) {
+    public void setLoadBalancingDataPublisherBufferedEventSize(int loadBalancingDataPublisherBufferedEventSize) {
         this.loadBalancingDataPublisherBufferedEventSize = loadBalancingDataPublisherBufferedEventSize;
     }
 

@@ -25,18 +25,9 @@ import org.wso2.carbon.databridge.core.internal.utils.DataBridgeConstants;
  * configuration details related to DataReceiver
  */
 public class DataBridgeConfiguration {
-    private String streamDefinitionStoreName = DataBridgeConstants.DEFAULT_DEFINITION_STORE;
     private int workerThreads = DataBridgeConstants.NO_OF_WORKER_THREADS;
     private int eventBufferCapacity = DataBridgeConstants.EVENT_BUFFER_CAPACITY;
     private int clientTimeOut = DataBridgeConstants.CLIENT_TIMEOUT_MS;
-
-    public void setStreamDefinitionStoreName(String eventDefStoreName) {
-        streamDefinitionStoreName = eventDefStoreName;
-    }
-
-    public String getStreamDefinitionStoreName() {
-        return streamDefinitionStoreName;
-    }
 
     public int getWorkerThreads() {
         return workerThreads;

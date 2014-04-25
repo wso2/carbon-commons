@@ -267,7 +267,7 @@ public class EventConverterUtils {
                         List list = new ArrayList();
                         int pos = 0;
                         while (it.hasNext()) {
-                            Object value = getValue(it.next().toString(), attributeList.get(pos).getType());
+                            Object value = getValue(jsonParser.parse(it.next().toString()).getAsString(), attributeList.get(pos).getType());
                             list.add(value);
                             pos++;
                         }

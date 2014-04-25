@@ -34,21 +34,21 @@ public class AgentServerURL {
     public AgentServerURL(String url) throws MalformedURLException {
         URL theUrl;
         if (url.startsWith("http:")) {
-            this.protocol = ReceiverConfiguration.Protocol.HTTP;
+            this.protocol= ReceiverConfiguration.Protocol.HTTP;
             theUrl = new URL(url);
-            isSecured = false;
-        } else if (url.startsWith("https:")) {
-            this.protocol = ReceiverConfiguration.Protocol.HTTP;
+            isSecured=false;
+        } else  if (url.startsWith("https:")) {
+            this.protocol= ReceiverConfiguration.Protocol.HTTP;
             theUrl = new URL(url);
-            isSecured = true;
-        } else if (url.startsWith("tcp:")) {
+            isSecured=true;
+        } else  if (url.startsWith("tcp:")) {
             theUrl = new URL(url.replaceFirst("tcp", "http"));
-            this.protocol = ReceiverConfiguration.Protocol.TCP;
-            isSecured = false;
+            this.protocol= ReceiverConfiguration.Protocol.TCP;
+            isSecured=false;
         } else if (url.startsWith("ssl:")) {
-            this.protocol = ReceiverConfiguration.Protocol.TCP;
+            this.protocol= ReceiverConfiguration.Protocol.TCP;
             theUrl = new URL(url.replaceFirst("ssl", "http"));
-            isSecured = true;
+            isSecured=true;
         } else {
             throw new MalformedURLException("The url protocol is not tcp or ssl " + url);
         }
