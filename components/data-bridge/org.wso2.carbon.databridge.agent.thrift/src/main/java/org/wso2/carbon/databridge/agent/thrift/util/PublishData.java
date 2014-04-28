@@ -40,20 +40,20 @@ public class PublishData {
                                correlationDataArray, payloadDataArray, arbitraryDataMap);
     }
 
-    public PublishData(String streamName,
-                       String streamVersion,
-                       Object[] metaDataArray,
-                       Object[] correlationDataArray,
-                       Object[] payloadDataArray, Map<String, String> arbitraryDataMap) {
+    public  PublishData(String streamName,
+                        String streamVersion,
+                        Object[] metaDataArray,
+                        Object[] correlationDataArray,
+                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap) {
         this.streamName = streamName;
         this.streamVersion = streamVersion;
         this.event = new Event(null, System.currentTimeMillis(),
                                metaDataArray, correlationDataArray, payloadDataArray, arbitraryDataMap);
     }
 
-    public PublishData(String streamName,
-                       String streamVersion,
-                       Event event) {
+    public  PublishData(String streamName,
+                        String streamVersion,
+                        Event event) {
         this.streamName = streamName;
         this.streamVersion = streamVersion;
         this.event = event;

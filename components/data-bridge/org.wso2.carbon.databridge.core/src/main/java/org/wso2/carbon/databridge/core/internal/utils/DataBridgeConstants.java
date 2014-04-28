@@ -33,6 +33,7 @@ public final class DataBridgeConstants {
     public static final int EVENT_BUFFER_CAPACITY = 10000;
     public static final int CLIENT_TIMEOUT_MS = 30000;
 
+    public static final String STREAM_DEFINITIONS_XML = "stream-definitions.xml";
     public static final String DATA_BRIDGE_CONFIG_XML = "data-bridge-config.xml";
     public static final String DATA_BRIDGE_NAMESPACE = "http://wso2.org/carbon/databridge";
 

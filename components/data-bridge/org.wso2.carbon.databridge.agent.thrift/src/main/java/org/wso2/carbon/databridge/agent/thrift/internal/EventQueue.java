@@ -64,7 +64,7 @@ public class EventQueue<E> {
         // Return 0 if isScheduledForEventDispatching is false
         // Return 1 if isScheduledForEventDispatching is true
         // Return 2 if eventQueue is full
-        if (!eventQueue.offer(event)) {
+        if(!eventQueue.offer(event)){
             return 2;
         }
         if (!isScheduledForEventDispatching) {

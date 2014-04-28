@@ -22,6 +22,7 @@ package org.wso2.carbon.databridge.commons;
 
 import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
 import org.wso2.carbon.databridge.commons.utils.DataBridgeCommonsUtils;
+import org.wso2.carbon.databridge.commons.utils.EventDefinitionConverterUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -250,16 +251,8 @@ public class StreamDefinition {
 
     @Override
     public String toString() {
-        return "\nStreamDefinition{\n" +
-               "        " + EBCommonsConstants.STREAM_ID + "='" + streamId + "',\n" +
-               "        " + EBCommonsConstants.NAME + "='" + name + "',\n" +
-               "        " + EBCommonsConstants.VERSION + "='" + version + "',\n" +
-               "        " + EBCommonsConstants.NICK_NAME + "='" + nickName + "',\n" +
-               "        " + EBCommonsConstants.DESCRIPTION + "='" + description + "',\n" +
-               "        " + EBCommonsConstants.TAGS + "=" + tags + ",\n" +
-               "        " + EBCommonsConstants.META_DATA + "=" + metaData + ",\n" +
-               "        " + EBCommonsConstants.CORRELATION_DATA + "=" + correlationData + ",\n" +
-               "        " + EBCommonsConstants.PAYLOAD_DATA + "=" + payloadData + ",\n" +
-               "}\n";
+        return EventDefinitionConverterUtils.convertToBasicJson(this);
     }
+
+
 }

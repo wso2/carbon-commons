@@ -30,5 +30,7 @@ public interface AuthenticationHandler {
 
     int getTenantId(String tenantDomain)throws UserStoreException;
 
-    void setThreadLocalContext(AgentSession agentSession);
+    void initContext(AgentSession agentSession);
+
+    void destroyContext(AgentSession agentSession);
 }

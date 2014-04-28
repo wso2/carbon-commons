@@ -38,48 +38,48 @@ public abstract class AbstractStreamDefinitionStore implements StreamDefinitionS
     private List<StreamAddRemoveListener> streamAddRemoveListenerList = new ArrayList<StreamAddRemoveListener>();
 
     public StreamDefinition getStreamDefinition(String name,
-                                                String version)
+                                                String version, int tenantId)
             throws StreamDefinitionStoreException {
-        return getStreamDefinitionFromStore(name, version);
+        return getStreamDefinitionFromStore(name, version, tenantId);
     }
 
-    public StreamDefinition getStreamDefinition(String streamId)
+    public StreamDefinition getStreamDefinition(String streamId, int tenantId)
             throws StreamDefinitionStoreException {
-        return getStreamDefinitionFromStore(streamId);
+        return getStreamDefinitionFromStore(streamId, tenantId);
     }
 
-    public Collection<StreamDefinition> getAllStreamDefinitions() {
+    public Collection<StreamDefinition> getAllStreamDefinitions(int tenantId) {
         try {
-            return getAllStreamDefinitionsFromStore();
+            return getAllStreamDefinitionsFromStore(tenantId);
         } catch (StreamDefinitionStoreException e) {
             log.error("Error occured when trying to retrieve definitions. Returning empty list.");
             return new ArrayList<StreamDefinition>();
         }
     }
 
-    public void saveStreamDefinition(StreamDefinition streamDefinition)
+    public void saveStreamDefinition(StreamDefinition streamDefinition, int tenantId)
             throws DifferentStreamDefinitionAlreadyDefinedException,
-                   StreamDefinitionStoreException {
+            StreamDefinitionStoreException {
         StreamDefinition existingDefinition;
-        existingDefinition = getStreamDefinition(streamDefinition.getName(), streamDefinition.getVersion());
+        existingDefinition = getStreamDefinition(streamDefinition.getName(), streamDefinition.getVersion(), tenantId);
         if (existingDefinition == null) {
-            saveStreamDefinitionToStore(streamDefinition);
+            saveStreamDefinitionToStore(streamDefinition, tenantId);
             for (StreamAddRemoveListener streamAddRemoveListener : streamAddRemoveListenerList) {
-                streamAddRemoveListener.streamAdded(streamDefinition.getStreamId());
+                streamAddRemoveListener.streamAdded(tenantId, streamDefinition.getStreamId());
             }
             return;
         }
         if (!existingDefinition.equals(streamDefinition)) {
-            throw new DifferentStreamDefinitionAlreadyDefinedException("Another Stream with same name and version" +
-                                                                       " exist :" + EventDefinitionConverterUtils
+            throw new DifferentStreamDefinitionAlreadyDefinedException("Cannot define Stream definition:"+EventDefinitionConverterUtils.convertToJson(existingDefinition)+ ", Another Stream with same name and version" +
+                    " exist :" + EventDefinitionConverterUtils
                     .convertToJson(existingDefinition));
         }
     }
 
-    public boolean deleteStreamDefinition(String streamName, String streamVersion) {
-        if (removeStreamDefinition(streamName, streamVersion)) {
+    public boolean deleteStreamDefinition(String streamName, String streamVersion, int tenantId) {
+        if (removeStreamDefinition(streamName, streamVersion, tenantId)) {
             for (StreamAddRemoveListener streamAddRemoveListener : streamAddRemoveListenerList) {
-                streamAddRemoveListener.streamRemoved(streamName + ":" + streamVersion);
+                streamAddRemoveListener.streamRemoved(tenantId, streamName + ":" + streamVersion);
             }
             return true;
         }
@@ -101,18 +101,18 @@ public abstract class AbstractStreamDefinitionStore implements StreamDefinitionS
     }
 
 
-    public abstract StreamDefinition getStreamDefinitionFromStore(String name, String version)
+    public abstract StreamDefinition getStreamDefinitionFromStore(String name, String version, int tenantId)
             throws StreamDefinitionStoreException;
 
-    public abstract StreamDefinition getStreamDefinitionFromStore(String streamId)
+    public abstract StreamDefinition getStreamDefinitionFromStore(String streamId, int tenantId)
             throws StreamDefinitionStoreException;
 
-    public abstract Collection<StreamDefinition> getAllStreamDefinitionsFromStore()
+    public abstract Collection<StreamDefinition> getAllStreamDefinitionsFromStore(int tenantId)
             throws StreamDefinitionStoreException;
 
-    public abstract void saveStreamDefinitionToStore(StreamDefinition streamDefinition)
+    public abstract void saveStreamDefinitionToStore(StreamDefinition streamDefinition, int tenantId)
             throws StreamDefinitionStoreException;
 
-    public abstract boolean removeStreamDefinition(String name, String version);
+    public abstract boolean removeStreamDefinition(String name, String version, int tenantId);
 
 }

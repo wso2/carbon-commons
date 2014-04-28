@@ -16,11 +16,15 @@ package org.wso2.carbon.databridge.core;
 * limitations under the License.
 */
 
+import org.wso2.carbon.databridge.core.definitionstore.AbstractStreamDefinitionStore;
 import org.wso2.carbon.user.core.service.RealmService;
+import org.wso2.carbon.utils.ConfigurationContextService;
 
 public class DataBridgeServiceValueHolder {
 
     private static RealmService realmService;
+    private static AbstractStreamDefinitionStore streamDefinitionStore;
+    private static ConfigurationContextService configurationContextService;
 
     public static void setRealmService(RealmService realmService) {
         DataBridgeServiceValueHolder.realmService = realmService;
@@ -28,5 +32,21 @@ public class DataBridgeServiceValueHolder {
 
     public static RealmService getRealmService() {
         return realmService;
+    }
+
+    public static void setStreamDefinitionStore(AbstractStreamDefinitionStore streamDefinitionStore) {
+        DataBridgeServiceValueHolder.streamDefinitionStore = streamDefinitionStore;
+    }
+
+    public static AbstractStreamDefinitionStore getStreamDefinitionStore() {
+        return streamDefinitionStore;
+    }
+
+    public static void setConfigurationContextService(ConfigurationContextService configurationContextService) {
+        DataBridgeServiceValueHolder.configurationContextService = configurationContextService;
+    }
+
+    public static ConfigurationContextService getConfigurationContextService() {
+        return configurationContextService;
     }
 }

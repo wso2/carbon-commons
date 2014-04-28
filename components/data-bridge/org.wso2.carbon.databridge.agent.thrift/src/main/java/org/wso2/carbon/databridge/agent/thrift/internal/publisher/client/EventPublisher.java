@@ -31,13 +31,7 @@ import org.wso2.carbon.databridge.agent.thrift.internal.publisher.authenticator.
 import org.wso2.carbon.databridge.agent.thrift.internal.utils.AgentConstants;
 import org.wso2.carbon.databridge.agent.thrift.lb.ReceiverStateObserver;
 import org.wso2.carbon.databridge.commons.Event;
-import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
-import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlreadyDefinedException;
-import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.SessionTimeoutException;
-import org.wso2.carbon.databridge.commons.exception.StreamDefinitionException;
-import org.wso2.carbon.databridge.commons.exception.TransportException;
-import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
+import org.wso2.carbon.databridge.commons.exception.*;
 import org.wso2.carbon.databridge.commons.thrift.data.ThriftEventBundle;
 
 import java.util.ArrayList;
@@ -154,23 +148,22 @@ public abstract class EventPublisher implements Runnable {
     }
 
 
-    private void republish(Object client, Object eventBundle,
-                           ArrayList<Event> tempEventBundleHolder) {
+    private void republish(Object client, Object eventBundle, ArrayList<Event> tempEventBundleHolder) {
         try {
             publish(client, eventBundle);
             returnClient(client);
         } catch (EventPublisherException e) {
             discardClient();
             log.error("Cannot send events to " + dataPublisherConfiguration.getPublisherKey() +
-                      " even after reconnecting ", e);
+                    " even after reconnecting ", e);
             notifyConnectionFailure(tempEventBundleHolder);
         } catch (SessionTimeoutException e) {
             discardClient();
             log.error("Session timed out for " + dataPublisherConfiguration.getPublisherKey()
-                      + " even after reconnecting ", e);
+                    + " even after reconnecting ", e);
         } catch (UndefinedEventTypeException e) {
             log.error("Wrongly typed event " + eventBundle.toString() + " sent  to " +
-                      dataPublisherConfiguration.getPublisherKey(), e);
+                    dataPublisherConfiguration.getPublisherKey(), e);
             returnClient(client);
         }
     }
@@ -221,7 +214,7 @@ public abstract class EventPublisher implements Runnable {
 
     public String defineStream(String sessionId, String streamDefinition)
             throws AgentException, DifferentStreamDefinitionAlreadyDefinedException,
-                   MalformedStreamDefinitionException, StreamDefinitionException {
+            MalformedStreamDefinitionException, StreamDefinitionException {
         String currentSessionId = sessionId;
         String streamId = null;
         Object client = getClient(dataPublisherConfiguration.getPublisherKey());
@@ -242,11 +235,11 @@ public abstract class EventPublisher implements Runnable {
         } catch (DifferentStreamDefinitionAlreadyDefinedException e) {
             returnClient(client);
             throw new DifferentStreamDefinitionAlreadyDefinedException("Same stream with different definition already defined before sending this stream definitions to " +
-                                                                       dataPublisherConfiguration.getPublisherKey(), e);
+                    dataPublisherConfiguration.getPublisherKey(), e);
         } catch (MalformedStreamDefinitionException e) {
             returnClient(client);
             throw new MalformedStreamDefinitionException("Malformed event definition :" + streamDefinition + " send  to " +
-                                                         dataPublisherConfiguration.getPublisherKey(), e);
+                    dataPublisherConfiguration.getPublisherKey(), e);
         }
         return streamId;
     }
@@ -254,7 +247,7 @@ public abstract class EventPublisher implements Runnable {
     private String redefineStream(Object client, String streamDefinition,
                                   String currentSessionId)
             throws DifferentStreamDefinitionAlreadyDefinedException, StreamDefinitionException,
-                   MalformedStreamDefinitionException {
+            MalformedStreamDefinitionException {
         String streamId = null;
         try {
             streamId = defineStream(client, currentSessionId, streamDefinition);
@@ -262,35 +255,35 @@ public abstract class EventPublisher implements Runnable {
             return streamId;
         } catch (SessionTimeoutException ex) {
             log.error("Session timed out for " + dataPublisherConfiguration.getPublisherKey()
-                      + " even after reconnecting ", ex);
+                    + " even after reconnecting ", ex);
             discardClient();
             return null;
         } catch (EventPublisherException ex) {
             log.error("Cannot send events to " + dataPublisherConfiguration.getPublisherKey() +
-                      " even after reconnecting ", ex);
+                    " even after reconnecting ", ex);
             discardClient();
             notifyConnectionFailure(null);
             return null;
         } catch (DifferentStreamDefinitionAlreadyDefinedException ex) {
             returnClient(client);
             throw new DifferentStreamDefinitionAlreadyDefinedException("Type already defined when send event definitions to" +
-                                                                       dataPublisherConfiguration.getPublisherKey(), ex);
+                    dataPublisherConfiguration.getPublisherKey(), ex);
         } catch (StreamDefinitionException ex) {
             returnClient(client);
             throw new StreamDefinitionException("Wrongly defined event definition after reconnection  :" + streamDefinition + " sent to " +
-                                                dataPublisherConfiguration.getPublisherKey(), ex);
+                    dataPublisherConfiguration.getPublisherKey(), ex);
         } catch (MalformedStreamDefinitionException ex) {
             returnClient(client);
             throw new MalformedStreamDefinitionException("Malformed event definition after reconnection  :" + streamDefinition + " sent to " +
-                                                         dataPublisherConfiguration.getPublisherKey(), ex);
+                    dataPublisherConfiguration.getPublisherKey(), ex);
         }
     }
 
     protected abstract String defineStream(Object client, String currentSessionId,
                                            String streamDefinition)
             throws DifferentStreamDefinitionAlreadyDefinedException,
-                   MalformedStreamDefinitionException,
-                   EventPublisherException, SessionTimeoutException, StreamDefinitionException;
+            MalformedStreamDefinitionException,
+            EventPublisherException, SessionTimeoutException, StreamDefinitionException;
 
 
     public String findStreamId(String sessionId, String name, String version)
@@ -310,11 +303,11 @@ public abstract class EventPublisher implements Runnable {
             } catch (SessionTimeoutException ex) {
                 discardClient();
                 log.error("Session timed out for " + dataPublisherConfiguration.getPublisherKey()
-                          + " even after reconnecting ", ex);
+                        + " even after reconnecting ", ex);
             } catch (EventPublisherException ex) {
                 discardClient();
                 log.error("Cannot send events to " + dataPublisherConfiguration.getPublisherKey() +
-                          " even after reconnecting ", ex);
+                        " even after reconnecting ", ex);
                 notifyConnectionFailure(null);
             }
         } catch (EventPublisherException e) {
@@ -346,12 +339,12 @@ public abstract class EventPublisher implements Runnable {
             } catch (EventPublisherException ex) {
                 discardClient();
                 log.error("Cannot delete stream " + streamId + " at " + dataPublisherConfiguration.getPublisherKey() +
-                          " even after reconnecting ", ex);
+                        " even after reconnecting ", ex);
                 notifyConnectionFailure(null);
             } catch (SessionTimeoutException ex) {
                 discardClient();
                 log.error("Session timed out for " + dataPublisherConfiguration.getPublisherKey()
-                          + " even after reconnecting ", ex);
+                        + " even after reconnecting ", ex);
             }
 
         } catch (EventPublisherException e) {
@@ -362,11 +355,9 @@ public abstract class EventPublisher implements Runnable {
         return status;
     }
 
-    protected abstract boolean deleteStream(Object client, String currentSessionId, String streamId)
-            throws EventPublisherException, SessionTimeoutException;
+    protected abstract boolean deleteStream(Object client, String currentSessionId, String streamId) throws EventPublisherException, SessionTimeoutException;
 
-    public boolean deleteStream(String sessionId, String streamName, String streamVersion)
-            throws AgentException {
+    public boolean deleteStream(String sessionId, String streamName, String streamVersion) throws AgentException {
         String currentSessionId = sessionId;
         Object client = getClient(dataPublisherConfiguration.getPublisherKey());
         boolean status = false;
@@ -382,12 +373,12 @@ public abstract class EventPublisher implements Runnable {
             } catch (EventPublisherException ex) {
                 discardClient();
                 log.error("Cannot delete stream " + streamName + " " + streamVersion + " at " + dataPublisherConfiguration.getPublisherKey() +
-                          " even after reconnecting ", ex);
+                        " even after reconnecting ", ex);
                 notifyConnectionFailure(null);
             } catch (SessionTimeoutException ex) {
                 discardClient();
                 log.error("Session timed out for " + dataPublisherConfiguration.getPublisherKey()
-                          + " even after reconnecting ", ex);
+                        + " even after reconnecting ", ex);
             }
 
         } catch (EventPublisherException e) {
@@ -398,9 +389,7 @@ public abstract class EventPublisher implements Runnable {
         return status;
     }
 
-    protected abstract boolean deleteStream(Object client, String currentSessionId,
-                                            String streamName, String streamVersion)
-            throws EventPublisherException, SessionTimeoutException;
+    protected abstract boolean deleteStream(Object client, String currentSessionId, String streamName, String streamVersion) throws EventPublisherException, SessionTimeoutException;
 
     private String reconnect(String currentSessionId) {
         attemptReconnection(AgentConstants.AGENT_RECONNECTION_TIMES, currentSessionId);
@@ -418,8 +407,8 @@ public abstract class EventPublisher implements Runnable {
                         agentAuthenticator.connect(dataPublisherConfiguration));
             } catch (AuthenticationException e) {
                 log.error(dataPublisherConfiguration.getReceiverConfiguration().getUserName() +
-                          " not authorised to access server at " +
-                          dataPublisherConfiguration.getPublisherKey());
+                        " not authorised to access server at " +
+                        dataPublisherConfiguration.getPublisherKey());
             } catch (TransportException e) {
                 attemptReconnection(reconnectionTime - 1, sessionId);
             } catch (AgentException e) {
