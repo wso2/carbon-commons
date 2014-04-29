@@ -37,7 +37,6 @@ import org.wso2.carbon.discovery.config.Config;
 import org.wso2.carbon.discovery.cxf.internal.CxfDiscoveryDataHolder;
 import org.wso2.carbon.discovery.messages.Notification;
 import org.wso2.carbon.discovery.messages.TargetService;
-import org.wso2.carbon.discovery.util.ConfigHolder;
 import org.wso2.carbon.discovery.util.DiscoveryMgtUtils;
 import org.wso2.carbon.registry.core.Registry;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
@@ -181,7 +180,7 @@ public class CxfMessageSender {
     private ServiceClient initServiceClient(String epr, int notificationType,
                                             AxisConfiguration axisConf) throws Exception {
 
-        ConfigurationContext cfgCtx = ConfigHolder.getInstance().getClientConfigurationContext();
+        ConfigurationContext cfgCtx = CxfDiscoveryDataHolder.getInstance().getClientConfigurationContext();
         ServiceClient serviceClient = new ServiceClient(cfgCtx, null);
         serviceClient.setTargetEPR(new EndpointReference(epr));
         if (notificationType == DiscoveryConstants.NOTIFICATION_TYPE_HELLO) {

@@ -28,7 +28,6 @@ import org.wso2.carbon.discovery.cxf.DiscoveryStartupHandler;
 import org.wso2.carbon.utils.Axis2ConfigurationContextObserver;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
-import java.util.LinkedList;
 import java.util.Queue;
 
 /**
@@ -41,7 +40,6 @@ import java.util.Queue;
 public class CxfDiscoveryServiceComponent {
 
     private static Log log = LogFactory.getLog(CxfDiscoveryServiceComponent.class);
-    private Queue<CXFServiceInfo> initialMessagesList = new LinkedList<CXFServiceInfo>();
 
     private ServiceRegistration observerServiceRegistration;
     private CxfDiscoveryDataHolder dataHolder = CxfDiscoveryDataHolder.getInstance();
@@ -52,7 +50,7 @@ public class CxfDiscoveryServiceComponent {
         bundleContext.registerService(ServerStartupHandler.class.getName(), new DiscoveryStartupHandler(), null);
 
         // This will take care of registering observers in tenant axis configurations
-        dataHolder.setInitialMessagesList(initialMessagesList);
+        Queue<CXFServiceInfo> initialMessagesList = dataHolder.getInitialMessagesList();
         CxfDiscoveryConfigurationContextObserver configCtxObserver =
                 new CxfDiscoveryConfigurationContextObserver(initialMessagesList);
         observerServiceRegistration = bundleContext.registerService(
@@ -78,10 +76,12 @@ public class CxfDiscoveryServiceComponent {
 
     protected void setConfigurationContextService(ConfigurationContextService contextService) {
         dataHolder.setMainServerConfigContext(contextService.getServerConfigContext());
+        dataHolder.setClientConfigurationContext(contextService.getClientConfigContext());
     }
 
     protected void unsetConfigurationContextService(ConfigurationContextService contextService) {
         dataHolder.setMainServerConfigContext(null);
+        dataHolder.setClientConfigurationContext(null);
     }
 
 }
