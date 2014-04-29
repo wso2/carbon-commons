@@ -21,10 +21,8 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.core.ServerStartupHandler;
 import org.wso2.carbon.discovery.cxf.CXFServiceInfo;
 import org.wso2.carbon.discovery.cxf.CxfDiscoveryConfigurationContextObserver;
-import org.wso2.carbon.discovery.cxf.DiscoveryStartupHandler;
 import org.wso2.carbon.utils.Axis2ConfigurationContextObserver;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
@@ -47,7 +45,6 @@ public class CxfDiscoveryServiceComponent {
     protected void activate(ComponentContext ctx) {
 
         BundleContext bundleContext = ctx.getBundleContext();
-        bundleContext.registerService(ServerStartupHandler.class.getName(), new DiscoveryStartupHandler(), null);
 
         // This will take care of registering observers in tenant axis configurations
         Queue<CXFServiceInfo> initialMessagesList = dataHolder.getInitialMessagesList();

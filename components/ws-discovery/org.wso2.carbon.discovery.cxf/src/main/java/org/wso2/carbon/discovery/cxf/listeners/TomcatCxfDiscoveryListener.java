@@ -52,6 +52,7 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
 
     private static final String httpPort = "mgt.transport.http.port";
     private static final String hostName = "carbon.local.ip";
+    CxfMessageSender cxfMessageSender = new CxfMessageSender();
 
     private Log log = LogFactory.getLog(TomcatCxfDiscoveryListener.class);
 
@@ -81,10 +82,10 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
                     }
 
                     if(Lifecycle.AFTER_START_EVENT.equals(type)) {
-                        new CxfMessageSender().sendHello(serviceBean, null);
+                        cxfMessageSender.sendHello(serviceBean, null);
 
                     } else if (Lifecycle.BEFORE_STOP_EVENT.equals(type))  {
-                        new CxfMessageSender().sendBye(serviceBean, null);
+                        cxfMessageSender.sendBye(serviceBean, null);
                     }
                 }
             }
