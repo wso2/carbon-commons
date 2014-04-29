@@ -13,34 +13,18 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package org.wso2.carbon.discovery.cxf;
+package org.wso2.carbon.discovery.cxf.util;
 
 import org.apache.catalina.core.StandardContext;
-import org.wso2.carbon.discovery.cxf.util.CarbonAnnotationDB;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class APIScanner {
-/*
-    public static void scan(StandardContext context) {
+public class ClassAnnotationScanner {
 
-        Set<String> entityClasses = getAnnotatedClasses(context, Path.class);
-        for (String className : entityClasses) {
-            try {
-                Class<?> clazz = Class.forName(className);
-                showAPIinfo(context, clazz);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    */
-    public static CarbonAnnotationDB getAnnotatedClasses(StandardContext context,
-                                            Class<?> annotation) {
+    public static CarbonAnnotationDB getAnnotatedClasses(StandardContext context) {
 
         CarbonAnnotationDB db = new CarbonAnnotationDB();
         db.addIgnoredPackages("org.apache");

@@ -26,7 +26,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.discovery.DiscoveryException;
-import org.wso2.carbon.discovery.cxf.APIScanner;
+import org.wso2.carbon.discovery.cxf.util.ClassAnnotationScanner;
 import org.wso2.carbon.discovery.cxf.CXFServiceInfo;
 import org.wso2.carbon.discovery.cxf.CxfMessageSender;
 import org.wso2.carbon.discovery.cxf.util.CarbonAnnotationDB;
@@ -170,7 +170,7 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
     private QName getPortType(StandardContext context) {
         try {
             String sei = null;        //service endpoint interface
-            CarbonAnnotationDB annotations = APIScanner.getAnnotatedClasses(context, javax.jws.WebService.class);
+            CarbonAnnotationDB annotations = ClassAnnotationScanner.getAnnotatedClasses(context);
             Set<String> set = annotations.getAnnotationIndex().get(javax.jws.WebService.class.getName());
             annotations.crossReferenceImplementedInterfaces();
             Map<String, Set<String>> implementsMap = annotations.getImplementsIndex();
