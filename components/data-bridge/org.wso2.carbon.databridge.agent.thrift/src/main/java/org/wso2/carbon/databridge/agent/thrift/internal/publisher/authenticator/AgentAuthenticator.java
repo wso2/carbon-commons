@@ -26,8 +26,8 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.wso2.carbon.databridge.agent.thrift.conf.DataPublisherConfiguration;
 import org.wso2.carbon.databridge.agent.thrift.exception.AgentAuthenticatorException;
 import org.wso2.carbon.databridge.agent.thrift.exception.AgentException;
-import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
+import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
 
 /**
  * Authenticates all data publishers
@@ -76,9 +76,9 @@ public abstract class AgentAuthenticator {
 
         try {
             client = secureTransportPool.borrowObject(dataPublisherConfiguration.getPublisherKey());
-            disconnect(client, dataPublisherConfiguration.getSessionId());
+            disconnect(client,dataPublisherConfiguration.getSessionId());
         } catch (Exception e) {
-            if (log.isDebugEnabled()) {
+            if(log.isDebugEnabled()){
                 log.error("Cannot connect to the server at " + dataPublisherConfiguration.getPublisherKey() + " Authenticator", e);
             }
             log.warn("Cannot connect to the server at " + dataPublisherConfiguration.getPublisherKey() + " Authenticator");

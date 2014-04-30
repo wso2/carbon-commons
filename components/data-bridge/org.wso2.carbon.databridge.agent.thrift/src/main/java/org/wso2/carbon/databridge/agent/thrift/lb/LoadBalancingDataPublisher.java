@@ -51,8 +51,7 @@ public class LoadBalancingDataPublisher {
         }
     }
 
-    public LoadBalancingDataPublisher(ArrayList<ReceiverGroup> receiverGroups, Agent agent,
-                                      boolean shareStreamDefinitionCache) {
+    public LoadBalancingDataPublisher(ArrayList<ReceiverGroup> receiverGroups, Agent agent, boolean shareStreamDefinitionCache) {
 
         this.receiverGroups = receiverGroups;
         AgentHolder.setAgent(agent);
@@ -93,8 +92,7 @@ public class LoadBalancingDataPublisher {
     public void publish(String streamName, String streamVersion,
                         long timeStamp,
                         Object[] metaDataArray, Object[] correlationDataArray,
-                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
-            throws AgentException {
+                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap) throws AgentException {
         for (ReceiverGroup aGroup : receiverGroups) {
             aGroup.publish(streamName, streamVersion, timeStamp,
                            metaDataArray, correlationDataArray, payloadDataArray, arbitraryDataMap);
@@ -147,8 +145,7 @@ public class LoadBalancingDataPublisher {
      */
     public void publish(String streamName, String streamVersion,
                         Object[] metaDataArray, Object[] correlationDataArray,
-                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
-            throws AgentException {
+                        Object[] payloadDataArray, Map<String, String> arbitraryDataMap) throws AgentException {
         for (ReceiverGroup aGroup : receiverGroups) {
             aGroup.publish(streamName, streamVersion,
                            metaDataArray, correlationDataArray, payloadDataArray, arbitraryDataMap);

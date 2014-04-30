@@ -23,6 +23,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -57,7 +58,10 @@ public class ReceiverGroup implements ReceiverStateObserver {
 
     private final LinkedBlockingQueue<PublishData> receiverGroupUnsentEventQueue;
 
+    private volatile AtomicBoolean isOneReceiverWasConnected = new AtomicBoolean(false);
+
     private boolean isFailOver = false;
+    private long reconnectionInterval;
 
     public ReceiverGroup(ArrayList<DataPublisherHolder> properties) {
         for (DataPublisherHolder aHolder : properties) {
@@ -69,7 +73,7 @@ public class ReceiverGroup implements ReceiverStateObserver {
         this.receiverGroupUnsentEventQueue = new LinkedBlockingQueue<PublishData>(AgentHolder.getOrCreateAgent().getAgentConfiguration().getLoadBalancingDataPublisherBufferedEventSize());
     }
 
-    public ReceiverGroup(ArrayList<DataPublisherHolder> properties, boolean failOver) {
+    public ReceiverGroup(ArrayList<DataPublisherHolder> properties, boolean  failOver) {
         for (DataPublisherHolder aHolder : properties) {
 
             dataPublisherCache.add(aHolder);
@@ -87,7 +91,7 @@ public class ReceiverGroup implements ReceiverStateObserver {
             aHolder.generateDataPublisher(streamDefnCache);
             aHolder.getDataPublisher().registerReceiverObserver(this);
         }
-        long reconnectionInterval = agent.
+        reconnectionInterval = agent.
                 getAgentConfiguration().getReconnectionInterval();
         scheduledExecutorService
                 .scheduleAtFixedRate(new ReconnectionTask(), reconnectionInterval,
@@ -100,8 +104,7 @@ public class ReceiverGroup implements ReceiverStateObserver {
     protected void publish(String streamName, String streamVersion,
                            long timeStamp,
                            Object[] metaDataArray, Object[] correlationDataArray,
-                           Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
-            throws AgentException {
+                           Object[] payloadDataArray, Map<String, String> arbitraryDataMap) throws AgentException {
         AsyncDataPublisher dataPublisher = getDataPublisher();
         if (null != dataPublisher) {
             dataPublisher.publish(streamName, streamVersion,
@@ -118,8 +121,7 @@ public class ReceiverGroup implements ReceiverStateObserver {
 
     protected void publish(String streamName, String streamVersion,
                            Object[] metaDataArray, Object[] correlationDataArray,
-                           Object[] payloadDataArray, Map<String, String> arbitraryDataMap)
-            throws AgentException {
+                           Object[] payloadDataArray, Map<String, String> arbitraryDataMap) throws AgentException {
         AsyncDataPublisher dataPublisher = getDataPublisher();
         if (null != dataPublisher) {
             dataPublisher.publish(streamName, streamVersion,
@@ -163,7 +165,7 @@ public class ReceiverGroup implements ReceiverStateObserver {
         if (!isFailOver) {
             startIndex = getDataPublisherIndex();
         } else {
-            startIndex = START_INDEX;
+           startIndex = START_INDEX;
         }
         int index = startIndex;
 
@@ -208,8 +210,7 @@ public class ReceiverGroup implements ReceiverStateObserver {
     }
 
 
-    private AsyncDataPublisher setConnectionStatus(String receiverUrl, String username,
-                                                   String password, boolean status) {
+    private AsyncDataPublisher setConnectionStatus(String receiverUrl, String username, String password, boolean status) {
         for (int i = START_INDEX; i <= maximumDataPublisherIndex; i++) {
             DataPublisherHolder holder = dataPublisherCache.get(i);
             if (holder.getReceiverUrl().equalsIgnoreCase(receiverUrl) &&
@@ -307,7 +308,9 @@ public class ReceiverGroup implements ReceiverStateObserver {
                 }
             }
             if (!isOneReceiverConnected) {
-                log.error("No receiver is reachable at reconnection, can't publish the events");
+                if (isOneReceiverWasConnected.getAndSet(false)) {
+                    log.info("No receiver is reachable at reconnection, will try to reconnect every "+reconnectionInterval+" sec");
+                }
             }
         }
 

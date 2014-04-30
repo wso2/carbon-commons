@@ -49,7 +49,7 @@ public class ClientPoolFactory extends BaseKeyedPoolableObjectFactory {
             TTransport receiverTransport = null;
             try {
                 receiverTransport = new TSocket(HostAddressFinder.findAddress(hostNameAndPort[0]),
-                                                Integer.parseInt(hostNameAndPort[1]));
+                                                           Integer.parseInt(hostNameAndPort[1]));
             } catch (SocketException ignored) {
                 //already checked
             }

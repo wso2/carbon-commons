@@ -135,7 +135,7 @@ public class Agent {
             threadPool.shutdown();
             transportPool.close();
         } catch (Exception e) {
-            log.warn("Agent forceful shutdown failed", e);
+            log.warn("Agent forceful shutdown failed",e);
         }
         AgentHolder.setAgent(null);
     }

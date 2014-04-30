@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified"
-           targetNamespace="http://wso2.org/carbon/databridge/agent/thrift"
-           xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="thriftAgentConfiguration" type="thr:thriftAgentConfigurationType"
-                xmlns:thr="http://wso2.org/carbon/databridge/agent/thrift"/>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://wso2.org/carbon/databridge/agent/thrift" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="thriftAgentConfiguration" type="thr:thriftAgentConfigurationType" xmlns:thr="http://wso2.org/carbon/databridge/agent/thrift"/>
     <xs:complexType name="thriftAgentConfigurationType">
         <xs:all>
             <xs:element type="xs:string" name="bufferedEventsSize"/>

@@ -30,11 +30,11 @@ public class ClientPool {
     private volatile GenericKeyedObjectPool socketPool = null;
 
     public GenericKeyedObjectPool getClientPool(KeyedPoolableObjectFactory factory,
-                                                int maxActive,
-                                                int maxIdle,
-                                                boolean testOnBorrow,
-                                                long timeBetweenEvictionRunsMillis,
-                                                long minEvictableIdleTimeMillis) {
+                                                       int maxActive,
+                                                       int maxIdle,
+                                                       boolean testOnBorrow,
+                                                       long timeBetweenEvictionRunsMillis,
+                                                       long minEvictableIdleTimeMillis) {
         if (socketPool == null) {
             synchronized (ClientPool.class) {
                 if (socketPool == null) {

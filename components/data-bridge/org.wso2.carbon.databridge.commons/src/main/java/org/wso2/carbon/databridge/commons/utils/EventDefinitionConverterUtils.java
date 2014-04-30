@@ -20,6 +20,7 @@ package org.wso2.carbon.databridge.commons.utils;
 
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.wso2.carbon.databridge.commons.Attribute;
@@ -35,7 +36,10 @@ import java.util.List;
  */
 public final class EventDefinitionConverterUtils {
     public final static String nullString = "_null";
-    private static Gson gson = new Gson();
+    private static Gson gson =new GsonBuilder()
+            .setPrettyPrinting()
+            .disableHtmlEscaping()
+            .create();
 
     private EventDefinitionConverterUtils() {
 
@@ -126,5 +130,101 @@ public final class EventDefinitionConverterUtils {
 
     public static String convertToJson(StreamDefinition existingDefinition) {
         return gson.toJson(existingDefinition);
+    }
+
+    public static String convertToBasicJson(StreamDefinition existingDefinition) {
+        return gson.toJson(new StreamDefinitionTemplate(existingDefinition));
+
+    }
+
+    private static class  StreamDefinitionTemplate{
+
+        private String name;
+        private String version = "1.0.0";
+        private String nickName;
+        private String description;
+        private List<String> tags;
+
+        private List<Attribute> metaData;
+        private List<Attribute> correlationData;
+        private List<Attribute> payloadData;
+
+
+        public StreamDefinitionTemplate(StreamDefinition existingDefinition) {
+
+            this.name = existingDefinition.getName();
+            this.version = existingDefinition.getVersion();
+            this.nickName = existingDefinition.getNickName();
+            this.description = existingDefinition.getDescription();
+            this.tags = existingDefinition.getTags();
+            this.metaData = existingDefinition.getMetaData();
+            this.correlationData = existingDefinition.getCorrelationData();
+            this.payloadData = existingDefinition.getPayloadData();
+        }
+
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getVersion() {
+            return version;
+        }
+
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        public String getNickName() {
+            return nickName;
+        }
+
+        public void setNickName(String nickName) {
+            this.nickName = nickName;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public List<String> getTags() {
+            return tags;
+        }
+
+        public void setTags(List<String> tags) {
+            this.tags = tags;
+        }
+
+        public List<Attribute> getMetaData() {
+            return metaData;
+        }
+
+        public void setMetaData(List<Attribute> metaData) {
+            this.metaData = metaData;
+        }
+
+        public List<Attribute> getCorrelationData() {
+            return correlationData;
+        }
+
+        public void setCorrelationData(List<Attribute> correlationData) {
+            this.correlationData = correlationData;
+        }
+
+        public List<Attribute> getPayloadData() {
+            return payloadData;
+        }
+
+        public void setPayloadData(List<Attribute> payloadData) {
+            this.payloadData = payloadData;
+        }
     }
 }

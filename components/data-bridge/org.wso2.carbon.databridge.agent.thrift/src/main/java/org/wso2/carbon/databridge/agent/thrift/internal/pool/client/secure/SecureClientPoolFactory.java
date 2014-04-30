@@ -51,7 +51,7 @@ public class SecureClientPoolFactory extends BaseKeyedPoolableObjectFactory {
     private String trustStorePassword;
     private String trustStore;
 
-    public SecureClientPoolFactory(String trustStorePassword, String trustStore) {
+    public SecureClientPoolFactory(String trustStore, String trustStorePassword) {
         this.trustStorePassword = trustStorePassword;
         this.trustStore = trustStore;
     }

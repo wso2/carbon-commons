@@ -50,22 +50,25 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
     private StreamDefinitionStore streamDefinitionStore;
     private EventDispatcher eventDispatcher;
     private Authenticator authenticator;
+    private AuthenticationHandler authenticatorHandler;
     private OMElement initialConfig;
     private List<StreamAddRemoveListener> streamAddRemoveListenerList = new ArrayList<StreamAddRemoveListener>();
 
     public DataBridge(AuthenticationHandler authenticationHandler,
                       AbstractStreamDefinitionStore streamDefinitionStore,
                       DataBridgeConfiguration dataBridgeConfiguration) {
-        this.eventDispatcher = new EventDispatcher(streamDefinitionStore, dataBridgeConfiguration,authenticationHandler);
+        this.eventDispatcher = new EventDispatcher(streamDefinitionStore, dataBridgeConfiguration, authenticationHandler);
         this.streamDefinitionStore = streamDefinitionStore;
+        authenticatorHandler = authenticationHandler;
         authenticator = new Authenticator(authenticationHandler, dataBridgeConfiguration);
     }
 
     public DataBridge(AuthenticationHandler authenticationHandler,
                       AbstractStreamDefinitionStore streamDefinitionStore) {
         DataBridgeConfiguration dataBridgeConfiguration = new DataBridgeConfiguration();
-        this.eventDispatcher = new EventDispatcher(streamDefinitionStore, dataBridgeConfiguration,authenticationHandler);
+        this.eventDispatcher = new EventDispatcher(streamDefinitionStore, dataBridgeConfiguration, authenticationHandler);
         this.streamDefinitionStore = streamDefinitionStore;
+        authenticatorHandler = authenticationHandler;
         authenticator = new Authenticator(authenticationHandler, dataBridgeConfiguration);
     }
 
@@ -82,10 +85,12 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             throw new SessionTimeoutException(sessionId + " expired");
         }
         try {
-            String streamId =  eventDispatcher.defineStream(streamDefinition, agentSession);
+            authenticatorHandler.initContext(agentSession);
+            String streamId = eventDispatcher.defineStream(streamDefinition, agentSession);
             if (streamId != null) {
+                int tenantId = agentSession.getCredentials().getTenantId();
                 for (StreamAddRemoveListener streamAddRemoveListener : streamAddRemoveListenerList) {
-                    streamAddRemoveListener.streamAdded(streamId);
+                    streamAddRemoveListener.streamAdded(tenantId, streamId);
                 }
             }
             return streamId;
@@ -95,6 +100,8 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             throw new DifferentStreamDefinitionAlreadyDefinedException(e.getErrorMessage(), e);
         } catch (StreamDefinitionStoreException e) {
             throw new MalformedStreamDefinitionException(e.getErrorMessage(), e);
+        } finally {
+            authenticatorHandler.destroyContext(agentSession);
         }
     }
 
@@ -111,10 +118,12 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             throw new SessionTimeoutException(sessionId + " expired");
         }
         try {
+            authenticatorHandler.initContext(agentSession);
             String streamId = eventDispatcher.defineStream(streamDefinition, agentSession, indexDefinition);
             if (streamId != null) {
+                int tenantId = agentSession.getCredentials().getTenantId();
                 for (StreamAddRemoveListener streamAddRemoveListener : streamAddRemoveListenerList) {
-                    streamAddRemoveListener.streamAdded(streamId);
+                    streamAddRemoveListener.streamAdded(tenantId, streamId);
                 }
             }
             return streamId;
@@ -124,6 +133,8 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             throw new DifferentStreamDefinitionAlreadyDefinedException(e.getErrorMessage(), e);
         } catch (StreamDefinitionStoreException e) {
             throw new MalformedStreamDefinitionException(e.getErrorMessage(), e);
+        } finally {
+            authenticatorHandler.destroyContext(agentSession);
         }
     }
 
@@ -137,28 +148,19 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             throw new SessionTimeoutException(sessionId + " expired");
         }
         try {
+            authenticatorHandler.initContext(agentSession);
             return eventDispatcher.findStreamId(streamName,
-                                                streamVersion, agentSession);
+                    streamVersion, agentSession);
         } catch (StreamDefinitionStoreException e) {
             log.warn("Cannot find streamId for " + streamName + " " + streamVersion, e);
             return null;
+        } finally {
+            authenticatorHandler.destroyContext(agentSession);
         }
 
     }
 
     public boolean deleteStream(String sessionId, String streamId)
-            throws SessionTimeoutException {
-        boolean status = deleteStream(sessionId, DataBridgeCommonsUtils.getStreamNameFromStreamId(streamId),
-                                      DataBridgeCommonsUtils.getStreamVersionFromStreamId(streamId));
-        if (status) {
-            for (StreamAddRemoveListener streamAddRemoveListener : streamAddRemoveListenerList) {
-                streamAddRemoveListener.streamRemoved(streamId);
-            }
-        }
-        return status;
-    }
-
-    public boolean deleteStream(String sessionId, String streamName, String streamVersion)
             throws SessionTimeoutException {
         AgentSession agentSession = authenticator.getSession(sessionId);
         if (agentSession.getCredentials() == null) {
@@ -167,7 +169,26 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             }
             throw new SessionTimeoutException(sessionId + " expired");
         }
-        return eventDispatcher.deleteStream(streamName, streamVersion, agentSession);
+        boolean status;
+
+        try {
+            authenticatorHandler.initContext(agentSession);
+            status = eventDispatcher.deleteStream(DataBridgeCommonsUtils.getStreamNameFromStreamId(streamId), DataBridgeCommonsUtils.getStreamVersionFromStreamId(streamId), agentSession);
+            if (status) {
+                for (StreamAddRemoveListener streamAddRemoveListener : streamAddRemoveListenerList) {
+                    streamAddRemoveListener.streamRemoved(agentSession.getCredentials().getTenantId(), streamId);
+                }
+            }
+        } finally {
+            authenticatorHandler.destroyContext(agentSession);
+
+        }
+        return status;
+    }
+
+    public boolean deleteStream(String sessionId, String streamName, String streamVersion)
+            throws SessionTimeoutException {
+        return deleteStream(sessionId, DataBridgeCommonsUtils.generateStreamId(streamName, streamVersion));
     }
 
 
@@ -180,18 +201,28 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             }
             throw new SessionTimeoutException(sessionId + " expired");
         }
-        eventDispatcher.publish(eventBundle, agentSession, eventConverter);
+        try {
+            authenticatorHandler.initContext(agentSession);
+            eventDispatcher.publish(eventBundle, agentSession, eventConverter);
+        } finally {
+            authenticatorHandler.destroyContext(agentSession);
+        }
     }
 
     public String login(String username, String password) throws AuthenticationException {
-        log.info(username + " connected");
+        log.info("user " + username + " connected");
         return authenticator.authenticate(username, password);
     }
 
 
     public void logout(String sessionId) throws Exception {
-        log.info(sessionId + " disconnected");
+        AgentSession agentSession = authenticator.getSession(sessionId);
         authenticator.logout(sessionId);
+        if (agentSession != null) {
+            log.info("user " + agentSession.getUsername() + " disconnected");
+        } else {
+            log.info("session " + sessionId + " disconnected");
+        }
     }
 
     public OMElement getInitialConfig() {
@@ -224,7 +255,7 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
     public StreamDefinition getStreamDefinition(String sessionId, String streamName,
                                                 String streamVersion)
             throws SessionTimeoutException, StreamDefinitionNotFoundException,
-                   StreamDefinitionStoreException {
+            StreamDefinitionStoreException {
         AgentSession agentSession = authenticator.getSession(sessionId);
         if (agentSession.getUsername() == null) {
             if (log.isDebugEnabled()) {
@@ -232,7 +263,14 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             }
             throw new SessionTimeoutException(sessionId + " expired");
         }
-        return getStreamDefinition(streamName, streamVersion);
+
+        try {
+            authenticatorHandler.initContext(agentSession);
+            return getStreamDefinition(streamName, streamVersion, agentSession.getCredentials().getTenantId());
+        } finally {
+            authenticatorHandler.destroyContext(agentSession);
+
+        }
     }
 
     @Override
@@ -245,13 +283,18 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             }
             throw new SessionTimeoutException(sessionId + " expired");
         }
-        return getAllStreamDefinitions();
+        try {
+            authenticatorHandler.initContext(agentSession);
+            return getAllStreamDefinitions(agentSession.getCredentials().getTenantId());
+        } finally {
+            authenticatorHandler.destroyContext(agentSession);
+        }
     }
 
     @Override
     public void saveStreamDefinition(String sessionId, StreamDefinition streamDefinition)
             throws SessionTimeoutException, StreamDefinitionStoreException,
-                   DifferentStreamDefinitionAlreadyDefinedException {
+            DifferentStreamDefinitionAlreadyDefinedException {
         AgentSession agentSession = authenticator.getSession(sessionId);
         if (agentSession.getUsername() == null) {
             if (log.isDebugEnabled()) {
@@ -259,44 +302,48 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
             }
             throw new SessionTimeoutException(sessionId + " expired");
         }
-        saveStreamDefinition(streamDefinition);
-        eventDispatcher.updateStreamDefinitionHolder(agentSession.getCredentials().getTenantId());
-
+        try {
+            authenticatorHandler.initContext(agentSession);
+            saveStreamDefinition(streamDefinition, agentSession.getCredentials().getTenantId());
+            eventDispatcher.updateStreamDefinitionHolder(agentSession);
+        } finally {
+            authenticatorHandler.destroyContext(agentSession);
+        }
     }
 
     // Stream store operations
     @Override
     public StreamDefinition getStreamDefinition(String streamName,
-                                                String streamVersion)
+                                                String streamVersion, int tenantId)
             throws StreamDefinitionNotFoundException, StreamDefinitionStoreException {
-        return streamDefinitionStore.getStreamDefinition(streamName, streamVersion);
+        return streamDefinitionStore.getStreamDefinition(streamName, streamVersion, tenantId);
 
     }
 
     @Override
-    public StreamDefinition getStreamDefinition(String streamId)
+    public StreamDefinition getStreamDefinition(String streamId, int tenantId)
             throws StreamDefinitionNotFoundException, StreamDefinitionStoreException {
-        return streamDefinitionStore.getStreamDefinition(streamId);
+        return streamDefinitionStore.getStreamDefinition(streamId, tenantId);
 
     }
 
     @Override
-    public List<StreamDefinition> getAllStreamDefinitions() {
-        return new ArrayList<StreamDefinition>(streamDefinitionStore.getAllStreamDefinitions());
+    public List<StreamDefinition> getAllStreamDefinitions(int tenantId) {
+        return new ArrayList<StreamDefinition>(streamDefinitionStore.getAllStreamDefinitions(tenantId));
     }
 
 
     @Override
-    public void saveStreamDefinition(StreamDefinition streamDefinition)
+    public void saveStreamDefinition(StreamDefinition streamDefinition, int tenantId)
             throws DifferentStreamDefinitionAlreadyDefinedException,
-                   StreamDefinitionStoreException {
-        streamDefinitionStore.saveStreamDefinition(streamDefinition);
+            StreamDefinitionStoreException {
+        streamDefinitionStore.saveStreamDefinition(streamDefinition, tenantId);
     }
 
     @Override
     public boolean deleteStreamDefinition(String streamName,
-                                          String streamVersion) {
-        return streamDefinitionStore.deleteStreamDefinition(streamName, streamVersion);
+                                          String streamVersion, int tenantId) {
+        return streamDefinitionStore.deleteStreamDefinition(streamName, streamVersion, tenantId);
     }
 
     public List<AgentCallback> getSubscribers() {

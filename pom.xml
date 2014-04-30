@@ -11,7 +11,6 @@
     <url>http://wso2.org</url>
 
     <modules>
-        <module>service-stubs/org.wso2.carbon.security.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.adc.repositoryinformation.service.stub</module>
         <module>service-stubs/org.wso2.carbon.application.mgt.bpel.stub</module>
         <module>service-stubs/org.wso2.carbon.application.mgt.humantask.stub</module>
@@ -20,42 +19,27 @@
         <module>service-stubs/org.wso2.carbon.application.mgt.webapp.stub</module>
         <module>service-stubs/org.wso2.carbon.deployment.synchronizer.stub</module>
         <module>service-stubs/org.wso2.carbon.discovery.stub</module>
-        <module>service-stubs/org.wso2.carbon.idp.mgt.stub</module>
-        <module>service-stubs/org.wso2.carbon.identity.sso.saml.stub</module>
-        <module>service-stubs/org.wso2.carbon.identity.authenticator.saml2.sso.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.oauth.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.entitlement.stub</module>
         <module>service-stubs/org.wso2.carbon.transport.jms.stub</module>
         <module>service-stubs/org.wso2.carbon.transport.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.datasource.stub</module>
-        <module>service-stubs/org.wso2.carbon.tenant.mgt.stub</module>
-        <module>service-stubs/org.wso2.carbon.tenant.common.stub</module>
-        <module>service-stubs/org.wso2.carbon.tenant.redirector.servlet.stub</module>
         <module>service-stubs/org.wso2.carbon.throttling.agent.stub</module>
-        <module>service-stubs/org.wso2.carbon.tenant.theme.mgt.stub</module>
 
-        <module>components/security-mgt</module>
         <module>components/authentication</module>
         <module>components/data-sources</module>
         <module>components/application-deployers</module>
         <module>components/deployment-synchronizer</module>
         <module>components/application-mgt</module>
         <module>components/ws-discovery</module>
-        <module>components/tenant-mgt</module>
-        <module>components/idp-mgt</module>
-        <module>components/authenticators/saml2-sso-authenticator</module>
         <module>components/entitlement-commons</module>
         <module>components/transport-mgt</module>
         <module>components/data-bridge</module>
 
-        <module>features/security-mgt</module>
         <module>features/application-deployers</module>
         <module>features/application-mgt</module>
         <module>features/deployment-synchronizer</module>
         <module>features/ws-discovery</module>
-        <module>features/tenant-mgt</module>
-        <module>features/idp-mgt</module>
-        <module>features/authenticators/saml2-sso-authenticator</module>
         <module>features/transport-mgt</module>
         <module>features/data-bridge</module>
         <module>features/data-sources</module>
@@ -730,125 +714,10 @@
                 <artifactId>org.wso2.carbon.user.api</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
-            <!--dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.security.mgt</artifactId>
-                <version>${previous.version}</version>
-            </dependency-->
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.idp.mgt.stub</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.ws.security.wso2</groupId>
-                <artifactId>wss4j</artifactId>
-                <version>${wss4j.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.idp.mgt.ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.idp.mgt</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.idp.mgt.server.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.idp.mgt.ui.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.identity.sso.saml.stub</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.stub</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.server.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.identity.authenticator.saml2.sso.ui.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
             <dependency>
                 <groupId>backport-util-concurrent.wso2</groupId>
                 <artifactId>backport-util-concurrent</artifactId>
                 <version>${orbit.version.backport.util}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.security.mgt.stub</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.security.mgt</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.security.mgt.ui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.security.mgt.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.security.mgt.server.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.security.mgt.ui.feature</artifactId>
-                <version>${project.version}</version>
-                <type>zip</type>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -1021,7 +890,7 @@
                 <version>13.0.1</version>
             </dependency>
 
-            <!-- Stratos dependencies -->
+            <!-- Stratos dependencies >
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.tenant.common</artifactId>
@@ -1103,22 +972,12 @@
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.tenant.activation</artifactId>
                 <version>${carbon.platform.version}</version>
-            </dependency>
+            </dependency-->
             <dependency>
                 <groupId>org.eclipse.equinox</groupId>
                 <artifactId>javax.servlet</artifactId>
                 <version>${version.javax.servlet}</version>
                 <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.redirector.servlet.stub</artifactId>
-                <version>${carbon.platform.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.theme.mgt.stub</artifactId>
-                <version>${carbon.platform.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -1141,28 +1000,6 @@
                 <version>${carbon.platform.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.common.server.feature</artifactId>
-                <version>${carbon.platform.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.common.ui.feature</artifactId>
-                <version>${carbon.platform.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.dispatcher</artifactId>
-                <version>${carbon.platform.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.redirector.servlet</artifactId>
-                <version>${carbon.platform.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.quartz-scheduler.wso2</groupId>
                 <artifactId>quartz</artifactId>
                 <version>2.1.1.wso2v1</version>
@@ -1172,27 +1009,6 @@
                 <artifactId>kaptcha</artifactId>
                 <version>2.3.0.wso2v1</version>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.redirector.servlet.ui</artifactId>
-                <version>${carbon.platform.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.sso.redirector.ui</artifactId>
-                <version>${carbon.platform.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.mgt.ui</artifactId>
-                <version>${carbon.platform.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.tenant.theme.mgt.ui</artifactId>
-                <version>${carbon.platform.version}</version>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
@@ -1347,7 +1163,7 @@
                 <module>components/application-mgt</module>
                 <module>components/deployment-synchronizer</module>
                 <module>components/ws-discovery</module>
-                <module>components/idp-mgt</module>
+                <!--module>components/idp-mgt</module-->
             </modules>
         </profile>
         <profile>
@@ -1363,7 +1179,7 @@
                 <module>components/application-mgt</module>
                 <module>components/deployment-synchronizer</module>
                 <module>components/ws-discovery</module>
-                <module>components/idp-mgt</module>
+                <!--module>components/idp-mgt</module-->
             </modules>
         </profile>
     </profiles>
@@ -1426,7 +1242,7 @@
         <version.javax.servlet>3.0.0.v201112011016</version.javax.servlet>
 
         <!-- Rampart Version -->
-        <rampart.wso2.version>1.6.1.wso2v12</rampart.wso2.version>
+        <rampart.wso2.version>1.6.1.wso2v13-SNAPSHOT</rampart.wso2.version>
 
         <slf4j.wso2.version>1.5.10.wso2v1</slf4j.wso2.version>
 

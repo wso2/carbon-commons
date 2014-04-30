@@ -89,13 +89,14 @@ public class QueueWorker implements Runnable {
                     }
 
                 } catch (EventConversionException re) {
-                    log.error("Wrongly formatted event sent for " + eventComposite.getStreamTypeHolder().getTenantId(), re);
+                    log.error("Dropping wrongly formatted event sent for " + eventComposite.getStreamTypeHolder().getTenantId(), re);
                 }
             }
         } catch (Throwable e) {
             log.error("Error in passing events " + eventList + " to subscribers " + subscribers + " " + rawDataSubscribers, e);
         }
     }
+
 
 
 }

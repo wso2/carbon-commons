@@ -33,13 +33,13 @@ public class DataPublisherConfiguration {
 
     public DataPublisherConfiguration(ReceiverConfiguration receiverConfiguration) {
         this.receiverConfiguration = receiverConfiguration;
-        publisherKey = receiverConfiguration.getDataReceiverProtocol().toString() +
+        publisherKey = receiverConfiguration.getDataReceiverProtocol().toString()+
                        AgentConstants.SEPARATOR +
                        receiverConfiguration.getDataReceiverIp() +
                        AgentConstants.HOSTNAME_AND_PORT_SEPARATOR +
                        receiverConfiguration.getDataReceiverPort() +
                        AgentConstants.SEPARATOR +
-                       receiverConfiguration.getSecureDataReceiverProtocol().toString() +
+                       receiverConfiguration.getSecureDataReceiverProtocol().toString()+
                        AgentConstants.SEPARATOR +
                        receiverConfiguration.getSecureDataReceiverIp() +
                        AgentConstants.HOSTNAME_AND_PORT_SEPARATOR +
