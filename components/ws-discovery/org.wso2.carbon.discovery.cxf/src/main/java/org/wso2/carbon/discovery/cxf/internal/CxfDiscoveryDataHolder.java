@@ -28,6 +28,10 @@ public class CxfDiscoveryDataHolder {
     private ConfigurationContext mainServerConfigContext;
     private Queue<CXFServiceInfo> initialMessagesList;
 
+    private ConfigurationContext clientCfgCtx;
+    private ConfigurationContext serverCfgCtx;
+
+
     public static CxfDiscoveryDataHolder getInstance() {
         return instance;
     }
@@ -52,9 +56,23 @@ public class CxfDiscoveryDataHolder {
     }
 
     public void setInitialMessagesList(Queue<CXFServiceInfo> initialMessagesList) {
-        if (!initialMessagesList.isEmpty()) {
-            initialMessagesList.addAll(this.initialMessagesList);
-        }
-        this.initialMessagesList = initialMessagesList;
+        this.initialMessagesList.addAll(initialMessagesList);
     }
+
+    public ConfigurationContext getClientConfigurationContext() {
+        return clientCfgCtx;
+    }
+
+    public void setClientConfigurationContext(ConfigurationContext clientCfgCtx) {
+        this.clientCfgCtx = clientCfgCtx;
+    }
+
+    public ConfigurationContext getServerConfigurationContext() {
+        return serverCfgCtx;
+    }
+
+    public void setServerConfigurationContext(ConfigurationContext serverCfgCtx) {
+        this.serverCfgCtx = serverCfgCtx;
+    }
+
 }

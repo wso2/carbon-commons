@@ -20,13 +20,16 @@ import org.apache.catalina.LifecycleEvent;
 import org.apache.catalina.core.StandardContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.scannotation.AnnotationDB;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.discovery.DiscoveryException;
+import org.wso2.carbon.discovery.cxf.util.ClassAnnotationScanner;
 import org.wso2.carbon.discovery.cxf.CXFServiceInfo;
 import org.wso2.carbon.discovery.cxf.CxfMessageSender;
+import org.wso2.carbon.discovery.cxf.util.CarbonAnnotationDB;
 import org.xml.sax.SAXException;
 
 import javax.servlet.ServletContext;
@@ -40,6 +43,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TomcatCxfDiscoveryListener implements org.apache.catalina.LifecycleListener {
 
@@ -48,6 +52,7 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
 
     private static final String httpPort = "mgt.transport.http.port";
     private static final String hostName = "carbon.local.ip";
+    CxfMessageSender cxfMessageSender = new CxfMessageSender();
 
     private Log log = LogFactory.getLog(TomcatCxfDiscoveryListener.class);
 
@@ -77,18 +82,19 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
                     }
 
                     if(Lifecycle.AFTER_START_EVENT.equals(type)) {
-                        new CxfMessageSender().sendHello(serviceBean, null);
+                        cxfMessageSender.sendHello(serviceBean, null);
+
                     } else if (Lifecycle.BEFORE_STOP_EVENT.equals(type))  {
-                        new CxfMessageSender().sendHello(serviceBean, null);
+                        cxfMessageSender.sendBye(serviceBean, null);
                     }
                 }
             }
 
         } catch (DiscoveryException e) {
-            log.error(e.getMessage(), e);
+            log.warn("Error while publishing the services to the discovery service ", e);
+        } catch (Throwable e) {
+            log.warn("Error while publishing the services to the discovery service ", e);
         }
-
-
     }
 
     private String getServletContextPath(String jaxServletPattern) {
@@ -111,7 +117,7 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
         CXFServiceInfo serviceInfo = new CXFServiceInfo();
         String contextPath = context.getServletContext().getContextPath();
         serviceInfo.setServiceName(contextPath);
-        serviceInfo.setType(new QName("http://wso2.org", "portType"));     //hard-coded
+        serviceInfo.setType(getPortType(context));
         serviceInfo.setTenantDomain(PrivilegedCarbonContext.getThreadLocalCarbonContext().
                 getTenantDomain(true));
 
@@ -159,6 +165,56 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
         serviceInfo.setxAddrs(getxAddrs(context, jaxServletMapping, endpoints));
 
         return serviceInfo;
+
+    }
+
+    private QName getPortType(StandardContext context) {
+        try {
+            String sei = null;        //service endpoint interface
+            CarbonAnnotationDB annotations = ClassAnnotationScanner.getAnnotatedClasses(context);
+            Set<String> set = annotations.getAnnotationIndex().get(javax.jws.WebService.class.getName());
+            annotations.crossReferenceImplementedInterfaces();
+            Map<String, Set<String>> implementsMap = annotations.getImplementsIndex();
+            if (set == null || set.isEmpty()) {
+                return null;
+            }
+            for (String clazzName : set) {
+                Set serviceImplements;
+                if ((serviceImplements = implementsMap.get(clazzName)) != null) {
+                    sei = (String) serviceImplements.toArray()[0];
+                    break;
+                } else {
+                    sei = clazzName;
+                }
+            }
+            if (sei == null ) {
+                sei = (String) set.toArray()[0];
+            }
+            String portType;
+            String targetNamespace;
+
+            portType = sei.substring(sei.lastIndexOf('.') + 1);
+            targetNamespace = getTargetNamespace(sei);
+
+            return new QName(targetNamespace, portType);
+
+        } catch (AnnotationDB.CrossReferenceException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        return null;
+    }
+
+    private String getTargetNamespace(String sei) {
+        String[] arr = sei.substring(0, sei.lastIndexOf('.')).split("\\.");
+        StringBuilder sb = new StringBuilder();
+        sb.append("http://");
+        for(int i = arr.length-1; i >= 0; i--) {
+            sb.append(arr[i]).append(".");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        sb.append("/");
+        return sb.toString();
 
     }
 
