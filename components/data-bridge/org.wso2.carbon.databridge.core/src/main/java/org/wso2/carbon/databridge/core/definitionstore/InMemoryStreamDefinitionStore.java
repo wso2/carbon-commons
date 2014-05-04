@@ -28,12 +28,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * The in memory implementation of the Event Stream definition Store
  */
 public class InMemoryStreamDefinitionStore extends
-                                           AbstractStreamDefinitionStore {
+        AbstractStreamDefinitionStore {
 
     private ConcurrentHashMap<String, StreamDefinition> streamDefinitionStore = new ConcurrentHashMap<String, StreamDefinition>();
 
     @Override
-    public boolean removeStreamDefinition(String name, String version) {
+    public boolean removeStreamDefinition(String name, String version, int tenantId) {
         if (null != streamDefinitionStore.remove(DataBridgeCommonsUtils.generateStreamId(name, version))) {
             return true;
         }
@@ -41,25 +41,25 @@ public class InMemoryStreamDefinitionStore extends
     }
 
     @Override
-    public void saveStreamDefinitionToStore(StreamDefinition streamDefinition)
+    public void saveStreamDefinitionToStore(StreamDefinition streamDefinition, int tenantId)
             throws StreamDefinitionStoreException {
 
         streamDefinitionStore.put(streamDefinition.getStreamId(), streamDefinition);
     }
 
 
-    public StreamDefinition getStreamDefinitionFromStore(String name, String version)
+    public StreamDefinition getStreamDefinitionFromStore(String name, String version, int tenantId)
             throws StreamDefinitionStoreException {
-        return getStreamDefinition(DataBridgeCommonsUtils.generateStreamId(name, version));
+        return getStreamDefinition(DataBridgeCommonsUtils.generateStreamId(name, version), tenantId);
     }
 
     @Override
-    public StreamDefinition getStreamDefinitionFromStore(String streamId)
+    public StreamDefinition getStreamDefinitionFromStore(String streamId, int tenantId)
             throws StreamDefinitionStoreException {
         return streamDefinitionStore.get(streamId);
     }
 
-    public Collection<StreamDefinition> getAllStreamDefinitionsFromStore() {
+    public Collection<StreamDefinition> getAllStreamDefinitionsFromStore(int tenantId) {
         if (streamDefinitionStore != null) {
             return streamDefinitionStore.values();
         }

@@ -21,21 +21,27 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.databridge.commons.StreamDefinition;
+import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlreadyDefinedException;
+import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
+import org.wso2.carbon.databridge.commons.utils.EventDefinitionConverterUtils;
 import org.wso2.carbon.databridge.core.DataBridge;
 import org.wso2.carbon.databridge.core.DataBridgeReceiverService;
 import org.wso2.carbon.databridge.core.DataBridgeServiceValueHolder;
 import org.wso2.carbon.databridge.core.DataBridgeSubscriberService;
 import org.wso2.carbon.databridge.core.conf.DataBridgeConfiguration;
 import org.wso2.carbon.databridge.core.definitionstore.AbstractStreamDefinitionStore;
-import org.wso2.carbon.databridge.core.definitionstore.InMemoryStreamDefinitionStore;
 import org.wso2.carbon.databridge.core.exception.DataBridgeConfigurationException;
+import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
 import org.wso2.carbon.databridge.core.internal.authentication.CarbonAuthenticationHandler;
-import org.wso2.carbon.databridge.core.internal.utils.DataBridgeConstants;
 import org.wso2.carbon.databridge.core.internal.utils.DataBridgeCoreBuilder;
 import org.wso2.carbon.identity.authentication.AuthenticationService;
+import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.service.RealmService;
+import org.wso2.carbon.utils.ConfigurationContextService;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,6 +51,12 @@ import java.util.List;
  * cardinality="1..1" policy="dynamic" bind="setAuthenticationService"  unbind="unsetAuthenticationService"
  * @scr.reference name="user.realmservice.default" interface="org.wso2.carbon.user.core.service.RealmService"
  * cardinality="1..1" policy="dynamic" bind="setRealmService"  unbind="unsetRealmService"
+ * @scr.reference name="stream.definitionStore.service"
+ * interface="org.wso2.carbon.databridge.core.definitionstore.AbstractStreamDefinitionStore" cardinality="1..1"
+ * policy="dynamic" bind="setEventStreamStoreService" unbind="unsetEventStreamStoreService"
+ * @scr.reference name="config.context.service"
+ * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="0..1"
+ * policy="dynamic"  bind="setConfigurationContextService" unbind="unsetConfigurationContextService"
  */
 public class DataBridgeDS {
     private static final Log log = LogFactory.getLog(DataBridgeDS.class);
@@ -64,46 +76,73 @@ public class DataBridgeDS {
 
         try {
             DataBridgeConfiguration dataBridgeConfiguration = new DataBridgeConfiguration();
-            List<String[]> streamDefinitions = new ArrayList<String[]>();
             try {
                 initialConfig = DataBridgeCoreBuilder.loadConfigXML();
             } catch (DataBridgeConfigurationException e) {
                 log.error("The data Bridge config was not found. Falling back to defaults.");
             }
-            DataBridgeCoreBuilder.populateConfigurations(dataBridgeConfiguration, streamDefinitions, initialConfig);
+            DataBridgeCoreBuilder.populateConfigurations(dataBridgeConfiguration, initialConfig);
 
             if (databridge == null) {
-                String definitionStoreName = dataBridgeConfiguration.getStreamDefinitionStoreName();
-                AbstractStreamDefinitionStore streamDefinitionStore = null;
-                try {
-                    streamDefinitionStore = (AbstractStreamDefinitionStore) DataBridgeDS.class.getClassLoader().loadClass(definitionStoreName).newInstance();
+//                String definitionStoreName = dataBridgeConfiguration.getStreamDefinitionStoreName();
+                AbstractStreamDefinitionStore streamDefinitionStore = DataBridgeServiceValueHolder.getStreamDefinitionStore();
 
-                    if (definitionStoreName.equals(DataBridgeConstants.DEFAULT_DEFINITION_STORE)) {
-                        log.warn("The default stream defintion store is loaded : " + definitionStoreName + ". Please configure a proper definition store.");
-                    }
-//                    streamDefinitionStore = (AbstractStreamDefinitionStore) Class.forName(definitionStoreName).newInstance();
-                } catch (Exception e) {
-                    log.warn("The stream definition store :" + definitionStoreName + " cannot be created. Hence using " + DataBridgeConstants.DEFAULT_DEFINITION_STORE, e);
-                    //by default if used InMemoryStreamDefinitionStore
-                    streamDefinitionStore = new InMemoryStreamDefinitionStore();
-                }
+//                try {
+//                    streamDefinitionStore = (AbstractStreamDefinitionStore) DataBridgeDS.class.getClassLoader().loadClass(definitionStoreName).newInstance();
+//
+//                    if (definitionStoreName.equals(DataBridgeConstants.DEFAULT_DEFINITION_STORE)) {
+//                        log.warn("The default stream defintion store is loaded : " + definitionStoreName + ". Please configure a proper definition store.");
+//                    }
+////                    streamDefinitionStore = (AbstractStreamDefinitionStore) Class.forName(definitionStoreName).newInstance();
+//                } catch (Exception e) {
+//                    log.warn("The stream definition store :" + definitionStoreName + " cannot be created. Hence using " + DataBridgeConstants.DEFAULT_DEFINITION_STORE, e);
+//                    //by default if used InMemoryStreamDefinitionStore
+//                    streamDefinitionStore = new InMemoryStreamDefinitionStore();
+//                }
 
 
                 databridge = new DataBridge(new CarbonAuthenticationHandler(authenticationService), streamDefinitionStore, dataBridgeConfiguration);
                 databridge.setInitialConfig(initialConfig);
 
-                //todo
-//                for (String[] streamDefinition : streamDefinitions) {
-//                    try {
-//                        dataReceiver.saveStreamDefinition(streamDefinition[0], streamDefinition[1]);
-//                    } catch (MalformedStreamDefinitionException e) {
-//                        log.error("Malformed Stream Definition for " + streamDefinition[0] + ": " + streamDefinition[1], e);
-//                    } catch (DifferentStreamDefinitionAlreadyDefinedException e) {
-//                        log.warn("Redefining event stream of " + streamDefinition[0] + ": " + streamDefinition[1], e);
-//                    } catch (RuntimeException e) {
-//                        log.error("Error in defining event stream " + streamDefinition[0] + ": " + streamDefinition[1], e);
-//                    }
-//                }
+                try {
+                    List<String[]> streamDefinitionStrings = DataBridgeCoreBuilder.loadStreamDefinitionXML();
+                    for (String[] streamDefinitionString : streamDefinitionStrings) {
+                        try {
+                            StreamDefinition streamDefinition = EventDefinitionConverterUtils.convertFromJson(streamDefinitionString[1]);
+                            int tenantId = DataBridgeServiceValueHolder.getRealmService().getTenantManager().getTenantId(streamDefinitionString[0]);
+                            if (tenantId == MultitenantConstants.INVALID_TENANT_ID) {
+                                log.warn("Tenant " + streamDefinitionString[0] + " does not exist, Error in defining event stream " + streamDefinitionString[1]);
+                                continue;
+                            }
+
+                            try {
+                                PrivilegedCarbonContext.startTenantFlow();
+                                PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+                                privilegedCarbonContext.setTenantId(tenantId);
+                                privilegedCarbonContext.setTenantDomain(streamDefinitionString[0]);
+
+                                streamDefinitionStore.saveStreamDefinition(streamDefinition, tenantId);
+
+                            } catch (DifferentStreamDefinitionAlreadyDefinedException e) {
+                                log.warn("Error redefining event stream of " + streamDefinitionString[0] + ": " + streamDefinitionString[1], e);
+                            } catch (RuntimeException e) {
+                                log.error("Error in defining event stream " + streamDefinitionString[0] + ": " + streamDefinitionString[1], e);
+                            } catch (StreamDefinitionStoreException e) {
+                                log.error("Error in defining event stream in store " + streamDefinitionString[0] + ": " + streamDefinitionString[1], e);
+                            } finally {
+                                PrivilegedCarbonContext.endTenantFlow();
+                            }
+                        } catch (MalformedStreamDefinitionException e) {
+                            log.error("Malformed Stream Definition for " + streamDefinitionString[0] + ": " + streamDefinitionString[1], e);
+                        } catch (UserStoreException e) {
+                            log.error("Error in identifying tenant event stream " + streamDefinitionString[0] + ": " + streamDefinitionString[1], e);
+                        }
+                    }
+                } catch (Throwable t) {
+                    log.error("Cannot load stream definitions ", t);
+                }
+
+
                 receiverServiceRegistration = context.getBundleContext().
                         registerService(DataBridgeReceiverService.class.getName(), databridge, null);
                 subscriberServiceRegistration = context.getBundleContext().
@@ -143,6 +182,24 @@ public class DataBridgeDS {
 
     protected void unsetRealmService(RealmService realmService) {
         DataBridgeServiceValueHolder.setRealmService(null);
+    }
+
+    protected void setEventStreamStoreService(
+            AbstractStreamDefinitionStore abstractStreamDefinitionStore) {
+        DataBridgeServiceValueHolder.setStreamDefinitionStore(abstractStreamDefinitionStore);
+    }
+
+    protected void unsetEventStreamStoreService(
+            AbstractStreamDefinitionStore abstractStreamDefinitionStore) {
+        DataBridgeServiceValueHolder.setStreamDefinitionStore(null);
+    }
+
+    protected void setConfigurationContextService(ConfigurationContextService contextService) {
+        DataBridgeServiceValueHolder.setConfigurationContextService(contextService);
+    }
+
+    protected void unsetConfigurationContextService(ConfigurationContextService contextService) {
+        DataBridgeServiceValueHolder.setConfigurationContextService(null);
     }
 
 }

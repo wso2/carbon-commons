@@ -21,32 +21,23 @@ package org.wso2.carbon.databridge.core.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.commons.Attribute;
 import org.wso2.carbon.databridge.commons.StreamDefinition;
 import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlreadyDefinedException;
 import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
 import org.wso2.carbon.databridge.commons.utils.DataBridgeCommonsUtils;
 import org.wso2.carbon.databridge.commons.utils.EventDefinitionConverterUtils;
-import org.wso2.carbon.databridge.core.AgentCallback;
-import org.wso2.carbon.databridge.core.EventConverter;
-import org.wso2.carbon.databridge.core.RawDataAgentCallback;
-import org.wso2.carbon.databridge.core.StreamAttributeComposite;
-import org.wso2.carbon.databridge.core.StreamTypeHolder;
+import org.wso2.carbon.databridge.core.*;
 import org.wso2.carbon.databridge.core.Utils.AgentSession;
 import org.wso2.carbon.databridge.core.Utils.EventComposite;
 import org.wso2.carbon.databridge.core.conf.DataBridgeConfiguration;
 import org.wso2.carbon.databridge.core.definitionstore.AbstractStreamDefinitionStore;
+import org.wso2.carbon.databridge.core.definitionstore.StreamAddRemoveListener;
 import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
 import org.wso2.carbon.databridge.core.internal.authentication.AuthenticationHandler;
 import org.wso2.carbon.databridge.core.internal.queue.EventQueue;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -65,10 +56,22 @@ public class EventDispatcher {
 
 
     public EventDispatcher(AbstractStreamDefinitionStore streamDefinitionStore,
-                           DataBridgeConfiguration dataBridgeConfiguration,AuthenticationHandler authenticationHandler) {
+                           DataBridgeConfiguration dataBridgeConfiguration, AuthenticationHandler authenticationHandler) {
         this.eventQueue = new EventQueue(subscribers, rawDataSubscribers, dataBridgeConfiguration);
         this.streamDefinitionStore = streamDefinitionStore;
         this.authenticationHandler = authenticationHandler;
+        streamDefinitionStore.subscribe(new StreamAddRemoveListener() {
+            @Override
+            public void streamAdded(int tenantId, String streamId) {
+
+            }
+
+            @Override
+            public void streamRemoved(int tenantId, String streamId) {
+                removeStreamDefinitionFromStreamTypeHolder(tenantId, streamId);
+
+            }
+        });
     }
 
     public void addCallback(AgentCallback agentCallback) {
@@ -86,8 +89,8 @@ public class EventDispatcher {
 
     public synchronized String defineStream(String streamDefinition, AgentSession agentSession)
             throws MalformedStreamDefinitionException,
-                   DifferentStreamDefinitionAlreadyDefinedException,
-                   StreamDefinitionStoreException {
+            DifferentStreamDefinitionAlreadyDefinedException,
+            StreamDefinitionStoreException {
 
         authenticationHandler.setThreadLocalContext(agentSession);
         int tenantId = agentSession.getCredentials().getTenantId();
@@ -100,7 +103,7 @@ public class EventDispatcher {
 
             StreamDefinition existingStreamDefinition = attributeComposite.getStreamDefinition();
             if (!existingStreamDefinition.equals(newStreamDefinition)) {
-                throw new DifferentStreamDefinitionAlreadyDefinedException("Similar event stream for " + newStreamDefinition + " with the same name and version already exist: " + streamDefinitionStore.getStreamDefinition(newStreamDefinition.getName(), newStreamDefinition.getVersion()));
+                throw new DifferentStreamDefinitionAlreadyDefinedException("Similar event stream for " + newStreamDefinition + " with the same name and version already exist: " + streamDefinitionStore.getStreamDefinition(newStreamDefinition.getName(), newStreamDefinition.getVersion(), tenantId));
             }
             newStreamDefinition = existingStreamDefinition;
 
@@ -110,7 +113,7 @@ public class EventDispatcher {
             }
 
             updateDomainNameStreamTypeHolderCache(newStreamDefinition, tenantId);
-            streamDefinitionStore.saveStreamDefinition(newStreamDefinition);
+            streamDefinitionStore.saveStreamDefinition(newStreamDefinition, tenantId);
 
         }
 
@@ -126,8 +129,8 @@ public class EventDispatcher {
     public synchronized String defineStream(String streamDefinition, AgentSession agentSession,
                                             String indexDefinition)
             throws MalformedStreamDefinitionException,
-                   DifferentStreamDefinitionAlreadyDefinedException,
-                   StreamDefinitionStoreException {
+            DifferentStreamDefinitionAlreadyDefinedException,
+            StreamDefinitionStoreException {
 
         authenticationHandler.setThreadLocalContext(agentSession);
         int tenantId = agentSession.getCredentials().getTenantId();
@@ -139,7 +142,7 @@ public class EventDispatcher {
 
             StreamDefinition existingStreamDefinition = attributeComposite.getStreamDefinition();
             if (!existingStreamDefinition.equals(newStreamDefinition)) {
-                throw new DifferentStreamDefinitionAlreadyDefinedException("Similar event stream for " + newStreamDefinition + " with the same name and version already exist: " + streamDefinitionStore.getStreamDefinition(newStreamDefinition.getName(), newStreamDefinition.getVersion()));
+                throw new DifferentStreamDefinitionAlreadyDefinedException("Similar event stream for " + newStreamDefinition + " with the same name and version already exist: " + streamDefinitionStore.getStreamDefinition(newStreamDefinition.getName(), newStreamDefinition.getVersion(), tenantId));
             }
             newStreamDefinition = existingStreamDefinition;
 
@@ -149,7 +152,7 @@ public class EventDispatcher {
             }
 
             updateDomainNameStreamTypeHolderCache(newStreamDefinition, tenantId);
-            streamDefinitionStore.saveStreamDefinition(newStreamDefinition);
+            streamDefinitionStore.saveStreamDefinition(newStreamDefinition, tenantId);
         }
         newStreamDefinition.createIndexDefinition(indexDefinition);
 
@@ -183,10 +186,10 @@ public class EventDispatcher {
                     if (attribute.getName().equals(existingAttribute.getName())) {
                         if (attribute.getType() != existingAttribute.getType()) {
                             throw new DifferentStreamDefinitionAlreadyDefinedException("Attribute type mismatch " + type + " " +
-                                                                                       attribute.getName() + " type:" + attribute.getType() +
-                                                                                       " was already defined with type:" + existingAttribute.getType() +
-                                                                                       " in " + existingStreamDefinition + ", hence " + newStreamDefinition +
-                                                                                       " cannot be defined");
+                                    attribute.getName() + " type:" + attribute.getType() +
+                                    " was already defined with type:" + existingAttribute.getType() +
+                                    " in " + existingStreamDefinition + ", hence " + newStreamDefinition +
+                                    " cannot be defined");
                         }
                     }
                 }
@@ -197,6 +200,7 @@ public class EventDispatcher {
 
     public void publish(Object eventBundle, AgentSession agentSession,
                         EventConverter eventConverter) {
+        authenticationHandler.setThreadLocalContext(agentSession);
         eventQueue.publish(new EventComposite(eventBundle, getStreamDefinitionHolder(agentSession.getCredentials().getTenantId()), agentSession, eventConverter));
     }
 
@@ -223,7 +227,9 @@ public class EventDispatcher {
         }
     }
 
-    public void updateStreamDefinitionHolder(int tenantId) {
+    public void updateStreamDefinitionHolder(AgentSession agentSession) {
+        int tenantId = agentSession.getCredentials().getTenantId();
+        authenticationHandler.setThreadLocalContext(agentSession);
         StreamTypeHolder streamTypeHolder = domainNameStreamTypeHolderCache.get(tenantId);
 
         if (streamTypeHolder != null) {
@@ -253,7 +259,7 @@ public class EventDispatcher {
         if (null == streamTypeHolder) {
             streamTypeHolder = new StreamTypeHolder(tenantId);
             Collection<StreamDefinition> allStreamDefinitions =
-                    streamDefinitionStore.getAllStreamDefinitions();
+                    streamDefinitionStore.getAllStreamDefinitions(tenantId);
             if (null != allStreamDefinitions) {
                 for (StreamDefinition aStreamDefinition : allStreamDefinitions) {
                     streamTypeHolder.putStreamDefinition(aStreamDefinition);
@@ -274,7 +280,7 @@ public class EventDispatcher {
         StreamTypeHolder streamTypeHolder = domainNameStreamTypeHolderCache.get(tenantId);
         if (null != streamTypeHolder) {
             Collection<StreamDefinition> allStreamDefinitions =
-                    streamDefinitionStore.getAllStreamDefinitions();
+                    streamDefinitionStore.getAllStreamDefinitions(tenantId);
             if (null != allStreamDefinitions) {
                 for (StreamDefinition aStreamDefinition : allStreamDefinitions) {
                     if (streamTypeHolder.getAttributeComposite(aStreamDefinition.getStreamId()) == null) {
@@ -348,7 +354,7 @@ public class EventDispatcher {
                 agentCallback.removeStream(streamDefinition, tenantId);
             }
         }
-        return streamDefinitionStore.deleteStreamDefinition(streamName, streamVersion);
+        return streamDefinitionStore.deleteStreamDefinition(streamName, streamVersion, tenantId);
     }
 
     private synchronized StreamDefinition removeStreamDefinitionFromStreamTypeHolder(int tenantId,
@@ -356,7 +362,9 @@ public class EventDispatcher {
         StreamTypeHolder streamTypeHolder = domainNameStreamTypeHolderCache.get(tenantId);
         if (streamTypeHolder != null) {
             StreamAttributeComposite attributeComposite = streamTypeHolder.getAttributeCompositeMap().remove(streamId);
-            return attributeComposite.getStreamDefinition();
+            if (attributeComposite != null) {
+                return attributeComposite.getStreamDefinition();
+            }
         }
         return null;
     }

@@ -17,26 +17,54 @@
 */
 package org.wso2.carbon.databridge.core.internal.authentication;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.core.multitenancy.utils.TenantAxisUtils;
 import org.wso2.carbon.databridge.core.DataBridgeServiceValueHolder;
 import org.wso2.carbon.databridge.core.Utils.AgentSession;
 import org.wso2.carbon.identity.authentication.AuthenticationService;
 import org.wso2.carbon.user.api.UserStoreException;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
-
 /**
  * CarbonAuthenticationHandler implementation that authenticate Agents
  * via Carbon AuthenticationService
  */
 public class CarbonAuthenticationHandler implements AuthenticationHandler {
     private AuthenticationService authenticationService;
+    private static final Log log = LogFactory.getLog(CarbonAuthenticationHandler.class);
+
 
     public CarbonAuthenticationHandler(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 
     public boolean authenticate(String userName, String password) {
-        return authenticationService.authenticate(userName, password);
+        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        privilegedCarbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        privilegedCarbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+        boolean authenticated= authenticationService.authenticate(userName, password);
+        if(authenticated){
+
+            String tenantDomain = MultitenantUtils.getTenantDomain(userName);
+
+            // Load tenant : This is needed because we have removed ActivationHandler,
+            // which did the tenant loading part earlier with login. So we load tenant after successful login
+            try {
+                if (!MultitenantConstants.SUPER_TENANT_DOMAIN_NAME.equals(tenantDomain)) {
+                    TenantAxisUtils.getTenantConfigurationContext(tenantDomain,
+                            DataBridgeServiceValueHolder.
+                                    getConfigurationContextService().
+                                    getServerConfigContext()
+                    );
+                }
+            } catch (Exception e) {
+                log.error("Error trying load tenant after successful login", e);
+            }
+        }
+        return authenticated;
+
     }
 
     @Override
@@ -45,16 +73,17 @@ public class CarbonAuthenticationHandler implements AuthenticationHandler {
     }
 
     @Override
-    public int getTenantId(String tenantDomain)throws UserStoreException {
+    public int getTenantId(String tenantDomain) throws UserStoreException {
         return DataBridgeServiceValueHolder.getRealmService().getTenantManager().getTenantId(tenantDomain);
     }
 
     @Override
     public void setThreadLocalContext(AgentSession agentSession) {
         int tenantId = agentSession.getCredentials().getTenantId();
-        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
-        privilegedCarbonContext.setTenantDomain(agentSession.getCredentials().getDomainName());
-        privilegedCarbonContext.setTenantId(tenantId);
+
+            PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+            privilegedCarbonContext.setTenantId(tenantId);
+            privilegedCarbonContext.setTenantDomain(agentSession.getDomainName());
     }
 
 
