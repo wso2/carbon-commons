@@ -31,7 +31,11 @@ import org.wso2.carbon.application.deployer.CarbonApplication;
 import org.wso2.carbon.application.deployer.config.Artifact;
 import org.wso2.carbon.application.deployer.config.CappFile;
 import org.wso2.carbon.application.deployer.handler.AppDeploymentHandler;
+import org.wso2.carbon.application.deployer.synapse.internal.DataHolder;
 import org.wso2.carbon.application.deployer.synapse.internal.SynapseAppDeployerDSComponent;
+import org.wso2.carbon.mediation.initializer.ServiceBusConstants;
+import org.wso2.carbon.mediation.initializer.ServiceBusUtils;
+import org.wso2.carbon.mediation.initializer.services.SynapseEnvironmentService;
 
 import java.io.File;
 import java.io.IOException;
@@ -341,12 +345,21 @@ public class SynapseAppDeployer implements AppDeploymentHandler {
      * @return Deployer instance
      */
     private Deployer getDeployer(AxisConfiguration axisConfig, String directory) {
-
+        Deployer deployer = null;
         // access the deployment engine through axis config
         DeploymentEngine deploymentEngine = (DeploymentEngine) axisConfig.getConfigurator();
-        String endpointDirPath = getArtifactDirPath(axisConfig, directory);
-        return deploymentEngine.getDeployer(endpointDirPath,
-                                                    SynapseAppDeployerConstants.ARTIFACT_EXTENSION);
+        String tenantId = AppDeployerUtils.getTenantIdString(axisConfig);
+        SynapseEnvironmentService environmentService = DataHolder.getInstance().
+                getSynapseEnvironmentService(Integer.parseInt(tenantId));
+        if (environmentService != null) {
+            String synapseConfigPath = ServiceBusUtils.getSynapseConfigAbsPath(
+                    environmentService.getSynapseEnvironment().getServerContextInformation());
+            String endpointDirPath = synapseConfigPath
+                                     + File.separator + directory;
+            deployer = deploymentEngine.getDeployer(endpointDirPath,
+                                                    ServiceBusConstants.ARTIFACT_EXTENSION);
+        }
+        return deployer;
     }
 
     /**
@@ -360,8 +373,7 @@ public class SynapseAppDeployer implements AppDeploymentHandler {
         String classMediatorPath = axisConfig.getRepository().getPath() +
                                    File.separator + SynapseAppDeployerConstants.MEDIATORS_FOLDER;
         return deploymentEngine.
-                getDeployer(classMediatorPath,
-                        SynapseAppDeployerConstants.CLASS_MEDIATOR_EXTENSION);
+                getDeployer(classMediatorPath, ServiceBusConstants.CLASS_MEDIATOR_EXTENSION);
     }
 
     /**
