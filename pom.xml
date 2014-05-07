@@ -253,7 +253,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.mediation.initializer</artifactId>
-                <version>${previous.version}</version>
+                <version>${previous.version.422}</version>
             </dependency>
 
             <dependency>
@@ -1217,6 +1217,7 @@
     <properties>
         <older.version>4.1.0</older.version>
         <previous.version>4.2.0</previous.version>
+        <previous.version.422>4.2.2</previous.version.422>
         <version.jettison>1.3.4</version.jettison>
         <wso2carbon.version>4.3.0-SNAPSHOT</wso2carbon.version>
         <orbit.version.axiom>1.2.11.wso2v5-SNAPSHOT</orbit.version.axiom>
