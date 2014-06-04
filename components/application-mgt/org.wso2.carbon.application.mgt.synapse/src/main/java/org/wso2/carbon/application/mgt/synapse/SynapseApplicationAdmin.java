@@ -24,7 +24,7 @@ import org.wso2.carbon.application.mgt.synapse.internal.SynapseAppServiceCompone
 import org.wso2.carbon.core.AbstractAdmin;
 import org.apache.synapse.Startup;
 import org.apache.synapse.endpoints.*;
-import org.apache.synapse.startup.quartz.SimpleQuartz;
+import org.apache.synapse.startup.quartz.StartUpController;
 import org.apache.synapse.task.TaskDescription;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -118,10 +118,10 @@ public class SynapseApplicationAdmin extends AbstractAdmin {
             } else if (SynapseAppDeployerConstants.TASK_TYPE.equals(type)) {
                 Startup task = SynapseAppServiceComponent.getScService().
                         getSynapseConfiguration().getStartup(instanceName);
-                TaskDescription taskDescription = ((SimpleQuartz) task).getTaskDescription();
+                TaskDescription taskDescription = ((StartUpController) task).getTaskDescription();
                 TaskMetadata taskMetadata = new TaskMetadata();
                 taskMetadata.setName(taskDescription.getName());
-                taskMetadata.setGroupName(taskDescription.getGroup());
+                taskMetadata.setGroupName(taskDescription.getTaskGroup());
                 taskList.add(taskMetadata);
             }
         }
