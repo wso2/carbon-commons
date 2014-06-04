@@ -236,10 +236,18 @@ public class PassThroughNHttpGetProcessor  implements HttpGetRequestProcessor{
         String serviceName = getServiceName(request);
 
         boolean loadBalancer = Boolean.parseBoolean(System.getProperty("wso2.loadbalancer", "false"));
+        // Handle browser request to get favicon while requesting for wsdl
         if (uri.equals("/favicon.ico")) {
             response.setStatusCode(HttpStatus.SC_MOVED_PERMANENTLY);
             response.addHeader("Location", "http://wso2.org/favicon.ico");
+            SourceContext.updateState(conn, ProtocolState.WSDL_RESPONSE_DONE);
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (Exception ignore) {
+            }
             sourceHandler.commitResponseHideExceptions(conn, response);
+            isRequestHandled = true ;
         } else if(uri.startsWith(servicePath) &&
                 (serviceName == null || serviceName.length() == 0)){
             //check if service listing request is blocked
