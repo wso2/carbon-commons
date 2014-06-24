@@ -303,7 +303,7 @@
                         <artifactId>ode</artifactId>
                     </exclusion>
                 </exclusions>
-                <version>${previous.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
@@ -315,13 +315,13 @@
                         <artifactId>ode</artifactId>
                     </exclusion>
                 </exclusions>
-                <version>${older.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.deployer.humantask</artifactId>
-                <version>${previous.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>
@@ -345,7 +345,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.humantask.skeleton</artifactId>
-                <version>${previous.version}</version>
+                <version>${project.version}</version>
             </dependency>
 
             <dependency>

@@ -74,7 +74,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.application.mgt.humantask</bundleDef>
-								<bundleDef>org.wso2.carbon:org.wso2.carbon.humantask.skeleton:${previous.version}</bundleDef>
+				<bundleDef>org.wso2.carbon:org.wso2.carbon.humantask.skeleton</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>

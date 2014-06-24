@@ -72,7 +72,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.application.mgt.bpel</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.bpel.skeleton:${previous.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.bpel.skeleton</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>
