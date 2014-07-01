@@ -19,7 +19,6 @@ package org.wso2.carbon.databridge.receiver.thrift;
 
 import org.wso2.carbon.databridge.core.DataBridgeReceiverService;
 import org.wso2.carbon.databridge.receiver.thrift.conf.ThriftDataReceiverConfiguration;
-import org.wso2.carbon.databridge.receiver.thrift.internal.ThriftDataReceiver;
 
 /**
  * The falconry method that is used to create Agent server

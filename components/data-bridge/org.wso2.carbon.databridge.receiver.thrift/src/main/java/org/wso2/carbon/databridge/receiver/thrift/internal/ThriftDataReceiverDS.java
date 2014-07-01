@@ -28,6 +28,7 @@ import org.wso2.carbon.databridge.commons.thrift.utils.CommonThriftConstants;
 import org.wso2.carbon.databridge.commons.thrift.utils.HostAddressFinder;
 import org.wso2.carbon.databridge.core.DataBridgeReceiverService;
 import org.wso2.carbon.databridge.core.exception.DataBridgeException;
+import org.wso2.carbon.databridge.receiver.thrift.ThriftDataReceiver;
 import org.wso2.carbon.databridge.receiver.thrift.ThriftDataReceiverFactory;
 import org.wso2.carbon.databridge.receiver.thrift.conf.ThriftDataReceiverConfiguration;
 import org.wso2.carbon.databridge.receiver.thrift.internal.utils.ThriftDataReceiverBuilder;
