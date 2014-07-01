@@ -35,6 +35,7 @@
         <module>components/entitlement-commons</module>
         <module>components/transport-mgt</module>
         <module>components/data-bridge</module>
+	<module>components/ganalytics</module>
 
         <module>features/application-deployers</module>
         <module>features/application-mgt</module>
