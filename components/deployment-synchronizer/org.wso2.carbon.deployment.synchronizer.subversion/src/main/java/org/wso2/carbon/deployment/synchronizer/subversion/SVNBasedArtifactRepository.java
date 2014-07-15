@@ -343,6 +343,14 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
             if (status != null && status.length > 0 && !isAllUnversioned(status)) {
                 File[] files = new File[] { root };
                 svnClient.commit(files, "Commit initiated by deployment synchronizer", true);
+
+                //Always do a svn update if you do a commit. This is just to update the working copy's
+                //revision number to the latest. This fixes out-of-date working copy issues.
+                if (log.isDebugEnabled()) {
+                    log.debug("Updating the working copy after the commit.");
+                }
+                checkout(tenantId, filePath);
+
                 return true;
             } else {
                 log.debug("No changes in the local working copy");
