@@ -64,6 +64,9 @@ rg.wso2.carbon:org.wso2.carbon.application.deployer.synapse:bundle:4.3.0-SNAPSHO
                     <instructions>
                         <Bundle-Vendor>WSO2 Inc</Bundle-Vendor>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <CAPP_MANAGER-RequiredServices>
+                            org.wso2.carbon.application.deployer.synapse.service.SynapseAppDeployerService
+                        </CAPP_MANAGER-RequiredServices>
                         <Private-Package>
                             org.wso2.carbon.application.deployer.synapse.internal
                         </Private-Package>
