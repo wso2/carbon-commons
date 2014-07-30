@@ -1323,7 +1323,7 @@
         <imp.pkg.version.javax.servlet>[2.6.0, 3.0.0)</imp.pkg.version.javax.servlet>
 
         <!-- Misc -->
-        <junit.version>3.8.2</junit.version>
+        <junit.version>4.8.1</junit.version>
         <wsdl4j.wso2.version>1.6.2.wso2v4</wsdl4j.wso2.version>
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <orbit.version.h2.engine>1.2.140.wso2v3</orbit.version.h2.engine>
