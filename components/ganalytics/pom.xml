@@ -50,6 +50,12 @@
                 	<artifactId>httpcore</artifactId>
                 	<version>4.3.0.wso2v1</version>
             	</dependency>
+		<dependency>
+		      <groupId>junit</groupId>
+		      <artifactId>junit</artifactId>
+		      <version>${junit.version}</version>	      
+		      <scope>test</scope>
+    		</dependency> 
 		</dependencies>
 	</dependencyManagement>
 
