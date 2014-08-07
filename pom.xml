@@ -35,7 +35,7 @@
         <module>components/entitlement-commons</module>
         <module>components/transport-mgt</module>
         <module>components/data-bridge</module>
-	<!--module>components/ganalytics</module-->
+	<module>components/ganalytics</module>
 
         <module>features/application-deployers</module>
         <module>features/application-mgt</module>
@@ -1267,7 +1267,7 @@
         <xercesImpl.version>2.8.1</xercesImpl.version>
 
         <cxf.version>2.7.10</cxf.version>
-        <spring.framework.wso2.version>3.1.0.wso2v1</spring.framework.wso2.version>
+        <spring.framework.wso2.version>3.2.9.wso2v1</spring.framework.wso2.version>
 
         <!-- Servet Version -->
         <version.javax.servlet.jsp>2.2.0.v201112011158</version.javax.servlet.jsp>
@@ -1323,7 +1323,7 @@
         <imp.pkg.version.javax.servlet>[2.6.0, 3.0.0)</imp.pkg.version.javax.servlet>
 
         <!-- Misc -->
-        <junit.version>3.8.2</junit.version>
+        <junit.version>4.8.1</junit.version>
         <wsdl4j.wso2.version>1.6.2.wso2v4</wsdl4j.wso2.version>
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <orbit.version.h2.engine>1.2.140.wso2v3</orbit.version.h2.engine>
