@@ -1267,7 +1267,7 @@
         <xercesImpl.version>2.8.1</xercesImpl.version>
 
         <cxf.version>2.7.10</cxf.version>
-        <spring.framework.wso2.version>3.1.0.wso2v1</spring.framework.wso2.version>
+        <spring.framework.wso2.version>3.2.9.wso2v1</spring.framework.wso2.version>
 
         <!-- Servet Version -->
         <version.javax.servlet.jsp>2.2.0.v201112011158</version.javax.servlet.jsp>
