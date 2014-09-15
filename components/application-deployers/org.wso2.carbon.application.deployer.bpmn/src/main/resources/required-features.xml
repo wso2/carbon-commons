@@ -1,0 +1,5 @@
+<featureSets>
+    <featureSet artifactType="bpmn/artifact">
+        <feature id="org.wso2.carbon.bpmn.server.feature.group" version="[4.2.0, 4.3.0)"/>
+    </featureSet>
+</featureSets>

@@ -73,5 +73,10 @@ public class ClientPoolFactory extends BaseKeyedPoolableObjectFactory {
         return client.getOutputProtocol().getTransport().isOpen();
     }
 
+    public void destroyObject(Object key, Object obj)  {
+      ThriftEventTransmissionService.Client client = (ThriftEventTransmissionService.Client) obj;
+      client.getOutputProtocol().getTransport().close();
+    }
+
 
 }
