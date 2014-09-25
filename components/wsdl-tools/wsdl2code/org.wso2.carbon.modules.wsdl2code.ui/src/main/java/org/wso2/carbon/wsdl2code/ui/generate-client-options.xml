@@ -1,0 +1,132 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<codegen>
+    <argument uiType="skip">
+        <name>o</name>
+        <description>Specify a directory path for the generated code</description>
+    </argument>
+    <argument uiType="check">
+        <name>a</name>
+        <description>Generate async style code only (Default: off)</description>
+    </argument>
+    <argument uiType="check">
+        <name>s</name>
+        <description>Generate sync style code only (Default: off). Takes precedence over -a</description>
+    </argument>
+    <argument uiType="text" default="org.wso2.client">
+        <name>p</name>
+        <description>Specify a custom package name for the generated code</description>
+    </argument>
+    <argument uiType="option">
+        <name>l</name>
+        <description>Valid languages</description>
+        <values>
+            <value>java</value>
+        </values>
+    </argument>
+    <argument uiType="check">
+        <name>t</name>
+        <description>Generate a test case for the generated code</description>
+    </argument>
+    <argument uiType="option">
+        <name>d</name>
+        <description>Valid databinding(s)</description>
+        <values>
+            <value>adb</value>
+            <value>xmlbeans</value>
+            <value>jibx</value>
+            <value>jaxbri</value>
+        </values>
+    </argument>
+    <argument uiType="check">
+        <name>g</name>
+        <description>Generates all the classes. Valid only with -ss</description>
+    </argument>
+    <argument uiType="text">
+        <name>pn</name>
+        <description>Port name. Choose a specific port when there are multiple ports in the wsdl</description>
+    </argument>
+    <argument uiType="text">
+        <name>sn</name>
+        <description>Service name. Choose a specific service when there are multiple services in the wsdl</description>
+    </argument>
+    <argument uiType="check">
+        <name>u</name>
+        <description>Unpacks the databinding classes</description>
+    </argument>
+    <argument uiType="text">
+        <name>r</name>
+        <description>Specify a repository against which code is generated</description>
+    </argument>
+    <argument uiType="text-area">
+        <name>ns2p</name>
+        <description>ns1=pkg1,ns2=pkg2 .Specify a custom package name for each namespace specified in the wsdls schema</description>
+    </argument>
+    <argument uiType="skip">
+        <name>S</name>
+        <description>Specify a directory path for generated source</description>
+    </argument>
+    <argument uiType="skip">
+        <name>R</name>
+        <description>Specify a directory path for generated resources</description>
+    </argument>
+    <argument uiType="skip">
+        <name>em</name>
+        <description>Specify an external mapping file</description>
+    </argument>
+    <argument uiType="skip">
+        <name>f</name>
+        <description>Flattens the generated files</description>
+    </argument>
+    <argument uiType="check">
+        <name>uw</name>
+        <description>Switch on un-wrapping</description>
+    </argument>
+    <argument uiType="text" readOnly="true" name="xsdconfig" uploadFile="true">
+        <name>xsdconfig</name>
+        <description>Use XMLBeans .xsdconfig file. Valid only with -d xmlbeans</description>
+    </argument>
+    <argument uiType="check">
+        <name>ap</name>
+        <description>Generate code for all ports</description>
+    </argument>
+    <argument uiType="check">
+        <name>or</name>
+        <description>Overwrite the existing classes</description>
+    </argument>
+    <argument uiType="skip">
+        <name>b</name>
+        <description>Generate Axis 1.x backword compatible code</description>
+    </argument>
+    <argument uiType="skip">
+        <name>sp</name>
+        <description>Suppress namespace prefixes (Optimzation that reduces size of soap request/response)</description>
+    </argument>
+    <argument uiType="text">
+        <name>Emp</name>
+        <description>Package name for ADB. Extension mapper package name</description>
+    </argument>
+    <argument uiType="check">
+        <name>Eosv</name>
+        <description>(for ADB) - off strict validation</description>
+    </argument>
+    <argument uiType="text" readOnly="true" name="Ebindingfile" uploadFile="true">
+        <name>Ebindingfile</name>
+        <description>File path to your JiBX binding definition</description>
+    </argument>
+</codegen>

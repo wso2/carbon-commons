@@ -1,0 +1,2 @@
+instructions.configure = \
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.event.server_${feature.version}/conf/event-broker.xml,target:${installFolder}/../../conf/event-broker.xml,overwrite:true);\

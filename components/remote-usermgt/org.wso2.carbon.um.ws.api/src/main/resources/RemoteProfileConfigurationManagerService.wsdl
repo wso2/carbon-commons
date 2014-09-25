@@ -1,0 +1,305 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://service.ws.um.carbon.wso2.org" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax2310="http://profile.core.user.carbon.wso2.org/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ax2307="http://core.user.carbon.wso2.org/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://service.ws.um.carbon.wso2.org">
+    <wsdl:documentation>RemoteProfileConfigurationManagerService</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema xmlns:ax2311="http://profile.core.user.carbon.wso2.org/xsd" xmlns:ax2309="http://core.user.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://service.ws.um.carbon.wso2.org">
+            <xs:import namespace="http://core.user.carbon.wso2.org/xsd" />
+            <xs:import namespace="http://profile.core.user.carbon.wso2.org/xsd" />
+            <xs:complexType name="Exception">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="UserStoreException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="UserStoreException" nillable="true" type="ax2307:UserStoreException" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="updateProfileConfig">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="profileConfig" nillable="true" type="ax2311:ProfileConfiguration" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getProfileConfig">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="profileName" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getProfileConfigResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2311:ProfileConfiguration" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllProfilesResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax2311:ProfileConfiguration" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteProfileConfig">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="profileConfig" nillable="true" type="ax2311:ProfileConfiguration" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addProfileConfig">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="profileConfig" nillable="true" type="ax2311:ProfileConfiguration" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax2308="http://service.ws.um.carbon.wso2.org" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://core.user.carbon.wso2.org/xsd">
+            <xs:import namespace="http://service.ws.um.carbon.wso2.org" />
+            <xs:complexType name="UserStoreException">
+                <xs:complexContent>
+                    <xs:extension base="ns:Exception">
+                        <xs:sequence />
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://profile.core.user.carbon.wso2.org/xsd">
+            <xs:complexType name="ProfileConfiguration">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="dialectName" nillable="true" type="xs:string" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="hiddenClaims" nillable="true" type="xs:string" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="inheritedClaims" nillable="true" type="xs:string" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="overriddenClaims" nillable="true" type="xs:string" />
+                    <xs:element minOccurs="0" name="profileName" nillable="true" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="deleteProfileConfigRequest">
+        <wsdl:part name="parameters" element="ns:deleteProfileConfig" />
+    </wsdl:message>
+    <wsdl:message name="UserStoreException">
+        <wsdl:part name="parameters" element="ns:UserStoreException" />
+    </wsdl:message>
+    <wsdl:message name="updateProfileConfigRequest">
+        <wsdl:part name="parameters" element="ns:updateProfileConfig" />
+    </wsdl:message>
+    <wsdl:message name="addProfileConfigRequest">
+        <wsdl:part name="parameters" element="ns:addProfileConfig" />
+    </wsdl:message>
+    <wsdl:message name="getAllProfilesRequest" />
+    <wsdl:message name="getAllProfilesResponse">
+        <wsdl:part name="parameters" element="ns:getAllProfilesResponse" />
+    </wsdl:message>
+    <wsdl:message name="getProfileConfigRequest">
+        <wsdl:part name="parameters" element="ns:getProfileConfig" />
+    </wsdl:message>
+    <wsdl:message name="getProfileConfigResponse">
+        <wsdl:part name="parameters" element="ns:getProfileConfigResponse" />
+    </wsdl:message>
+    <wsdl:portType name="RemoteProfileConfigurationManagerServicePortType">
+        <wsdl:operation name="deleteProfileConfig">
+            <wsdl:input message="ns:deleteProfileConfigRequest" wsaw:Action="urn:deleteProfileConfig" />
+            <wsdl:fault message="ns:UserStoreException" name="UserStoreException" wsaw:Action="urn:deleteProfileConfigUserStoreException" />
+        </wsdl:operation>
+        <wsdl:operation name="updateProfileConfig">
+            <wsdl:input message="ns:updateProfileConfigRequest" wsaw:Action="urn:updateProfileConfig" />
+            <wsdl:fault message="ns:UserStoreException" name="UserStoreException" wsaw:Action="urn:updateProfileConfigUserStoreException" />
+        </wsdl:operation>
+        <wsdl:operation name="addProfileConfig">
+            <wsdl:input message="ns:addProfileConfigRequest" wsaw:Action="urn:addProfileConfig" />
+            <wsdl:fault message="ns:UserStoreException" name="UserStoreException" wsaw:Action="urn:addProfileConfigUserStoreException" />
+        </wsdl:operation>
+        <wsdl:operation name="getAllProfiles">
+            <wsdl:input message="ns:getAllProfilesRequest" wsaw:Action="urn:getAllProfiles" />
+            <wsdl:output message="ns:getAllProfilesResponse" wsaw:Action="urn:getAllProfilesResponse" />
+            <wsdl:fault message="ns:UserStoreException" name="UserStoreException" wsaw:Action="urn:getAllProfilesUserStoreException" />
+        </wsdl:operation>
+        <wsdl:operation name="getProfileConfig">
+            <wsdl:input message="ns:getProfileConfigRequest" wsaw:Action="urn:getProfileConfig" />
+            <wsdl:output message="ns:getProfileConfigResponse" wsaw:Action="urn:getProfileConfigResponse" />
+            <wsdl:fault message="ns:UserStoreException" name="UserStoreException" wsaw:Action="urn:getProfileConfigUserStoreException" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="RemoteProfileConfigurationManagerServiceSoap11Binding" type="ns:RemoteProfileConfigurationManagerServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="deleteProfileConfig">
+            <soap:operation soapAction="urn:deleteProfileConfig" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UserStoreException">
+                <soap:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="updateProfileConfig">
+            <soap:operation soapAction="urn:updateProfileConfig" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UserStoreException">
+                <soap:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addProfileConfig">
+            <soap:operation soapAction="urn:addProfileConfig" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UserStoreException">
+                <soap:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllProfiles">
+            <soap:operation soapAction="urn:getAllProfiles" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UserStoreException">
+                <soap:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getProfileConfig">
+            <soap:operation soapAction="urn:getProfileConfig" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UserStoreException">
+                <soap:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="RemoteProfileConfigurationManagerServiceSoap12Binding" type="ns:RemoteProfileConfigurationManagerServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="deleteProfileConfig">
+            <soap12:operation soapAction="urn:deleteProfileConfig" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UserStoreException">
+                <soap12:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="updateProfileConfig">
+            <soap12:operation soapAction="urn:updateProfileConfig" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UserStoreException">
+                <soap12:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addProfileConfig">
+            <soap12:operation soapAction="urn:addProfileConfig" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UserStoreException">
+                <soap12:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllProfiles">
+            <soap12:operation soapAction="urn:getAllProfiles" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UserStoreException">
+                <soap12:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getProfileConfig">
+            <soap12:operation soapAction="urn:getProfileConfig" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UserStoreException">
+                <soap12:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="RemoteProfileConfigurationManagerServiceHttpBinding" type="ns:RemoteProfileConfigurationManagerServicePortType">
+        <http:binding verb="POST" />
+        <wsdl:operation name="deleteProfileConfig">
+            <http:operation location="deleteProfileConfig" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="deleteProfileConfig" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="updateProfileConfig">
+            <http:operation location="updateProfileConfig" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="updateProfileConfig" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="addProfileConfig">
+            <http:operation location="addProfileConfig" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="addProfileConfig" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getAllProfiles">
+            <http:operation location="getAllProfiles" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="getAllProfiles" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getAllProfiles" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getProfileConfig">
+            <http:operation location="getProfileConfig" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="getProfileConfig" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getProfileConfig" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="RemoteProfileConfigurationManagerService">
+        <wsdl:port name="RemoteProfileConfigurationManagerServiceHttpsSoap11Endpoint" binding="ns:RemoteProfileConfigurationManagerServiceSoap11Binding">
+            <soap:address location="https://localhost:9443/services/RemoteProfileConfigurationManagerService.RemoteProfileConfigurationManagerServiceHttpsSoap11Endpoint/" />
+        </wsdl:port>
+        <wsdl:port name="RemoteProfileConfigurationManagerServiceHttpsSoap12Endpoint" binding="ns:RemoteProfileConfigurationManagerServiceSoap12Binding">
+            <soap12:address location="https://localhost:9443/services/RemoteProfileConfigurationManagerService.RemoteProfileConfigurationManagerServiceHttpsSoap12Endpoint/" />
+        </wsdl:port>
+        <wsdl:port name="RemoteProfileConfigurationManagerServiceHttpsEndpoint" binding="ns:RemoteProfileConfigurationManagerServiceHttpBinding">
+            <http:address location="https://localhost:9443/services/RemoteProfileConfigurationManagerService.RemoteProfileConfigurationManagerServiceHttpsEndpoint/" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

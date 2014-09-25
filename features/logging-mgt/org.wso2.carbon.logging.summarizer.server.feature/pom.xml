@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ ~ Copyright (c) WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ Licensed under the Apache License, Version 2.0 (the "License");
+ ~ you may not use this file except in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~      http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing, software
+ ~ distributed under the License is distributed on an "AS IS" BASIS,
+ ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ~ See the License for the specific language governing permissions and
+ ~ limitations under the License.
+-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.wso2.carbon</groupId>
+        <artifactId>logging-mgt-features</artifactId>
+        <version>4.3.0-SNAPSHOT</version>
+      <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>org.wso2.carbon.logging.summarizer.server.feature</artifactId>
+    <packaging>pom</packaging>
+    <name>WSO2 Carbon - Logging Summarizer Server Feature</name>
+    <url>http://wso2.org</url>
+    <description>This feature contains the core bundles required for Log Summarizing Functionality</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.logging.summarizer</artifactId>
+	    <version>${project.version}</version>
+    </dependency>
+
+
+       <dependency>
+            <groupId>com.google.guava.wso2</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+          <!--Hector-->
+        <dependency>
+            <groupId>org.hectorclient</groupId>
+            <artifactId>hector-core</artifactId>
+            <version>${hector-core.version}</version>
+        </dependency>
+	<!--ntask-->
+	 <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.ntask.core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.ntask.solutions</artifactId>
+           <version>${project.version}</version>
+        </dependency>
+
+        <!--Hive-->
+ 	<dependency>
+            <groupId>org.wso2.carbon</groupId>
+            <artifactId>org.wso2.carbon.analytics.hive</artifactId>
+           <version>4.3.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-exec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-shims</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-builtins</artifactId>
+               </exclusion>
+               <exclusion>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-service</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-serde</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-metastore</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-cassandra</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.hive</groupId>
+                    <artifactId>hive-jdbc</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.wso2.carbon</groupId>
+                    <artifactId>hive-jdbc-handler</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>libthrift.wso2</groupId>
+            <artifactId>libthrift</artifactId>
+            <version>${libthrift.patch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>libthrift.wso2</groupId>
+            <artifactId>libthrift</artifactId>
+            <version>${libthrift.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.perf4j.wso2</groupId>
+            <artifactId>perf4j</artifactId>
+            <version>${perf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.cliffc.high_scale_lib.wso2</groupId>
+            <artifactId>high-scale-lib</artifactId>
+            <version>${highscale.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>antlr.wso2</groupId>
+            <artifactId>antlr</artifactId>
+	    <version>${antlr.orbit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.antlr.wso2</groupId>
+            <artifactId>antlr-runtime</artifactId>
+	    <version>${antlr.orbit.version}</version>
+        </dependency>
+	 <!--Hadoop-->
+          <dependency>
+            <groupId>org.apache.hadoop.wso2</groupId>
+            <artifactId>hadoop-core</artifactId>
+	    <version>${hadoop.orbit.version}</version>
+        </dependency>
+
+        <!--Agent -->
+		<dependency>
+			<groupId>org.wso2.carbon</groupId>
+			<artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>
+			<version>${databridge.agent.thrift.version}</version>
+		</dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+
+             <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>prefilter-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>src/main/resources</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>resources</directory>
+                                    <includes>
+                                        <include>conf/summarizer-config.xml</include>
+                                      
+                                        <include>p2.inf</include>
+                                        <include>build.properties</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.wso2.maven</groupId>
+                <artifactId>carbon-p2-plugin</artifactId>
+                <version>${carbon.p2.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>4-p2-feature-generation</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>p2-feature-gen</goal>
+                        </goals>
+                        <configuration>
+                            <id>org.wso2.carbon.logging.summarizer.server</id>
+                            <propertiesFile>../../etc/feature.properties</propertiesFile>
+			                <adviceFile>
+                                <properties>
+                                    <propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
+                                    <propertyDef>org.eclipse.equinox.p2.type.group:false</propertyDef>
+                                </properties>
+                            </adviceFile>
+                            <bundles>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.logging.summarizer:${project.version}</bundleDef>
+                                <bundleDef>libthrift.wso2:libthrift</bundleDef>
+                                <bundleDef>org.perf4j.wso2:perf4j</bundleDef>
+                                <bundleDef>org.cliffc.high_scale_lib.wso2:high-scale-lib</bundleDef>
+                                <bundleDef>org.slf4j:slf4j-api</bundleDef>
+                                <bundleDef>org.slf4j:slf4j-log4j12</bundleDef>
+                                <bundleDef>org.hectorclient:hector-core</bundleDef>
+				<bundleDef>org.wso2.carbon:org.wso2.carbon.ntask.core</bundleDef>
+				<bundleDef>org.wso2.carbon:org.wso2.carbon.ntask.solutions</bundleDef>
+				<bundleDef>org.wso2.carbon:org.wso2.carbon.analytics.hive</bundleDef>
+                                <bundleDef>antlr.wso2:antlr</bundleDef>
+                                <bundleDef>org.antlr.wso2:antlr-runtime</bundleDef>
+                                <bundleDef>com.google.guava.wso2:guava</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.databridge.agent.thrift</bundleDef>
+				 <importBundleDef>org.apache.hadoop.wso2:hadoop-core</importBundleDef>
+                            </bundles>
+                            <importFeatures>
+				 <importFeatureDef>org.wso2.carbon.core.server:${project.version}</importFeatureDef>
+                            </importFeatures>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <properties>
+	<cassandra.version>1.1.3.wso2v2</cassandra.version>
+	<libthrift.patch.version>0.7.0.wso2v2</libthrift.patch.version>
+	<antlr.orbit.version>3.0.1.wso2v1</antlr.orbit.version>
+	<databridge.agent.thrift.version>${project.version}</databridge.agent.thrift.version>
+       <hadoop.orbit.version>0.20.203.1.wso2v2</hadoop.orbit.version>
+    </properties>
+</project>
