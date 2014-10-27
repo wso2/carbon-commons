@@ -1,0 +1,172 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<codegen>
+    <argument uiType="skip">
+        <name>d</name>
+        <description>Specify a directory path for the generated code</description>
+    </argument>
+
+    <argument uiType="check">
+        <name>compile</name>
+        <description>Compiles generated Java files.</description>
+    </argument>
+    <argument uiType="check">
+        <name>impl</name>
+        <description>Generates starting point code for an implementation object.</description>
+    </argument>
+    <argument uiType="check">
+        <name>all</name>
+        <description>Generates all starting point code: types, service proxy, service interface, server mainline, client mainline, implementation object, and an Ant build.xml file.</description>
+    </argument>
+    <argument uiType="check">
+        <name>ant</name>
+        <description>Specify to generate an Ant build.xml script.</description>
+    </argument>
+    <argument uiType="check">
+        <name>autoNameResolution</name>
+        <description>Automatically resolve naming conflicts without requiring the use of binding customizations.</description>
+    </argument>
+    <argument uiType="check">
+        <name>validate</name>
+        <description>Enables validating the WSDL before generating the code.</description>
+    </argument>
+    <argument uiType="check">
+        <name>keep</name>
+        <description>Specifies that the code generator will not overwrite any preexisting files. You will be responsible for resolving any resulting compilation issues</description>
+    </argument>
+    <argument uiType="check">
+        <name>noAddressBinding</name>
+        <description>For compatibility with CXF 2.0, this flag directs the code generator to generate the older CXF proprietary WS-Addressing types instead of the JAX-WS 2.1 compliant WS-Addressing types.</description>
+    </argument>
+ <!--   <argument uiType="check">
+        <name>v</name>
+        <description>Displays the version number for the tool.</description>
+    </argument>-->
+    <argument uiType="check">
+        <name>verbose</name>
+        <description>Displays comments during the code generation process.</description>
+    </argument>
+    <argument uiType="check">
+        <name>quiet</name>
+        <description>Suppresses comments during the code generation process.</description>
+    </argument>
+    <argument uiType="check">
+        <name>mg</name>
+        <description>-mark-generated, Adds the @Generated annotation to classes generated.</description>
+    </argument>
+    <!--<argument uiType="check">-->
+        <!--<name>aer=true</name>-->
+        <!--<description> If true, disregards the rule given in section 2.3.1.2(v) of the JAX-WS 2.2 specification disallowing element references when using wrapper-style mapping.</description>-->
+    <!--</argument>-->
+
+
+    <argument uiType="option">
+        <name>fe</name>
+        <description>Specifies the frontend. Default is JAXWS. Currently supports only JAXWS frontend and a "jaxws21" frontend to generate JAX-WS 2.1 compliant code.</description>
+        <values>
+            <value>jaxws</value>
+            <value>jaxws21</value>
+        </values>
+    </argument>
+    <argument uiType="option">
+        <name>db</name>
+        <description>Specifies the databinding. Default is jaxb. Currently supports jaxb, xmlbeans, sdo (sdo-static and sdo-dynamic), and jibx.</description>
+        <values>
+            <value>jaxb</value>
+            <value>xmlbeans</value>
+            <value>sdo</value>
+            <value>jibx</value>
+        </values>
+    </argument>
+    <argument uiType="option">
+        <name>faultSerialVersionUID</name>
+        <description>How to generate suid of fault exceptions. Use NONE, TIMESTAMP, FQCN, or a specific number. Default is NONE.</description>
+        <values>
+            <value>NONE</value>
+            <value>TIMESTAMP</value>
+            <value>FQCN</value>
+        </values>
+    </argument>
+    <!--<argument uiType="option">
+        <name>wv</name>
+        <description>Specifies the wsdl version .Default is WSDL1.1. Currently suppports only WSDL1.1 version.</description>
+        <values>
+            <value>WSDL1.1</value>
+        </values>
+    </argument>-->
+    <argument uiType="option">
+        <name>exsh</name>
+        <description>Enables or disables processing of implicit SOAP headers (i.e. SOAP headers defined in the wsdl:binding but not wsdl:portType section.) Processing the SOAP headers requires the SOAP binding jars available on the classpath which was not the default in CXF 2.4.x and older. You may need to add a dependency to cxf-rt-binding-soap for this flag to work. Default is false.</description>
+        <values>
+            <value>false</value>
+            <value>true</value>
+        </values>
+    </argument>
+    <argument uiType="option">
+        <name>dns</name>
+        <description>Enables or disables the loading of the default namespace package name mapping. Default is true and http://www.w3.org/2005/08/addressing=org.apache.cxf.ws.addressing namespace package mapping will be enabled.</description>
+        <values>
+            <value>true</value>
+            <value>false</value>
+        </values>
+    </argument>
+    <argument uiType="option">
+        <name>dex</name>
+        <description>Enables or disables the loading of the default excludes namespace mapping. Default is true.</description>
+        <values>
+            <value>true</value>
+            <value>false</value>
+        </values>
+    </argument>
+
+    <argument uiType="text">
+        <name>sn</name>
+        <description>The WSDL service name to use for the generated code.</description>
+    </argument>
+    <argument uiType="text" readOnly="true" name="Ebindingfile" uploadFile="true">
+        <name>catalog</name>
+        <description>Specify catalog file to map the imported wsdl/schema</description>
+    </argument>
+    <argument uiType="text">
+        <name>exceptionSuper</name>
+        <description>superclass for fault beans generated from wsdl:fault elements (defaults to java.lang.Exception) </description>
+    </argument>
+    <argument uiType="text">
+        <name>asyncMethods</name>
+        <description>List of subsequently generated Java class methods to allow for client-side asynchronous calls, similar to enableAsyncMapping in a JAX-WS binding file.</description>
+    </argument>
+    <argument uiType="text">
+        <name>bareMethods</name>
+        <description>List of subsequently generated Java class methods to have wrapper style (see below), similar to enableWrapperStyle in JAX-WS binding file.</description>
+    </argument>
+    <argument uiType="text">
+        <name>mimeMethods</name>
+        <description>List of subsequently generated Java class methods to enable mime:content mapping, similar to enableMIMEContent in JAX-WS binding file.</description>
+    </argument>
+    <argument uiType="text">
+        <name>defaultValues</name>
+        <description>Specifies that default values are generated for the impl and client. You can also provide a custom default value provider. The default provider is RandomValueProvider.</description>
+    </argument>
+
+
+    <argument uiType="text" readOnly="true" name="Ebindingfile" uploadFile="true">
+        <name>b</name>
+        <description>Specifies JAXWS or JAXB binding files or XMLBeans context files.</description>
+    </argument>
+
+</codegen>

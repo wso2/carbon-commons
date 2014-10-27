@@ -1,0 +1,1590 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ax2366="http://securevault.wso2.org/xsd" xmlns:ax2368="http://util.axis2.apache.org/xsd" xmlns:ax2380="http://services.statistics.carbon.wso2.org/xsd" xmlns:ax2344="http://management.clustering.axis2.apache.org/xsd" xmlns:ax2347="http://state.clustering.axis2.apache.org/xsd" xmlns:ax2340="http://clustering.axis2.apache.org/xsd" xmlns:ax2342="http://util.java/xsd" xmlns:ax2360="http://java2wsdl.description.axis2.apache.org/xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ax2358="http://net.java/xsd" xmlns:ax2339="http://engine.axis2.apache.org/xsd" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2338="http://context.axis2.apache.org/xsd" xmlns:ax2374="http://threadpool.util.axis2.apache.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:tns="http://services.statistics.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax2370="http://transaction.axis2.apache.org/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ax2379="http://util.services.statistics.carbon.wso2.org/xsd" xmlns:ax2354="http://description.axis2.apache.org/xsd" xmlns:ax2353="http://util.deployment.axis2.apache.org/xsd" xmlns:ax2377="http://data.webapp.statistics.carbon.wso2.org/xsd" targetNamespace="http://services.statistics.carbon.wso2.org">
+    <wsdl:documentation>StatisticsAdmin</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://data.webapp.statistics.carbon.wso2.org/xsd">
+            <xs:complexType name="StatisticData">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="averageResponseTime" type="xs:double"></xs:element>
+                    <xs:element minOccurs="0" name="faultCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="maximumResponseTime" type="xs:double"></xs:element>
+                    <xs:element minOccurs="0" name="minimumresponseTime" type="xs:double"></xs:element>
+                    <xs:element minOccurs="0" name="requstCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="responseCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="responseTime" type="xs:double"></xs:element>
+                    <xs:element minOccurs="0" name="tenantId" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="tenantName" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="webappName" nillable="true" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://transaction.axis2.apache.org/xsd">
+            <xs:complexType name="TransactionConfiguration">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="transactionManager" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="transactionTimeout" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="userTransaction" nillable="true" type="xs:anyType"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://threadpool.util.axis2.apache.org/xsd">
+            <xs:complexType abstract="true" name="ThreadFactory">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://util.axis2.apache.org/xsd">
+            <xs:complexType abstract="true" name="TargetResolver">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://util.java/xsd">
+            <xs:complexType abstract="true" name="Set">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="empty" type="xs:boolean"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType abstract="true" name="Map">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="empty" type="xs:boolean"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType abstract="true" name="Iterator">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2345="http://context.axis2.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://management.clustering.axis2.apache.org/xsd">
+            <xs:import namespace="http://context.axis2.apache.org/xsd"></xs:import>
+            <xs:complexType abstract="true" name="NodeManager">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="configurationContext" nillable="true" type="ax2338:ConfigurationContext"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2357="http://util.deployment.axis2.apache.org/xsd" xmlns:ax2356="http://util.java/xsd" xmlns:ax2355="http://engine.axis2.apache.org/xsd" xmlns:ax2362="http://java2wsdl.description.axis2.apache.org/xsd" xmlns:ax2359="http://net.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://description.axis2.apache.org/xsd">
+            <xs:import namespace="http://engine.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://util.java/xsd"></xs:import>
+            <xs:import namespace="http://util.deployment.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://net.java/xsd"></xs:import>
+            <xs:import namespace="http://java2wsdl.description.axis2.apache.org/xsd"></xs:import>
+            <xs:complexType abstract="true" name="AxisOperation">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="WSAMappingList" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="axisService" nillable="true" type="ax2354:AxisService"></xs:element>
+                    <xs:element minOccurs="0" name="axisSpecificMEPConstant" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="controlOperation" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="faultAction" nillable="true" type="xs:string"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="faultActionNames" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="faultMessages" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="inputAction" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="key" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="messageExchangePattern" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="messageReceiver" nillable="true" type="ax2339:MessageReceiver"></xs:element>
+                    <xs:element minOccurs="0" name="messages" nillable="true" type="ax2342:Iterator"></xs:element>
+                    <xs:element minOccurs="0" name="moduleRefs" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="outputAction" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="phasesInFaultFlow" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="phasesOutFaultFlow" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="phasesOutFlow" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="remainingPhasesInFlow" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="soapAction" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="style" nillable="true" type="xs:string"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="wsamappingList" nillable="true" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="AxisService">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="EPRs" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="WSAddressingFlag" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="active" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="axisServiceGroup" nillable="true" type="ax2354:AxisServiceGroup"></xs:element>
+                    <xs:element minOccurs="0" name="bindingName" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="classLoader" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="clientSide" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="controlOperations" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="customSchemaNamePrefix" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="customSchemaNameSuffix" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="customWsdl" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="elementFormDefault" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="enableAllTransports" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="endpointName" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="endpointURL" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="endpoints" nillable="true" type="ax2342:Map"></xs:element>
+                    <xs:element minOccurs="0" name="excludeInfo" nillable="true" type="ax2357:ExcludeInfo"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="exposedTransports" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="fileName" nillable="true" type="ax2358:URL"></xs:element>
+                    <xs:element minOccurs="0" name="importedNamespaces" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="key" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="lastUpdate" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="lastupdate" type="xs:long"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="messageElementQNameToOperationMap" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="modifyUserWSDLPortAddress" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="modules" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="nameSpacesMap" nillable="true" type="ax2342:Map"></xs:element>
+                    <xs:element minOccurs="0" name="namespaceMap" nillable="true" type="ax2342:Map"></xs:element>
+                    <xs:element minOccurs="0" name="objectSupplier" nillable="true" type="ax2339:ObjectSupplier"></xs:element>
+                    <xs:element minOccurs="0" name="operations" nillable="true" type="ax2342:Iterator"></xs:element>
+                    <xs:element minOccurs="0" name="operationsNameList" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="p2nMap" nillable="true" type="ax2342:Map"></xs:element>
+                    <xs:element minOccurs="0" name="parent" nillable="true" type="ax2354:AxisServiceGroup"></xs:element>
+                    <xs:element minOccurs="0" name="portTypeName" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="publishedOperations" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="schemaLocationsAdjusted" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="schemaMappingTable" nillable="true" type="ax2342:Map"></xs:element>
+                    <xs:element minOccurs="0" name="schemaTargetNamespace" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="schemaTargetNamespacePrefix" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="schematargetNamespace" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="schematargetNamespacePrefix" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="scope" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="serviceDescription" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="serviceLifeCycle" nillable="true" type="ax2339:ServiceLifeCycle"></xs:element>
+                    <xs:element minOccurs="0" name="setEndpointsToAllUsedBindings" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="soapNsUri" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="targetNamespace" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="targetNamespacePrefix" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="typeTable" nillable="true" type="ax2360:TypeTable"></xs:element>
+                    <xs:element minOccurs="0" name="useDefaultChains" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="useUserWSDL" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="wsdlFound" type="xs:boolean"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="AxisServiceGroup">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="axisDescription" nillable="true" type="ax2339:AxisConfiguration"></xs:element>
+                    <xs:element minOccurs="0" name="foundWebResources" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="key" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="moduleRefs" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="serviceGroupClassLoader" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="serviceGroupName" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="services" nillable="true" type="ax2342:Iterator"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2375="http://threadpool.util.axis2.apache.org/xsd" xmlns:ax2372="http://engine.axis2.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://context.axis2.apache.org/xsd">
+            <xs:import namespace="http://engine.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://threadpool.util.axis2.apache.org/xsd"></xs:import>
+            <xs:complexType name="ConfigurationContext">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="anyOperationContextRegistered" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="axisConfiguration" nillable="true" type="ax2339:AxisConfiguration"></xs:element>
+                    <xs:element minOccurs="0" name="contextRoot" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="listenerManager" nillable="true" type="ax2339:ListenerManager"></xs:element>
+                    <xs:element minOccurs="0" name="rootContext" nillable="true" type="ax2338:ConfigurationContext"></xs:element>
+                    <xs:element minOccurs="0" name="serviceContextPath" nillable="true" type="xs:string"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="serviceGroupContextIDs" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="serviceGroupContextTimeoutInterval" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="serviceGroupContextTimoutInterval" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="serviceGroupContexts" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="servicePath" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="threadPool" nillable="true" type="ax2375:ThreadFactory"></xs:element>
+                    <xs:element minOccurs="0" name="transportManager" nillable="true" type="ax2339:ListenerManager"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2363="http://description.axis2.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://util.deployment.axis2.apache.org/xsd">
+            <xs:import namespace="http://description.axis2.apache.org/xsd"></xs:import>
+            <xs:complexType name="PhasesInfo">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="INPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="IN_FaultPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="OUTPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="OUT_FaultPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="globalInFaultPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="globalInflow" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="globalOutPhaseList" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="operationInFaultPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="operationInPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="operationOutFaultPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="operationOutPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="operationPhases" nillable="true" type="ax2363:AxisOperation"></xs:element>
+                    <xs:element minOccurs="0" name="outFaultPhaseList" nillable="true" type="xs:anyType"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ExcludeInfo">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://net.java/xsd">
+            <xs:complexType name="URL">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="authority" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="content" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="defaultPort" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="file" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="host" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="path" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="port" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="protocol" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="query" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="ref" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="userInfo" nillable="true" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://services.statistics.carbon.wso2.org/xsd">
+            <xs:complexType name="SystemStatisticsUtil">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://securevault.wso2.org/xsd">
+            <xs:complexType name="SecretResolver">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="initialized" type="xs:boolean"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2367="http://securevault.wso2.org/xsd" xmlns:ax2369="http://util.axis2.apache.org/xsd" xmlns:ax2373="http://context.axis2.apache.org/xsd" xmlns:ax2371="http://transaction.axis2.apache.org/xsd" xmlns:ax2365="http://net.java/xsd" xmlns:ax2352="http://util.java/xsd" xmlns:ax2351="http://clustering.axis2.apache.org/xsd" xmlns:ax2364="http://util.deployment.axis2.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://engine.axis2.apache.org/xsd">
+            <xs:import namespace="http://clustering.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://util.java/xsd"></xs:import>
+            <xs:import namespace="http://util.deployment.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://net.java/xsd"></xs:import>
+            <xs:import namespace="http://securevault.wso2.org/xsd"></xs:import>
+            <xs:import namespace="http://util.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://transaction.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://context.axis2.apache.org/xsd"></xs:import>
+            <xs:complexType name="AxisConfiguration">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="childFirstClassLoading" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="clusteringAgent" nillable="true" type="ax2340:ClusteringAgent"></xs:element>
+                    <xs:element minOccurs="0" name="configurator" nillable="true" type="ax2339:AxisConfigurator"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="faultyModules" nillable="true" type="xs:string"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="faultyServices" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="faultyServicesDuetoModules" nillable="true" type="ax2342:Map"></xs:element>
+                    <xs:element minOccurs="0" name="globalModules" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="globalOutPhase" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="inFaultFlowPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="inFaultPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="inFlowPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="inPhasesUptoAndIncludingPostDispatch" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="key" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="localPolicyAssertions" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="moduleClassLoader" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="modules" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="observersList" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="outFaultFlowPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="outFaultPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="outFlowPhases" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="phasesInfo" nillable="true" type="ax2364:PhasesInfo"></xs:element>
+                    <xs:element minOccurs="0" name="repository" nillable="true" type="ax2365:URL"></xs:element>
+                    <xs:element minOccurs="0" name="secretResolver" nillable="true" type="ax2367:SecretResolver"></xs:element>
+                    <xs:element minOccurs="0" name="serviceClassLoader" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="serviceGroups" nillable="true" type="ax2342:Iterator"></xs:element>
+                    <xs:element minOccurs="0" name="services" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="start" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="systemClassLoader" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="targetResolverChain" nillable="true" type="ax2369:TargetResolver"></xs:element>
+                    <xs:element minOccurs="0" name="transactionConfig" nillable="true" type="ax2371:TransactionConfiguration"></xs:element>
+                    <xs:element minOccurs="0" name="transactionConfiguration" nillable="true" type="ax2371:TransactionConfiguration"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="transportsIn" nillable="true" type="xs:string"></xs:element>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="transportsOut" nillable="true" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType abstract="true" name="AxisConfigurator">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="axisConfiguration" nillable="true" type="ax2339:AxisConfiguration"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType abstract="true" name="ObjectSupplier">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+            <xs:complexType abstract="true" name="ServiceLifeCycle">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+            <xs:complexType abstract="true" name="MessageReceiver">
+                <xs:sequence></xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ListenerManager">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="configctx" nillable="true" type="ax2338:ConfigurationContext"></xs:element>
+                    <xs:element minOccurs="0" name="shutdownHookRequired" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="stopped" type="xs:boolean"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2349="http://util.java/xsd" xmlns:ax2348="http://context.axis2.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://state.clustering.axis2.apache.org/xsd">
+            <xs:import namespace="http://context.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://util.java/xsd"></xs:import>
+            <xs:complexType abstract="true" name="StateManager">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="configurationContext" nillable="true" type="ax2348:ConfigurationContext"></xs:element>
+                    <xs:element minOccurs="0" name="replicationExcludePatterns" nillable="true" type="ax2349:Map"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2381="http://services.statistics.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://util.services.statistics.carbon.wso2.org/xsd">
+            <xs:import namespace="http://services.statistics.carbon.wso2.org/xsd"></xs:import>
+            <xs:complexType name="SystemStatistics">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="avgResponseTime" type="xs:double"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationFaultCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationRequestCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationResponseCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationResponseTime" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="javaVersion" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="maxResponseTime" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="minResponseTime" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="serverName" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="serverStartTime" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="services" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="statService" nillable="true" type="ax2380:SystemStatisticsUtil"></xs:element>
+                    <xs:element minOccurs="0" name="systemUpTime" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="totalFaultCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="totalMemory" nillable="true" type="ax2379:Metric"></xs:element>
+                    <xs:element minOccurs="0" name="totalRequestCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="totalResponseCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="usedMemory" nillable="true" type="ax2379:Metric"></xs:element>
+                    <xs:element minOccurs="0" name="wso2wsasVersion" nillable="true" type="xs:string"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="Metric">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="unit" nillable="true" type="xs:string"></xs:element>
+                    <xs:element minOccurs="0" name="value" type="xs:double"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="ServiceStatistics">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="avgResponseTime" type="xs:double"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationFaultCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationRequestCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationResponseCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationResponseTime" type="xs:double"></xs:element>
+                    <xs:element minOccurs="0" name="maxResponseTime" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="minResponseTime" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="totalFaultCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="totalRequestCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="totalResponseCount" type="xs:int"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="OperationStatistics">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="avgResponseTime" type="xs:double"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationFaultCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationRequestCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationResponseCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="currentInvocationResponseTime" type="xs:double"></xs:element>
+                    <xs:element minOccurs="0" name="maxResponseTime" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="minResponseTime" type="xs:long"></xs:element>
+                    <xs:element minOccurs="0" name="totalFaultCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="totalRequestCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="totalResponseCount" type="xs:int"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2350="http://state.clustering.axis2.apache.org/xsd" xmlns:ax2341="http://context.axis2.apache.org/xsd" xmlns:ax2343="http://util.java/xsd" xmlns:ax2346="http://management.clustering.axis2.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://clustering.axis2.apache.org/xsd">
+            <xs:import namespace="http://context.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://util.java/xsd"></xs:import>
+            <xs:import namespace="http://management.clustering.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://state.clustering.axis2.apache.org/xsd"></xs:import>
+            <xs:complexType abstract="true" name="ClusteringAgent">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="aliveMemberCount" type="xs:int"></xs:element>
+                    <xs:element minOccurs="0" name="configurationContext" nillable="true" type="ax2338:ConfigurationContext"></xs:element>
+                    <xs:element minOccurs="0" name="coordinator" type="xs:boolean"></xs:element>
+                    <xs:element minOccurs="0" name="domains" nillable="true" type="ax2343:Set"></xs:element>
+                    <xs:element minOccurs="0" name="members" nillable="true" type="xs:anyType"></xs:element>
+                    <xs:element minOccurs="0" name="nodeManager" nillable="true" type="ax2344:NodeManager"></xs:element>
+                    <xs:element minOccurs="0" name="stateManager" nillable="true" type="ax2347:StateManager"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2376="http://context.axis2.apache.org/xsd" xmlns:ns="http://org.apache.axis2/xsd" xmlns:ax2382="http://util.services.statistics.carbon.wso2.org/xsd" xmlns:ax2378="http://data.webapp.statistics.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
+            <xs:import namespace="http://context.axis2.apache.org/xsd"></xs:import>
+            <xs:import namespace="http://data.webapp.statistics.carbon.wso2.org/xsd"></xs:import>
+            <xs:import namespace="http://util.services.statistics.carbon.wso2.org/xsd"></xs:import>
+            <xs:element name="setConfigurationContext">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="configurationContext" nillable="true" type="ax2376:ConfigurationContext"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getWebappRelatedData">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="webAppName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getWebappRelatedDataResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2377:StatisticData"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemStatistics">
+                <xs:complexType>
+                    <xs:sequence></xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemStatisticsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2382:SystemStatistics"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemResponseCount">
+                <xs:complexType>
+                    <xs:sequence></xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemResponseCountResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemRequestCount">
+                <xs:complexType>
+                    <xs:sequence></xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemRequestCountResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemFaultCount">
+                <xs:complexType>
+                    <xs:sequence></xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemFaultCountResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getServiceStatistics">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getServiceStatisticsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2382:ServiceStatistics"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getServiceResponseCount">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getServiceResponseCountResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getServiceRequestCount">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getServiceRequestCountResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getServiceFaultCount">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getServiceFaultCountResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOperationStatistics">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="operationName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOperationStatisticsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2382:OperationStatistics"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOperationResponseCount">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="operationName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOperationResponseCountResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOperationRequestCount">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="operationName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOperationRequestCountResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOperationFaultCount">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="operationName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getOperationFaultCountResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:int"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMinSystemResponseTime">
+                <xs:complexType>
+                    <xs:sequence></xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMinSystemResponseTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:long"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMinServiceResponseTime">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMinServiceResponseTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:long"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMinOperationResponseTime">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="operationName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMinOperationResponseTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:long"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMaxSystemResponseTime">
+                <xs:complexType>
+                    <xs:sequence></xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMaxSystemResponseTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:long"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMaxServiceResponseTime">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMaxServiceResponseTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:long"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMaxOperationResponseTime">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="operationName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getMaxOperationResponseTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:long"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAvgSystemResponseTime">
+                <xs:complexType>
+                    <xs:sequence></xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAvgSystemResponseTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:double"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAvgServiceResponseTime">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAvgServiceResponseTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:double"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAvgOperationResponseTime">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"></xs:element>
+                        <xs:element minOccurs="0" name="operationName" nillable="true" type="xs:string"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAvgOperationResponseTimeResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:double"></xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax2361="http://util.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://java2wsdl.description.axis2.apache.org/xsd">
+            <xs:import namespace="http://util.java/xsd"></xs:import>
+            <xs:complexType name="TypeTable">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="complexSchemaMap" nillable="true" type="ax2361:Map"></xs:element>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getSystemStatisticsRequest">
+        <wsdl:part name="parameters" element="ns1:getSystemStatistics"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getSystemStatisticsResponse">
+        <wsdl:part name="parameters" element="ns1:getSystemStatisticsResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMinOperationResponseTimeRequest">
+        <wsdl:part name="parameters" element="ns1:getMinOperationResponseTime"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMinOperationResponseTimeResponse">
+        <wsdl:part name="parameters" element="ns1:getMinOperationResponseTimeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getOperationRequestCountRequest">
+        <wsdl:part name="parameters" element="ns1:getOperationRequestCount"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getOperationRequestCountResponse">
+        <wsdl:part name="parameters" element="ns1:getOperationRequestCountResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMaxSystemResponseTimeRequest">
+        <wsdl:part name="parameters" element="ns1:getMaxSystemResponseTime"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMaxSystemResponseTimeResponse">
+        <wsdl:part name="parameters" element="ns1:getMaxSystemResponseTimeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getServiceStatisticsRequest">
+        <wsdl:part name="parameters" element="ns1:getServiceStatistics"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getServiceStatisticsResponse">
+        <wsdl:part name="parameters" element="ns1:getServiceStatisticsResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getServiceFaultCountRequest">
+        <wsdl:part name="parameters" element="ns1:getServiceFaultCount"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getServiceFaultCountResponse">
+        <wsdl:part name="parameters" element="ns1:getServiceFaultCountResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getSystemRequestCountRequest">
+        <wsdl:part name="parameters" element="ns1:getSystemRequestCount"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getSystemRequestCountResponse">
+        <wsdl:part name="parameters" element="ns1:getSystemRequestCountResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMinSystemResponseTimeRequest">
+        <wsdl:part name="parameters" element="ns1:getMinSystemResponseTime"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMinSystemResponseTimeResponse">
+        <wsdl:part name="parameters" element="ns1:getMinSystemResponseTimeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getWebappRelatedDataRequest">
+        <wsdl:part name="parameters" element="ns1:getWebappRelatedData"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getWebappRelatedDataResponse">
+        <wsdl:part name="parameters" element="ns1:getWebappRelatedDataResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMinServiceResponseTimeRequest">
+        <wsdl:part name="parameters" element="ns1:getMinServiceResponseTime"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMinServiceResponseTimeResponse">
+        <wsdl:part name="parameters" element="ns1:getMinServiceResponseTimeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getAvgServiceResponseTimeRequest">
+        <wsdl:part name="parameters" element="ns1:getAvgServiceResponseTime"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getAvgServiceResponseTimeResponse">
+        <wsdl:part name="parameters" element="ns1:getAvgServiceResponseTimeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getSystemResponseCountRequest">
+        <wsdl:part name="parameters" element="ns1:getSystemResponseCount"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getSystemResponseCountResponse">
+        <wsdl:part name="parameters" element="ns1:getSystemResponseCountResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMaxOperationResponseTimeRequest">
+        <wsdl:part name="parameters" element="ns1:getMaxOperationResponseTime"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMaxOperationResponseTimeResponse">
+        <wsdl:part name="parameters" element="ns1:getMaxOperationResponseTimeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getAvgOperationResponseTimeRequest">
+        <wsdl:part name="parameters" element="ns1:getAvgOperationResponseTime"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getAvgOperationResponseTimeResponse">
+        <wsdl:part name="parameters" element="ns1:getAvgOperationResponseTimeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getAvgSystemResponseTimeRequest">
+        <wsdl:part name="parameters" element="ns1:getAvgSystemResponseTime"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getAvgSystemResponseTimeResponse">
+        <wsdl:part name="parameters" element="ns1:getAvgSystemResponseTimeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMaxServiceResponseTimeRequest">
+        <wsdl:part name="parameters" element="ns1:getMaxServiceResponseTime"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getMaxServiceResponseTimeResponse">
+        <wsdl:part name="parameters" element="ns1:getMaxServiceResponseTimeResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getServiceResponseCountRequest">
+        <wsdl:part name="parameters" element="ns1:getServiceResponseCount"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getServiceResponseCountResponse">
+        <wsdl:part name="parameters" element="ns1:getServiceResponseCountResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getOperationStatisticsRequest">
+        <wsdl:part name="parameters" element="ns1:getOperationStatistics"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getOperationStatisticsResponse">
+        <wsdl:part name="parameters" element="ns1:getOperationStatisticsResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="setConfigurationContextRequest">
+        <wsdl:part name="parameters" element="ns1:setConfigurationContext"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getServiceRequestCountRequest">
+        <wsdl:part name="parameters" element="ns1:getServiceRequestCount"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getServiceRequestCountResponse">
+        <wsdl:part name="parameters" element="ns1:getServiceRequestCountResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getSystemFaultCountRequest">
+        <wsdl:part name="parameters" element="ns1:getSystemFaultCount"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getSystemFaultCountResponse">
+        <wsdl:part name="parameters" element="ns1:getSystemFaultCountResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getOperationResponseCountRequest">
+        <wsdl:part name="parameters" element="ns1:getOperationResponseCount"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getOperationResponseCountResponse">
+        <wsdl:part name="parameters" element="ns1:getOperationResponseCountResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getOperationFaultCountRequest">
+        <wsdl:part name="parameters" element="ns1:getOperationFaultCount"></wsdl:part>
+    </wsdl:message>
+    <wsdl:message name="getOperationFaultCountResponse">
+        <wsdl:part name="parameters" element="ns1:getOperationFaultCountResponse"></wsdl:part>
+    </wsdl:message>
+    <wsdl:portType name="StatisticsAdminPortType">
+        <wsdl:operation name="getSystemStatistics">
+            <wsdl:input message="tns:getSystemStatisticsRequest" wsaw:Action="urn:getSystemStatistics"></wsdl:input>
+            <wsdl:output message="tns:getSystemStatisticsResponse" wsaw:Action="urn:getSystemStatisticsResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinOperationResponseTime">
+            <wsdl:input message="tns:getMinOperationResponseTimeRequest" wsaw:Action="urn:getMinOperationResponseTime"></wsdl:input>
+            <wsdl:output message="tns:getMinOperationResponseTimeResponse" wsaw:Action="urn:getMinOperationResponseTimeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationRequestCount">
+            <wsdl:input message="tns:getOperationRequestCountRequest" wsaw:Action="urn:getOperationRequestCount"></wsdl:input>
+            <wsdl:output message="tns:getOperationRequestCountResponse" wsaw:Action="urn:getOperationRequestCountResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxSystemResponseTime">
+            <wsdl:input message="tns:getMaxSystemResponseTimeRequest" wsaw:Action="urn:getMaxSystemResponseTime"></wsdl:input>
+            <wsdl:output message="tns:getMaxSystemResponseTimeResponse" wsaw:Action="urn:getMaxSystemResponseTimeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceStatistics">
+            <wsdl:input message="tns:getServiceStatisticsRequest" wsaw:Action="urn:getServiceStatistics"></wsdl:input>
+            <wsdl:output message="tns:getServiceStatisticsResponse" wsaw:Action="urn:getServiceStatisticsResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceFaultCount">
+            <wsdl:input message="tns:getServiceFaultCountRequest" wsaw:Action="urn:getServiceFaultCount"></wsdl:input>
+            <wsdl:output message="tns:getServiceFaultCountResponse" wsaw:Action="urn:getServiceFaultCountResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemRequestCount">
+            <wsdl:input message="tns:getSystemRequestCountRequest" wsaw:Action="urn:getSystemRequestCount"></wsdl:input>
+            <wsdl:output message="tns:getSystemRequestCountResponse" wsaw:Action="urn:getSystemRequestCountResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinSystemResponseTime">
+            <wsdl:input message="tns:getMinSystemResponseTimeRequest" wsaw:Action="urn:getMinSystemResponseTime"></wsdl:input>
+            <wsdl:output message="tns:getMinSystemResponseTimeResponse" wsaw:Action="urn:getMinSystemResponseTimeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getWebappRelatedData">
+            <wsdl:input message="tns:getWebappRelatedDataRequest" wsaw:Action="urn:getWebappRelatedData"></wsdl:input>
+            <wsdl:output message="tns:getWebappRelatedDataResponse" wsaw:Action="urn:getWebappRelatedDataResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinServiceResponseTime">
+            <wsdl:input message="tns:getMinServiceResponseTimeRequest" wsaw:Action="urn:getMinServiceResponseTime"></wsdl:input>
+            <wsdl:output message="tns:getMinServiceResponseTimeResponse" wsaw:Action="urn:getMinServiceResponseTimeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgServiceResponseTime">
+            <wsdl:input message="tns:getAvgServiceResponseTimeRequest" wsaw:Action="urn:getAvgServiceResponseTime"></wsdl:input>
+            <wsdl:output message="tns:getAvgServiceResponseTimeResponse" wsaw:Action="urn:getAvgServiceResponseTimeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemResponseCount">
+            <wsdl:input message="tns:getSystemResponseCountRequest" wsaw:Action="urn:getSystemResponseCount"></wsdl:input>
+            <wsdl:output message="tns:getSystemResponseCountResponse" wsaw:Action="urn:getSystemResponseCountResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxOperationResponseTime">
+            <wsdl:input message="tns:getMaxOperationResponseTimeRequest" wsaw:Action="urn:getMaxOperationResponseTime"></wsdl:input>
+            <wsdl:output message="tns:getMaxOperationResponseTimeResponse" wsaw:Action="urn:getMaxOperationResponseTimeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgOperationResponseTime">
+            <wsdl:input message="tns:getAvgOperationResponseTimeRequest" wsaw:Action="urn:getAvgOperationResponseTime"></wsdl:input>
+            <wsdl:output message="tns:getAvgOperationResponseTimeResponse" wsaw:Action="urn:getAvgOperationResponseTimeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgSystemResponseTime">
+            <wsdl:input message="tns:getAvgSystemResponseTimeRequest" wsaw:Action="urn:getAvgSystemResponseTime"></wsdl:input>
+            <wsdl:output message="tns:getAvgSystemResponseTimeResponse" wsaw:Action="urn:getAvgSystemResponseTimeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxServiceResponseTime">
+            <wsdl:input message="tns:getMaxServiceResponseTimeRequest" wsaw:Action="urn:getMaxServiceResponseTime"></wsdl:input>
+            <wsdl:output message="tns:getMaxServiceResponseTimeResponse" wsaw:Action="urn:getMaxServiceResponseTimeResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceResponseCount">
+            <wsdl:input message="tns:getServiceResponseCountRequest" wsaw:Action="urn:getServiceResponseCount"></wsdl:input>
+            <wsdl:output message="tns:getServiceResponseCountResponse" wsaw:Action="urn:getServiceResponseCountResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationStatistics">
+            <wsdl:input message="tns:getOperationStatisticsRequest" wsaw:Action="urn:getOperationStatistics"></wsdl:input>
+            <wsdl:output message="tns:getOperationStatisticsResponse" wsaw:Action="urn:getOperationStatisticsResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="setConfigurationContext">
+            <wsdl:input message="tns:setConfigurationContextRequest" wsaw:Action="urn:setConfigurationContext"></wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceRequestCount">
+            <wsdl:input message="tns:getServiceRequestCountRequest" wsaw:Action="urn:getServiceRequestCount"></wsdl:input>
+            <wsdl:output message="tns:getServiceRequestCountResponse" wsaw:Action="urn:getServiceRequestCountResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemFaultCount">
+            <wsdl:input message="tns:getSystemFaultCountRequest" wsaw:Action="urn:getSystemFaultCount"></wsdl:input>
+            <wsdl:output message="tns:getSystemFaultCountResponse" wsaw:Action="urn:getSystemFaultCountResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationResponseCount">
+            <wsdl:input message="tns:getOperationResponseCountRequest" wsaw:Action="urn:getOperationResponseCount"></wsdl:input>
+            <wsdl:output message="tns:getOperationResponseCountResponse" wsaw:Action="urn:getOperationResponseCountResponse"></wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationFaultCount">
+            <wsdl:input message="tns:getOperationFaultCountRequest" wsaw:Action="urn:getOperationFaultCount"></wsdl:input>
+            <wsdl:output message="tns:getOperationFaultCountResponse" wsaw:Action="urn:getOperationFaultCountResponse"></wsdl:output>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="StatisticsAdminSoap11Binding" type="tns:StatisticsAdminPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap:binding>
+        <wsdl:operation name="getSystemStatistics">
+            <soap:operation soapAction="urn:getSystemStatistics" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinOperationResponseTime">
+            <soap:operation soapAction="urn:getMinOperationResponseTime" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxSystemResponseTime">
+            <soap:operation soapAction="urn:getMaxSystemResponseTime" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationRequestCount">
+            <soap:operation soapAction="urn:getOperationRequestCount" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceFaultCount">
+            <soap:operation soapAction="urn:getServiceFaultCount" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceStatistics">
+            <soap:operation soapAction="urn:getServiceStatistics" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinSystemResponseTime">
+            <soap:operation soapAction="urn:getMinSystemResponseTime" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemRequestCount">
+            <soap:operation soapAction="urn:getSystemRequestCount" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinServiceResponseTime">
+            <soap:operation soapAction="urn:getMinServiceResponseTime" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getWebappRelatedData">
+            <soap:operation soapAction="urn:getWebappRelatedData" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgServiceResponseTime">
+            <soap:operation soapAction="urn:getAvgServiceResponseTime" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemResponseCount">
+            <soap:operation soapAction="urn:getSystemResponseCount" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxOperationResponseTime">
+            <soap:operation soapAction="urn:getMaxOperationResponseTime" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgOperationResponseTime">
+            <soap:operation soapAction="urn:getAvgOperationResponseTime" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgSystemResponseTime">
+            <soap:operation soapAction="urn:getAvgSystemResponseTime" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceResponseCount">
+            <soap:operation soapAction="urn:getServiceResponseCount" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxServiceResponseTime">
+            <soap:operation soapAction="urn:getMaxServiceResponseTime" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationStatistics">
+            <soap:operation soapAction="urn:getOperationStatistics" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="setConfigurationContext">
+            <soap:operation soapAction="urn:setConfigurationContext" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemFaultCount">
+            <soap:operation soapAction="urn:getSystemFaultCount" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceRequestCount">
+            <soap:operation soapAction="urn:getServiceRequestCount" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationResponseCount">
+            <soap:operation soapAction="urn:getOperationResponseCount" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationFaultCount">
+            <soap:operation soapAction="urn:getOperationFaultCount" style="document"></soap:operation>
+            <wsdl:input>
+                <soap:body use="literal"></soap:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"></soap:body>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="StatisticsAdminSoap12Binding" type="tns:StatisticsAdminPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"></soap12:binding>
+        <wsdl:operation name="getSystemStatistics">
+            <soap12:operation soapAction="urn:getSystemStatistics" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinOperationResponseTime">
+            <soap12:operation soapAction="urn:getMinOperationResponseTime" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxSystemResponseTime">
+            <soap12:operation soapAction="urn:getMaxSystemResponseTime" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationRequestCount">
+            <soap12:operation soapAction="urn:getOperationRequestCount" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceFaultCount">
+            <soap12:operation soapAction="urn:getServiceFaultCount" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceStatistics">
+            <soap12:operation soapAction="urn:getServiceStatistics" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinSystemResponseTime">
+            <soap12:operation soapAction="urn:getMinSystemResponseTime" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemRequestCount">
+            <soap12:operation soapAction="urn:getSystemRequestCount" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinServiceResponseTime">
+            <soap12:operation soapAction="urn:getMinServiceResponseTime" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getWebappRelatedData">
+            <soap12:operation soapAction="urn:getWebappRelatedData" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgServiceResponseTime">
+            <soap12:operation soapAction="urn:getAvgServiceResponseTime" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemResponseCount">
+            <soap12:operation soapAction="urn:getSystemResponseCount" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxOperationResponseTime">
+            <soap12:operation soapAction="urn:getMaxOperationResponseTime" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgOperationResponseTime">
+            <soap12:operation soapAction="urn:getAvgOperationResponseTime" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgSystemResponseTime">
+            <soap12:operation soapAction="urn:getAvgSystemResponseTime" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceResponseCount">
+            <soap12:operation soapAction="urn:getServiceResponseCount" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxServiceResponseTime">
+            <soap12:operation soapAction="urn:getMaxServiceResponseTime" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationStatistics">
+            <soap12:operation soapAction="urn:getOperationStatistics" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="setConfigurationContext">
+            <soap12:operation soapAction="urn:setConfigurationContext" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemFaultCount">
+            <soap12:operation soapAction="urn:getSystemFaultCount" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceRequestCount">
+            <soap12:operation soapAction="urn:getServiceRequestCount" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationResponseCount">
+            <soap12:operation soapAction="urn:getOperationResponseCount" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationFaultCount">
+            <soap12:operation soapAction="urn:getOperationFaultCount" style="document"></soap12:operation>
+            <wsdl:input>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"></soap12:body>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="StatisticsAdminHttpBinding" type="tns:StatisticsAdminPortType">
+        <http:binding verb="POST"></http:binding>
+        <wsdl:operation name="getSystemStatistics">
+            <http:operation location="getSystemStatistics"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinOperationResponseTime">
+            <http:operation location="getMinOperationResponseTime"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxSystemResponseTime">
+            <http:operation location="getMaxSystemResponseTime"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationRequestCount">
+            <http:operation location="getOperationRequestCount"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceFaultCount">
+            <http:operation location="getServiceFaultCount"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceStatistics">
+            <http:operation location="getServiceStatistics"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinSystemResponseTime">
+            <http:operation location="getMinSystemResponseTime"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemRequestCount">
+            <http:operation location="getSystemRequestCount"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMinServiceResponseTime">
+            <http:operation location="getMinServiceResponseTime"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getWebappRelatedData">
+            <http:operation location="getWebappRelatedData"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgServiceResponseTime">
+            <http:operation location="getAvgServiceResponseTime"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemResponseCount">
+            <http:operation location="getSystemResponseCount"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxOperationResponseTime">
+            <http:operation location="getMaxOperationResponseTime"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgOperationResponseTime">
+            <http:operation location="getAvgOperationResponseTime"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getAvgSystemResponseTime">
+            <http:operation location="getAvgSystemResponseTime"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceResponseCount">
+            <http:operation location="getServiceResponseCount"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getMaxServiceResponseTime">
+            <http:operation location="getMaxServiceResponseTime"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationStatistics">
+            <http:operation location="getOperationStatistics"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="setConfigurationContext">
+            <http:operation location="setConfigurationContext"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemFaultCount">
+            <http:operation location="getSystemFaultCount"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getServiceRequestCount">
+            <http:operation location="getServiceRequestCount"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationResponseCount">
+            <http:operation location="getOperationResponseCount"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getOperationFaultCount">
+            <http:operation location="getOperationFaultCount"></http:operation>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"></mime:content>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="StatisticsAdmin">
+        <wsdl:port name="StatisticsAdminHttpsSoap11Endpoint" binding="tns:StatisticsAdminSoap11Binding">
+            <soap:address location="https://10.100.0.134:9443/services/StatisticsAdmin.StatisticsAdminHttpsSoap11Endpoint/"></soap:address>
+        </wsdl:port>
+        <wsdl:port name="StatisticsAdminHttpsSoap12Endpoint" binding="tns:StatisticsAdminSoap12Binding">
+            <soap12:address location="https://10.100.0.134:9443/services/StatisticsAdmin.StatisticsAdminHttpsSoap12Endpoint/"></soap12:address>
+        </wsdl:port>
+        <wsdl:port name="StatisticsAdminHttpsEndpoint" binding="tns:StatisticsAdminHttpBinding">
+            <http:address location="https://10.100.0.134:9443/services/StatisticsAdmin.StatisticsAdminHttpsEndpoint/"></http:address>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

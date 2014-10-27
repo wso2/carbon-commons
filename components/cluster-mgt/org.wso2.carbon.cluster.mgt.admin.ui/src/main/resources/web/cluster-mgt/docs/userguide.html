@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"></meta>
+    <title>Cluster Management - User Guide</title>
+    <link href="../../admin/css/documentation.css" rel="stylesheet" type="text/css" media="all"/>
+</head>
+
+<body>
+<h1>Cluster Management</h1>
+
+<h2>Why Web Services Clustering?</h2>
+
+<p>Any production deployment of a server has to fulfil two basic needs. They
+    are high availability and scalability. High availability refers to the
+    ability to serve client requests by tolerating failures. Scalability is the
+    ability to serve a large number of clients sending a large number of requests
+    without a degradation of the performance. Almost all successful server
+    products support the above two features to some extent.</p>
+
+<p>Another requirement that pops up naturally with the above two features is
+    the ability to manage clustered deployments from a single point. There is no
+    exception when it comes to Web services servers. Many large scale enterprises
+    are adapting to Web services as the de facto middleware standard. These
+    enterprises have to process millions of transactions per day, or even more. A
+    large number of clients, both human and computers, connect simultaneously to
+    these systems and initiate transactions. Therefore, the servers hosting the
+    Web services for these enterprises have to support that level of performance
+    and concurrency. In addition, almost all the transactions happening in such
+    enterprise deployments are critical to the business of the organization. This
+    imposes another requirement for production ready Web services servers. That
+    is to maintain very low downtime. </p>
+
+<p>It is impossible to support that level of scalability and high
+    availability from a single server despite how powerful the server hardware or
+    how efficient the server software. Web services clustering is needed to solve
+    this, which allows to deploy and manage several instances of identical Web
+    services across multiple Web services servers running on different server
+    machines.</p>
+
+<p></p>
+
+<h2>Cluster Management Component</h2>
+
+<p>This cluster management component can be used to manage the entire
+    Carbon cluster or individual cluster groups. You can perform the following
+    operations on the entire cluster or on a selected cluster group.</p>
+<ul>
+    <li>Shut down</li>
+    <li>Restart</li>
+    <li>Switch to maintenance mode</li>
+</ul>
+
+<p>In addition to that, you can access the management console of each
+    host in a cluster group and manage that host.</p>
+
+<p></p>
+
+<h2>Cluster Management User Interface</h2>
+
+<p>Cluster Management user interface allows you to easily control the entire
+    cluster or individual cluster groups.</p>
+
+<h3>Managing the entire cluster</h3>
+
+<p>Figure 1 shows the first page which will appear when you click on the
+    Manage > Cluster menu item. This interface shows all existing cluster
+    groups and you can perform the above mentioned operations such that
+    it will afftect all listed cluster groups.</p>
+
+<img src="images/cluster.png" alt="Managing all cluster groups" width="1014" height="535">
+
+<p><strong>Figure 1 :</strong> Managing the entire cluster</p>
+
+<p>You can move into the individual cluster group management user interface by clicking
+    on the cluster group name.</p>
+
+<h3>Managing a single cluster group</h3>
+
+<p>Figure 2 shows the individual cluster group management user interface. It
+    lists all hosts (nodes) in the cluster. You can perform the above
+    mentioned operations such that it will afftect only for this particular
+    cluster group.</p>
+
+<img src="images/cluster_group.png" alt="Managing a single cluster group" width="1013" height="524">
+
+<p><strong>Figure 2 :</strong> Managing a single cluster group</p>
+
+<p>And also, you can use the "Management Console" link infront of each listed
+    host to connect to the management console of that particular host. If that
+    host doesn't have a management console (it only has a backend), "Connect
+    to Backend" link can be used to connect to the backend of that host using the
+    current Carbon UI.</p>
+
+</body>
+</html>

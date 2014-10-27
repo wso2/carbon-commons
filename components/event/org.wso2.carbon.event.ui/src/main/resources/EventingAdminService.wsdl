@@ -1,0 +1,236 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:ns="http://service.eventing.carbon.wso2.org" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:ax275="http://dto.service.eventing.carbon.wso2.org/xsd"
+                  targetNamespace="http://service.eventing.carbon.wso2.org">
+    <wsdl:documentation>EventingAdminService</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified"
+                   targetNamespace="http://dto.service.eventing.carbon.wso2.org/xsd">
+            <xs:complexType name="SubscriptionDTO">
+                <xs:all>
+                    <xs:element minOccurs="0" name="dialect" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="diliveryMode" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="epr" nillable="true" type="xs:string"/>
+
+                    <xs:element minOccurs="0" name="filterValue" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="subscriptionEndString" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="subscriptionEndingTime" nillable="true" type="xs:date"/>
+                </xs:all>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax276="http://dto.service.eventing.carbon.wso2.org/xsd" attributeFormDefault="qualified"
+                   elementFormDefault="qualified" targetNamespace="http://service.eventing.carbon.wso2.org">
+            <xs:import namespace="http://dto.service.eventing.carbon.wso2.org/xsd"/>
+            <xs:complexType name="Exception">
+
+                <xs:all>
+                    <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType"/>
+                </xs:all>
+            </xs:complexType>
+            <xs:element name="getValidSubscriptions">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getValidSubscriptionsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="getSubscriptionDetails">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="subscriberId" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSubscriptionDetailsResponse">
+
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax275:SubscriptionDTO"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getExpiredSubscriptions">
+                <xs:complexType>
+                    <xs:sequence>
+
+                        <xs:element minOccurs="0" name="serviceName" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getExpiredSubscriptionsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getSubscriptionDetailsRequest">
+        <wsdl:part name="parameters" element="ns:getSubscriptionDetails"/>
+    </wsdl:message>
+    <wsdl:message name="getSubscriptionDetailsResponse">
+        <wsdl:part name="parameters" element="ns:getSubscriptionDetailsResponse"/>
+
+    </wsdl:message>
+    <wsdl:message name="getExpiredSubscriptionsRequest">
+        <wsdl:part name="parameters" element="ns:getExpiredSubscriptions"/>
+    </wsdl:message>
+    <wsdl:message name="getExpiredSubscriptionsResponse">
+        <wsdl:part name="parameters" element="ns:getExpiredSubscriptionsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getValidSubscriptionsRequest">
+        <wsdl:part name="parameters" element="ns:getValidSubscriptions"/>
+
+    </wsdl:message>
+    <wsdl:message name="getValidSubscriptionsResponse">
+        <wsdl:part name="parameters" element="ns:getValidSubscriptionsResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="EventingAdminServicePortType">
+        <wsdl:operation name="getSubscriptionDetails">
+            <wsdl:input message="ns:getSubscriptionDetailsRequest" wsaw:Action="urn:getSubscriptionDetails"/>
+            <wsdl:output message="ns:getSubscriptionDetailsResponse" wsaw:Action="urn:getSubscriptionDetailsResponse"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="getExpiredSubscriptions">
+            <wsdl:input message="ns:getExpiredSubscriptionsRequest" wsaw:Action="urn:getExpiredSubscriptions"/>
+            <wsdl:output message="ns:getExpiredSubscriptionsResponse"
+                         wsaw:Action="urn:getExpiredSubscriptionsResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getValidSubscriptions">
+            <wsdl:input message="ns:getValidSubscriptionsRequest" wsaw:Action="urn:getValidSubscriptions"/>
+            <wsdl:output message="ns:getValidSubscriptionsResponse" wsaw:Action="urn:getValidSubscriptionsResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="EventingAdminServiceSoap11Binding" type="ns:EventingAdminServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getSubscriptionDetails">
+            <soap:operation soapAction="urn:getSubscriptionDetails" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getExpiredSubscriptions">
+            <soap:operation soapAction="urn:getExpiredSubscriptions" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getValidSubscriptions">
+            <soap:operation soapAction="urn:getValidSubscriptions" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="EventingAdminServiceSoap12Binding" type="ns:EventingAdminServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getSubscriptionDetails">
+            <soap12:operation soapAction="urn:getSubscriptionDetails" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getExpiredSubscriptions">
+            <soap12:operation soapAction="urn:getExpiredSubscriptions" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getValidSubscriptions">
+            <soap12:operation soapAction="urn:getValidSubscriptions" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="EventingAdminServiceHttpBinding" type="ns:EventingAdminServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="getSubscriptionDetails">
+
+            <http:operation location="getSubscriptionDetails"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getSubscriptionDetails"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getSubscriptionDetails"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getExpiredSubscriptions">
+
+            <http:operation location="getExpiredSubscriptions"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getExpiredSubscriptions"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getExpiredSubscriptions"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getValidSubscriptions">
+
+            <http:operation location="getValidSubscriptions"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getValidSubscriptions"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getValidSubscriptions"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="EventingAdminService">
+        <wsdl:port name="EventingAdminServiceHttpsSoap11Endpoint" binding="ns:EventingAdminServiceSoap11Binding">
+            <soap:address
+                    location="https://localhost:8243/services/EventingAdminService.EventingAdminServiceHttpsSoap11Endpoint"/>
+        </wsdl:port>
+        <wsdl:port name="EventingAdminServiceHttpsSoap12Endpoint" binding="ns:EventingAdminServiceSoap12Binding">
+            <soap12:address
+                    location="https://localhost:8243/services/EventingAdminService.EventingAdminServiceHttpsSoap12Endpoint"/>
+        </wsdl:port>
+        <wsdl:port name="EventingAdminServiceHttpsEndpoint" binding="ns:EventingAdminServiceHttpBinding">
+            <http:address
+                    location="https://localhost:8243/services/EventingAdminService.EventingAdminServiceHttpsEndpoint"/>
+
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
