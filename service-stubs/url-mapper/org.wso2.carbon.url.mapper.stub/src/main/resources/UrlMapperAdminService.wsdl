@@ -1,0 +1,769 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://mapper.url.carbon.wso2.org" xmlns:ax2482="http://exception.internal.mapper.url.carbon.wso2.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax2484="http://data.mapper.url.carbon.wso2.org/xsd" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://mapper.url.carbon.wso2.org">
+    <wsdl:documentation>UrlMapperAdminService</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://data.mapper.url.carbon.wso2.org/xsd">
+            <xs:complexType name="PaginatedMappingData">
+                <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="mappingData" nillable="true" type="ax2484:MappingData" />
+                    <xs:element minOccurs="0" name="numberOfPages" type="xs:int" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="MappingData">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="mappingName" nillable="true" type="xs:string" />
+                    <xs:element minOccurs="0" name="serviceMapping" type="xs:boolean" />
+                    <xs:element minOccurs="0" name="tenantDomain" nillable="true" type="xs:string" />
+                    <xs:element minOccurs="0" name="url" nillable="true" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exception.internal.mapper.url.carbon.wso2.org/xsd">
+            <xs:complexType name="UrlMapperException">
+                <xs:sequence />
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2483="http://exception.internal.mapper.url.carbon.wso2.org/xsd" xmlns:ax2485="http://data.mapper.url.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://mapper.url.carbon.wso2.org">
+            <xs:import namespace="http://exception.internal.mapper.url.carbon.wso2.org/xsd" />
+            <xs:import namespace="http://data.mapper.url.carbon.wso2.org/xsd" />
+            <xs:element name="UrlMapperAdminServiceUrlMapperException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="UrlMapperException" nillable="true" type="ax2482:UrlMapperException" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="isMappingLimitExceeded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="webAppName" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="isMappingLimitExceededResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="isMappingExist">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="mappingName" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="isMappingExistResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getPaginatedMappings">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="pageNumber" type="xs:int" />
+                        <xs:element minOccurs="0" name="tenantDomain" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getPaginatedMappingsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2484:PaginatedMappingData" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHttpPort">
+                <xs:complexType>
+                    <xs:sequence />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHttpPortResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHostForWebApp">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="url" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHostForWebAppResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHostForEpr">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="url" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHostForEprResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getDomainNamePrefix">
+                <xs:complexType>
+                    <xs:sequence />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getDomainNamePrefixResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllMappings">
+                <xs:complexType>
+                    <xs:sequence />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllMappingsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax2484:MappingData" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="editServiceDomain">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="newHost" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="oldhost" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="editHost">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="webappName" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="newHost" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="oldhost" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="editHostResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteServiceDomain">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="hostName" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteHost">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="hostName" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addWebAppToHost">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="hostName" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="uri" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="appType" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addServiceDomain">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="hostName" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="url" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="appType" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="deleteServiceDomainRequest">
+        <wsdl:part name="parameters" element="ns:deleteServiceDomain" />
+    </wsdl:message>
+    <wsdl:message name="UrlMapperAdminServiceUrlMapperException">
+        <wsdl:part name="parameters" element="ns:UrlMapperAdminServiceUrlMapperException" />
+    </wsdl:message>
+    <wsdl:message name="getHttpPortRequest">
+        <wsdl:part name="parameters" element="ns:getHttpPort" />
+    </wsdl:message>
+    <wsdl:message name="getHttpPortResponse">
+        <wsdl:part name="parameters" element="ns:getHttpPortResponse" />
+    </wsdl:message>
+    <wsdl:message name="addServiceDomainRequest">
+        <wsdl:part name="parameters" element="ns:addServiceDomain" />
+    </wsdl:message>
+    <wsdl:message name="getPaginatedMappingsRequest">
+        <wsdl:part name="parameters" element="ns:getPaginatedMappings" />
+    </wsdl:message>
+    <wsdl:message name="getPaginatedMappingsResponse">
+        <wsdl:part name="parameters" element="ns:getPaginatedMappingsResponse" />
+    </wsdl:message>
+    <wsdl:message name="getDomainNamePrefixRequest">
+        <wsdl:part name="parameters" element="ns:getDomainNamePrefix" />
+    </wsdl:message>
+    <wsdl:message name="getDomainNamePrefixResponse">
+        <wsdl:part name="parameters" element="ns:getDomainNamePrefixResponse" />
+    </wsdl:message>
+    <wsdl:message name="addWebAppToHostRequest">
+        <wsdl:part name="parameters" element="ns:addWebAppToHost" />
+    </wsdl:message>
+    <wsdl:message name="isMappingExistRequest">
+        <wsdl:part name="parameters" element="ns:isMappingExist" />
+    </wsdl:message>
+    <wsdl:message name="isMappingExistResponse">
+        <wsdl:part name="parameters" element="ns:isMappingExistResponse" />
+    </wsdl:message>
+    <wsdl:message name="getHostForWebAppRequest">
+        <wsdl:part name="parameters" element="ns:getHostForWebApp" />
+    </wsdl:message>
+    <wsdl:message name="getHostForWebAppResponse">
+        <wsdl:part name="parameters" element="ns:getHostForWebAppResponse" />
+    </wsdl:message>
+    <wsdl:message name="getAllMappingsRequest">
+        <wsdl:part name="parameters" element="ns:getAllMappings" />
+    </wsdl:message>
+    <wsdl:message name="getAllMappingsResponse">
+        <wsdl:part name="parameters" element="ns:getAllMappingsResponse" />
+    </wsdl:message>
+    <wsdl:message name="deleteHostRequest">
+        <wsdl:part name="parameters" element="ns:deleteHost" />
+    </wsdl:message>
+    <wsdl:message name="editServiceDomainRequest">
+        <wsdl:part name="parameters" element="ns:editServiceDomain" />
+    </wsdl:message>
+    <wsdl:message name="getHostForEprRequest">
+        <wsdl:part name="parameters" element="ns:getHostForEpr" />
+    </wsdl:message>
+    <wsdl:message name="getHostForEprResponse">
+        <wsdl:part name="parameters" element="ns:getHostForEprResponse" />
+    </wsdl:message>
+    <wsdl:message name="editHostRequest">
+        <wsdl:part name="parameters" element="ns:editHost" />
+    </wsdl:message>
+    <wsdl:message name="editHostResponse">
+        <wsdl:part name="parameters" element="ns:editHostResponse" />
+    </wsdl:message>
+    <wsdl:message name="isMappingLimitExceededRequest">
+        <wsdl:part name="parameters" element="ns:isMappingLimitExceeded" />
+    </wsdl:message>
+    <wsdl:message name="isMappingLimitExceededResponse">
+        <wsdl:part name="parameters" element="ns:isMappingLimitExceededResponse" />
+    </wsdl:message>
+    <wsdl:portType name="UrlMapperAdminServicePortType">
+        <wsdl:operation name="deleteServiceDomain">
+            <wsdl:input message="ns:deleteServiceDomainRequest" wsaw:Action="urn:deleteServiceDomain" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:deleteServiceDomainUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="getHttpPort">
+            <wsdl:input message="ns:getHttpPortRequest" wsaw:Action="urn:getHttpPort" />
+            <wsdl:output message="ns:getHttpPortResponse" wsaw:Action="urn:getHttpPortResponse" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:getHttpPortUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="addServiceDomain">
+            <wsdl:input message="ns:addServiceDomainRequest" wsaw:Action="urn:addServiceDomain" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:addServiceDomainUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="getPaginatedMappings">
+            <wsdl:input message="ns:getPaginatedMappingsRequest" wsaw:Action="urn:getPaginatedMappings" />
+            <wsdl:output message="ns:getPaginatedMappingsResponse" wsaw:Action="urn:getPaginatedMappingsResponse" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:getPaginatedMappingsUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="getDomainNamePrefix">
+            <wsdl:input message="ns:getDomainNamePrefixRequest" wsaw:Action="urn:getDomainNamePrefix" />
+            <wsdl:output message="ns:getDomainNamePrefixResponse" wsaw:Action="urn:getDomainNamePrefixResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="addWebAppToHost">
+            <wsdl:input message="ns:addWebAppToHostRequest" wsaw:Action="urn:addWebAppToHost" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:addWebAppToHostUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="isMappingExist">
+            <wsdl:input message="ns:isMappingExistRequest" wsaw:Action="urn:isMappingExist" />
+            <wsdl:output message="ns:isMappingExistResponse" wsaw:Action="urn:isMappingExistResponse" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:isMappingExistUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="getHostForWebApp">
+            <wsdl:input message="ns:getHostForWebAppRequest" wsaw:Action="urn:getHostForWebApp" />
+            <wsdl:output message="ns:getHostForWebAppResponse" wsaw:Action="urn:getHostForWebAppResponse" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:getHostForWebAppUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="getAllMappings">
+            <wsdl:input message="ns:getAllMappingsRequest" wsaw:Action="urn:getAllMappings" />
+            <wsdl:output message="ns:getAllMappingsResponse" wsaw:Action="urn:getAllMappingsResponse" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:getAllMappingsUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="deleteHost">
+            <wsdl:input message="ns:deleteHostRequest" wsaw:Action="urn:deleteHost" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:deleteHostUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="editServiceDomain">
+            <wsdl:input message="ns:editServiceDomainRequest" wsaw:Action="urn:editServiceDomain" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:editServiceDomainUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="getHostForEpr">
+            <wsdl:input message="ns:getHostForEprRequest" wsaw:Action="urn:getHostForEpr" />
+            <wsdl:output message="ns:getHostForEprResponse" wsaw:Action="urn:getHostForEprResponse" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:getHostForEprUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="editHost">
+            <wsdl:input message="ns:editHostRequest" wsaw:Action="urn:editHost" />
+            <wsdl:output message="ns:editHostResponse" wsaw:Action="urn:editHostResponse" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:editHostUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+        <wsdl:operation name="isMappingLimitExceeded">
+            <wsdl:input message="ns:isMappingLimitExceededRequest" wsaw:Action="urn:isMappingLimitExceeded" />
+            <wsdl:output message="ns:isMappingLimitExceededResponse" wsaw:Action="urn:isMappingLimitExceededResponse" />
+            <wsdl:fault message="ns:UrlMapperAdminServiceUrlMapperException" name="UrlMapperAdminServiceUrlMapperException" wsaw:Action="urn:isMappingLimitExceededUrlMapperAdminServiceUrlMapperException" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="UrlMapperAdminServiceSoap11Binding" type="ns:UrlMapperAdminServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="getHttpPort">
+            <soap:operation soapAction="urn:getHttpPort" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteServiceDomain">
+            <soap:operation soapAction="urn:deleteServiceDomain" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addServiceDomain">
+            <soap:operation soapAction="urn:addServiceDomain" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getPaginatedMappings">
+            <soap:operation soapAction="urn:getPaginatedMappings" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getDomainNamePrefix">
+            <soap:operation soapAction="urn:getDomainNamePrefix" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="isMappingExist">
+            <soap:operation soapAction="urn:isMappingExist" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addWebAppToHost">
+            <soap:operation soapAction="urn:addWebAppToHost" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllMappings">
+            <soap:operation soapAction="urn:getAllMappings" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getHostForWebApp">
+            <soap:operation soapAction="urn:getHostForWebApp" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="editServiceDomain">
+            <soap:operation soapAction="urn:editServiceDomain" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteHost">
+            <soap:operation soapAction="urn:deleteHost" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getHostForEpr">
+            <soap:operation soapAction="urn:getHostForEpr" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="editHost">
+            <soap:operation soapAction="urn:editHost" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="isMappingLimitExceeded">
+            <soap:operation soapAction="urn:isMappingLimitExceeded" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="UrlMapperAdminServiceSoap12Binding" type="ns:UrlMapperAdminServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="getHttpPort">
+            <soap12:operation soapAction="urn:getHttpPort" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteServiceDomain">
+            <soap12:operation soapAction="urn:deleteServiceDomain" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addServiceDomain">
+            <soap12:operation soapAction="urn:addServiceDomain" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getPaginatedMappings">
+            <soap12:operation soapAction="urn:getPaginatedMappings" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getDomainNamePrefix">
+            <soap12:operation soapAction="urn:getDomainNamePrefix" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="isMappingExist">
+            <soap12:operation soapAction="urn:isMappingExist" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addWebAppToHost">
+            <soap12:operation soapAction="urn:addWebAppToHost" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllMappings">
+            <soap12:operation soapAction="urn:getAllMappings" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getHostForWebApp">
+            <soap12:operation soapAction="urn:getHostForWebApp" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="editServiceDomain">
+            <soap12:operation soapAction="urn:editServiceDomain" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteHost">
+            <soap12:operation soapAction="urn:deleteHost" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getHostForEpr">
+            <soap12:operation soapAction="urn:getHostForEpr" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="editHost">
+            <soap12:operation soapAction="urn:editHost" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="isMappingLimitExceeded">
+            <soap12:operation soapAction="urn:isMappingLimitExceeded" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UrlMapperAdminServiceUrlMapperException">
+                <soap12:fault use="literal" name="UrlMapperAdminServiceUrlMapperException" />
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="UrlMapperAdminServiceHttpBinding" type="ns:UrlMapperAdminServicePortType">
+        <http:binding verb="POST" />
+        <wsdl:operation name="getHttpPort">
+            <http:operation location="getHttpPort" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="deleteServiceDomain">
+            <http:operation location="deleteServiceDomain" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="addServiceDomain">
+            <http:operation location="addServiceDomain" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getPaginatedMappings">
+            <http:operation location="getPaginatedMappings" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getDomainNamePrefix">
+            <http:operation location="getDomainNamePrefix" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="isMappingExist">
+            <http:operation location="isMappingExist" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="addWebAppToHost">
+            <http:operation location="addWebAppToHost" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getAllMappings">
+            <http:operation location="getAllMappings" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getHostForWebApp">
+            <http:operation location="getHostForWebApp" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="editServiceDomain">
+            <http:operation location="editServiceDomain" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="deleteHost">
+            <http:operation location="deleteHost" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getHostForEpr">
+            <http:operation location="getHostForEpr" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="editHost">
+            <http:operation location="editHost" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="isMappingLimitExceeded">
+            <http:operation location="isMappingLimitExceeded" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="UrlMapperAdminService">
+        <wsdl:port name="UrlMapperAdminServiceHttpsSoap11Endpoint" binding="ns:UrlMapperAdminServiceSoap11Binding">
+            <soap:address location="https://10.100.3.56:9443/services/UrlMapperAdminService.UrlMapperAdminServiceHttpsSoap11Endpoint/" />
+        </wsdl:port>
+        <wsdl:port name="UrlMapperAdminServiceHttpsSoap12Endpoint" binding="ns:UrlMapperAdminServiceSoap12Binding">
+            <soap12:address location="https://10.100.3.56:9443/services/UrlMapperAdminService.UrlMapperAdminServiceHttpsSoap12Endpoint/" />
+        </wsdl:port>
+        <wsdl:port name="UrlMapperAdminServiceHttpsEndpoint" binding="ns:UrlMapperAdminServiceHttpBinding">
+            <http:address location="https://10.100.3.56:9443/services/UrlMapperAdminService.UrlMapperAdminServiceHttpsEndpoint/" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

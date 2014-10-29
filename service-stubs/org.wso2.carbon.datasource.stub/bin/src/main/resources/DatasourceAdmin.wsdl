@@ -1,0 +1,585 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:axis2="http://services.datasource.carbon.wso2.org"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:ax299="http://datasource.carbon.wso2.org/xsd"
+                  xmlns:ns1="http://org.apache.axis2/xsd"
+                  xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+                  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  targetNamespace="http://services.datasource.carbon.wso2.org">
+    <wsdl:documentation>DataSourceAdmin</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema xmlns:ax2100="http://org.apache.axis2/xsd" attributeFormDefault="qualified"
+                   elementFormDefault="qualified"
+                   targetNamespace="http://datasource.carbon.wso2.org/xsd">
+            <xs:import namespace="http://org.apache.axis2/xsd"/>
+            <xs:complexType name="DataSourceManagementException">
+                <xs:complexContent>
+                    <xs:extension base="ax2100:Exception">
+
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2101="http://datasource.carbon.wso2.org/xsd"
+                   xmlns:ns="http://org.apache.axis2/xsd" attributeFormDefault="qualified"
+                   elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
+            <xs:import namespace="http://datasource.carbon.wso2.org/xsd"/>
+            <xs:complexType name="Exception">
+                <xs:sequence>
+
+                    <xs:any/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="DataSourceManagementException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="DataSourceManagementException"
+                                    nillable="true" type="ax299:DataSourceManagementException"/>
+                    </xs:sequence>
+                </xs:complexType>
+
+            </xs:element>
+            <xs:element name="testConnection">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:any/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+
+            <xs:element name="testConnectionResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="setConfigurationProperties">
+                <xs:complexType>
+
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:any/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="removeDataSourceInformation">
+                <xs:complexType>
+                    <xs:sequence>
+
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="isContains">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="isContainsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getInactiveDataSourceListResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getDataSourceInformation">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getDataSourceInformationResponse">
+                <xs:complexType>
+
+                    <xs:sequence>
+                        <xs:any/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllDataSourceInformationResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                       <xs:any/>
+
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="editDataSourceInformation">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:any/>
+                    </xs:sequence>
+
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addDataSourceInformation">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:any/>
+                    </xs:sequence>
+                </xs:complexType>
+
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="testConnectionRequest">
+        <wsdl:part name="parameters" element="ns1:testConnection"/>
+    </wsdl:message>
+    <wsdl:message name="testConnectionResponse">
+        <wsdl:part name="parameters" element="ns1:testConnectionResponse"/>
+    </wsdl:message>
+
+    <wsdl:message name="DataSourceManagementException">
+        <wsdl:part name="parameters" element="ns1:DataSourceManagementException"/>
+    </wsdl:message>
+    <wsdl:message name="removeDataSourceInformationRequest">
+        <wsdl:part name="parameters" element="ns1:removeDataSourceInformation"/>
+    </wsdl:message>
+    <wsdl:message name="addDataSourceInformationRequest">
+        <wsdl:part name="parameters" element="ns1:addDataSourceInformation"/>
+    </wsdl:message>
+
+    <wsdl:message name="editDataSourceInformationRequest">
+        <wsdl:part name="parameters" element="ns1:editDataSourceInformation"/>
+    </wsdl:message>
+    <wsdl:message name="getAllDataSourceInformationRequest"/>
+    <wsdl:message name="getAllDataSourceInformationResponse">
+        <wsdl:part name="parameters" element="ns1:getAllDataSourceInformationResponse"/>
+    </wsdl:message>
+    <wsdl:message name="isContainsRequest">
+        <wsdl:part name="parameters" element="ns1:isContains"/>
+
+    </wsdl:message>
+    <wsdl:message name="isContainsResponse">
+        <wsdl:part name="parameters" element="ns1:isContainsResponse"/>
+    </wsdl:message>
+    <wsdl:message name="setConfigurationPropertiesRequest">
+        <wsdl:part name="parameters" element="ns1:setConfigurationProperties"/>
+    </wsdl:message>
+    <wsdl:message name="getDataSourceInformationRequest">
+        <wsdl:part name="parameters" element="ns1:getDataSourceInformation"/>
+
+    </wsdl:message>
+    <wsdl:message name="getDataSourceInformationResponse">
+        <wsdl:part name="parameters" element="ns1:getDataSourceInformationResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getInactiveDataSourceListRequest" />
+    <wsdl:message name="getInactiveDataSourceListResponse">
+        <wsdl:part name="parameters" element="ns1:getInactiveDataSourceListResponse" />
+    </wsdl:message>
+    <wsdl:portType name="DataSourceAdminPortType">
+        <wsdl:operation name="testConnection">
+            <wsdl:input message="axis2:testConnectionRequest" wsaw:Action="urn:testConnection"/>
+            <wsdl:output message="axis2:testConnectionResponse"
+                         wsaw:Action="urn:testConnectionResponse"/>
+            <wsdl:fault message="axis2:DataSourceManagementException"
+                        name="DataSourceManagementException"
+                        wsaw:Action="urn:testConnectionDataSourceManagementException"/>
+
+        </wsdl:operation>
+        <wsdl:operation name="removeDataSourceInformation">
+            <wsdl:input message="axis2:removeDataSourceInformationRequest"
+                        wsaw:Action="urn:removeDataSourceInformation"/>
+            <wsdl:fault message="axis2:DataSourceManagementException"
+                        name="DataSourceManagementException"
+                        wsaw:Action="urn:removeDataSourceInformationDataSourceManagementException"/>
+        </wsdl:operation>
+        <wsdl:operation name="addDataSourceInformation">
+            <wsdl:input message="axis2:addDataSourceInformationRequest"
+                        wsaw:Action="urn:addDataSourceInformation"/>
+            <wsdl:fault message="axis2:DataSourceManagementException"
+                        name="DataSourceManagementException"
+                        wsaw:Action="urn:addDataSourceInformationDataSourceManagementException"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="editDataSourceInformation">
+            <wsdl:input message="axis2:editDataSourceInformationRequest"
+                        wsaw:Action="urn:editDataSourceInformation"/>
+            <wsdl:fault message="axis2:DataSourceManagementException"
+                        name="DataSourceManagementException"
+                        wsaw:Action="urn:editDataSourceInformationDataSourceManagementException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAllDataSourceInformation">
+            <wsdl:input message="axis2:getAllDataSourceInformationRequest"
+                        wsaw:Action="urn:getAllDataSourceInformation"/>
+            <wsdl:output message="axis2:getAllDataSourceInformationResponse"
+                         wsaw:Action="urn:getAllDataSourceInformationResponse"/>
+            <wsdl:fault message="axis2:DataSourceManagementException"
+                        name="DataSourceManagementException"
+                        wsaw:Action="urn:getAllDataSourceInformationDataSourceManagementException"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="isContains">
+            <wsdl:input message="axis2:isContainsRequest" wsaw:Action="urn:isContains"/>
+            <wsdl:output message="axis2:isContainsResponse" wsaw:Action="urn:isContainsResponse"/>
+            <wsdl:fault message="axis2:DataSourceManagementException"
+                        name="DataSourceManagementException"
+                        wsaw:Action="urn:isContainsDataSourceManagementException"/>
+        </wsdl:operation>
+        <wsdl:operation name="setConfigurationProperties">
+            <wsdl:input message="axis2:setConfigurationPropertiesRequest"
+                        wsaw:Action="urn:setConfigurationProperties"/>
+            <wsdl:fault message="axis2:DataSourceManagementException"
+                        name="DataSourceManagementException"
+                        wsaw:Action="urn:setConfigurationPropertiesDataSourceManagementException"/>
+        </wsdl:operation>
+
+        <wsdl:operation name="getDataSourceInformation">
+            <wsdl:input message="axis2:getDataSourceInformationRequest"
+                        wsaw:Action="urn:getDataSourceInformation"/>
+            <wsdl:output message="axis2:getDataSourceInformationResponse"
+                         wsaw:Action="urn:getDataSourceInformationResponse"/>
+            <wsdl:fault message="axis2:DataSourceManagementException"
+                        name="DataSourceManagementException"
+                        wsaw:Action="urn:getDataSourceInformationDataSourceManagementException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getInactiveDataSourceList">
+            <wsdl:input message="axis2:getInactiveDataSourceListRequest" wsaw:Action="urn:getInactiveDataSourceList" />
+            <wsdl:output message="axis2:getInactiveDataSourceListResponse" wsaw:Action="urn:getInactiveDataSourceListResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="DataSourceAdminSoap11Binding" type="axis2:DataSourceAdminPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="testConnection">
+
+            <soap:operation soapAction="urn:testConnection" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap:fault use="literal" name="DataSourceManagementException"/>
+
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addDataSourceInformation">
+            <soap:operation soapAction="urn:addDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap:fault use="literal" name="DataSourceManagementException"/>
+
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="removeDataSourceInformation">
+            <soap:operation soapAction="urn:removeDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap:fault use="literal" name="DataSourceManagementException"/>
+
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="editDataSourceInformation">
+            <soap:operation soapAction="urn:editDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap:fault use="literal" name="DataSourceManagementException"/>
+
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllDataSourceInformation">
+            <soap:operation soapAction="urn:getAllDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+
+            </wsdl:output>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="isContains">
+            <soap:operation soapAction="urn:isContains" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="setConfigurationProperties">
+
+            <soap:operation soapAction="urn:setConfigurationProperties" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getDataSourceInformation">
+
+            <soap:operation soapAction="urn:getDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap:fault use="literal" name="DataSourceManagementException"/>
+
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getInactiveDataSourceList">
+            <soap:operation soapAction="urn:getInactiveDataSourceList" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="DataSourceAdminSoap12Binding" type="axis2:DataSourceAdminPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="testConnection">
+            <soap12:operation soapAction="urn:testConnection" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap12:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addDataSourceInformation">
+
+            <soap12:operation soapAction="urn:addDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap12:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="removeDataSourceInformation">
+
+            <soap12:operation soapAction="urn:removeDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap12:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="editDataSourceInformation">
+
+            <soap12:operation soapAction="urn:editDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap12:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllDataSourceInformation">
+
+            <soap12:operation soapAction="urn:getAllDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap12:fault use="literal" name="DataSourceManagementException"/>
+
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="isContains">
+            <soap12:operation soapAction="urn:isContains" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+
+            </wsdl:output>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap12:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="setConfigurationProperties">
+            <soap12:operation soapAction="urn:setConfigurationProperties" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+
+            </wsdl:input>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap12:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getDataSourceInformation">
+            <soap12:operation soapAction="urn:getDataSourceInformation" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="DataSourceManagementException">
+                <soap12:fault use="literal" name="DataSourceManagementException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getInactiveDataSourceList">
+            <soap12:operation soapAction="urn:getInactiveDataSourceList" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:binding name="DataSourceAdminHttpBinding" type="axis2:DataSourceAdminPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="testConnection">
+            <http:operation location="testConnection"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="testConnection"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="testConnection"/>
+
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="addDataSourceInformation">
+            <http:operation location="addDataSourceInformation"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="addDataSourceInformation"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="removeDataSourceInformation">
+
+            <http:operation location="removeDataSourceInformation"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="removeDataSourceInformation"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="editDataSourceInformation">
+            <http:operation location="editDataSourceInformation"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="editDataSourceInformation"/>
+
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getAllDataSourceInformation">
+            <http:operation location="getAllDataSourceInformation"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getAllDataSourceInformation"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getAllDataSourceInformation"/>
+
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="isContains">
+            <http:operation location="isContains"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="isContains"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="isContains"/>
+
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="setConfigurationProperties">
+            <http:operation location="setConfigurationProperties"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="setConfigurationProperties"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getDataSourceInformation">
+
+            <http:operation location="getDataSourceInformation"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getDataSourceInformation"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getDataSourceInformation"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getInactiveDataSourceList">
+            <http:operation location="getInactiveDataSourceList" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="DataSourceAdmin">
+        <wsdl:port name="DataSourceAdminHttpsSoap11Endpoint"
+                   binding="axis2:DataSourceAdminSoap11Binding">
+            <soap:address
+                    location="https://indika:8243/services/DataSourceAdmin.DataSourceAdminHttpsSoap11Endpoint"/>
+        </wsdl:port>
+        <wsdl:port name="DataSourceAdminHttpsSoap12Endpoint"
+                   binding="axis2:DataSourceAdminSoap12Binding">
+            <soap12:address
+                    location="https://indika:8243/services/DataSourceAdmin.DataSourceAdminHttpsSoap12Endpoint"/>
+        </wsdl:port>
+        <wsdl:port name="DataSourceAdminHttpsEndpoint" binding="axis2:DataSourceAdminHttpBinding">
+            <http:address
+                    location="https://indika:8243/services/DataSourceAdmin.DataSourceAdminHttpsEndpoint"/>
+
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

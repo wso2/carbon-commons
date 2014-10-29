@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"></meta>
+    <title>Carbon Applications - User Guide</title>
+    <link href="../../admin/css/documentation.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body>
+
+<h1>Carbon Applications</h1>
+
+<p>A Carbon Application (cApp) is a collection of deployable artifacts, which can be
+    deployed on a Carbon instance to easily port your Web services based solution from
+    one environment to another.</p>
+
+<p>When developing solutions using WSO2 Carbon platform, there can be many artifact
+    types used in it. For example Axis2 services, Synapse artifacts (endpoints,
+    proxy services, mediators etc.), Registry Resources, Data services etc. Normally
+    these artifacts are developed in a development environment and then moved one by
+    one into the staging and production environments. On each and every setup, you
+    have to manually configure these artifacts in order to build up the entire solutions.
+    If your solution contains many artifacts, this process can take lot of time and effort.</p>
+
+<p>So the cApp concept tries to solve this problem by providing the facility to export
+    your entire solution as a single cApp artifact and simply deploy it. WSO2 Web services
+    development tooling environment (Carbon Studio) can be used to develop your individual
+    artifacts and export it as a single cApp artifact. Then you can deploy it on any Carbon
+    server which has cApp deployment capabilities.</p>
+
+<h2>Configuring server role</h2>
+
+<p>In cApp development time, you have to specify a server role for each and every artifact
+    in the cApp. That is because, at development time we don't know the physical server
+    in which a particular artifact will be deployed. Therefore, a logical server role is
+    assigned for each and every artifact.</p>
+
+<p><strong>Ex :</strong> If you are developing an Axis2 service and if you are going to
+    deploy all your services in a single AppServer instance in the production setup, you may
+    set the server role as "appserver1".</p>
+
+<p>At the deployment time of the cApp, you have to set the server roles for each and every
+    Carbon instance in your setup. You can set one or more roles which can be acted by the
+    current Carbon instance. Product name is set as the default value for the server role
+    of each product. Following three methods can be used to set the server role.</p>
+
+<ol>
+    <li>Using Server Roles Manager UI</li>
+    <p>This is the easiest way to set the server role of your Carbon instance. Go to
+        <i><b>Configure &gt; Server Roles</b></i> UI and you can simply add/remove server
+        roles. Read the "Help" page for more details on that. This is the most recommended
+        way to configure your server roles.</p>
+
+    <li>Using CARBON_HOME/repository/conf/carbon.xml</li>
+        <p>In the carbon.xml file, you can find the following element.</p>
+
+        <pre>
+        &lt;ServerRoles&gt;
+            &lt;Role&gt;ApplicationServer&lt;/Role&gt;
+        &lt;/ServerRoles&gt;
+        </pre>
+
+        <p>You can set multiple Role elements here to specify the roles acted by the
+            current server.</p>
+
+        <p><strong>Ex :</strong> If you want this server to act as appserver1 and dataservices1
+            servers, configuration will be as follows. Before setting this, you have to
+            make sure that the current server has the capabilities of deploying Axis2
+            services and data services.</p>
+
+        <pre>
+        &lt;ServerRoles&gt;
+            &lt;Role>appserver1&lt;/Role&gt;
+            &lt;Role>dataservices1&lt;/Role&gt;
+        &lt;/ServerRoles&gt;
+        </pre>
+
+        <p>So when you deploy a cApp artifact on this server, all artifacts which has the above
+        two server roles will be deployed on the current instance. Others will be ignored.</p>
+
+    <li>Using a system property</li>
+
+    <p>You can use the system property "serverRoles" to specify the server roles that can
+        be acted by the current Carbon instance. So when you start the server, pass the
+        server roles as a comma separated list as follows.</p>
+
+    <p><strong>Ex :</strong> sh wso2server.sh -DserverRoles=appserver1,dataservices1</p>
+</ol>
+
+<p><strong>Note :</strong> Once you use the Server Roles UI to configure your server roles
+    you can't change that configuration using other two methods. That is because when you use
+    the UI, server roles will be stored in the Registry and after that, values in Registry
+    are given priority over the values set using other two methods.</p>
+
+<h2>Deploying a cApp</h2>
+
+<p>You can upload a cApp (.car file) into a running Carbon instance using the management
+    console. Go to <i><b>Manage &gt; Applications &gt; Add</b></i> and you will be directed to the
+    following page.</p>
+
+<p><img alt="Uploading a cApp" src="images/capp_upload.png" height="201" width="1017"/></p>
+
+<p>Here you can select your .car file by browsing the file system. After you upload the
+    .car file, you can see a log on your console about the status of your application.
+    If the cApp deployment is successful, go to <i><b>Manage &gt; Applications &gt; List</b></i>. You will
+    be able to see the deployed cApp on this page as follows.</p>
+
+<p><img alt="cApp listing page" src="images/capp_list.png" height="177" width="1014"/></p>
+
+<p>If you click on your cApp name, you will be directed to the Application Dashboard
+    page which contains all the information about the content of the deployed cApp.
+    It separately lists each and every artifact and you can navigate to those artifacts'
+    information pages by clicking on those links. Application dashboard page is shown
+    in the following image.</p>
+
+<p><img alt="cApp dashboard" src="images/capp_details.png" height="351" width="1015"/></p>
+
+<p><strong>Note :</strong> As an alternate to uploading the cApp using the management
+    console, you can copy your .car archive into CARBON_HOME/repository/deployment/server/carbonapps
+    folder manually and it will be hot deployed.</p>
+
+<h2>Deleting a cApp</h2>
+
+<p>It is not recommended to delete individual artifacts of a cApp. The entire cApp
+    should be deleted. Go to <i><b>Manage &gt; Applications &gt; List</b></i> and click on Delete icon in
+    front of the cApp to be deleted.</p>
+
+<p><strong>Note :</strong> As an alternate to deleting the cApp using the management
+    console, you can delete your .car archive from CARBON_HOME/repository/deployment/server/carbonapps
+    folder manually and it will be undeployed.</p>
+
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
+        <title>Deployment Synchronizer - User Guide</title>
+        <link href="../../admin/css/documentation.css" rel="stylesheet" type="text/css" media="all"/>
+    </head>
+    <body>
+        <h1>Deployment Synchronizer</h1>
+        <p>
+            Deployment synchronizer can be used to synchronize the main repository of a Carbon
+            server with a collection in the registry. This feature is sometimes also referred to
+            as the registry based repository synchronizer. Deployment synchronizer has a number
+            of use cases.
+        </p>
+        <ol>
+            <li>Maintaining an up-to-date backup of the Carbon repository</li>
+            <li>Sharing a single Carbon repository among multiple servers (through a shared registry)</li>
+            <li>Enforcing artifact updates in the registry to be deployed on a server at runtime</li>
+        </ol>
+        <p>
+            Perhaps the most interesting use case of the deployment synchronizer is the second
+            item listed above. Assume a cluster of Carbon servers that share the configuration
+            registry. With the deployment synchronizer it is possible to maintain all the nodes in
+            the cluster in sync through the shared registry. One of the nodes can be
+            designated as the master node and it can upload its local repository to the registry
+            using the deployment synchronizer. Other nodes (slave nodes) can then download the
+            same repository from the registry and deploy locally. To support this use case, synchronizer
+            has to be run in auto commit mode in the master node. When in auto commit mode, it will
+            periodically upload the changed artifacts in the local repository to the registry.
+            Similarly slave nodes should run the synchronizer in the auto checkout mode. If needed
+            registry eventing can be employed to run the checkout operations so that a checkout
+            will be made only when some artifact has changed in the shared registry.
+        </p>
+        <p>
+            Note that Carbon repository is located in the repository/deployment/server directory
+            by default. Once enabled, deployment synchronizer uploads the contents of this directory
+            to a collection named repository/deployment/server in the configuration registry (this
+            is configurable).
+        </p>
+        <p>&#160;</p>
+        <h2>
+            Deployment Synchronizer Control Panel
+        </h2>
+        <p>
+            While the deployment synchronizer can be engages and configured from the carbon.xml file
+            the, control panel allows the user to engage it from the Carbon management console.
+        </p>
+        <p>
+            To access the Deployment Synchronizer Control Panel select Configure > Deployment Synchronizer
+            from the left navigation panel of the Carbon management console. The following page will
+            be displayed.
+        </p>
+        <div class="image">
+            <img src="images/sync-home.png" alt="Deployment Synchronizer Home"/>
+        </div>
+        <p>Figure 1: Deployment Synchronizer Control Panel (Synchronizer Home Page)</p>
+        <p>&#160;</p>
+        <h2>
+            Enabling the Synchronizer
+        </h2>
+        <p>
+            To enable the synchronizer simply check the required features (eg: auto commit) and click
+            the 'Enable' button. Synchronizer will get initialized and start running periodically
+            as specified in the 'Synchronization Period' parameter. When the auto checkout option is
+            checked, an additional option named 'Use Eventing' will be enabled. This can be checked
+            if you want to trigger checkout actions on registry events.
+        </p>
+        <p>
+            When the synchronizer is enabled additional information will be shown on the UI as shown
+            below.
+        </p>
+        <div class="image">
+            <img src="images/sync-enabled.png" alt="Synchronizer Activated"/>
+        </div>
+        <p>Figure 2: Deployment Synchronizer Enabled</p>
+        <p>
+            You can use the additional panels to monitor the progress of auto commit and checkout
+            operations (by observing timestamps). It is also possible to execute a commit operation
+            or a checkout operation manually by clicking on the corresponding buttons. To disable
+            the synchronizer simply hit the 'Disable' button at any time.
+        </p>
+    </body>
+</html>
