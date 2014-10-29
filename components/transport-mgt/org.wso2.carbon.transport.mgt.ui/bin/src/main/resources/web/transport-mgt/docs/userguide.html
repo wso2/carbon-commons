@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<html>
+<head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
+    <title>Transport Management - User Guide</title>
+    <link href="../../admin/css/documentation.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body>
+
+<div id="middle">
+    <h1>Transport Management</h1>
+
+    <p>
+        The <strong>Transport Management</strong> page lists the available transport listeners and senders.
+        From here, you can enable, disable and configure transport listeners and senders separately, without
+        having to restart the server.
+    </p>
+    <div align="center">
+        <img alt="Transport UI" src="images/trp_mgt.png" />
+        <p><strong>Figure: Transport Management Home Page</strong> </p>
+    </div>
+    <p>
+        Transport configurations are saved in the embedded registry and are loaded from there. Please note
+        that WSO2 Carbon also supports the traditional axis2.xml file based transport configuration model.
+        For instance you can override the transport configurations in the registry by specifying the relevant
+        configurations n the [CARBON_HOME]/conf/axis2.xml file. In other words transport configuration details
+        given in the axis2.xml file gets priority over the transport configuration details saved in the registry.
+        Keep in mind that any changes to axis2.xml file require a server restart to take effect.
+    </p>
+    <p>
+        HTTP and HTTPS transports are configured in the axis2.xml and thus are always loaded at the server
+        startup from the axis2.xml. Also HTTP and HTTPS transports cannot be disabled since those transports
+        are required by the Carbon management console and related administrative services.
+    </p>
+    <p>
+        To enable a transport listener or a sender simply click on the corresponding <strong>Enable</strong>
+        link. Then you will be taken to a page where you can specify configuration parameters for the transport
+        listener or the sender you want to enable. You will notice that all the required fields are already populated
+        with a set of default values. Change the default values to suit the requirements of your deployment.
+    </p>
+    <div align="center">
+        <img alt="Transport Setup" src="images/trp_config.png" />
+        <p><strong>Figure: Transport Configure Form</strong> </p>
+    </div>
+    <p>
+        Once you specify the transport configuration details you can click on the <strong>Enable</strong> button
+        on the same page to activate the transport listener or the sender. A confirmation dialog will appear and
+        to enable the particular transport click <strong>Yes</strong>.
+    </p>
+    <div align="center">
+        <img alt="Transport Enable" src="images/trp_enable.png" />
+        <p><strong>Figure: Transport Enable Confirmation Dialog</strong> </p>
+    </div>
+    <p>
+        If any of the dependencies required to enable the transport listener or the sender are missing the transport
+        will not be enabled and you will be redirected back to the <strong>Transport Management</strong> page. You will
+        notice that the <strong>Enable</strong> option is still available for that particular transport listener or
+        sender, indicating that it hasn't been enabled. Therefore it is important that you put all the required jars in the [CARBON_HOME]/repository/components/dropins
+        directory before attempting to activate a transport listener or a sender.
+    </p>
+    <p>
+        Once enabled a given transport can be further configured or disabled. To configure a transport listener
+        or a sender click on the <strong>Configure</strong> link associated with it in the <strong>Transport Management</strong>
+        page. Then you will be taken to a page where you can add and edit transport parameters. Once you are
+        satisfied with the configuration click on the <strong>Update</strong> button to save the changes. The
+        updated settings will take effect immediately and the corresponding transport listener or sender will be
+        restarted.
+    </p>
+    <p>
+        To disable an already active transport listener or a sender use the <strong>Disable</strong> links given
+        on the <strong>Transport Management</strong> page. A confirmation dialog will appear and by clicking on
+        <strong>Yes</strong> button you can turn off the transport listener or the sender.
+    </p>
+    <div align="center">
+        <img alt="Transport Enable" src="images/trp_disable.png" />
+        <p><strong>Figure: Transport Disable Confirmation Dialog</strong> </p>
+    </div>
+    <p>
+        In case of HTTP/HTTPS transport listeners and senders you will receive a warning dialog indicating that
+        those transports cannot be disabled.
+    </p>
+
+    <p></p>
+
+
+</div>
+</body>
+</html>

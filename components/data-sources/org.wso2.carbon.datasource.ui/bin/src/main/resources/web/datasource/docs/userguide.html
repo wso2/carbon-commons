@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
+  <title>Data Sources - User Guide</title>
+  <link href="../../admin/css/documentation.css" rel="stylesheet" type="text/css" media="all"/>
+</head>
+
+<body>
+<h1>Data Sources</h1>
+
+<p><span style="color: black;">Use this configuration panel to configure data
+sources, and connection pools.</span></p>
+<ol>
+  <li>In the navigator, under Manage, click <span
+    style="font-weight: bold;">Data Sources. </span> The <span
+    style="font-weight: bold; font-style: italic;">Data Sources</span> page
+    appears.
+    <img src="images/datasources.jpg" alt="Add New Data Sources"/>
+    <p>Figure 1. Add New Data Source</p>
+  </li>
+  <li>Click <span style="font-weight: bold;">AddDataSource</span>. The <span
+    style="font-weight: bold; font-style: italic;">New Data Source</span> page
+    appears.
+  </li>
+  <li>Add your data source configuration details. Depending on the selection of
+    your data source repository (InMemory, JNDI ) different configuration
+    parameters will be available. </li>
+  <li>Click <span style="font-weight: bold;">Add</span>. Your data source will
+    be added.</li>
+</ol>
+<p><img src="images/datasources1.jpg" alt="Data Source configuration panel InMemory"/></p>
+    <p>Figure 2. Adding Data Source with InMemory configuration</p>
+<p><img src="images/datasources2.jpg" alt="Data Source configuration panel JNDI"/></p>
+    <p>Figure 3. Data Source configuration with JNDI </p>
+
+<h2><strong>Field Descriptions</strong></h2>
+
+<p>The meanings of many field descriptions are similar to the <a
+href="http://commons.apache.org/dbcp/configuration.html">DBCPconfiguration
+guide</a>. Please refer that for more information. The following table only
+briefly summaries some of them. </p>
+
+<table style="text-align: left; width: 712px; height: 155px;" border="1"
+cellpadding="2" cellspacing="2">
+  <tbody>
+    <tr>
+      <td colspan="2" rowspan="1"><a name="PageWindow_name"
+        id="PageWindow_name1"/><strong>New Data Source</strong></td>
+    </tr>
+    <tr>
+      <td style="width: 127px;"><strong>Field Name</strong></td>
+      <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Name</td>
+      <td>Name of the data source (This value should be unique.)</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Data Source Name</td>
+      <td>A name to identify the data source, if a value is not specified, </td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Driver</td>
+      <td>The JDBC driver to be used.</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">URL</td>
+      <td>The connection URL to be passed to the JDBC driver to establish a
+        connection</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">User Name</td>
+      <td>The connection user name to be passed to the JDBC driver to establish
+        a connection</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Password</td>
+      <td>The connection password to be passed to the JDBC driver to establish
+        a connection</td>
+    </tr>
+    <tr>
+      <td style="width: 127px; height: 44px;">Data Source Pool
+      Implementation</td>
+      <td style="height: 44px;">The type of the data source pool
+      implementation</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Pool type</td>
+      <td>This can be either: BasicDataSource or PerUserPoolDataSource.
+        <strong>BasicDataSource - </strong>This data source is an
+        implementation of <span style="font-family:sans-serif">javax.sql.DataSource</span> that is
+        configured via Java Bean properties. <strong>PerUserPoolDataSource :-
+        </strong>This data source uses individual pools per user. Some
+        properties can be set specifically for a given user, if the deployment
+        environment can support initialization of mapped properties. For
+        example, a pool of admin or write-access Connections can be guaranteed
+        a certain number of connections, separate from a maximum set for users
+        with read-only connections</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Repository type</td>
+      <td>The type of the data source repository. </td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">IC Factory</td>
+      <td>Initial context factory of the JNDI</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Provider Port</td>
+      <td>If specified, it will be used to create a JNDI provider URL
+        internally.</td>
+    </tr>
+    <tr>
+      <td style="width: 127px; height: 25px;">Provider URL</td>
+      <td style="height: 25px;">The URL of the JNDI provider. It is assumed
+        that this URL exists and is accessible. </td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Max Active</td>
+      <td>The maximum number of active connections that can be allocated from
+        this pool at the same time. If a negative value is specified, there
+        wont be a limit to the number of connections. The default value is 8.</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Max Idle</td>
+      <td>The minimum number of connections that can remain idle in the pool,
+        without extra ones being created.<span style="color: red;"><span
+        style="color: black">It can be zero, to create none. The</span>
+        </span>default value is 8.</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Initial Size (int)</td>
+      <td>The initial number of connections that are created when the pool is
+        started. </td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Max Open Statements (int)</td>
+      <td>The maximum number of active connections that can be allocated from
+        this pool at the same time. If a negative value is specifed, there wont
+        be a limit to the number of connections. The default value is 8.</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Transaction Isolation</td>
+      <td>For the isolation values, please refer to the <a
+        href="http://java.sun.com/j2se/1.4.2/docs/api/java/sql/Connection.html#field_summary">javadoc</a>.
+      </td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Auto Commit</td>
+      <td>The default auto-commit state of connections created by this
+      pool.</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Pool Statements</td>
+      <td>Enables prepared statement pooling for this pool. The default value
+        is <strong>False</strong>.</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Test On Borrow</td>
+      <td>Indicates whether objects will be validated before being borrowed
+        from the pool. If the object fails to validate, it will be dropped from
+        the pool, and we will attempt to borrow another. The default value is
+        <span style="font-weight: bold;">T</span><strong>rue. Note - </strong>
+        For the value True to have any effect, the
+        <code>validationQuery</code> parameter must be set to a non-null
+      string</td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Test While Idle</td>
+      <td>Indicates whether objects will be validated by the idle object
+        evictor (if any). If an object fails to validate, it will be dropped
+        from the pool. The default value is <strong>False</strong>.
+        <strong>Note</strong> - For the value True to have any effect, the
+        <code>validationQuery</code> parameter must be set to a non-null
+        string. </td>
+    </tr>
+    <tr>
+      <td style="width: 127px;">Validation Query</td>
+      <td>The SQL query that will be used to validate connections from this
+        pool before returning them to the caller. If specified, this query
+        <strong>must</strong> be an SQL SELECT statement that returns at least
+        one row</td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>
