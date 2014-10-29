@@ -1,0 +1,97 @@
+{
+    "apiVersion": "1.0",
+    "swaggerVersion": "1.1",
+    "basePath": "http://localhost:9763/jaxrs_basic/services/customers",
+    "resourcePath": "http://localhost:9763/jaxrs_basic/services/customers",
+    "apis": [
+        {
+            "path": "/customerservice/customers/",
+            "description": "llll",
+            "operations": [
+                {
+                    "httpMethod": "POST",
+                    "notes": "eeeee",
+                    "responseClass": "void",
+                    "nickname": "aaaa",
+                    "parameters": []
+                },
+                {
+                    "httpMethod": "PUT",
+                    "notes": "eeeee",
+                    "responseClass": "void",
+                    "nickname": "aaaa",
+                    "parameters": []
+                }
+            ]
+        },
+        {
+            "path": "/customerservice/customers/name/",
+            "description": "llll",
+            "operations": [
+                {
+                    "httpMethod": "POST",
+                    "notes": "eeeee",
+                    "responseClass": "void",
+                    "nickname": "aaaa",
+                    "parameters": []
+                }
+            ]
+        },
+        {
+            "path": "/customerservice/customers/{id}/",
+            "description": "llll",
+            "operations": [
+                {
+                    "httpMethod": "DELETE",
+                    "notes": "eeeee",
+                    "responseClass": "void",
+                    "nickname": "aaaa",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "description": "ooooooo",
+                            "paramType": "path",
+                            "required": "true",
+                            "allowMultiple": "false",
+                            "dataType": "string"
+                        }
+                    ]
+                },
+                {
+                    "httpMethod": "GET",
+                    "notes": "eeeee",
+                    "responseClass": "void",
+                    "nickname": "aaaa",
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "description": "ooooooo",
+                            "paramType": "path",
+                            "required": "true",
+                            "allowMultiple": "false",
+                            "dataType": "string"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "path": "/customerservice/getJs",
+            "description": "llll",
+            "operations": [
+                {
+                    "httpMethod": "GET",
+                    "notes": "eeeee",
+                    "responseClass": "void",
+                    "nickname": "aaaa",
+                    "parameters": []
+                }
+            ]
+        },
+        {
+            "path": "/customerservice/orders/{orderId}/",
+            "description": "llll",
+            "operations": []
+        }
+    ]
+}

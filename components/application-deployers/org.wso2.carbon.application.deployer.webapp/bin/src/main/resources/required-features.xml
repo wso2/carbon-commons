@@ -1,0 +1,8 @@
+<featureSets>
+    <featureSet artifactType="web/application">
+        <feature id="org.wso2.carbon.webapp.mgt.server.feature.group" version="[4.3.0.SNAPSHOT, 4.4.0)"/>
+    </featureSet>
+    <!--<featureSet artifactType="webapp/jaxws">
+        <feature id="org.wso2.carbon.jaxws.webapp.mgt.server.feature.group" version="[4.3.0-SNAPSHOT, 4.4.0)"/>
+    </featureSet>-->
+</featureSets>

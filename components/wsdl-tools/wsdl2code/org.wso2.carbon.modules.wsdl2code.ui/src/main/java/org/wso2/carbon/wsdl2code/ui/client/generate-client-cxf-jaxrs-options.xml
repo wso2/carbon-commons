@@ -1,0 +1,91 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<codegen>
+    <!--<argument uiType="skip">-->
+        <!--<name>d</name>-->
+        <!--<description>Specify a directory path for the generated code</description>-->
+    <!--</argument>-->
+
+    <argument uiType="check">
+        <name>impl</name>
+        <description>Generates starting implementation code. Can also be used with -interface option</description>
+    </argument>
+    <argument uiType="check">
+        <name>noTypes</name>
+        <description>Requests that no schema generation is needed. Can also be used with -tMap option</description>
+    </argument>
+    <argument uiType="check">
+        <name>compile</name>
+        <description>Compiles generated Java files.</description>
+    </argument>
+    <!--Gives an invalid argument error-->
+    <!--<argument uiType="check">
+        <name>noVoidForEmptyResponses</name>
+        <description>Generate JAX-RS Response instead of 'void' for methods with no response representations.</description>
+    </argument>-->
+    <argument uiType="check">
+        <name>inheritResourceParams</name>
+        <description>Get current resource-level path or matrix parameters added to generated methods for all descendant resources.</description>
+    </argument>
+    <argument uiType="check">
+        <name>generateEnums</name>
+        <description>Generates Java enums for parameters with options.</description>
+    </argument>
+    <argument uiType="check">
+        <name>supportMultipleXmlReps</name>
+        <description>Generates separate method for every XML representation in a single WADL request element.</description>
+    </argument>
+
+    <argument uiType="text">
+        <name>p</name>
+        <description>Specifies the package name of root resource classes</description>
+    </argument>
+    <argument uiType="text">
+        <name>resource</name>
+        <description>Specifies a full name of root resource class if WADL contains a single resource</description>
+    </argument>
+
+    <argument uiType="text" readOnly="true" name="xsdconfig" uploadFile="true">
+        <name>catalog</name>
+        <description>Specifies catalog file to map referenced wadl/schemas</description>
+    </argument>
+    <argument uiType="text" readOnly="true" name="xsdconfig" uploadFile="true">
+        <name>b</name>
+        <description>Specifies JAXB binding files. Use multiple -b flags to specify multiple entries.</description>
+    </argument>
+
+    <argument uiType="text-area">
+        <name>sp</name>
+        <description>Specifies one or more package names corresponding to individual schema namespaces</description>
+    </argument>
+    <argument uiType="text-area">
+        <name>tMap</name>
+        <description>Provides mapping between schema elements and java types</description>
+    </argument>
+    <argument uiType="text-area">
+        <name>repMap</name>
+        <description>Provides mapping between media types and java types</description>
+    </argument>
+    <argument uiType="text-area">
+        <name>async</name>
+        <description>Adds JAX-RS 2.0 AsyncResponse parameter to generated methods, methodNames is a comma-separated list of WADL method name or id attributes</description>
+    </argument>
+
+
+
+</codegen>

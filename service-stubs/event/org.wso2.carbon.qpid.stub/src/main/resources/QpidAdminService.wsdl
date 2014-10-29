@@ -1,0 +1,323 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://ws.service.qpid.carbon.wso2.org" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://ws.service.qpid.carbon.wso2.org">
+    <wsdl:documentation>QpidAdminService</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://ws.service.qpid.carbon.wso2.org">
+            <xs:element name="getVirtualHostName">
+                <xs:complexType>
+                    <xs:sequence />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getVirtualHostNameResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSSLPort">
+                <xs:complexType>
+                    <xs:sequence />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSSLPortResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getPort">
+                <xs:complexType>
+                    <xs:sequence />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getPortResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHostname">
+                <xs:complexType>
+                    <xs:sequence />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getHostnameResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getClientID">
+                <xs:complexType>
+                    <xs:sequence />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getClientIDResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAccessKey">
+                <xs:complexType>
+                    <xs:sequence />
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAccessKeyResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getAccessKeyRequest">
+        <wsdl:part name="parameters" element="ns:getAccessKey" />
+    </wsdl:message>
+    <wsdl:message name="getAccessKeyResponse">
+        <wsdl:part name="parameters" element="ns:getAccessKeyResponse" />
+    </wsdl:message>
+    <wsdl:message name="getPortRequest">
+        <wsdl:part name="parameters" element="ns:getPort" />
+    </wsdl:message>
+    <wsdl:message name="getPortResponse">
+        <wsdl:part name="parameters" element="ns:getPortResponse" />
+    </wsdl:message>
+    <wsdl:message name="getClientIDRequest">
+        <wsdl:part name="parameters" element="ns:getClientID" />
+    </wsdl:message>
+    <wsdl:message name="getClientIDResponse">
+        <wsdl:part name="parameters" element="ns:getClientIDResponse" />
+    </wsdl:message>
+    <wsdl:message name="getVirtualHostNameRequest">
+        <wsdl:part name="parameters" element="ns:getVirtualHostName" />
+    </wsdl:message>
+    <wsdl:message name="getVirtualHostNameResponse">
+        <wsdl:part name="parameters" element="ns:getVirtualHostNameResponse" />
+    </wsdl:message>
+    <wsdl:message name="getHostnameRequest">
+        <wsdl:part name="parameters" element="ns:getHostname" />
+    </wsdl:message>
+    <wsdl:message name="getHostnameResponse">
+        <wsdl:part name="parameters" element="ns:getHostnameResponse" />
+    </wsdl:message>
+    <wsdl:message name="getSSLPortRequest">
+        <wsdl:part name="parameters" element="ns:getSSLPort" />
+    </wsdl:message>
+    <wsdl:message name="getSSLPortResponse">
+        <wsdl:part name="parameters" element="ns:getSSLPortResponse" />
+    </wsdl:message>
+    <wsdl:portType name="QpidAdminServicePortType">
+        <wsdl:operation name="getAccessKey">
+            <wsdl:input message="ns:getAccessKeyRequest" wsaw:Action="urn:getAccessKey" />
+            <wsdl:output message="ns:getAccessKeyResponse" wsaw:Action="urn:getAccessKeyResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="getPort">
+            <wsdl:input message="ns:getPortRequest" wsaw:Action="urn:getPort" />
+            <wsdl:output message="ns:getPortResponse" wsaw:Action="urn:getPortResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="getClientID">
+            <wsdl:input message="ns:getClientIDRequest" wsaw:Action="urn:getClientID" />
+            <wsdl:output message="ns:getClientIDResponse" wsaw:Action="urn:getClientIDResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="getVirtualHostName">
+            <wsdl:input message="ns:getVirtualHostNameRequest" wsaw:Action="urn:getVirtualHostName" />
+            <wsdl:output message="ns:getVirtualHostNameResponse" wsaw:Action="urn:getVirtualHostNameResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="getHostname">
+            <wsdl:input message="ns:getHostnameRequest" wsaw:Action="urn:getHostname" />
+            <wsdl:output message="ns:getHostnameResponse" wsaw:Action="urn:getHostnameResponse" />
+        </wsdl:operation>
+        <wsdl:operation name="getSSLPort">
+            <wsdl:input message="ns:getSSLPortRequest" wsaw:Action="urn:getSSLPort" />
+            <wsdl:output message="ns:getSSLPortResponse" wsaw:Action="urn:getSSLPortResponse" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="QpidAdminServiceSoap11Binding" type="ns:QpidAdminServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="getAccessKey">
+            <soap:operation soapAction="urn:getAccessKey" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getPort">
+            <soap:operation soapAction="urn:getPort" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getClientID">
+            <soap:operation soapAction="urn:getClientID" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getVirtualHostName">
+            <soap:operation soapAction="urn:getVirtualHostName" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getHostname">
+            <soap:operation soapAction="urn:getHostname" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSSLPort">
+            <soap:operation soapAction="urn:getSSLPort" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="QpidAdminServiceSoap12Binding" type="ns:QpidAdminServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="getAccessKey">
+            <soap12:operation soapAction="urn:getAccessKey" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getPort">
+            <soap12:operation soapAction="urn:getPort" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getClientID">
+            <soap12:operation soapAction="urn:getClientID" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getVirtualHostName">
+            <soap12:operation soapAction="urn:getVirtualHostName" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getHostname">
+            <soap12:operation soapAction="urn:getHostname" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSSLPort">
+            <soap12:operation soapAction="urn:getSSLPort" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="QpidAdminServiceHttpBinding" type="ns:QpidAdminServicePortType">
+        <http:binding verb="POST" />
+        <wsdl:operation name="getAccessKey">
+            <http:operation location="getAccessKey" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getPort">
+            <http:operation location="getPort" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getClientID">
+            <http:operation location="getClientID" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getVirtualHostName">
+            <http:operation location="getVirtualHostName" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getHostname">
+            <http:operation location="getHostname" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSSLPort">
+            <http:operation location="getSSLPort" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="QpidAdminService">
+        <wsdl:port name="QpidAdminServiceHttpsSoap11Endpoint" binding="ns:QpidAdminServiceSoap11Binding">
+            <soap:address location="https://10.100.3.89:9443/services/QpidAdminService.QpidAdminServiceHttpsSoap11Endpoint/" />
+        </wsdl:port>
+        <wsdl:port name="QpidAdminServiceHttpsSoap12Endpoint" binding="ns:QpidAdminServiceSoap12Binding">
+            <soap12:address location="https://10.100.3.89:9443/services/QpidAdminService.QpidAdminServiceHttpsSoap12Endpoint/" />
+        </wsdl:port>
+        <wsdl:port name="QpidAdminServiceHttpsEndpoint" binding="ns:QpidAdminServiceHttpBinding">
+            <http:address location="https://10.100.3.89:9443/services/QpidAdminService.QpidAdminServiceHttpsEndpoint/" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

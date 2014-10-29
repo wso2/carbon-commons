@@ -1,0 +1,726 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://admin.core.remotetasks.carbon.wso2.org" xmlns:ax2202="http://common.remotetasks.carbon.wso2.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://admin.core.remotetasks.carbon.wso2.org">
+    <wsdl:documentation>RemoteTaskAdmin</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://common.remotetasks.carbon.wso2.org/xsd">
+            <xs:complexType name="RemoteTasksException">
+                <xs:sequence/>
+            </xs:complexType>
+            <xs:complexType name="TriggerInformation">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="cronExpression" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="endTime" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="startTime" nillable="true" type="xs:dateTime"/>
+                    <xs:element minOccurs="0" name="taskCount" type="xs:int"/>
+                    <xs:element minOccurs="0" name="taskInterval" type="xs:int"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DeployedTaskInformation">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="staticTaskInfo" nillable="true" type="ax2202:StaticTaskInformation"/>
+                    <xs:element minOccurs="0" name="status" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="StaticTaskInformation">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="allowConcurrentExecutions" type="xs:boolean"/>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="targetURI" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="triggerInformation" nillable="true" type="ax2202:TriggerInformation"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2203="http://common.remotetasks.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://admin.core.remotetasks.carbon.wso2.org">
+            <xs:import namespace="http://common.remotetasks.carbon.wso2.org/xsd"/>
+            <xs:element name="RemoteTaskAdminRemoteTasksException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="RemoteTasksException" nillable="true" type="ax2203:RemoteTasksException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="resumeRemoteTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="resumeRemoteSystemTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="targetTenantId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="rescheduleRemoteTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="taskName" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="stTriggerInfo" nillable="true" type="ax2203:TriggerInformation"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="rescheduleRemoteSystemTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="taskName" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="stTriggerInfo" nillable="true" type="ax2203:TriggerInformation"/>
+                        <xs:element minOccurs="0" name="targetTenantId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="pauseRemoteTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="pauseRemoteSystemTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="targetTenantId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRemoteTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRemoteTaskResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2203:DeployedTaskInformation"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRemoteSystemTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="targetTenantId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRemoteSystemTaskResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2203:DeployedTaskInformation"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllRemoteTasks">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllRemoteTasksResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllRemoteSystemTasks">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="targetTenantId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllRemoteSystemTasksResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteRemoteTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteRemoteTaskResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteRemoteSystemTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="name" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="targetTenantId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="deleteRemoteSystemTaskResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addRemoteTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="taskInfo" nillable="true" type="ax2203:StaticTaskInformation"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addRemoteSystemTask">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="taskInfo" nillable="true" type="ax2203:StaticTaskInformation"/>
+                        <xs:element minOccurs="0" name="targetTenantId" type="xs:int"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getAllRemoteTasksRequest">
+        <wsdl:part name="parameters" element="ns:getAllRemoteTasks"/>
+    </wsdl:message>
+    <wsdl:message name="getAllRemoteTasksResponse">
+        <wsdl:part name="parameters" element="ns:getAllRemoteTasksResponse"/>
+    </wsdl:message>
+    <wsdl:message name="RemoteTaskAdminRemoteTasksException">
+        <wsdl:part name="parameters" element="ns:RemoteTaskAdminRemoteTasksException"/>
+    </wsdl:message>
+    <wsdl:message name="addRemoteTaskRequest">
+        <wsdl:part name="parameters" element="ns:addRemoteTask"/>
+    </wsdl:message>
+    <wsdl:message name="pauseRemoteSystemTaskRequest">
+        <wsdl:part name="parameters" element="ns:pauseRemoteSystemTask"/>
+    </wsdl:message>
+    <wsdl:message name="deleteRemoteTaskRequest">
+        <wsdl:part name="parameters" element="ns:deleteRemoteTask"/>
+    </wsdl:message>
+    <wsdl:message name="deleteRemoteTaskResponse">
+        <wsdl:part name="parameters" element="ns:deleteRemoteTaskResponse"/>
+    </wsdl:message>
+    <wsdl:message name="pauseRemoteTaskRequest">
+        <wsdl:part name="parameters" element="ns:pauseRemoteTask"/>
+    </wsdl:message>
+    <wsdl:message name="getRemoteTaskRequest">
+        <wsdl:part name="parameters" element="ns:getRemoteTask"/>
+    </wsdl:message>
+    <wsdl:message name="getRemoteTaskResponse">
+        <wsdl:part name="parameters" element="ns:getRemoteTaskResponse"/>
+    </wsdl:message>
+    <wsdl:message name="deleteRemoteSystemTaskRequest">
+        <wsdl:part name="parameters" element="ns:deleteRemoteSystemTask"/>
+    </wsdl:message>
+    <wsdl:message name="deleteRemoteSystemTaskResponse">
+        <wsdl:part name="parameters" element="ns:deleteRemoteSystemTaskResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getAllRemoteSystemTasksRequest">
+        <wsdl:part name="parameters" element="ns:getAllRemoteSystemTasks"/>
+    </wsdl:message>
+    <wsdl:message name="getAllRemoteSystemTasksResponse">
+        <wsdl:part name="parameters" element="ns:getAllRemoteSystemTasksResponse"/>
+    </wsdl:message>
+    <wsdl:message name="rescheduleRemoteSystemTaskRequest">
+        <wsdl:part name="parameters" element="ns:rescheduleRemoteSystemTask"/>
+    </wsdl:message>
+    <wsdl:message name="resumeRemoteTaskRequest">
+        <wsdl:part name="parameters" element="ns:resumeRemoteTask"/>
+    </wsdl:message>
+    <wsdl:message name="resumeRemoteSystemTaskRequest">
+        <wsdl:part name="parameters" element="ns:resumeRemoteSystemTask"/>
+    </wsdl:message>
+    <wsdl:message name="getRemoteSystemTaskRequest">
+        <wsdl:part name="parameters" element="ns:getRemoteSystemTask"/>
+    </wsdl:message>
+    <wsdl:message name="getRemoteSystemTaskResponse">
+        <wsdl:part name="parameters" element="ns:getRemoteSystemTaskResponse"/>
+    </wsdl:message>
+    <wsdl:message name="addRemoteSystemTaskRequest">
+        <wsdl:part name="parameters" element="ns:addRemoteSystemTask"/>
+    </wsdl:message>
+    <wsdl:message name="rescheduleRemoteTaskRequest">
+        <wsdl:part name="parameters" element="ns:rescheduleRemoteTask"/>
+    </wsdl:message>
+    <wsdl:portType name="RemoteTaskAdminPortType">
+        <wsdl:operation name="getAllRemoteTasks">
+            <wsdl:input message="ns:getAllRemoteTasksRequest" wsaw:Action="urn:getAllRemoteTasks"/>
+            <wsdl:output message="ns:getAllRemoteTasksResponse" wsaw:Action="urn:getAllRemoteTasksResponse"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:getAllRemoteTasksRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="addRemoteTask">
+            <wsdl:input message="ns:addRemoteTaskRequest" wsaw:Action="urn:addRemoteTask"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:addRemoteTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="pauseRemoteSystemTask">
+            <wsdl:input message="ns:pauseRemoteSystemTaskRequest" wsaw:Action="urn:pauseRemoteSystemTask"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:pauseRemoteSystemTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="deleteRemoteTask">
+            <wsdl:input message="ns:deleteRemoteTaskRequest" wsaw:Action="urn:deleteRemoteTask"/>
+            <wsdl:output message="ns:deleteRemoteTaskResponse" wsaw:Action="urn:deleteRemoteTaskResponse"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:deleteRemoteTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="pauseRemoteTask">
+            <wsdl:input message="ns:pauseRemoteTaskRequest" wsaw:Action="urn:pauseRemoteTask"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:pauseRemoteTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteTask">
+            <wsdl:input message="ns:getRemoteTaskRequest" wsaw:Action="urn:getRemoteTask"/>
+            <wsdl:output message="ns:getRemoteTaskResponse" wsaw:Action="urn:getRemoteTaskResponse"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:getRemoteTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="deleteRemoteSystemTask">
+            <wsdl:input message="ns:deleteRemoteSystemTaskRequest" wsaw:Action="urn:deleteRemoteSystemTask"/>
+            <wsdl:output message="ns:deleteRemoteSystemTaskResponse" wsaw:Action="urn:deleteRemoteSystemTaskResponse"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:deleteRemoteSystemTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAllRemoteSystemTasks">
+            <wsdl:input message="ns:getAllRemoteSystemTasksRequest" wsaw:Action="urn:getAllRemoteSystemTasks"/>
+            <wsdl:output message="ns:getAllRemoteSystemTasksResponse" wsaw:Action="urn:getAllRemoteSystemTasksResponse"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:getAllRemoteSystemTasksRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="rescheduleRemoteSystemTask">
+            <wsdl:input message="ns:rescheduleRemoteSystemTaskRequest" wsaw:Action="urn:rescheduleRemoteSystemTask"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:rescheduleRemoteSystemTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="resumeRemoteTask">
+            <wsdl:input message="ns:resumeRemoteTaskRequest" wsaw:Action="urn:resumeRemoteTask"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:resumeRemoteTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="resumeRemoteSystemTask">
+            <wsdl:input message="ns:resumeRemoteSystemTaskRequest" wsaw:Action="urn:resumeRemoteSystemTask"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:resumeRemoteSystemTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteSystemTask">
+            <wsdl:input message="ns:getRemoteSystemTaskRequest" wsaw:Action="urn:getRemoteSystemTask"/>
+            <wsdl:output message="ns:getRemoteSystemTaskResponse" wsaw:Action="urn:getRemoteSystemTaskResponse"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:getRemoteSystemTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="addRemoteSystemTask">
+            <wsdl:input message="ns:addRemoteSystemTaskRequest" wsaw:Action="urn:addRemoteSystemTask"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:addRemoteSystemTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+        <wsdl:operation name="rescheduleRemoteTask">
+            <wsdl:input message="ns:rescheduleRemoteTaskRequest" wsaw:Action="urn:rescheduleRemoteTask"/>
+            <wsdl:fault message="ns:RemoteTaskAdminRemoteTasksException" name="RemoteTaskAdminRemoteTasksException" wsaw:Action="urn:rescheduleRemoteTaskRemoteTaskAdminRemoteTasksException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="RemoteTaskAdminSoap11Binding" type="ns:RemoteTaskAdminPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getAllRemoteTasks">
+            <soap:operation soapAction="urn:getAllRemoteTasks" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addRemoteTask">
+            <soap:operation soapAction="urn:addRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="pauseRemoteSystemTask">
+            <soap:operation soapAction="urn:pauseRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteRemoteTask">
+            <soap:operation soapAction="urn:deleteRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="pauseRemoteTask">
+            <soap:operation soapAction="urn:pauseRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteTask">
+            <soap:operation soapAction="urn:getRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteRemoteSystemTask">
+            <soap:operation soapAction="urn:deleteRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="rescheduleRemoteSystemTask">
+            <soap:operation soapAction="urn:rescheduleRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllRemoteSystemTasks">
+            <soap:operation soapAction="urn:getAllRemoteSystemTasks" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="resumeRemoteSystemTask">
+            <soap:operation soapAction="urn:resumeRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="resumeRemoteTask">
+            <soap:operation soapAction="urn:resumeRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteSystemTask">
+            <soap:operation soapAction="urn:getRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addRemoteSystemTask">
+            <soap:operation soapAction="urn:addRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="rescheduleRemoteTask">
+            <soap:operation soapAction="urn:rescheduleRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="RemoteTaskAdminSoap12Binding" type="ns:RemoteTaskAdminPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="getAllRemoteTasks">
+            <soap12:operation soapAction="urn:getAllRemoteTasks" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addRemoteTask">
+            <soap12:operation soapAction="urn:addRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="pauseRemoteSystemTask">
+            <soap12:operation soapAction="urn:pauseRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteRemoteTask">
+            <soap12:operation soapAction="urn:deleteRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="pauseRemoteTask">
+            <soap12:operation soapAction="urn:pauseRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteTask">
+            <soap12:operation soapAction="urn:getRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="deleteRemoteSystemTask">
+            <soap12:operation soapAction="urn:deleteRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="rescheduleRemoteSystemTask">
+            <soap12:operation soapAction="urn:rescheduleRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllRemoteSystemTasks">
+            <soap12:operation soapAction="urn:getAllRemoteSystemTasks" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="resumeRemoteSystemTask">
+            <soap12:operation soapAction="urn:resumeRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="resumeRemoteTask">
+            <soap12:operation soapAction="urn:resumeRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteSystemTask">
+            <soap12:operation soapAction="urn:getRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addRemoteSystemTask">
+            <soap12:operation soapAction="urn:addRemoteSystemTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="rescheduleRemoteTask">
+            <soap12:operation soapAction="urn:rescheduleRemoteTask" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteTaskAdminRemoteTasksException">
+                <soap12:fault use="literal" name="RemoteTaskAdminRemoteTasksException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="RemoteTaskAdminHttpBinding" type="ns:RemoteTaskAdminPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="getAllRemoteTasks">
+            <http:operation location="getAllRemoteTasks"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="addRemoteTask">
+            <http:operation location="addRemoteTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="pauseRemoteSystemTask">
+            <http:operation location="pauseRemoteSystemTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="deleteRemoteTask">
+            <http:operation location="deleteRemoteTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="pauseRemoteTask">
+            <http:operation location="pauseRemoteTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteTask">
+            <http:operation location="getRemoteTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="deleteRemoteSystemTask">
+            <http:operation location="deleteRemoteSystemTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="rescheduleRemoteSystemTask">
+            <http:operation location="rescheduleRemoteSystemTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getAllRemoteSystemTasks">
+            <http:operation location="getAllRemoteSystemTasks"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="resumeRemoteSystemTask">
+            <http:operation location="resumeRemoteSystemTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="resumeRemoteTask">
+            <http:operation location="resumeRemoteTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteSystemTask">
+            <http:operation location="getRemoteSystemTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="addRemoteSystemTask">
+            <http:operation location="addRemoteSystemTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="rescheduleRemoteTask">
+            <http:operation location="rescheduleRemoteTask"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="RemoteTaskAdmin">
+        <wsdl:port name="RemoteTaskAdminHttpsSoap11Endpoint" binding="ns:RemoteTaskAdminSoap11Binding">
+            <soap:address location="https://10.100.3.43:9443/services/RemoteTaskAdmin.RemoteTaskAdminHttpsSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="RemoteTaskAdminHttpsSoap12Endpoint" binding="ns:RemoteTaskAdminSoap12Binding">
+            <soap12:address location="https://10.100.3.43:9443/services/RemoteTaskAdmin.RemoteTaskAdminHttpsSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="RemoteTaskAdminHttpsEndpoint" binding="ns:RemoteTaskAdminHttpBinding">
+            <http:address location="https://10.100.3.43:9443/services/RemoteTaskAdmin.RemoteTaskAdminHttpsEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

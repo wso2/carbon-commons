@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?><jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="master" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" isFloatColumnFooter="true">
+	<property name="ireport.zoom" value="1.0" />
+	<property name="ireport.x" value="0" />
+	<property name="ireport.y" value="0" />
+	<style name="Sans_Normal" isDefault="true" fontName="DejaVu Sans" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" />
+	<style name="Title" mode="Opaque" forecolor="#FF2EFF" backcolor="#FAC6E3" fontName="Arial" fontSize="20" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" />
+
+	<parameter name="TableDataSource1" class="net.sf.jasperreports.engine.JRDataSource" />
+    <parameter name="TableReport" class="net.sf.jasperreports.engine.JasperReport" />
+<title>
+<band height="500">
+<subreport>
+	<reportElement isPrintRepeatedValues="false" x="0" y="0" width="325" height="20" isRemoveLineWhenBlank="true" positionType="Float"/>
+	<subreportParameter name="TableDataSource">
+		<subreportParameterExpression><![CDATA[$P{TableDataSource1}]]></subreportParameterExpression>
+	</subreportParameter>
+	<subreportExpression class="net.sf.jasperreports.engine.JasperReport"></subreportExpression>
+</subreport>
+</band>
+</title>
+</jasperReport>

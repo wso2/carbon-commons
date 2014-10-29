@@ -1,0 +1,5 @@
+instructions.configure = \
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.logging.mgt.server_${feature.version}/conf/logging-config.xml,target:${installFolder}/../../conf/etc/logging-config.xml,overwrite:true);\
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.logging.mgt.server_${feature.version}/conf/log4j.properties,target:${installFolder}/../../conf/log4j.properties,overwrite:true);\
+
+
