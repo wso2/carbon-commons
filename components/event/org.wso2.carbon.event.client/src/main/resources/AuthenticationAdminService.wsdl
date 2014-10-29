@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax21="http://authentication.services.core.carbon.wso2.org/xsd" xmlns:ns="http://authentication.services.core.carbon.wso2.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://authentication.services.core.carbon.wso2.org">
+    <wsdl:types>
+        <xs:schema xmlns:ax23="http://authentication.services.core.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://authentication.services.core.carbon.wso2.org">
+            <xs:import namespace="http://authentication.services.core.carbon.wso2.org/xsd"/>
+            <xs:complexType name="Exception">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="AuthenticationException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="AuthenticationException" nillable="true" type="ax21:AuthenticationException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loginWithDelegation">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="password" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="authenticatedUser" nillable="true" type="xs:string" />
+                        <xs:element minOccurs="0" name="remoteAddress" nillable="true" type="xs:string" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loginWithDelegationResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="login">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="remoteAddress" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="loginResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="Exception">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="Exception" nillable="true" type="ns:Exception"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemPermissionOfUser">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getSystemPermissionOfUserResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax22="http://authentication.services.core.carbon.wso2.org" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://authentication.services.core.carbon.wso2.org/xsd">
+            <xs:import namespace="http://authentication.services.core.carbon.wso2.org"/>
+            <xs:complexType name="AuthenticationException">
+                <xs:complexContent>
+                    <xs:extension base="ax22:Exception">
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="logoutRequest"/>
+    <wsdl:message name="AuthenticationException">
+        <wsdl:part name="parameters" element="ns:AuthenticationException"/>
+    </wsdl:message>
+    <wsdl:message name="loginRequest">
+        <wsdl:part name="parameters" element="ns:login"/>
+    </wsdl:message>
+    <wsdl:message name="loginResponse">
+        <wsdl:part name="parameters" element="ns:loginResponse"/>
+    </wsdl:message>
+     <wsdl:message name="loginWithDelegationRequest">
+        <wsdl:part name="parameters" element="ns:loginWithDelegation" />
+    </wsdl:message>
+    <wsdl:message name="loginWithDelegationResponse">
+        <wsdl:part name="parameters" element="ns:loginWithDelegationResponse" />
+    </wsdl:message>
+    <wsdl:message name="getSystemPermissionOfUserRequest">
+        <wsdl:part name="parameters" element="ns:getSystemPermissionOfUser"/>
+    </wsdl:message>
+    <wsdl:message name="getSystemPermissionOfUserResponse">
+        <wsdl:part name="parameters" element="ns:getSystemPermissionOfUserResponse"/>
+    </wsdl:message>
+    <wsdl:message name="Exception">
+        <wsdl:part name="parameters" element="ns:Exception"/>
+    </wsdl:message>
+    <wsdl:portType name="AuthenticationAdminServicePortType">
+        <wsdl:operation name="logout">
+            <wsdl:input message="ns:logoutRequest" wsaw:Action="urn:logout"/>
+            <wsdl:fault message="ns:AuthenticationException" name="AuthenticationException" wsaw:Action="urn:logoutAuthenticationException"/>
+        </wsdl:operation>
+        <wsdl:operation name="login">
+            <wsdl:input message="ns:loginRequest" wsaw:Action="urn:login"/>
+            <wsdl:output message="ns:loginResponse" wsaw:Action="urn:loginResponse"/>
+            <wsdl:fault message="ns:AuthenticationException" name="AuthenticationException" wsaw:Action="urn:loginAuthenticationException"/>
+        </wsdl:operation>
+        <wsdl:operation name="loginWithDelegation">
+            <wsdl:input message="ns:loginWithDelegationRequest" wsaw:Action="urn:loginWithDelegation" />
+            <wsdl:output message="ns:loginWithDelegationResponse" wsaw:Action="urn:loginWithDelegationResponse" />
+            <wsdl:fault message="ns:AuthenticationException" name="AuthenticationException" wsaw:Action="urn:loginWithDelegationAuthenticationException" />
+        </wsdl:operation>
+        <wsdl:operation name="getSystemPermissionOfUser">
+            <wsdl:input message="ns:getSystemPermissionOfUserRequest" wsaw:Action="urn:getSystemPermissionOfUser"/>
+            <wsdl:output message="ns:getSystemPermissionOfUserResponse" wsaw:Action="urn:getSystemPermissionOfUserResponse"/>
+            <wsdl:fault message="ns:Exception" name="Exception" wsaw:Action="urn:getSystemPermissionOfUserException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="AuthenticationAdminServiceSoap11Binding" type="ns:AuthenticationAdminServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="logout">
+            <soap:operation soapAction="urn:logout" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="AuthenticationException">
+                <soap:fault use="literal" name="AuthenticationException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="login">
+            <soap:operation soapAction="urn:login" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="AuthenticationException">
+                <soap:fault use="literal" name="AuthenticationException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="loginWithDelegation">
+            <soap:operation soapAction="urn:loginWithDelegation" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="AuthenticationException">
+                <soap:fault use="literal" name="AuthenticationException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemPermissionOfUser">
+            <soap:operation soapAction="urn:getSystemPermissionOfUser" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="Exception">
+                <soap:fault use="literal" name="Exception"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="AuthenticationAdminServiceSoap12Binding" type="ns:AuthenticationAdminServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="logout">
+            <soap12:operation soapAction="urn:logout" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="AuthenticationException">
+                <soap12:fault use="literal" name="AuthenticationException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="login">
+            <soap12:operation soapAction="urn:login" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="AuthenticationException">
+                <soap12:fault use="literal" name="AuthenticationException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="loginWithDelegation">
+            <soap12:operation soapAction="urn:loginWithDelegation" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="AuthenticationException">
+                <soap12:fault use="literal" name="AuthenticationException" />
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemPermissionOfUser">
+            <soap12:operation soapAction="urn:getSystemPermissionOfUser" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="Exception">
+                <soap12:fault use="literal" name="Exception"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="AuthenticationAdminServiceHttpBinding" type="ns:AuthenticationAdminServicePortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="logout">
+            <http:operation location="AuthenticationAdminService/logout"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="logout"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="login">
+            <http:operation location="AuthenticationAdminService/login"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="login"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="login"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="loginWithDelegation">
+            <http:operation location="loginWithDelegation" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="loginWithDelegation" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="loginWithDelegation" />
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getSystemPermissionOfUser">
+            <http:operation location="AuthenticationAdminService/getSystemPermissionOfUser"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="getSystemPermissionOfUser"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getSystemPermissionOfUser"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="AuthenticationAdminService">
+        <wsdl:port name="AuthenticationAdminServiceHttpSoap11Endpoint" binding="ns:AuthenticationAdminServiceSoap11Binding">
+            <soap:address location="http://localhost:8080/axis2/services/AuthenticationAdminService"/>
+        </wsdl:port>
+        <wsdl:port name="AuthenticationAdminServiceHttpSoap12Endpoint" binding="ns:AuthenticationAdminServiceSoap12Binding">
+            <soap12:address location="http://localhost:8080/axis2/services/AuthenticationAdminService"/>
+        </wsdl:port>
+        <wsdl:port name="AuthenticationAdminServiceHttpEndpoint" binding="ns:AuthenticationAdminServiceHttpBinding">
+            <http:address location="http://localhost:8080/axis2/services/AuthenticationAdminService"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

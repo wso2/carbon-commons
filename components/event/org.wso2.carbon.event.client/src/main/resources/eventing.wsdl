@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+(c) 2004 BEA Systems Inc., International Business Machines Corporation, Microsoft Corporation, Inc, Sun Microsytems, Inc, and TIBCO Software Inc. All rights reserved.
+
+BEA Systems Inc., International Business Machines Corporation, Microsoft Corporation, Inc, Sun Microsystems, Inc, and TIBCO Software Inc (collectively, the "Authors") hereby grant you permission to copy and display the WS-Eventing Specification (the "Specification", which includes WSDL and schema documents), in any medium without fee or royalty, provided that you include the following on ALL copies of the Specification, that you make:
+
+1.	A link or URL to the WS-Eventing Specification at one of the Authors' websites 
+2.	The copyright notice as shown in the WS-Eventing Specification. 
+
+BEA, IBM, Microsoft, Sun, and TIBCO (collectively, the "Authors") each agree to grant you a license, under royalty-free and otherwise reasonable, non-discriminatory terms and conditions, to their respective essential patent claims that they deem necessary to implement the Specification. 
+
+THE SPECIFICATION IS PROVIDED "AS IS," AND THE AUTHORS MAKE NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR TITLE; THAT THE CONTENTS OF THE SPECIFICATION ARE SUITABLE FOR ANY PURPOSE; NOR THAT THE IMPLEMENTATION OF SUCH CONTENTS WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS. 
+
+THE AUTHORS WILL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR RELATING TO ANY USE OR DISTRIBUTION OF THE SPECIFICATION. 
+
+The name and trademarks of the Authors may NOT be used in any manner, including advertising or publicity pertaining to the Specification or its contents without specific, written prior permission. Title to copyright in the Specification will at all times remain with the Authors. 
+
+No other rights are granted by implication, estoppel or otherwise.
+-->
+
+<wsdl:definitions
+  targetNamespace="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" 
+  xmlns:wse="http://schemas.xmlsoap.org/ws/2004/08/eventing" 
+  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+  xmlns:tns="http://schemas.xmlsoap.org/ws/2004/08/eventing"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" >
+
+  <wsdl:types>
+    <xs:schema>
+       <xs:import  namespace="http://schemas.xmlsoap.org/ws/2004/08/eventing" schemaLocation="eventing.xsd" />
+    </xs:schema>
+  </wsdl:types>
+  
+  <wsdl:message name="SubscribeMsg" >
+    <wsdl:part name="parameters" element="wse:Subscribe" />
+  </wsdl:message>
+  <wsdl:message name="SubscribeResponseMsg" >
+    <wsdl:part name="parameters" element="wse:SubscribeResponse" />
+  </wsdl:message>
+  
+  <wsdl:message name="RenewMsg" >
+    <wsdl:part name="parameters" element="wse:Renew" />
+  </wsdl:message>
+  <wsdl:message name="RenewResponseMsg" >
+    <wsdl:part name="parameters" element="wse:RenewResponse" />
+  </wsdl:message>
+  
+  <wsdl:message name="GetStatusMsg" >
+    <wsdl:part name="parameters" element="wse:GetStatus" />
+  </wsdl:message>
+  <wsdl:message name="GetStatusResponseMsg" >
+    <wsdl:part name="parameters" element="wse:GetStatusResponse" />
+  </wsdl:message>
+  
+  <wsdl:message name="UnsubscribeMsg" >
+    <wsdl:part name="parameters" element="wse:Unsubscribe" />
+  </wsdl:message>
+  <wsdl:message name="UnsubscribeResponseMsg" />
+ 
+  <wsdl:message name="SubscriptionEnd" >
+    <wsdl:part name="parameters" element="wse:SubscriptionEnd" />
+  </wsdl:message>
+  
+  <wsdl:portType name="SecEventProxyPortType" >
+    <wsdl:operation name="mediate">
+      <wsdl:input message="tns:SubscribeMsg" wsa:Action="http://schemas.xmlsoap.org/ws/2004/08/eventing/Subscribe"/>
+      <wsdl:output message="tns:SubscribeResponseMsg" wsa:Action="http://schemas.xmlsoap.org/ws/2004/08/eventing/SubscribeResponse"/>
+    </wsdl:operation>
+  </wsdl:portType> 
+
+   <wsdl:binding name="SecEventProxy"
+                  type="tns:SecEventProxyPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="mediate">
+            <soap:operation soapAction="urn:mediate" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <wsdl:service name="SimpleEventSource">
+        <wsdl:port name="SimpleEventSource_http"
+                   binding="tns:SecEventProxy">
+            <soap:address location="http://localhost:8280/services/SampleEventSource"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
+

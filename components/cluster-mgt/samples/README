@@ -1,0 +1,45 @@
+How to run the cluster management sample
+----------------------------------------
+
+Manual Method
+-------------
+1. Download a WSO2 Carbon distribution or any WSO2 product that adheres to the
+WSO2 Carbon architecture.
+
+2. Extract the distribution downloaded in step 1, say the extracted directory is
+wso2carbon.
+
+3. Make 3 copies of the wso2carbon directory created in step 2, say wso2carbon-CM,
+wso2carbon-1 & wso2carbon-2. wso2carbon-CM is going to be the cluster manager &
+wso2carbon-1 is going to be a member in group1, and wso2carbon-2 is going to be
+a member in group2.
+
+4. copy the conf directories found in this sample to the respective directories
+created in step 3. Replace all existing configurations files.
+
+5. Copy the org.wso2.carbon.cluster.mgt.core-<version>.jar to the
+$CARBON/webapps/ROOT/WEB-INF/plugins directory in all 3 directories created in
+step 3.
+
+6. Copy the org.wso2.carbon.cluster.mgt.admin-<version>.jar &
+org.wso2.carbon.cluster.mgt.admin.ui-<version>.jar files to the
+wso2carbon-CM/webapps/ROOT/WEB-INF/plugins directory
+
+7. Run the 3 WSO2 Carbon instances.
+
+8. Point your Web browser to https://localhost:9443/carbon. You should
+see the cluster management menu in the Management Console.
+
+Automatic Method
+----------------
+1. Download a WSO2 Carbon distribution or any WSO2 product that adheres to the
+WSO2 Carbon architecture.
+
+2. Extract the distribution downloaded in step 1, say the extracted directory is
+wso2carbon.
+
+3. In this cluster management distribution, go to the sample1 directory and run;
+ant -Dcarbon.home=<carbon_home> -Dclustermgt.home=<clustermgt_home>
+
+Here carbon_home is the extracted directory in step2 & clustermgt_home is
+the directory where this cluster management component is extracted to.
