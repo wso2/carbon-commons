@@ -441,18 +441,22 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         tries++;
                         if (svnClient instanceof CmdLineClientAdapter) {
                             // CmdLineClientAdapter does not support all the options
-                            lastRevisionNumber = svnClient.getSingleStatus(root).getLastChangedRevision().getNumber();
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
                             newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
                             if (log.isDebugEnabled()) {
-                                log.debug(" files were updated to revision number: " + newRevisionNumber + " using CmdLineClientAdapter");
+                                log.debug(" files were updated to revision number: " +
+                                        newRevisionNumber + " using CmdLineClientAdapter");
                             }
                         } else {
-                            lastRevisionNumber = svnClient.getSingleStatus(root).getLastChangedRevision().getNumber();
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
                             newRevisionNumber = svnClient.update(root, SVNRevision.HEAD,
                                     Depth.infinity, NO_SET_DEPTH,
                                     ignoreExternals, forceUpdate);
                             if (log.isDebugEnabled()) {
-                                log.debug("files were updated to revision number: " + newRevisionNumber + " using SVN Kit");
+                                log.debug("files were updated to revision number: " +
+                                        newRevisionNumber + " using SVN Kit");
                             }
                         }
                         break;
@@ -619,15 +623,19 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         tries++;
                         if (svnClient instanceof CmdLineClientAdapter) {
                             // CmdLineClientAdapter does not support all the options
-                            lastRevisionNumber = svnClient.getSingleStatus(root).getLastChangedRevision().getNumber();
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
                             newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
-                            log.info("files were updated to revision number: " + newRevisionNumber + " using CmdLineClientAdapter");
+                            log.info("files were updated to revision number: " + newRevisionNumber +
+                                    " using CmdLineClientAdapter");
                         } else {
-                            lastRevisionNumber = svnClient.getSingleStatus(root).getLastChangedRevision().getNumber();
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
                             newRevisionNumber = svnClient.update(root, SVNRevision.HEAD,
                                                             depth, NO_SET_DEPTH,
                                                             ignoreExternals, forceUpdate);
-                            log.info("files were updated to revision number: " + newRevisionNumber + " using SVN Kit");
+                            log.info("files were updated to revision number: " + newRevisionNumber +
+                                    " using SVN Kit");
                         }
                         break;
                     } catch (SVNClientException e) {
@@ -690,15 +698,19 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                     tries++;
                     if (svnClient instanceof CmdLineClientAdapter) {
                         // CmdLineClientAdapter does not support all the options
-                        lastRevisionNumber = svnClient.getSingleStatus(root).getLastChangedRevision().getNumber();
+                        lastRevisionNumber = svnClient.getSingleStatus(root)
+                                .getLastChangedRevision().getNumber();
                         newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
-                        log.info("files were updated to revision number: " + newRevisionNumber + " using CmdLineClientAdapter");
+                        log.info("files were updated to revision number: " + newRevisionNumber +
+                                " using CmdLineClientAdapter");
                     } else {
-                        lastRevisionNumber = svnClient.getSingleStatus(root).getLastChangedRevision().getNumber();
+                        lastRevisionNumber = svnClient.getSingleStatus(root)
+                                .getLastChangedRevision().getNumber();
                         newRevisionNumber = svnClient.update(root, filePath, SVNRevision.HEAD,
                                                         depth, setDepth,
                                                         ignoreExternals, forceUpdate);
-                        log.info("files were updated to revision number: " + newRevisionNumber + " using SVN Kit");
+                        log.info("files were updated to revision number: " + newRevisionNumber +
+                                " using SVN Kit");
                     }
                     break;
                 } catch (SVNClientException e) {
