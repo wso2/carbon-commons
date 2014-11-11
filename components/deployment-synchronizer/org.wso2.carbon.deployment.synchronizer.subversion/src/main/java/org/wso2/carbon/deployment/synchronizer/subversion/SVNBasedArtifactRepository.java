@@ -432,7 +432,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                 }
                 return true;
             } else {
-                long filesUpdated = -1;
+                long lastRevisionNumber = -1;
+                long newRevisionNumber = -1;
                 svnClient.cleanup(root);
                 int tries = 0;
                 do {
@@ -440,16 +441,22 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         tries++;
                         if (svnClient instanceof CmdLineClientAdapter) {
                             // CmdLineClientAdapter does not support all the options
-                            filesUpdated = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
+                            newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
                             if (log.isDebugEnabled()) {
-                                log.debug(filesUpdated + " files were updated using CmdLineClientAdapter");
+                                log.debug(" files were updated to revision number: " +
+                                        newRevisionNumber + " using CmdLineClientAdapter");
                             }
                         } else {
-                            filesUpdated = svnClient.update(root, SVNRevision.HEAD,
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
+                            newRevisionNumber = svnClient.update(root, SVNRevision.HEAD,
                                     Depth.infinity, NO_SET_DEPTH,
                                     ignoreExternals, forceUpdate);
                             if (log.isDebugEnabled()) {
-                                log.debug(filesUpdated + " files were updated using SVN Kit");
+                                log.debug("files were updated to revision number: " +
+                                        newRevisionNumber + " using SVN Kit");
                             }
                         }
                         break;
@@ -468,7 +475,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         }
                     }
                 } while (tries < 10); // try to recover & retry
-                return filesUpdated > 1;
+                return newRevisionNumber > lastRevisionNumber;
             }
         } catch (SVNClientException e) {
             handleException("Error while checking out or updating artifacts from the " +
@@ -607,7 +614,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                 }
                 return true;
             } else {
-                long filesUpdated = -1;
+                long lastRevisionNumber = -1;
+                long newRevisionNumber = -1;
                 svnClient.cleanup(root);
                 int tries = 0;
                 do {
@@ -615,13 +623,19 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         tries++;
                         if (svnClient instanceof CmdLineClientAdapter) {
                             // CmdLineClientAdapter does not support all the options
-                            filesUpdated = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
-                            log.info(filesUpdated + " files were updated using CmdLineClientAdapter");
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
+                            newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
+                            log.info("files were updated to revision number: " + newRevisionNumber +
+                                    " using CmdLineClientAdapter");
                         } else {
-                            filesUpdated = svnClient.update(root, SVNRevision.HEAD,
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
+                            newRevisionNumber = svnClient.update(root, SVNRevision.HEAD,
                                                             depth, NO_SET_DEPTH,
                                                             ignoreExternals, forceUpdate);
-                            log.info(filesUpdated + " files were updated using SVN Kit");
+                            log.info("files were updated to revision number: " + newRevisionNumber +
+                                    " using SVN Kit");
                         }
                         break;
                     } catch (SVNClientException e) {
@@ -639,7 +653,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         }
                     }
                 } while (tries < 10); // try to recover & retry
-                return filesUpdated > 1;
+                return newRevisionNumber > lastRevisionNumber;
             }
         } catch (SVNClientException e) {
             handleException("Error while checking out or updating artifacts from the " +
@@ -666,7 +680,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
         if (depth == Depth.infinity) {
             setDepth = true;
         }
-        long filesUpdated = -1;
+        long lastRevisionNumber = -1;
+        long newRevisionNumber = -1;
         try {
             svnClient.cleanup(root);
 
@@ -683,13 +698,19 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                     tries++;
                     if (svnClient instanceof CmdLineClientAdapter) {
                         // CmdLineClientAdapter does not support all the options
-                        filesUpdated = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
-                        log.info(filesUpdated + " files were updated using CmdLineClientAdapter");
+                        lastRevisionNumber = svnClient.getSingleStatus(root)
+                                .getLastChangedRevision().getNumber();
+                        newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
+                        log.info("files were updated to revision number: " + newRevisionNumber +
+                                " using CmdLineClientAdapter");
                     } else {
-                        filesUpdated = svnClient.update(root, filePath,SVNRevision.HEAD,
+                        lastRevisionNumber = svnClient.getSingleStatus(root)
+                                .getLastChangedRevision().getNumber();
+                        newRevisionNumber = svnClient.update(root, filePath, SVNRevision.HEAD,
                                                         depth, setDepth,
                                                         ignoreExternals, forceUpdate);
-                        log.info(filesUpdated + " files were updated using SVN Kit");
+                        log.info("files were updated to revision number: " + newRevisionNumber +
+                                " using SVN Kit");
                     }
                     break;
                 } catch (SVNClientException e) {
@@ -707,7 +728,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                     }
                 }
             } while (tries < 10); // try to recover & retry
-            return filesUpdated > 1;
+            return newRevisionNumber > lastRevisionNumber;
         } catch (SVNClientException e) {
             handleException("Error while checking out or updating artifacts from the " +
                             "SVN repository", e);

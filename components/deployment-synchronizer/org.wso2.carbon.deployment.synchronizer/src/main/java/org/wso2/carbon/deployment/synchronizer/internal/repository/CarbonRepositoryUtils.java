@@ -189,7 +189,7 @@ public class CarbonRepositoryUtils {
 
             return config;
         }else{
-            return config;
+            return null;
         }
     }
 

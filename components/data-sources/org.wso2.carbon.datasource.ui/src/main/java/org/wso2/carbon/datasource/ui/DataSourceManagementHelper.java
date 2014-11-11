@@ -214,6 +214,23 @@ public class DataSourceManagementHelper {
             dataSourceInformation.setPoolPreparedStatements(
                     Boolean.parseBoolean(poolstatements.trim()));
         }
+        String removeAbandoned = request.getParameter("removeAbandoned");
+        if (removeAbandoned != null && !"".equals(removeAbandoned)) {
+            dataSourceInformation.setRemoveAbandoned(Boolean.parseBoolean(removeAbandoned));
+        }
+        String removeAbandonedTimeout = request.getParameter("removeAbandonedTimeout");
+        if (removeAbandonedTimeout != null && !"".equals(removeAbandonedTimeout)) {
+            try {
+                dataSourceInformation.setRemoveAbandonedTimeout(
+                        Integer.parseInt(removeAbandonedTimeout));
+            } catch (NumberFormatException e) {
+                handleException(bundle.getString("invalid.remove.abandoned.timeout"));
+            }
+        }
+        String logAbandoned = request.getParameter("logAbandoned");
+        if (logAbandoned != null && !"".equals(logAbandoned)) {
+            dataSourceInformation.setLogAbandoned(Boolean.parseBoolean(logAbandoned));
+        }
         String testonborrow = request.getParameter("testonborrow");
         if (testonborrow != null && !"".equals(testonborrow)) {
             dataSourceInformation.setTestOnBorrow(Boolean.parseBoolean(testonborrow.trim()));

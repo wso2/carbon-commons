@@ -139,7 +139,7 @@ public class ApplicationAdmin extends AbstractAdmin {
         ArrayList<CarbonApplication> appList =
                 AppManagementServiceComponent.getAppManager().getCarbonApps(tenantId);
         for (CarbonApplication carbonApp : appList) {
-            if (appName.equals(carbonApp.getAppNameWithVersion()) || appName.equals(carbonApp.getAppName())) {
+            if (appName.equals(carbonApp.getAppName()) || appName.equals(carbonApp.getAppNameWithVersion())) {
                 currentApp = carbonApp;
             }
         }
