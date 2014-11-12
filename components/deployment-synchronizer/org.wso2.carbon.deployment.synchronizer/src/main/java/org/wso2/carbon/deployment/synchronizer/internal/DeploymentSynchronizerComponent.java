@@ -25,15 +25,20 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
+import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryConfigParameter;
+import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryReferenceHolder;
+import org.wso2.carbon.deployment.synchronizer.registry.RegistryBasedArtifactRepository;
 import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
 import org.wso2.carbon.deployment.synchronizer.internal.repository.CarbonRepositoryUtils;
-import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryReferenceHolder;
-import org.wso2.carbon.deployment.synchronizer.internal.util.ServiceReferenceHolder;
 import org.wso2.carbon.deployment.synchronizer.services.DeploymentSynchronizerService;
+import org.wso2.carbon.deployment.synchronizer.internal.util.ServiceReferenceHolder;
 import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.utils.Axis2ConfigurationContextObserver;
 import org.wso2.carbon.utils.ConfigurationContextService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @scr.component name="org.wso2.carbon.deployment.synchronizer.XXX" immediate="true"
@@ -62,6 +67,11 @@ public class DeploymentSynchronizerComponent {
         ServerConfiguration serverConfig = ServerConfiguration.getInstance();
         DeploymentSynchronizationManager.getInstance().init(serverConfig);
 
+        //Register the Registry Based Artifact Repository
+        ArtifactRepository registryBasedArtifactRepository =  new RegistryBasedArtifactRepository();
+        registryDepSynServiceRegistration =
+                context.getBundleContext().registerService(ArtifactRepository.class.getName(),
+                                                           registryBasedArtifactRepository, null);
 
         try {
             initDeploymentSynchronizerForSuperTenant();
@@ -88,15 +98,11 @@ public class DeploymentSynchronizerComponent {
 
     private void initDeploymentSynchronizerForSuperTenant() throws DeploymentSynchronizerException {
         if (!CarbonRepositoryUtils.isSynchronizerEnabled(MultitenantConstants.SUPER_TENANT_ID)) {
-            if(log.isDebugEnabled()) {
-                log.debug("Cluster artifact synchronization is disabled.");
-            }
-
             return;
         }
 
         if (log.isDebugEnabled()) {
-            log.debug("Initializing the cluster artifact synchronization for super tenant");
+            log.debug("Initializing the deployment synchronizer for super tenant");
         }
 
         CarbonRepositoryUtils.newCarbonRepositorySynchronizer(MultitenantConstants.SUPER_TENANT_ID);

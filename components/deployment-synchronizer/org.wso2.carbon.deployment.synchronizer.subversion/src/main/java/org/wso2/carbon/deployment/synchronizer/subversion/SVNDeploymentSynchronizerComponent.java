@@ -26,9 +26,15 @@ import org.tigris.subversion.svnclientadapter.commandline.CmdLineClientAdapterFa
 import org.tigris.subversion.svnclientadapter.javahl.JhlClientAdapterFactory;
 import org.tigris.subversion.svnclientadapter.svnkit.SvnKitClientAdapterFactory;
 import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
+import org.wso2.carbon.deployment.synchronizer.subversion.util.SVNDataHolder;
+import org.wso2.carbon.tomcat.api.CarbonTomcatService;
 
 /**
  * @scr.component name="org.wso2.carbon.deployment.synchronizer.subversion" immediate="true"
+ * @scr.reference name="carbon.tomcat.service"
+ * interface="org.wso2.carbon.tomcat.api.CarbonTomcatService"
+ * cardinality="0..1" policy="dynamic" bind="setCarbonTomcatService"
+ * unbind="unsetCarbonTomcatService"
  */
 public class SVNDeploymentSynchronizerComponent {
 
@@ -91,4 +97,11 @@ public class SVNDeploymentSynchronizerComponent {
         log.debug("SVN based deployment synchronizer component deactivated");
     }
 
+    protected void setCarbonTomcatService(CarbonTomcatService carbonTomcatService) {
+        SVNDataHolder.getInstance().setCarbonTomcatService(carbonTomcatService);
+    }
+
+    protected void unsetCarbonTomcatService(CarbonTomcatService carbonTomcatService) {
+        SVNDataHolder.getInstance().setCarbonTomcatService(null);
+    }
 }

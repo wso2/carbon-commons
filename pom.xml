@@ -36,6 +36,7 @@
         <module>components/transport-mgt</module>
         <module>components/data-bridge</module>
 	<module>components/ganalytics</module>
+	<module>components/caching-invalidator</module>
 
         <module>features/application-deployers</module>
         <module>features/application-mgt</module>
@@ -44,6 +45,7 @@
         <module>features/transport-mgt</module>
         <module>features/data-bridge</module>
         <module>features/data-sources</module>
+	<module>features/caching-invalidator</module>
     </modules>
 
 
@@ -123,6 +125,11 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.utils</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.tomcat</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
             <dependency>

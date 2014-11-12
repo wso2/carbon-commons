@@ -18,6 +18,9 @@
 
 package org.wso2.carbon.deployment.synchronizer.subversion;
 
+import org.apache.catalina.Container;
+import org.apache.catalina.Host;
+import org.apache.catalina.startup.Tomcat;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,6 +43,8 @@ import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
 import org.wso2.carbon.deployment.synchronizer.internal.repository.CarbonRepositoryUtils;
 import org.wso2.carbon.deployment.synchronizer.internal.util.DeploymentSynchronizerConfiguration;
 import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryConfigParameter;
+import org.wso2.carbon.deployment.synchronizer.subversion.util.SVNDataHolder;
+import org.wso2.carbon.tomcat.api.CarbonTomcatService;
 import org.wso2.carbon.utils.CarbonUtils;
 
 import java.io.File;
@@ -72,6 +77,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
     private Map<Integer, TenantSVNRepositoryContext> tenantSVNRepositories;
 
     private  List<RepositoryConfigParameter> parameters;
+    private List<String> baseDirs;
 
     public SVNBasedArtifactRepository(){
         tenantSVNRepositories = new HashMap<Integer, TenantSVNRepositoryContext>();
@@ -82,6 +88,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
 
         ServerConfiguration serverConfig = ServerConfiguration.getInstance();
         DeploymentSynchronizerConfiguration conf = CarbonRepositoryUtils.getActiveSynchronizerConfiguration(tenantId);
+        baseDirs = getBaseDirs();
 
         String url = null;
         boolean appendTenantId = true;
@@ -432,7 +439,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                 }
                 return true;
             } else {
-                long filesUpdated = -1;
+                long lastRevisionNumber = -1;
+                long newRevisionNumber = -1;
                 svnClient.cleanup(root);
                 int tries = 0;
                 do {
@@ -440,16 +448,22 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         tries++;
                         if (svnClient instanceof CmdLineClientAdapter) {
                             // CmdLineClientAdapter does not support all the options
-                            filesUpdated = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
+                            newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
                             if (log.isDebugEnabled()) {
-                                log.debug(filesUpdated + " files were updated using CmdLineClientAdapter");
+                                log.debug(" files were updated to revision number: " +
+                                        newRevisionNumber + " using CmdLineClientAdapter");
                             }
                         } else {
-                            filesUpdated = svnClient.update(root, SVNRevision.HEAD,
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
+                            newRevisionNumber = svnClient.update(root, SVNRevision.HEAD,
                                     Depth.infinity, NO_SET_DEPTH,
                                     ignoreExternals, forceUpdate);
                             if (log.isDebugEnabled()) {
-                                log.debug(filesUpdated + " files were updated using SVN Kit");
+                                log.debug("files were updated to revision number: " +
+                                        newRevisionNumber + " using SVN Kit");
                             }
                         }
                         break;
@@ -468,7 +482,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         }
                     }
                 } while (tries < 10); // try to recover & retry
-                return filesUpdated > 1;
+                return newRevisionNumber > lastRevisionNumber;
             }
         } catch (SVNClientException e) {
             handleException("Error while checking out or updating artifacts from the " +
@@ -607,7 +621,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                 }
                 return true;
             } else {
-                long filesUpdated = -1;
+                long lastRevisionNumber = -1;
+                long newRevisionNumber = -1;
                 svnClient.cleanup(root);
                 int tries = 0;
                 do {
@@ -615,13 +630,19 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         tries++;
                         if (svnClient instanceof CmdLineClientAdapter) {
                             // CmdLineClientAdapter does not support all the options
-                            filesUpdated = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
-                            log.info(filesUpdated + " files were updated using CmdLineClientAdapter");
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
+                            newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
+                            log.info("files were updated to revision number: " + newRevisionNumber +
+                                    " using CmdLineClientAdapter");
                         } else {
-                            filesUpdated = svnClient.update(root, SVNRevision.HEAD,
+                            lastRevisionNumber = svnClient.getSingleStatus(root)
+                                    .getLastChangedRevision().getNumber();
+                            newRevisionNumber = svnClient.update(root, SVNRevision.HEAD,
                                                             depth, NO_SET_DEPTH,
                                                             ignoreExternals, forceUpdate);
-                            log.info(filesUpdated + " files were updated using SVN Kit");
+                            log.info("files were updated to revision number: " + newRevisionNumber +
+                                    " using SVN Kit");
                         }
                         break;
                     } catch (SVNClientException e) {
@@ -639,7 +660,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         }
                     }
                 } while (tries < 10); // try to recover & retry
-                return filesUpdated > 1;
+                return newRevisionNumber > lastRevisionNumber;
             }
         } catch (SVNClientException e) {
             handleException("Error while checking out or updating artifacts from the " +
@@ -666,7 +687,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
         if (depth == Depth.infinity) {
             setDepth = true;
         }
-        long filesUpdated = -1;
+        long lastRevisionNumber = -1;
+        long newRevisionNumber = -1;
         try {
             svnClient.cleanup(root);
 
@@ -683,13 +705,19 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                     tries++;
                     if (svnClient instanceof CmdLineClientAdapter) {
                         // CmdLineClientAdapter does not support all the options
-                        filesUpdated = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
-                        log.info(filesUpdated + " files were updated using CmdLineClientAdapter");
+                        lastRevisionNumber = svnClient.getSingleStatus(root)
+                                .getLastChangedRevision().getNumber();
+                        newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
+                        log.info("files were updated to revision number: " + newRevisionNumber +
+                                " using CmdLineClientAdapter");
                     } else {
-                        filesUpdated = svnClient.update(root, filePath,SVNRevision.HEAD,
+                        lastRevisionNumber = svnClient.getSingleStatus(root)
+                                .getLastChangedRevision().getNumber();
+                        newRevisionNumber = svnClient.update(root, filePath, SVNRevision.HEAD,
                                                         depth, setDepth,
                                                         ignoreExternals, forceUpdate);
-                        log.info(filesUpdated + " files were updated using SVN Kit");
+                        log.info("files were updated to revision number: " + newRevisionNumber +
+                                " using SVN Kit");
                     }
                     break;
                 } catch (SVNClientException e) {
@@ -707,7 +735,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                     }
                 }
             } while (tries < 10); // try to recover & retry
-            return filesUpdated > 1;
+            return newRevisionNumber > lastRevisionNumber;
         } catch (SVNClientException e) {
             handleException("Error while checking out or updating artifacts from the " +
                             "SVN repository", e);
@@ -784,14 +812,49 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
     }
 
     private boolean isWebApp(String filePath) {
-        /* Decide file is on "webapps" directory or not.
+        /* Decide file is in an appBase directory or not.
 
+          eg:for appBase="repository/deployment/server/webapps",
           supper tenant - "repository/deployment/server/webapps";
           tenant -  "repository/tenants/1/webapps"
          */
-        return filePath.contains(File.separator + "repository" + File.separator)
-                && filePath.contains(File.separator + "webapps" + File.separator);
+        if (filePath.contains(File.separator + "repository" + File.separator)) {
+            for (String dir : baseDirs) {
+                if (filePath.contains(File.separator + dir + File.separator)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
+
+    /**
+     *
+     * @return list of webapp directories
+     */
+    private List<String> getBaseDirs() {
+        CarbonTomcatService service = SVNDataHolder.getInstance().getCarbonTomcatService();
+        Tomcat tomcat = service.getTomcat();
+        Container[] virtualHosts = tomcat.getEngine().findChildren();
+        List<String> baseDirs = new ArrayList<String>();
+        for (Container container : virtualHosts) {
+            Host host = (Host) container;
+            String baseDir = getBaseDirectoryName(host.getAppBase());
+            baseDirs.add(baseDir);
+        }
+        return baseDirs;
+    }
+
+    private String getBaseDirectoryName(String appBase) {
+        String baseDir;
+        if (appBase.endsWith(File.separator)) {
+            baseDir = appBase.substring(0, appBase.lastIndexOf(File.separator));
+        } else {
+            baseDir = appBase;
+        }
+        return baseDir.substring(baseDir.lastIndexOf(File.separator) + 1, baseDir.length());
+    }
+
 
     private String getWebAppsDirPath(String path) {
         int start = path.indexOf("repository");
