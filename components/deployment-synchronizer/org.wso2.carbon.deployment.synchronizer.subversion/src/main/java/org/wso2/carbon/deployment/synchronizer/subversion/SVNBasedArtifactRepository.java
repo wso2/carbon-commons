@@ -18,6 +18,9 @@
 
 package org.wso2.carbon.deployment.synchronizer.subversion;
 
+import org.apache.catalina.Container;
+import org.apache.catalina.Host;
+import org.apache.catalina.startup.Tomcat;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -40,6 +43,8 @@ import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
 import org.wso2.carbon.deployment.synchronizer.internal.repository.CarbonRepositoryUtils;
 import org.wso2.carbon.deployment.synchronizer.internal.util.DeploymentSynchronizerConfiguration;
 import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryConfigParameter;
+import org.wso2.carbon.deployment.synchronizer.subversion.util.SVNDataHolder;
+import org.wso2.carbon.tomcat.api.CarbonTomcatService;
 import org.wso2.carbon.utils.CarbonUtils;
 
 import java.io.File;
@@ -72,6 +77,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
     private Map<Integer, TenantSVNRepositoryContext> tenantSVNRepositories;
 
     private  List<RepositoryConfigParameter> parameters;
+    private List<String> baseDirs;
 
     public SVNBasedArtifactRepository(){
         tenantSVNRepositories = new HashMap<Integer, TenantSVNRepositoryContext>();
@@ -82,6 +88,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
 
         ServerConfiguration serverConfig = ServerConfiguration.getInstance();
         DeploymentSynchronizerConfiguration conf = CarbonRepositoryUtils.getActiveSynchronizerConfiguration(tenantId);
+        baseDirs = getBaseDirs();
 
         String url = null;
         boolean appendTenantId = true;
@@ -805,14 +812,49 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
     }
 
     private boolean isWebApp(String filePath) {
-        /* Decide file is on "webapps" directory or not.
+        /* Decide file is in an appBase directory or not.
 
+          eg:for appBase="repository/deployment/server/webapps",
           supper tenant - "repository/deployment/server/webapps";
           tenant -  "repository/tenants/1/webapps"
          */
-        return filePath.contains(File.separator + "repository" + File.separator)
-                && filePath.contains(File.separator + "webapps" + File.separator);
+        if (filePath.contains(File.separator + "repository" + File.separator)) {
+            for (String dir : baseDirs) {
+                if (filePath.contains(File.separator + dir + File.separator)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
+
+    /**
+     *
+     * @return list of webapp directories
+     */
+    private List<String> getBaseDirs() {
+        CarbonTomcatService service = SVNDataHolder.getInstance().getCarbonTomcatService();
+        Tomcat tomcat = service.getTomcat();
+        Container[] virtualHosts = tomcat.getEngine().findChildren();
+        List<String> baseDirs = new ArrayList<String>();
+        for (Container container : virtualHosts) {
+            Host host = (Host) container;
+            String baseDir = getBaseDirectoryName(host.getAppBase());
+            baseDirs.add(baseDir);
+        }
+        return baseDirs;
+    }
+
+    private String getBaseDirectoryName(String appBase) {
+        String baseDir;
+        if (appBase.endsWith(File.separator)) {
+            baseDir = appBase.substring(0, appBase.lastIndexOf(File.separator));
+        } else {
+            baseDir = appBase;
+        }
+        return baseDir.substring(baseDir.lastIndexOf(File.separator) + 1, baseDir.length());
+    }
+
 
     private String getWebAppsDirPath(String path) {
         int start = path.indexOf("repository");
