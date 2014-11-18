@@ -1161,7 +1161,7 @@
             <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
+                <updatePolicy>weekly</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>false</enabled>
@@ -1228,7 +1228,7 @@
         <previous.version.422>4.2.2</previous.version.422>
         <version.jettison>1.3.4</version.jettison>
         <wso2carbon.version>4.3.0-SNAPSHOT</wso2carbon.version>
-        <orbit.version.axiom>1.2.11.wso2v5-SNAPSHOT</orbit.version.axiom>
+        <orbit.version.axiom>1.2.11.wso2v5</orbit.version.axiom>
         <orbit.version.axis2>1.6.1.wso2v11-SNAPSHOT</orbit.version.axis2>
         <axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
 
@@ -1258,8 +1258,8 @@
         <synapse.version>2.1.3-wso2v1-SNAPSHOT</synapse.version>
 
         <!-- Axiom Version -->
-        <axiom.wso2.version>1.2.11.wso2v5-SNAPSHOT</axiom.wso2.version>
-        <axiom.version>1.2.11-wso2v5-SNAPSHOT</axiom.version>
+        <axiom.wso2.version>1.2.11.wso2v5</axiom.wso2.version>
+        <axiom.version>1.2.11-wso2v5</axiom.version>
         <axiom.osgi.version.range>[1.2.11.wso2v5, 1.3.0)</axiom.osgi.version.range>
 
         <!-- Axis2 Version -->
