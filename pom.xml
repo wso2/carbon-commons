@@ -1161,7 +1161,7 @@
             <url>http://maven.wso2.org/nexus/content/repositories/snapshots/</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>weekly</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>false</enabled>
