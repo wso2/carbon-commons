@@ -43,6 +43,7 @@
         <module>features/deployment-synchronizer</module>
         <module>features/ws-discovery</module>
         <module>features/transport-mgt</module>
+        <module>features/transport-commons</module>
         <module>features/data-bridge</module>
         <module>features/data-sources</module>
 	<module>features/caching-invalidator</module>
