@@ -43,6 +43,7 @@
         <module>features/deployment-synchronizer</module>
         <module>features/ws-discovery</module>
         <module>features/transport-mgt</module>
+        <module>features/transport-commons</module>
         <module>features/data-bridge</module>
         <module>features/data-sources</module>
 	<module>features/caching-invalidator</module>
@@ -55,6 +56,31 @@
                 <groupId>org.apache.axis2.wso2</groupId>
                 <artifactId>axis2</artifactId>
                 <version>${orbit.version.axis2}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2.transport</groupId>
+                <artifactId>axis2-transport-mail</artifactId>
+                <version>${axis2-transport.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2.transport</groupId>
+                <artifactId>axis2-transport-tcp</artifactId>
+                <version>${axis2-transport.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2.transport</groupId>
+                <artifactId>axis2-transport-udp</artifactId>
+                <version>${axis2-transport.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2.transport</groupId>
+                <artifactId>axis2-transport-xmpp</artifactId>
+                <version>${axis2-transport.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.axis2.transport</groupId>
+                <artifactId>axis2-transport-jms</artifactId>
+                <version>${axis2-transport.wso2.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.ws.commons.axiom</groupId>
@@ -1269,6 +1295,9 @@
         <axis2.osgi.version.range>[1.6.1.wso2v11, 1.7.0)</axis2.osgi.version.range>
         <neethi.osgi.version>2.0.4.wso2v4</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
+
+        <!-- Axis2 transport version-->
+        <axis2-transport.wso2.version>1.1.0-wso2v10-SNAPSHOT</axis2-transport.wso2.version>
 
         <!-- Xerces Version -->
         <xercesImpl.version>2.8.1</xercesImpl.version>
