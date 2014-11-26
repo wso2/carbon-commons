@@ -85,9 +85,9 @@
             <version>1.6.2-wso2v3</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.ws.commons.schema</groupId>
+            <groupId>org.apache.ws.commons.schema.wso2</groupId>
             <artifactId>XmlSchema</artifactId>
-            <version>1.4.7-wso2v1</version>
+            <version>1.4.7.wso2v3</version>
         </dependency>
         <dependency>
             <groupId>commons-httpclient.wso2</groupId>
