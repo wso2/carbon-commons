@@ -847,6 +847,9 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
 
     private String getBaseDirectoryName(String appBase) {
         String baseDir;
+        //for appBase="repository/deployment/server/webapps from catalina-server.xml
+        //file separators ("/") are different in windows environment ("\\")
+        appBase = appBase.replace("/", File.separator);
         if (appBase.endsWith(File.separator)) {
             baseDir = appBase.substring(0, appBase.lastIndexOf(File.separator));
         } else {
