@@ -75,9 +75,9 @@
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.bpel.skeleton</bundleDef>
                             </bundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.application.deployer.bpel:${wso2carbon.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.bpel.server:${wso2carbon.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.application.deployer.bpel:${project.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.bpel.server:${carbon.platform.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>
