@@ -33,12 +33,6 @@
             <artifactId>org.wso2.carbon.databridge.commons</artifactId>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>com.google.guava.wso2</groupId>-->
-        <!--<artifactId>guava</artifactId>-->
-        <!--<version>${google.guava.wso2.version}</version>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.core.common</artifactId>
@@ -55,24 +49,12 @@
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.identity.authentication</artifactId>
         </dependency>
-        <!-- test dependencies for unit tests -->
 
-
-        <!--<dependency>-->
-            <!--<groupId>com.github.stephenc</groupId>-->
-            <!--<artifactId>jamm</artifactId>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>com.googlecode.concurrentlinkedhashmap</groupId>-->
-            <!--<artifactId>concurrentlinkedhashmap-lru</artifactId>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
 
     </dependencies>
     <build>

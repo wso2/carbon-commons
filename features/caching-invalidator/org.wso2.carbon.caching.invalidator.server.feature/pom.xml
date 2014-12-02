@@ -42,7 +42,6 @@
         <dependency>
             <groupId>com.rabbitmq.wso2</groupId>
             <artifactId>amqp-client</artifactId>
-            <version>3.0.3.wso2v1</version>
         </dependency>
     </dependencies>
 

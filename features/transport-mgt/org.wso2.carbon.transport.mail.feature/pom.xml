@@ -68,7 +68,7 @@
                             <importBundles>
                             </importBundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
 				                <importFeatureDef>org.wso2.carbon.transport.mgt.server:${project.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>

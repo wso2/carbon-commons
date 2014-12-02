@@ -84,8 +84,8 @@
                             <importBundles>
                             </importBundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.service.mgt.server:${wso2carbon.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.service.mgt.server:${carbon.platform.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>
