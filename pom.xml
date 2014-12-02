@@ -1344,7 +1344,7 @@
     <properties>
         <!-- Carbon kernel version -->
         <carbon.kernel.version>4.3.0</carbon.kernel.version>
-        <carbon.kernel.package.import.version.range>[4.3.0.SNAPSHOT, 4.4.0)</carbon.kernel.package.import.version.range>
+        <carbon.kernel.package.import.version.range>[4.3.0, 4.4.0)</carbon.kernel.package.import.version.range>
 
         <older.version>4.1.0</older.version>
         <previous.version>4.2.0</previous.version>
