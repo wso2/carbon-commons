@@ -52,6 +52,9 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Carbon Kernel Dependencies-->
+
+
             <dependency>
                 <groupId>org.apache.axis2.wso2</groupId>
                 <artifactId>axis2</artifactId>
@@ -88,20 +91,30 @@
                 <version>${axiom.version}</version>
             </dependency>
             <dependency>
+                <groupId>org.apache.ws.commons.axiom</groupId>
+                <artifactId>axiom-dom</artifactId>
+                <version>${axiom.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ws.commons.axiom</groupId>
+                <artifactId>axiom-impl</artifactId>
+                <version>${axiom.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.core</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.core.services</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.core.common</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -111,7 +124,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.registry.core</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -126,7 +139,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.user.core</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -146,22 +159,22 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.ui</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.utils</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.tomcat</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>javax.cache.wso2</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -226,17 +239,17 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.tomcat.ext</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.datasource</artifactId>
-                <version>${wso2carbon.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.datasource.ui</artifactId>
-                <version>${wso2carbon.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>wsdl4j.wso2</groupId>
@@ -262,13 +275,13 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.server.admin</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.server</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
 
 
@@ -293,7 +306,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.deployer</artifactId>
-                <version>${project.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
 
             <dependency>
@@ -324,6 +337,11 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.deployer.gadget</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.application.deployer.bpmn</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -385,7 +403,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.logging</artifactId>
-                <version>${project.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
 
             <dependency>
@@ -653,7 +671,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.securevault</artifactId>
-                <version>${project.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.synapse</groupId>
@@ -746,7 +764,7 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.user.api</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>backport-util-concurrent.wso2</groupId>
@@ -761,6 +779,11 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.identity.oauth.stub</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.identity.entitlement.stub</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -891,12 +914,12 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.authenticator.proxy</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.authenticator.stub</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -911,6 +934,11 @@
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.databridge.streamdefn.registry</artifactId>
+                <version>${carbon.platform.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.user.mgt.stub</artifactId>
                 <version>${carbon.platform.version}</version>
             </dependency>
             <dependency>
@@ -952,6 +980,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>13.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ws.commons.schema.wso2</groupId>
+                <artifactId>XmlSchema</artifactId>
+                <version>${org.apache.ws.commons.schema.wso2.version}</version>
             </dependency>
 
             <!-- Stratos dependencies >
@@ -1072,6 +1105,66 @@
                 <groupId>kaptcha.wso2</groupId>
                 <artifactId>kaptcha</artifactId>
                 <version>2.3.0.wso2v1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.rabbitmq.wso2</groupId>
+                <artifactId>amqp-client</artifactId>
+                <version>${amqp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>wsdl4j</groupId>
+                <artifactId>wsdl4j</artifactId>
+                <version>${wsdl4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.scannotation</groupId>
+                <artifactId>scannotation</artifactId>
+                <version>${org.scannotation.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-httpclient.wso2</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>${orbit.version.commons.httpclient}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io.wso2</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections.wso2</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.securevault</groupId>
+                <artifactId>org.wso2.securevault</artifactId>
+                <version>${org.wso2.securevault.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${org.testng.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.balana</groupId>
+                <artifactId>org.wso2.balana</artifactId>
+                <version>${org.wso2.balana.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.ws.security.wso2</groupId>
+                <artifactId>wss4j</artifactId>
+                <version>${org.apache.ws.security.wso2.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>${slf4j.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -1249,11 +1342,14 @@
     </profiles>
 
     <properties>
+        <!-- Carbon kernel version -->
+        <carbon.kernel.version>4.3.0</carbon.kernel.version>
+        <carbon.kernel.package.import.version.range>[4.3.0.SNAPSHOT, 4.4.0)</carbon.kernel.package.import.version.range>
+
         <older.version>4.1.0</older.version>
         <previous.version>4.2.0</previous.version>
         <previous.version.422>4.2.2</previous.version.422>
         <version.jettison>1.3.4</version.jettison>
-        <wso2carbon.version>4.3.0-SNAPSHOT</wso2carbon.version>
         <orbit.version.axiom>1.2.11.wso2v5</orbit.version.axiom>
         <orbit.version.axis2>1.6.1.wso2v11</orbit.version.axis2>
         <axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
@@ -1359,7 +1455,7 @@
         <imp.pkg.version.javax.servlet>[2.6.0, 3.0.0)</imp.pkg.version.javax.servlet>
 
         <!-- Misc -->
-        <junit.version>4.8.1</junit.version>
+        <junit.version>4.9</junit.version>
         <wsdl4j.wso2.version>1.6.2.wso2v4</wsdl4j.wso2.version>
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <orbit.version.h2.engine>1.2.140.wso2v3</orbit.version.h2.engine>
@@ -1373,7 +1469,17 @@
         <orbit.version.json>1.0.0.wso2v1</orbit.version.json>
         <org.eclipse.osgi.version>3.7.0.v20110613</org.eclipse.osgi.version>
         <version.equinox.osgi.services>3.3.100.v20120522-1822</version.equinox.osgi.services>
-        <libthrift.wso2.version>0.7.wso2v1</libthrift.wso2.version>
+        <amqp.version>3.0.3.wso2v1</amqp.version>
+        <wsdl4j.version>1.6.2-wso2v3</wsdl4j.version>
+        <org.apache.ws.commons.schema.wso2.version>1.4.7.wso2v3</org.apache.ws.commons.schema.wso2.version>
+        <org.scannotation.version>1.0.3</org.scannotation.version>
+        <commons-io.wso2.version>2.0.0.wso2v2</commons-io.wso2.version>
+        <commons-collections.wso2.version>3.2.0.wso2v1</commons-collections.wso2.version>
+        <org.wso2.securevault.version>1.0.0</org.wso2.securevault.version>
+        <org.testng.version>6.3.1</org.testng.version>
+        <org.wso2.balana.version>1.0.0-wso2v2</org.wso2.balana.version>
+        <org.apache.ws.security.wso2.version>1.5.9.wso2v1</org.apache.ws.security.wso2.version>
+        <slf4j.version>1.6.1</slf4j.version>
     </properties>
 
     <repositories>

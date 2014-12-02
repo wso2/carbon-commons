@@ -103,12 +103,12 @@
                                 <bundleDef>org.apache.httpcomponents.wso2:httpcore</bundleDef>
                             </bundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.databridge.commons.server:${wso2carbon.version}
+                                    org.wso2.carbon.databridge.commons.server:${project.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.databridge.commons.thrift.server:${wso2carbon.version}
+                                    org.wso2.carbon.databridge.commons.thrift.server:${project.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

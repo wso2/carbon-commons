@@ -21,27 +21,22 @@
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.core</artifactId>
-            <version>${carbon.version}</version>
         </dependency>
         <dependency>
             <groupId>com.rabbitmq.wso2</groupId>
             <artifactId>amqp-client</artifactId>
-            <version>${amqp.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.utils</artifactId>
-            <version>${carbon.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>javax.cache.wso2</artifactId>
-            <version>${carbon.version}</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.logging</artifactId>
-            <version>${carbon.version}</version>
         </dependency>
     </dependencies>
 
@@ -89,8 +84,4 @@
         </plugins>
     </build>
 
-    <properties>
-        <carbon.version>4.3.0-SNAPSHOT</carbon.version>
-        <amqp.version>3.0.3.wso2v1</amqp.version>
-    </properties>
 </project>
