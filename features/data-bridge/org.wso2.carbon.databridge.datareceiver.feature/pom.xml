@@ -70,7 +70,7 @@
                             </includedFeatures>
  				
 			    <importFeatures>
-				<importFeatureDef>org.wso2.carbon.core:${carbon.platform.version}</importFeatureDef>
+				<importFeatureDef>org.wso2.carbon.core:${carbon.kernel.version}</importFeatureDef>
 			   </importFeatures>
                         </configuration>
                     </execution>
