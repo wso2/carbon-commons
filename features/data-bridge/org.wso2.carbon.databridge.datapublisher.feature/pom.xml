@@ -54,7 +54,7 @@
                             <id>org.wso2.carbon.databridge.datapublisher</id>
                             <propertiesFile>../../../etc/feature.properties</propertiesFile>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core:${wso2carbon.version}
+                                <importFeatureDef>org.wso2.carbon.core:${carbon.kernel.version}
                                 </importFeatureDef>
                             </importFeatures>
                             <includedFeatures>
