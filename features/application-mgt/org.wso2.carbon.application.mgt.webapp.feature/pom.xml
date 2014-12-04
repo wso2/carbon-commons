@@ -68,7 +68,7 @@
                             <propertiesFile>../../../etc/feature.properties</propertiesFile>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core:${carbon.kernel.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.application.mgt</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.application.mgt:${carbon.kernel.version}</importFeatureDef>
                             </importFeatures>
                             <includedFeatures>
                                 <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.application.mgt.webapp.server.feature</includedFeatureDef>
