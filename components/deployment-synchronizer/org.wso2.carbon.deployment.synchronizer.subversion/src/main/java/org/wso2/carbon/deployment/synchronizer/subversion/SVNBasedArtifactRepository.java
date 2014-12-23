@@ -396,8 +396,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
         if (log.isDebugEnabled()) {
             log.debug("SVN checking out " + filePath);
         }
-        TenantSVNRepositoryContext repoContext= tenantSVNRepositories.get(tenantId);
-        if (repoContext == null ) {
+        TenantSVNRepositoryContext repoContext = tenantSVNRepositories.get(tenantId);
+        if (repoContext == null) {
             log.warn("TenantSVNRepositoryContext not initialized for " + tenantId);
             return false;
         }
@@ -446,18 +446,16 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                 do {
                     try {
                         tries++;
+                        lastRevisionNumber = svnClient.getSingleStatus(root)
+                                .getLastChangedRevision().getNumber();
                         if (svnClient instanceof CmdLineClientAdapter) {
                             // CmdLineClientAdapter does not support all the options
-                            lastRevisionNumber = svnClient.getSingleStatus(root)
-                                    .getLastChangedRevision().getNumber();
                             newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
                             if (log.isDebugEnabled()) {
                                 log.debug(" files were updated to revision number: " +
                                         newRevisionNumber + " using CmdLineClientAdapter");
                             }
                         } else {
-                            lastRevisionNumber = svnClient.getSingleStatus(root)
-                                    .getLastChangedRevision().getNumber();
                             newRevisionNumber = svnClient.update(root, SVNRevision.HEAD,
                                     Depth.infinity, NO_SET_DEPTH,
                                     ignoreExternals, forceUpdate);
@@ -470,13 +468,13 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                     } catch (SVNClientException e) {
                         if (tries < 10 &&
                                 (e.getMessage().contains("an unversioned file of the same name already exists") ||
-                                 e.getMessage().contains("an unversioned directory of the same name already exists"))) {
+                                        e.getMessage().contains("an unversioned directory of the same name already exists"))) {
                             log.info("Unversioned file problem. Retrying " + tries);
                             try {
                                 Thread.sleep(5000);
                             } catch (InterruptedException ignored) {
                             }
-                            cleanupUnversionedFiles(tenantId, svnUrl,root);
+                            cleanupUnversionedFiles(tenantId, svnUrl, root);
                         } else {
                             throw e;
                         }
@@ -672,8 +670,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
     public boolean update(int tenantId, String rootPath, String filePath, int depth) throws DeploymentSynchronizerException {
         log.info("SVN updating " + filePath);
 
-        TenantSVNRepositoryContext repoContext= tenantSVNRepositories.get(tenantId);
-        if (repoContext == null ) {
+        TenantSVNRepositoryContext repoContext = tenantSVNRepositories.get(tenantId);
+        if (repoContext == null) {
             log.warn("TenantSVNRepositoryContext not initialized for " + tenantId);
             return false;
         }
@@ -703,18 +701,17 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
             do {
                 try {
                     tries++;
+                    lastRevisionNumber = svnClient.getSingleStatus(root)
+                            .getLastChangedRevision().getNumber();
                     if (svnClient instanceof CmdLineClientAdapter) {
                         // CmdLineClientAdapter does not support all the options
-                        lastRevisionNumber = svnClient.getSingleStatus(root)
-                                .getLastChangedRevision().getNumber();
                         newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
                         if (log.isDebugEnabled()) {
                             log.debug("files were updated to revision number: " + newRevisionNumber +
                                     " using CmdLineClientAdapter");
                         }
                     } else {
-                        lastRevisionNumber = svnClient.getSingleStatus(root)
-                                .getLastChangedRevision().getNumber();
+
                         newRevisionNumber = svnClient.update(root, filePath, SVNRevision.HEAD,
                                 depth, setDepth,
                                 ignoreExternals, forceUpdate);
@@ -726,8 +723,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                     break;
                 } catch (SVNClientException e) {
                     if (tries < 10 &&
-                        (e.getMessage().contains("an unversioned file of the same name already exists") ||
-                         e.getMessage().contains("an unversioned directory of the same name already exists"))) {
+                            (e.getMessage().contains("an unversioned file of the same name already exists") ||
+                                    e.getMessage().contains("an unversioned directory of the same name already exists"))) {
                         log.info("Unversioned file problem. Retrying " + tries);
                         try {
                             Thread.sleep(5000);
@@ -742,7 +739,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
             return newRevisionNumber > lastRevisionNumber;
         } catch (SVNClientException e) {
             handleException("Error while checking out or updating artifacts from the " +
-                            "SVN repository", e);
+                    "SVN repository", e);
         }
         return false;
     }
