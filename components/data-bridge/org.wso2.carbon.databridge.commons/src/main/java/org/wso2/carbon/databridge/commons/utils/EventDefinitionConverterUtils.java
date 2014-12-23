@@ -85,17 +85,17 @@ public final class EventDefinitionConverterUtils {
             newStreamDefinition.setTags(tempStreamDefinition.getTags());
 
             List<Attribute> metaList = tempStreamDefinition.getMetaData();
-            validAttributeList = EventDefinitionConverterUtils.checkInvalidAttributeType(metaList, "Meta Attributes");
+            validAttributeList = EventDefinitionConverterUtils.checkInvalidAttributeType(metaList, "Meta");
             if (metaList != null && metaList.size() > 0 && validAttributeList) {
                 newStreamDefinition.setMetaData(metaList);
             }
             List<Attribute> correlationList = tempStreamDefinition.getCorrelationData();
-            validAttributeList = EventDefinitionConverterUtils.checkInvalidAttributeType(correlationList, "Correlation Attributes");
+            validAttributeList = EventDefinitionConverterUtils.checkInvalidAttributeType(correlationList, "Correlation");
             if (correlationList != null && correlationList.size() > 0 && validAttributeList) {
                 newStreamDefinition.setCorrelationData(correlationList);
             }
             List<Attribute> payloadList = tempStreamDefinition.getPayloadData();
-            validAttributeList = EventDefinitionConverterUtils.checkInvalidAttributeType(payloadList, "Payload Attributes");
+            validAttributeList = EventDefinitionConverterUtils.checkInvalidAttributeType(payloadList, "Payload");
             if (payloadList != null && payloadList.size() > 0 && validAttributeList) {
                 newStreamDefinition.setPayloadData(payloadList);
             }
@@ -146,12 +146,14 @@ public final class EventDefinitionConverterUtils {
     private static boolean checkInvalidAttributeType(List<Attribute> attributeList, String attributeType)throws MalformedStreamDefinitionException {
         if(attributeList!=null){
             for(int i=0; i<attributeList.size(); i++){
-                if(attributeList.get(i).getType().equals(null)){
-                    throw new MalformedStreamDefinitionException(" Malformed stream definition, Invalid type assigned to attribute " + attributeType );
+                if(attributeList.get(i).getType() != null){
+                    return true;
+                }else{
+                    throw new MalformedStreamDefinitionException(" Malformed stream definition, Invalid type assigned to attribute name \"" + attributeList.get(i).getName() + "\" in " + attributeType + " data attributes" );
                 }
             }
         }
-        return true;
+        return false;
     }
 
     private static class  StreamDefinitionTemplate{
