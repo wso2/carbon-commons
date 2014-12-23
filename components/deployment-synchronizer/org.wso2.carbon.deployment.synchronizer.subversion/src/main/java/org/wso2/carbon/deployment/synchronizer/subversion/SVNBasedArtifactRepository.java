@@ -634,7 +634,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                                     .getLastChangedRevision().getNumber();
                             newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
                             if (log.isDebugEnabled()) {
-                                log.info("files were updated to revision number: " + newRevisionNumber +
+                                log.debug("files were updated to revision number: " + newRevisionNumber +
                                         " using CmdLineClientAdapter");
                             }
                         } else {
@@ -644,7 +644,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                                     depth, NO_SET_DEPTH,
                                     ignoreExternals, forceUpdate);
                             if (log.isDebugEnabled()) {
-                                log.info("files were updated to revision number: " + newRevisionNumber +
+                                log.debug("files were updated to revision number: " + newRevisionNumber +
                                         " using SVN Kit");
                             }
                         }
@@ -713,7 +713,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                                 .getLastChangedRevision().getNumber();
                         newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
                         if (log.isDebugEnabled()) {
-                            log.info("files were updated to revision number: " + newRevisionNumber +
+                            log.debug("files were updated to revision number: " + newRevisionNumber +
                                     " using CmdLineClientAdapter");
                         }
                     } else {
@@ -723,7 +723,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                                 depth, setDepth,
                                 ignoreExternals, forceUpdate);
                         if (log.isDebugEnabled()) {
-                            log.info("files were updated to revision number: " + newRevisionNumber +
+                            log.debug("files were updated to revision number: " + newRevisionNumber +
                                     " using SVN Kit");
                         }
                     }
