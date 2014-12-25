@@ -446,8 +446,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                 do {
                     try {
                         tries++;
-                        lastRevisionNumber = svnClient.getSingleStatus(root)
-                                .getLastChangedRevision().getNumber();
+                        lastRevisionNumber = svnClient.getSingleStatus(root).
+                                getLastChangedRevision().getNumber();
                         if (svnClient instanceof CmdLineClientAdapter) {
                             // CmdLineClientAdapter does not support all the options
                             newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
@@ -626,7 +626,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                 do {
                     try {
                         tries++;
-                        lastRevisionNumber = svnClient.getSingleStatus(root).getLastChangedRevision().getNumber();
+                        lastRevisionNumber = svnClient.getSingleStatus(root).
+                                getLastChangedRevision().getNumber();
                         if (svnClient instanceof CmdLineClientAdapter) {
                             // CmdLineClientAdapter does not support all the options
                             newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
@@ -701,8 +702,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
             do {
                 try {
                     tries++;
-                    lastRevisionNumber = svnClient.getSingleStatus(root)
-                            .getLastChangedRevision().getNumber();
+                    lastRevisionNumber = svnClient.getSingleStatus(root).
+                            getLastChangedRevision().getNumber();
                     if (svnClient instanceof CmdLineClientAdapter) {
                         // CmdLineClientAdapter does not support all the options
                         newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
