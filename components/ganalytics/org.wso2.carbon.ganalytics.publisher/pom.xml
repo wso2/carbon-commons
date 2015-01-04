@@ -32,7 +32,7 @@
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Google Analytics Publisher</name>
     <description>Google Analytics Publisher</description>
-    <url>http://wso2.org</url>   
+    <url>http://wso2.org</url>
 
     <dependencies>
 
@@ -42,15 +42,15 @@
             <scope>test</scope>
         </dependency>
 
-	<dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents.wso2</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
         </dependency>
-	<dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents.wso2</groupId>
             <artifactId>httpcore</artifactId>
         </dependency>

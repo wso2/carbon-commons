@@ -46,10 +46,6 @@
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.deployer</artifactId>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.wso2.carbon</groupId>-->
-        <!--<artifactId>org.wso2.carbon.humantask</artifactId>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.deployer.humantask</artifactId>

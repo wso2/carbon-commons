@@ -39,11 +39,6 @@
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.application.mgt.humantask</artifactId>
         </dependency>
-        <!--dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.bpel</artifactId>
-            <version>${wso2carbon.version}</version>
-        </dependency-->
 	    <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.humantask.skeleton</artifactId>
@@ -77,9 +72,9 @@
 				<bundleDef>org.wso2.carbon:org.wso2.carbon.humantask.skeleton</bundleDef>
                             </bundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.server:${wso2carbon.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.application.deployer.humantask:${wso2carbon.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.humantask.server:${wso2carbon.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.application.deployer.humantask:${project.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.humantask.server:${carbon.platform.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>
@@ -87,7 +82,5 @@
             </plugin>
         </plugins>
     </build>
-	<properties>
-		<wso2carbon.version.4.3.0-SNAPSHOT>4.3.0-SNAPSHOT</wso2carbon.version.4.3.0-SNAPSHOT>
-	</properties>
+
 </project>

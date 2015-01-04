@@ -67,7 +67,15 @@ public final class Authenticator {
             logAndAuthenticationException("Authentication request was missing the required password");
         }
 
-        boolean isSuccessful = authenticationHandler.authenticate(userName, password);
+        boolean isSuccessful = false;
+        // catching org.wso2.carbon.identity.authentication.AuthenticationException runtime exception
+        // thrown for an invalid username.
+        // rethrow org.wso2.carbon.databridge.commons.exception.AuthenticationException
+        try {
+        	isSuccessful = authenticationHandler.authenticate(userName, password);
+		} catch (org.wso2.carbon.identity.authentication.AuthenticationException e) {
+			throw new AuthenticationException(e);
+		}
 
         if (isSuccessful) {
             String sessionId = UUID.randomUUID().toString();

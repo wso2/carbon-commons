@@ -33,31 +33,27 @@
     <name>WSO2 Carbon - Google Analytics Tools</name>
     <url>http://wso2.org</url>
 
-	<dependencyManagement>
-        	<dependencies>
-			<dependency>
-                	  <groupId>org.apache.httpcomponents.wso2</groupId>
-                	  <artifactId>httpclient</artifactId>
-                	  <version>4.2.5.wso2v1</version>
-            	</dependency>
-		<dependency>
-                	<groupId>commons-logging</groupId>
-               	 	<artifactId>commons-logging</artifactId>
-                	<version>${commons-logging.version}</version>
-            	</dependency>
-            	<dependency>
-                	<groupId>org.apache.httpcomponents.wso2</groupId>
-                	<artifactId>httpcore</artifactId>
-                	<version>4.3.0.wso2v1</version>
-            	</dependency>
-		<dependency>
-		      <groupId>junit</groupId>
-		      <artifactId>junit</artifactId>
-		      <version>${junit.version}</version>	      
-		      <scope>test</scope>
-    		</dependency> 
-		</dependencies>
-	</dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.httpcomponents.wso2</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents.wso2</groupId>
+            <artifactId>httpcore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
 
     <modules>
         <module>org.wso2.carbon.ganalytics.publisher</module>

@@ -54,7 +54,7 @@
                             <id>org.wso2.carbon.databridge.datapublisher</id>
                             <propertiesFile>../../../etc/feature.properties</propertiesFile>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core:${wso2carbon.version}
+                                <importFeatureDef>org.wso2.carbon.core:${carbon.kernel.version}
                                 </importFeatureDef>
                             </importFeatures>
                             <includedFeatures>
@@ -62,7 +62,7 @@
                                     org.wso2.carbon:org.wso2.carbon.databridge.commons.server.feature:${project.version}
                                 </includedFeatureDef>
                                 <includedFeatureDef>
-                                    org.wso2.carbon:org.wso2.carbon.databridge.commons.thrift.server.feature:${wso2carbon.version}
+                                    org.wso2.carbon:org.wso2.carbon.databridge.commons.thrift.server.feature:${project.version}
                                 </includedFeatureDef>
                                 <includedFeatureDef>
                                     org.wso2.carbon:org.wso2.carbon.databridge.agent.thrift.server.feature:${project.version}
