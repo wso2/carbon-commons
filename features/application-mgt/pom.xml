@@ -32,25 +32,25 @@
     <name>WSO2 Carbon - Application Management Feature Aggregator Module</name>
     <url>http://wso2.org</url>
 
-            <modules>
-                <module>org.wso2.carbon.application.mgt.server.feature</module>
-                <module>org.wso2.carbon.application.mgt.ui.feature</module>
-                <module>org.wso2.carbon.application.mgt.feature</module>
-		<module>org.wso2.carbon.application.mgt.webapp.server.feature</module>
-                <module>org.wso2.carbon.application.mgt.webapp.ui.feature</module>
-                <module>org.wso2.carbon.application.mgt.webapp.feature</module>
+    <modules>
+        <module>org.wso2.carbon.application.mgt.server.feature</module>
+        <module>org.wso2.carbon.application.mgt.ui.feature</module>
+        <module>org.wso2.carbon.application.mgt.feature</module>
+        <module>org.wso2.carbon.application.mgt.webapp.server.feature</module>
+        <module>org.wso2.carbon.application.mgt.webapp.ui.feature</module>
+        <module>org.wso2.carbon.application.mgt.webapp.feature</module>
 
-                <module>org.wso2.carbon.application.mgt.synapse.server.feature</module>
-                <module>org.wso2.carbon.application.mgt.synapse.ui.feature</module>
-                <module>org.wso2.carbon.application.mgt.synapse.feature</module>
-                <module>org.wso2.carbon.application.mgt.bpel.server.feature</module>
-                <module>org.wso2.carbon.application.mgt.bpel.ui.feature</module>
-                <module>org.wso2.carbon.application.mgt.bpel.feature</module>
-                <module>org.wso2.carbon.application.mgt.humantask.server.feature</module>
-                <module>org.wso2.carbon.application.mgt.humantask.ui.feature</module>
-                <module>org.wso2.carbon.application.mgt.humantask.feature</module>
+        <module>org.wso2.carbon.application.mgt.synapse.server.feature</module>
+        <module>org.wso2.carbon.application.mgt.synapse.ui.feature</module>
+        <module>org.wso2.carbon.application.mgt.synapse.feature</module>
+        <module>org.wso2.carbon.application.mgt.bpel.server.feature</module>
+        <module>org.wso2.carbon.application.mgt.bpel.ui.feature</module>
+        <module>org.wso2.carbon.application.mgt.bpel.feature</module>
+        <module>org.wso2.carbon.application.mgt.humantask.server.feature</module>
+        <module>org.wso2.carbon.application.mgt.humantask.ui.feature</module>
+        <module>org.wso2.carbon.application.mgt.humantask.feature</module>
 
-            </modules>
+    </modules>
 
         <dependencies>
 	    	<dependency>

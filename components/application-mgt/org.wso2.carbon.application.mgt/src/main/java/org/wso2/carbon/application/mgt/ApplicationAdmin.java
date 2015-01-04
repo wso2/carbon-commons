@@ -146,7 +146,13 @@ public class ApplicationAdmin extends AbstractAdmin {
 
         // If requested application not found, throw an exception
         if (currentApp == null) {
-            handleException("No Carbon Application found of the name : " + appName);
+            // Deleting the application on faulty application list, in case the application not found
+            // in the active application list
+            try {
+                deleteFaultyApplication(new String[]{appName});
+            } catch (Exception e) {
+                handleException("No Carbon Application found of the name : " + appName);
+            }
             return;
         }
 
@@ -182,7 +188,7 @@ public class ApplicationAdmin extends AbstractAdmin {
             for (String carbonApp : faultyCarbonAppList.keySet()) {
 
                 filename = carbonApp.substring(carbonApp.lastIndexOf('/') + 1);
-                if (faultyCarbonApplication .equals(filename)) {
+                if (faultyCarbonApplication .equals(filename) || faultyCarbonApplication .equals(filename.substring(0, filename.lastIndexOf('_')))) {
                     currentApp = carbonApp;
                     faultyCarbonAppList.remove(currentApp);
                     break;
