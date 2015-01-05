@@ -6,12 +6,12 @@
     <parent>
         <artifactId>data-bridge-feature</artifactId>
 	<groupId>org.wso2.carbon</groupId>
-    	<version>4.3.0-SNAPSHOT</version>
+    	<version>4.3.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.carbon</groupId>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.3.0</version>
     <artifactId>org.wso2.carbon.databridge.agent.thrift.server.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Data Bridge - Thrift Agent Server Feature</name>
