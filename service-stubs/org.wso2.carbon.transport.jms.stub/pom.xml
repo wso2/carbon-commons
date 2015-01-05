@@ -21,13 +21,13 @@
     <parent>
         <groupId>org.wso2.carbon</groupId>
         <artifactId>carbon-commons</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.3.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.transport.jms.stub</artifactId>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.3.0</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - JMS Transport Stub</name>
     <url>http://wso2.org</url>
