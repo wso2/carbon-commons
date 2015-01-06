@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wso2.carbon</groupId>
         <artifactId>application-mgt</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,7 @@
     <artifactId>org.wso2.carbon.application.mgt.webapp</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Webapp Applications BE</name>
-    <version>4.3.0</version>
+    <version>4.3.0-SNAPSHOT</version>
     <description>org.wso2.carbon.application.mgt.webapp provides the carbon app mgt functionalities specific to
         webapplications
     </description>
