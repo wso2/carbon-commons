@@ -6,12 +6,11 @@
     <groupId>org.wso2.carbon</groupId>
     <artifactId>carbon-commons</artifactId>
     <packaging>pom</packaging>
-    <version>4.3.0</version>
+    <version>4.3.0-SNAPSHOT</version>
     <name>WSO2 Carbon - Platform Aggregator Pom</name>
     <url>http://wso2.org</url>
 
     <modules>
-        <module>components/data-bridge</module>
         <module>service-stubs/org.wso2.carbon.adc.repositoryinformation.service.stub</module>
         <module>service-stubs/org.wso2.carbon.application.mgt.bpel.stub</module>
         <module>service-stubs/org.wso2.carbon.application.mgt.humantask.stub</module>
@@ -35,6 +34,7 @@
         <module>components/ws-discovery</module>
         <module>components/entitlement-commons</module>
         <module>components/transport-mgt</module>
+        <module>components/data-bridge</module>
 	<module>components/ganalytics</module>
 	<module>components/caching-invalidator</module>
 
@@ -1363,8 +1363,8 @@
         <jsch.version>0.1.49.wso2v1</jsch.version>
         <gitblit.version>1.2.0.wso2v1</gitblit.version>
         <!-- Carbon platform version comes here-->
-        <carbon.platform.version>4.3.0</carbon.platform.version>
-        <carbon.platform.package.export.version>4.3.0
+        <carbon.platform.version>4.3.0-SNAPSHOT</carbon.platform.version>
+        <carbon.platform.package.export.version>4.3.0-SNAPSHOT
         </carbon.platform.package.export.version>
         <carbon.platform.package.import.version.range>[4.3.0.SNAPSHOT, 4.4.0)
         </carbon.platform.package.import.version.range>
