@@ -28,7 +28,6 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.discovery.DiscoveryException;
 import org.wso2.carbon.discovery.cxf.CXFServiceInfo;
 import org.wso2.carbon.discovery.cxf.CxfMessageSender;
-import org.wso2.carbon.discovery.cxf.util.CarbonAnnotationDB;
 import org.wso2.carbon.discovery.cxf.util.ClassAnnotationScanner;
 import org.xml.sax.SAXException;
 
@@ -48,13 +47,14 @@ import java.util.Set;
 
 public class TomcatCxfDiscoveryListener implements org.apache.catalina.LifecycleListener {
 
-    private String cxfServletClass = "org.apache.cxf.transport.servlet.CXFServlet";
+    private static final String cxfServletClass = "org.apache.cxf.transport.servlet.CXFServlet";
 
     private static final String httpPort = "mgt.transport.http.port";
+    private static final String httpsPort = "mgt.transport.https.port";
     private static final String hostName = "carbon.local.ip";
-    CxfMessageSender cxfMessageSender = new CxfMessageSender();
+    private CxfMessageSender cxfMessageSender = new CxfMessageSender();
 
-    private Log log = LogFactory.getLog(TomcatCxfDiscoveryListener.class);
+    private static final Log log = LogFactory.getLog(TomcatCxfDiscoveryListener.class);
 
     public void lifecycleEvent(LifecycleEvent lifecycleEvent) {
         try {
@@ -122,6 +122,10 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
     private CXFServiceInfo getServiceInfo(StandardContext context, String jaxServletMapping) throws DiscoveryException {
         CXFServiceInfo serviceInfo = new CXFServiceInfo();
         String contextPath = context.getServletContext().getContextPath();
+        contextPath = contextPath.startsWith("/") ?
+                      contextPath.substring(1, contextPath.length()) :
+                      contextPath;
+
         serviceInfo.setServiceName(contextPath);
         serviceInfo.setType(getPortType(context));
         serviceInfo.setTenantDomain(PrivilegedCarbonContext.getThreadLocalCarbonContext().
@@ -143,10 +147,6 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
                 if (node instanceof Element) {
                     Element endpointElement = (Element) node;
                     String cxfEndpoint = endpointElement.getAttribute("address");
-                    cxfEndpoint = cxfEndpoint.trim();
-                    cxfEndpoint = cxfEndpoint.startsWith("/") ?
-                                  cxfEndpoint.substring(1, cxfEndpoint.length()) :
-                                  cxfEndpoint;
                     endpoints.add(cxfEndpoint);
                 }
             }
@@ -187,11 +187,10 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
         QName seiInfo = null;
         try {
 //            String sei = null;        //service endpoint interface
-            CarbonAnnotationDB annotations = ClassAnnotationScanner.getAnnotatedClasses(context);
+            AnnotationDB annotations = ClassAnnotationScanner.getAnnotatedClasses(context);
             Set<String> set = annotations.getAnnotationIndex().get(javax.jws.WebService.class.getName());
             annotations.crossReferenceImplementedInterfaces();
             //map classes with its interface
-            Map<String, Set<String>> implementsMap = annotations.getImplementsIndex();
             if (set == null || set.isEmpty()) {
                 return null;
             }
@@ -312,7 +311,7 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
         return xAddrs;
     }
 
-    private InputStream getConfigLocation(ServletContext context) throws IOException {
+    private InputStream getConfigLocation(ServletContext context) {
 
         String configLocation = context.getInitParameter("config-location");
         if (configLocation == null) {
@@ -328,19 +327,5 @@ public class TomcatCxfDiscoveryListener implements org.apache.catalina.Lifecycle
         }
 
         return context.getResourceAsStream(configLocation);
-
-    }
-
-    /**
-     * Class that contains the Service Endpoint Interface info
-     */
-    private class SeiInfo {
-        String wsdlPortType;
-        String targetNamespace;
-
-        public SeiInfo(String wsdlPortType, String targetNamespace) {
-            this.wsdlPortType = wsdlPortType;
-            this.targetNamespace = targetNamespace;
-        }
     }
 }

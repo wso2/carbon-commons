@@ -50,7 +50,7 @@ import java.util.Map;
 
 public class CxfMessageSender {
 
-    Log log = LogFactory.getLog(CxfMessageSender.class);
+    private static final Log log = LogFactory.getLog(CxfMessageSender.class);
 
     public void sendHello(CXFServiceInfo serviceBean, Parameter discoveryParams) throws
             DiscoveryException {

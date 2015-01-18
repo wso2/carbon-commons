@@ -18,15 +18,9 @@ package org.wso2.carbon.discovery.cxf.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.discovery.cxf.CXFServiceInfo;
-import org.wso2.carbon.discovery.cxf.CxfDiscoveryConfigurationContextObserver;
-import org.wso2.carbon.utils.Axis2ConfigurationContextObserver;
 import org.wso2.carbon.utils.ConfigurationContextService;
-
-import java.util.Queue;
 
 /**
  * @scr.component name="org.wso2.carbon.discovery.cxf" immediate="true"
@@ -37,24 +31,13 @@ import java.util.Queue;
  */
 public class CxfDiscoveryServiceComponent {
 
-    private static Log log = LogFactory.getLog(CxfDiscoveryServiceComponent.class);
+    private static final Log log = LogFactory.getLog(CxfDiscoveryServiceComponent.class);
 
     private ServiceRegistration observerServiceRegistration;
     private CxfDiscoveryDataHolder dataHolder = CxfDiscoveryDataHolder.getInstance();
 
     protected void activate(ComponentContext ctx) {
 
-        BundleContext bundleContext = ctx.getBundleContext();
-
-        // This will take care of registering observers in tenant axis configurations
-        Queue<CXFServiceInfo> initialMessagesList = dataHolder.getInitialMessagesList();
-        CxfDiscoveryConfigurationContextObserver configCtxObserver =
-                new CxfDiscoveryConfigurationContextObserver(initialMessagesList);
-        observerServiceRegistration = bundleContext.registerService(
-                Axis2ConfigurationContextObserver.class.getName(),
-                configCtxObserver, null);
-
-        configCtxObserver.createdConfigurationContext(dataHolder.getMainServerConfigContext());
         if (log.isDebugEnabled()) {
             log.info("Activating CXF WS-Discovery Startup Publisher Component");
         }

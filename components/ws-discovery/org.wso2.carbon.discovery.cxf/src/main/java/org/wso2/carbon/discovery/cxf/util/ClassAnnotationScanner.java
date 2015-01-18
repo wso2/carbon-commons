@@ -16,6 +16,7 @@
 package org.wso2.carbon.discovery.cxf.util;
 
 import org.apache.catalina.core.StandardContext;
+import org.scannotation.AnnotationDB;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +25,9 @@ import java.net.URL;
 
 public class ClassAnnotationScanner {
 
-    public static CarbonAnnotationDB getAnnotatedClasses(StandardContext context) {
+    public static AnnotationDB getAnnotatedClasses(StandardContext context) {
 
-        CarbonAnnotationDB db = new CarbonAnnotationDB();
+        AnnotationDB db = new AnnotationDB();
 //        db.addIgnoredPackages("org.apache");
         db.addIgnoredPackages("org.codehaus");
         db.addIgnoredPackages("org.springframework");
