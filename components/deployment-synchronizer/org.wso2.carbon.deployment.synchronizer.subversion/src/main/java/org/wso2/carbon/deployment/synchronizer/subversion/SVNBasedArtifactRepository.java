@@ -834,19 +834,24 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
      */
     private List<String> getBaseDirs() {
         CarbonTomcatService service = SVNDataHolder.getInstance().getCarbonTomcatService();
-        Tomcat tomcat = service.getTomcat();
-        Container[] virtualHosts = tomcat.getEngine().findChildren();
         List<String> baseDirs = new ArrayList<String>();
-        for (Container container : virtualHosts) {
-            Host host = (Host) container;
-            String baseDir = getBaseDirectoryName(host.getAppBase());
-            baseDirs.add(baseDir);
+        if (service != null) {
+            Tomcat tomcat = service.getTomcat();
+            Container[] virtualHosts = tomcat.getEngine().findChildren();
+            for (Container container : virtualHosts) {
+                Host host = (Host) container;
+                String baseDir = getBaseDirectoryName(host.getAppBase());
+                baseDirs.add(baseDir);
+            }
         }
         return baseDirs;
     }
 
     private String getBaseDirectoryName(String appBase) {
         String baseDir;
+        //for appBase="repository/deployment/server/webapps from catalina-server.xml
+        //file separators ("/") are different in windows environment ("\\")
+        appBase = appBase.replace("/", File.separator);
         if (appBase.endsWith(File.separator)) {
             baseDir = appBase.substring(0, appBase.lastIndexOf(File.separator));
         } else {
