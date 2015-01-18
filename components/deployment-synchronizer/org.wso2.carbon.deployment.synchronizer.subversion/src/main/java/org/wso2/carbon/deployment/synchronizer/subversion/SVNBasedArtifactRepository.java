@@ -834,13 +834,15 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
      */
     private List<String> getBaseDirs() {
         CarbonTomcatService service = SVNDataHolder.getInstance().getCarbonTomcatService();
-        Tomcat tomcat = service.getTomcat();
-        Container[] virtualHosts = tomcat.getEngine().findChildren();
         List<String> baseDirs = new ArrayList<String>();
-        for (Container container : virtualHosts) {
-            Host host = (Host) container;
-            String baseDir = getBaseDirectoryName(host.getAppBase());
-            baseDirs.add(baseDir);
+        if (service != null) {
+            Tomcat tomcat = service.getTomcat();
+            Container[] virtualHosts = tomcat.getEngine().findChildren();
+            for (Container container : virtualHosts) {
+                Host host = (Host) container;
+                String baseDir = getBaseDirectoryName(host.getAppBase());
+                baseDirs.add(baseDir);
+            }
         }
         return baseDirs;
     }
