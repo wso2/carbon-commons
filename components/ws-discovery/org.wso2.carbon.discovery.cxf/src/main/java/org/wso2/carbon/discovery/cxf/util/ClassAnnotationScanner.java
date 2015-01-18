@@ -27,7 +27,7 @@ public class ClassAnnotationScanner {
     public static CarbonAnnotationDB getAnnotatedClasses(StandardContext context) {
 
         CarbonAnnotationDB db = new CarbonAnnotationDB();
-        db.addIgnoredPackages("org.apache");
+//        db.addIgnoredPackages("org.apache");
         db.addIgnoredPackages("org.codehaus");
         db.addIgnoredPackages("org.springframework");
 

@@ -24,6 +24,8 @@ import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.description.Parameter;
 import org.apache.axis2.engine.AxisConfiguration;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.neethi.Policy;
 import org.apache.rampart.RampartMessageData;
 import org.wso2.carbon.context.CarbonContext;
@@ -42,10 +44,13 @@ import org.wso2.carbon.registry.core.Registry;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import javax.xml.namespace.QName;
+import java.net.ConnectException;
 import java.net.URI;
 import java.util.Map;
 
 public class CxfMessageSender {
+
+    Log log = LogFactory.getLog(CxfMessageSender.class);
 
     public void sendHello(CXFServiceInfo serviceBean, Parameter discoveryParams) throws
             DiscoveryException {
@@ -67,13 +72,14 @@ public class CxfMessageSender {
             return;
         }
 
+        Config config = getDiscoveryConfig(discoveryParams);
+        Parameter discoveryProxyParam = DiscoveryMgtUtils.getDiscoveryParam(axisConfig);
+        if (discoveryProxyParam == null) {
+            return;
+        }
+        String discoveryEPR = (String) discoveryProxyParam.getValue();
+
         try {
-            Config config = getDiscoveryConfig(discoveryParams);
-            Parameter discoveryProxyParam = DiscoveryMgtUtils.getDiscoveryParam(axisConfig);
-            if (discoveryProxyParam == null) {
-                return;
-            }
-            String discoveryEPR = (String) discoveryProxyParam.getValue();
 
             // create the service client object before getting the eprs
             // in order to get the EPRs
@@ -123,6 +129,11 @@ public class CxfMessageSender {
             serviceClient.cleanup();
 
         } catch (Exception e) {
+            if (e.getCause() instanceof ConnectException) {
+                log.error("Error while connecting to Discovery Service. " +
+                        "Connection Refused - " + discoveryEPR);
+            }
+
             throw new DiscoveryException("Error while sending the WS-Discovery notification " +
                     "for the service " + serviceBean.getServiceName(), e);
         }
