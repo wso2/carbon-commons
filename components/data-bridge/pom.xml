@@ -37,16 +37,9 @@
         <module>org.wso2.carbon.databridge.commons</module>
         <module>org.wso2.carbon.databridge.commons.thrift</module>
         <module>org.wso2.carbon.databridge.agent.thrift</module>
-
-        <!-- <module>org.wso2.carbon.databridge.receiver.thrift/4.2.0</module> -->
-        <module>org.wso2.carbon.databridge.test.thrift/4.2.0</module>
+        <!--<module>org.wso2.carbon.databridge.test.thrift/4.2.0</module>-->
         <module>org.wso2.carbon.databridge.core</module>
         <module>org.wso2.carbon.databridge.streamdefn.registry</module>
         <module>org.wso2.carbon.databridge.receiver.thrift</module>
-        <!-- <module>org.wso2.carbon.databridge.receiver.restapi/4.2.0</module> -->
-        <!-- <module>org.wso2.carbon.databridge.persistence.cassandra/4.2.0</module> -->
-        <!-- <module>org.wso2.carbon.databridge.datasink.cassandra/4.2.0</module> -->
-        <!-- <module>org.wso2.carbon.databridge.streamdefn.registry/4.2.0</module> -->
-
     </modules>
 </project>
