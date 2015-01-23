@@ -70,7 +70,8 @@ public class ServerOfflineTest extends TestCase {
     }
 
     public void testSendingEventsWhileServerOffline()
-            throws DataEndpointAuthenticationException, DataEndpointAgentConfigurationException, TransportException, DataEndpointException, DataEndpointConfigurationException, SocketException {
+            throws DataEndpointAuthenticationException, DataEndpointAgentConfigurationException, TransportException,
+            DataEndpointException, DataEndpointConfigurationException, SocketException {
         AgentHolder.setConfigPath(HADataPublisherTestUtil.getDataAgentConfigPath());
         String hostName = HADataPublisherTestUtil.LOCAL_HOST;
         HADataPublisher dataPublisher = new HADataPublisher("tcp://" + hostName + ":7611",

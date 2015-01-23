@@ -23,17 +23,15 @@ import org.wso2.carbon.databridge.commons.Credentials;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.StreamDefinition;
 import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
-import org.wso2.carbon.databridge.commons.thrift.utils.HostAddressFinder;
 import org.wso2.carbon.databridge.commons.utils.EventDefinitionConverterUtils;
 import org.wso2.carbon.databridge.core.AgentCallback;
 import org.wso2.carbon.databridge.core.DataBridge;
 import org.wso2.carbon.databridge.core.Utils.AgentSession;
 import org.wso2.carbon.databridge.core.definitionstore.InMemoryStreamDefinitionStore;
-import org.wso2.carbon.databridge.core.definitionstore.StreamDefinitionStore;
 import org.wso2.carbon.databridge.core.exception.DataBridgeException;
 import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
 import org.wso2.carbon.databridge.core.internal.authentication.AuthenticationHandler;
-import org.wso2.carbon.databridge.receiver.thrift.internal.ThriftDataReceiver;
+import org.wso2.carbon.databridge.receiver.thrift.ThriftDataReceiver;
 import org.wso2.carbon.user.api.UserStoreException;
 
 import java.net.SocketException;
