@@ -36,9 +36,6 @@
         <module>org.wso2.carbon.application.mgt.server.feature</module>
         <module>org.wso2.carbon.application.mgt.ui.feature</module>
         <module>org.wso2.carbon.application.mgt.feature</module>
-        <module>org.wso2.carbon.application.mgt.webapp.server.feature</module>
-        <module>org.wso2.carbon.application.mgt.webapp.ui.feature</module>
-        <module>org.wso2.carbon.application.mgt.webapp.feature</module>
 
         <module>org.wso2.carbon.application.mgt.synapse.server.feature</module>
         <module>org.wso2.carbon.application.mgt.synapse.ui.feature</module>
