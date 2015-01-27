@@ -34,7 +34,6 @@
 
             <modules>
                 <module>org.wso2.carbon.discovery.admin.ui</module>
-                <module>org.wso2.carbon.discovery.cxf</module>
 		<module>org.wso2.carbon.discovery.ui</module>
                 <module>org.wso2.carbon.discovery.module</module>
             </modules>
