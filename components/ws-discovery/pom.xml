@@ -57,10 +57,6 @@
                 <artifactId>org.wso2.carbon.ui</artifactId>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.mediation.registry</artifactId>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.rampart.wso2</groupId>
                 <artifactId>rampart-core</artifactId>
             </dependency>
