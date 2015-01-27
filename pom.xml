@@ -26,6 +26,21 @@
         <module>service-stubs/org.wso2.carbon.datasource.stub</module>
         <module>service-stubs/org.wso2.carbon.throttling.agent.stub</module>
 
+        <module>service-stubs/cluster-mgt</module>
+        <module>service-stubs/logging</module>
+        <module>service-stubs/remote-tasks</module>
+        <module>service-stubs/reporting</module>
+        <module>service-stubs/url-mapper</module>
+        <module>service-stubs/userstore-config</module>
+        <module>service-stubs/user-manager</module>
+        <module>service-stubs/remote-usermgt</module>
+        <module>service-stubs/event</module>
+        <module>service-stubs/ndatasource</module>
+        <module>service-stubs/soap-tracer</module>
+        <module>service-stubs/wsdl-tools</module>
+        <module>service-stubs/system-statistics</module>
+        <module>service-stubs/message-flows</module>
+
         <module>components/authentication</module>
         <module>components/data-sources</module>
         <module>components/application-deployers</module>
@@ -38,6 +53,27 @@
 	<module>components/ganalytics</module>
 	<module>components/caching-invalidator</module>
 
+        <module>components/cluster-mgt</module>
+        <module>components/url-mapper</module>
+        <module>components/transaction-manager</module>
+        <module>components/hostobjects</module>
+        <module>components/ntask</module>
+        <module>components/reporting</module>
+        <module>components/doc-request-processor</module>
+        <module>components/tryit</module>
+        <module>components/wsdl2form</module>
+        <module>components/logging</module>
+        <module>components/userstore-config</module>
+        <module>components/user-manager</module>
+        <module>components/remote-usermgt</module>
+        <module>components/event</module>
+        <module>components/ndatasource</module>
+        <module>components/ws-discovery-core</module>
+        <module>components/soap-tracer</module>
+        <module>components/wsdl-tools</module>
+        <module>components/system-statistics</module>
+        <module>components/message-flows</module>
+
         <module>features/application-deployers</module>
         <module>features/application-mgt</module>
         <module>features/deployment-synchronizer</module>
@@ -47,6 +83,24 @@
         <module>features/data-bridge</module>
         <module>features/data-sources</module>
 	<module>features/caching-invalidator</module>
+
+        <module>features/cluster-mgt</module>
+        <module>features/hostobjects</module>
+        <module>features/logging-mgt</module>
+        <module>features/ntask</module>
+        <module>features/reporting</module>
+        <module>features/transaction-manager</module>
+        <module>features/tryit</module>
+        <module>features/url-mapper</module>
+        <module>features/user-manager</module>
+        <module>features/remote-usermgt</module>
+        <module>features/event</module>
+        <module>features/ndatasource</module>
+        <module>features/ws-discovery-core</module>
+        <module>features/wsdl-tools</module>
+        <module>features/system-statistics</module>
+        <module>features/soap-tracer</module>
+        <module>features/message-flows</module>
     </modules>
 
 
