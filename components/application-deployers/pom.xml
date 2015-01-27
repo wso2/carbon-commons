@@ -41,7 +41,6 @@
     </dependencies>
 
     <modules>
-        <module>org.wso2.carbon.application.deployer.webapp</module>
         <module>org.wso2.carbon.application.deployer.mashup</module>
         <module>org.wso2.carbon.application.deployer.synapse</module>
         <module>org.wso2.carbon.application.deployer.bpel</module>
