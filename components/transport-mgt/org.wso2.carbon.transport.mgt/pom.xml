@@ -50,10 +50,6 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.service.mgt</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.utils</artifactId>
         </dependency>
         <dependency>
@@ -84,7 +80,6 @@
                             org.wso2.carbon.utils.*,
                             org.apache.commons.logging,
                             org.wso2.carbon.core.transports.*,
-                            org.wso2.carbon.service.mgt.*,
                             org.wso2.carbon.registry.core.*,
                             *;resolution:=optional
                         </Import-Package>

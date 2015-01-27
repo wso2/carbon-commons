@@ -30,7 +30,7 @@ import org.wso2.carbon.core.transports.TransportService;
 import org.wso2.carbon.core.transports.util.TransportDetails;
 import org.wso2.carbon.core.transports.util.TransportParameter;
 import org.wso2.carbon.core.transports.util.TransportSummary;
-import org.wso2.carbon.service.mgt.ServiceAdmin;
+//import org.wso2.carbon.service.mgt.ServiceAdmin;
 import org.wso2.carbon.utils.ServerConstants;
 import org.wso2.carbon.CarbonConstants;
 
@@ -160,7 +160,11 @@ public class TransportAdmin extends AbstractAdmin {
 	 * @return TransportSummary[]
 	 * @throws Exception on error
 	 */
+        @Deprecated
 	public TransportSummary[] listExposedTransports(String serviceName) throws Exception {
+                return new TransportSummary[0];
+
+                /*
 		Collection<TransportSummary> transCollection;
 		String[] exposedTransports;
 		ServiceAdmin admin;
@@ -219,6 +223,7 @@ public class TransportAdmin extends AbstractAdmin {
 		}
 
 		return transCollection.toArray(new TransportSummary[transCollection.size()]);
+                */
 	}
 
 	/**
@@ -260,12 +265,14 @@ public class TransportAdmin extends AbstractAdmin {
 	/**
 	 * Adds transport to a given service. Any active available transport can be exposed by a
 	 * service. All transports already loaded in to axis2configuration are considered as active.
-	 *
+	 * We no longer provide UI options to add transports to services
 	 * @param serviceName Name of the service where new transport to be added.
 	 * @param transport Name of the transport to be added.
 	 * @throws Exception on error
 	 */
+        @Deprecated
 	public void addExposedTransports(String serviceName, String transport) throws Exception {
+                /*
 		ServiceAdmin admin;
 
 		if (serviceName == null) {
@@ -282,6 +289,7 @@ public class TransportAdmin extends AbstractAdmin {
 		} catch (Exception e) {
             handleException("Error while adding exposed transport " + transport, e);
 		}
+                */
 	}
 
 	/**
