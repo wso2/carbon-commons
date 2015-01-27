@@ -1,0 +1,45 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<module name="wso2statistics"
+        class="org.wso2.carbon.statistics.module.StatisticsModule">
+    <InFlow>
+        <handler name="InOnlyMEPHandler"
+                 class="org.wso2.carbon.statistics.module.InOnlyMEPHandler">
+            <order phase="MsgInObservation"/>
+        </handler>
+    </InFlow>
+    <InFaultFlow>
+        <handler name="InOnlyMEPHandler"
+                 class="org.wso2.carbon.statistics.module.InOnlyMEPHandler">
+            <order phase="MsgInObservation"/>
+        </handler>
+    </InFaultFlow>
+    <OutFlow>
+        <handler name="InOutMEPHandler"
+                 class="org.wso2.carbon.statistics.module.InOutMEPHandler">
+            <order phase="MsgOutObservation"/>
+        </handler>
+    </OutFlow>
+    <OutFaultFlow>
+        <handler name="FaultHandler"
+                 class="org.wso2.carbon.statistics.module.FaultHandler">
+            <order phase="MsgOutObservation"/>
+        </handler>
+    </OutFaultFlow>
+    <parameter name="adminModule" locked="true">true</parameter>
+</module>

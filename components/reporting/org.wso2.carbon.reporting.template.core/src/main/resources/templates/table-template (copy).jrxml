@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TableReport" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="30" bottomMargin="30" isFloatColumnFooter="true">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Sans_Normal" isDefault="true" fontName="DejaVu Sans" fontSize="10" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<style name="Title" mode="Opaque" forecolor="#800517" backcolor="#806D7E" fontName="Arial" fontSize="26" isBold="false" isItalic="false" isUnderline="false"/>
+	<style name="Table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#FF0000"/>
+		</box>
+	</style>
+	<style name="TableHeader" mode="Opaque" backcolor="#808080"/>
+	<style name="TableFooter" mode="Opaque" backcolor="#C0C0C0"/>
+	<subDataset name="TableData">
+		<field name="tailNum" class="java.lang.String"/>
+		<field name="aircraftSerial" class="java.lang.String"/>
+		<field name="aircraftModel" class="java.lang.String"/>
+		<field name="engineModel" class="java.lang.String"/>
+		<field name="Column5" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="TableDataSource" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<background>
+		<band height="780" splitType="Stretch">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="780" backcolor="#CCFFCC"/>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</background>
+	<title>
+		<band height="150">
+			<image scaleImage="Clip">
+				<reportElement x="0" y="5" width="165" height="40"/>
+				<imageExpression><![CDATA[ImageName]]></imageExpression>
+				<hyperlinkTooltipExpression><![CDATA[ImageName]]></hyperlinkTooltipExpression>
+			</image>
+			<textField isStretchWithOverflow="true">
+				<reportElement style="Title" x="180" y="5" width="375" height="40"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[Titletext]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement style="Table" x="0" y="50" width="555" height="100"/>
+				<c:table xmlns:c="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="TableData">
+						<dataSourceExpression><![CDATA[$P{TableDataSource}]]></dataSourceExpression>
+					</datasetRun>
+					<c:column width="300">
+						<c:columnHeader style="TableHeader" height="15" rowSpan="1">
+							<box leftPadding="10">
+								<pen lineColor="#000000"/>
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="290" height="15"/>
+								<textElement verticalAlignment="Middle">
+									<font size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Header 1]]></text>
+							</staticText>
+						</c:columnHeader>
+						<c:columnFooter style="TableFooter" height="15" rowSpan="1">
+							<box leftPadding="10">
+								<pen lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="290" height="15"/>
+								<textElement verticalAlignment="Middle">
+									<font size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total 1]]></text>
+							</staticText>
+						</c:columnFooter>
+						<c:detailCell height="15" rowSpan="1">
+							<box leftPadding="10">
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="0" width="290" height="15"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{tailNum}]]></textFieldExpression>
+							</textField>
+						</c:detailCell>
+					</c:column>
+					<c:column width="255">
+						<c:columnHeader style="TableHeader" height="15" rowSpan="1">
+							<box leftPadding="10">
+								<pen lineColor="#000000"/>
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="245" height="15"/>
+								<textElement verticalAlignment="Middle">
+									<font size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Header 2]]></text>
+							</staticText>
+						</c:columnHeader>
+						<c:columnFooter style="TableFooter" height="15" rowSpan="1">
+							<box leftPadding="10">
+								<pen lineColor="#000000"/>
+								<leftPen lineWidth="0.5"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="245" height="15"/>
+								<textElement verticalAlignment="Middle">
+									<font size="12" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total 2]]></text>
+							</staticText>
+						</c:columnFooter>
+						<c:detailCell height="15" rowSpan="1">
+							<box leftPadding="10">
+								<leftPen lineWidth="0.5"/>
+								<bottomPen lineWidth="0.5"/>
+							</box>
+							<textField>
+								<reportElement x="0" y="0" width="245" height="15"/>
+								<textElement/>
+								<textFieldExpression><![CDATA[$F{aircraftSerial}]]></textFieldExpression>
+							</textField>
+						</c:detailCell>
+					</c:column>
+				</c:table>
+			</componentElement>
+		</band>
+	</title>
+</jasperReport>
+

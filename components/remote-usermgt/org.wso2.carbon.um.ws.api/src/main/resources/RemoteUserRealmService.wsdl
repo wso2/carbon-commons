@@ -1,0 +1,148 @@
+<!--
+ ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~
+ ~ WSO2 Inc. licenses this file to you under the Apache License,
+ ~ Version 2.0 (the "License"); you may not use this file except
+ ~ in compliance with the License.
+ ~ You may obtain a copy of the License at
+ ~
+ ~    http://www.apache.org/licenses/LICENSE-2.0
+ ~
+ ~ Unless required by applicable law or agreed to in writing,
+ ~ software distributed under the License is distributed on an
+ ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ ~ KIND, either express or implied.  See the License for the
+ ~ specific language governing permissions and limitations
+ ~ under the License.
+ -->
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ns="http://service.ws.um.carbon.wso2.org" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax2118="http://core.user.carbon.wso2.org/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:ax2121="http://dao.service.ws.um.carbon.wso2.org/xsd" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://service.ws.um.carbon.wso2.org">
+    <wsdl:documentation>RemoteUserRealmService</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://dao.service.ws.um.carbon.wso2.org/xsd">
+            <xs:complexType name="RealmConfigurationDTO">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="adminPassword" nillable="true" type="xs:string" />
+                    <xs:element minOccurs="0" name="adminRoleName" nillable="true" type="xs:string" />
+                    <xs:element minOccurs="0" name="adminUserName" nillable="true" type="xs:string" />
+                    <xs:element minOccurs="0" name="authorizationManagerClass" nillable="true" type="xs:string" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="authzProperties" nillable="true" type="ax2121:RealmPropertyDTO" />
+                    <xs:element minOccurs="0" name="everyOneRoleName" nillable="true" type="xs:string" />
+                    <xs:element minOccurs="0" name="maxUserListLength" type="xs:int" />
+                    <xs:element minOccurs="0" name="persistedTimestamp" nillable="true" type="xs:date" />
+                    <xs:element minOccurs="0" name="readOnly" type="xs:boolean" />
+                    <xs:element minOccurs="0" name="realmClassName" nillable="true" type="xs:string" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="realmProperties" nillable="true" type="ax2121:RealmPropertyDTO" />
+                    <xs:element minOccurs="0" name="tenantId" type="xs:int" />
+                    <xs:element minOccurs="0" name="userStoreClass" nillable="true" type="xs:string" />
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="userStoreProperties" nillable="true" type="ax2121:RealmPropertyDTO" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="RealmPropertyDTO">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+                    <xs:element minOccurs="0" name="value" nillable="true" type="xs:string" />
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2120="http://core.user.carbon.wso2.org/xsd" xmlns:ax2122="http://dao.service.ws.um.carbon.wso2.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://service.ws.um.carbon.wso2.org">
+            <xs:import namespace="http://core.user.carbon.wso2.org/xsd" />
+            <xs:import namespace="http://dao.service.ws.um.carbon.wso2.org/xsd" />
+            <xs:complexType name="Exception">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="Exception" nillable="true" type="xs:anyType" />
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="UserStoreException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="UserStoreException" nillable="true" type="ax2120:UserStoreException" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRealmConfigurationResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2122:RealmConfigurationDTO" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax2119="http://service.ws.um.carbon.wso2.org" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://core.user.carbon.wso2.org/xsd">
+            <xs:import namespace="http://service.ws.um.carbon.wso2.org" />
+            <xs:complexType name="UserStoreException">
+                <xs:complexContent>
+                    <xs:extension base="ax2119:Exception">
+                        <xs:sequence />
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="getRealmConfigurationRequest" />
+    <wsdl:message name="getRealmConfigurationResponse">
+        <wsdl:part name="parameters" element="ns:getRealmConfigurationResponse" />
+    </wsdl:message>
+    <wsdl:message name="UserStoreException">
+        <wsdl:part name="parameters" element="ns:UserStoreException" />
+    </wsdl:message>
+    <wsdl:portType name="RemoteUserRealmServicePortType">
+        <wsdl:operation name="getRealmConfiguration">
+            <wsdl:input message="ns:getRealmConfigurationRequest" wsaw:Action="urn:getRealmConfiguration" />
+            <wsdl:output message="ns:getRealmConfigurationResponse" wsaw:Action="urn:getRealmConfigurationResponse" />
+            <wsdl:fault message="ns:UserStoreException" name="UserStoreException" wsaw:Action="urn:getRealmConfigurationUserStoreException" />
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="RemoteUserRealmServiceSoap11Binding" type="ns:RemoteUserRealmServicePortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="getRealmConfiguration">
+            <soap:operation soapAction="urn:getRealmConfiguration" style="document" />
+            <wsdl:input>
+                <soap:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UserStoreException">
+                <soap:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="RemoteUserRealmServiceSoap12Binding" type="ns:RemoteUserRealmServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+        <wsdl:operation name="getRealmConfiguration">
+            <soap12:operation soapAction="urn:getRealmConfiguration" style="document" />
+            <wsdl:input>
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal" />
+            </wsdl:output>
+            <wsdl:fault name="UserStoreException">
+                <soap12:fault use="literal" name="UserStoreException" />
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="RemoteUserRealmServiceHttpBinding" type="ns:RemoteUserRealmServicePortType">
+        <http:binding verb="POST" />
+        <wsdl:operation name="getRealmConfiguration">
+            <http:operation location="getRealmConfiguration" />
+            <wsdl:input>
+                <mime:content type="text/xml" part="getRealmConfiguration" />
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="getRealmConfiguration" />
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="RemoteUserRealmService">
+        <wsdl:port name="RemoteUserRealmServiceHttpsSoap11Endpoint" binding="ns:RemoteUserRealmServiceSoap11Binding">
+            <soap:address location="https://10.100.1.231:9443/services/RemoteUserRealmService.RemoteUserRealmServiceHttpsSoap11Endpoint/" />
+        </wsdl:port>
+        <wsdl:port name="RemoteUserRealmServiceHttpsSoap12Endpoint" binding="ns:RemoteUserRealmServiceSoap12Binding">
+            <soap12:address location="https://10.100.1.231:9443/services/RemoteUserRealmService.RemoteUserRealmServiceHttpsSoap12Endpoint/" />
+        </wsdl:port>
+        <wsdl:port name="RemoteUserRealmServiceHttpsEndpoint" binding="ns:RemoteUserRealmServiceHttpBinding">
+            <http:address location="https://10.100.1.231:9443/services/RemoteUserRealmService.RemoteUserRealmServiceHttpsEndpoint/" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
