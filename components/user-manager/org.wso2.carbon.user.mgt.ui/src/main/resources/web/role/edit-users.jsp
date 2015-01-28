@@ -314,7 +314,7 @@
                                       numberOfPages="<%=numberOfPages%>"
                                       noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                                       page="edit-users.jsp" pageNumberParameterName="pageNumber"
-                                      parameters="<%=\"roleName=\"+roleName%>"/>
+                                      parameters="<%="roleName="+roleName%>"/>
                         <table class="normal">
                             <%
                                 if (users != null && users.length > 0) {
@@ -393,7 +393,7 @@
                                   numberOfPages="<%=numberOfPages%>"
                                   noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                                   page="edit-users.jsp" pageNumberParameterName="pageNumber"
-                                  parameters="<%=\"roleName=\"+roleName%>"/>
+                                  parameters="<%="roleName="+roleName%>"/>
             <%
                 if (users != null && users.length > 0 && exceededDomains != null) {
                     if(exceededDomains.getItemName() != null || exceededDomains.getItemDisplayName() != null){

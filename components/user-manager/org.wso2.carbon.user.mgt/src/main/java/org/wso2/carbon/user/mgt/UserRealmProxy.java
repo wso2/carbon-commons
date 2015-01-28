@@ -40,6 +40,7 @@ import org.wso2.carbon.registry.api.RegistryException;
 import org.wso2.carbon.registry.api.Resource;
 import org.wso2.carbon.registry.core.Collection;
 import org.wso2.carbon.registry.core.RegistryConstants;
+import org.wso2.carbon.registry.core.utils.RegistryUtils;
 import org.wso2.carbon.user.api.Claim;
 import org.wso2.carbon.user.api.ClaimMapping;
 import org.wso2.carbon.user.api.RealmConfiguration;
@@ -49,7 +50,6 @@ import org.wso2.carbon.user.core.UserRealm;
 import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.UserStoreManager;
 import org.wso2.carbon.user.core.common.AbstractUserStoreManager;
-import org.wso2.carbon.user.core.ldap.LDAPConstants;
 import org.wso2.carbon.user.core.util.UserCoreUtil;
 import org.wso2.carbon.user.mgt.bulkimport.BulkImportConfig;
 import org.wso2.carbon.user.mgt.bulkimport.CSVUserBulkImport;
@@ -69,6 +69,10 @@ import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 public class UserRealmProxy {
 
     private static Log log = LogFactory.getLog(UserRealmProxy.class);
+    
+    private static final String APPLICATIONS_PATH = RegistryConstants.PATH_SEPARATOR
+            + CarbonConstants.UI_PERMISSION_NAME + RegistryConstants.PATH_SEPARATOR
+            + "applications";
 
     private UserRealm realm = null;
 
@@ -1582,7 +1586,7 @@ public class UserRealmProxy {
 
             for (String name : oldRoleList) {
                 int newindex = Arrays.binarySearch(roleList, name);
-                if (newindex > 0) {
+                if (newindex < 0) {
                     if (realm.getRealmConfiguration().getEveryOneRoleName().equalsIgnoreCase(name)) {
                         log.error("Security Alert! Carbon everyone role is being manipulated");
                         throw new UserAdminException("Invalid data");// obscure
@@ -1816,6 +1820,9 @@ public class UserRealmProxy {
 
         UIPermissionNode nodeRoot;
         Collection regRoot;
+        Collection parent = null;
+        Registry tenentRegistry = null;
+
         try {
             Registry registry = UserMgtDSComponent.getRegistryService().getGovernanceSystemRegistry();           
             if (tenantId == MultitenantConstants.SUPER_TENANT_ID) {
@@ -1827,12 +1834,37 @@ public class UserRealmProxy {
                 String displayName = regRoot.getProperty(UserMgtConstants.DISPLAY_NAME);
                 nodeRoot = new UIPermissionNode(UserMgtConstants.UI_PERMISSION_ROOT, displayName);
             } else {
+                
                 regRoot = (Collection) registry.get(UserMgtConstants.UI_ADMIN_PERMISSION_ROOT);
-                String displayName = regRoot.getProperty(UserMgtConstants.DISPLAY_NAME);
+                
+                tenentRegistry = UserMgtDSComponent.getRegistryService().getGovernanceSystemRegistry(tenantId);           
+                Collection appRoot;
+                
+                if (tenentRegistry.resourceExists(APPLICATIONS_PATH)) {
+                    appRoot = (Collection) tenentRegistry.get(APPLICATIONS_PATH);                       
+                    parent = (Collection) tenentRegistry.newCollection();
+                    parent.setProperty(UserMgtConstants.DISPLAY_NAME, "All Permissions");                                        
+                    parent.setChildren(new String[]{regRoot.getPath(),appRoot.getPath()});
+                }
+
+                String displayName = null;
+
+                if (parent != null) {
+                    displayName = parent.getProperty(UserMgtConstants.DISPLAY_NAME);
+                } else {
+                    displayName = regRoot.getProperty(UserMgtConstants.DISPLAY_NAME);
+                }
+                
                 nodeRoot = new UIPermissionNode(UserMgtConstants.UI_ADMIN_PERMISSION_ROOT,
                         displayName);
             }
-            buildUIPermissionNode(regRoot, nodeRoot, registry, null, null, null);
+            
+            if (parent != null) {
+                buildUIPermissionNode(parent, nodeRoot, registry, tenentRegistry, null, null, null);
+            } else {
+                buildUIPermissionNode(regRoot, nodeRoot, registry, tenentRegistry, null, null, null);
+            }
+            
             return nodeRoot;
         } catch (UserStoreException e) {
             // previously logged so logging not needed
@@ -1847,6 +1879,9 @@ public class UserRealmProxy {
             throws UserAdminException {
         UIPermissionNode nodeRoot;
         Collection regRoot;
+        Collection parent = null;
+        Registry tenentRegistry = null;
+
         try {
             Registry registry = UserMgtDSComponent.getRegistryService().getGovernanceSystemRegistry();
             if (tenantId == MultitenantConstants.SUPER_TENANT_ID) {
@@ -1854,13 +1889,39 @@ public class UserRealmProxy {
                 String displayName = regRoot.getProperty(UserMgtConstants.DISPLAY_NAME);
                 nodeRoot = new UIPermissionNode(UserMgtConstants.UI_PERMISSION_ROOT, displayName);
             } else {
+                
                 regRoot = (Collection) registry.get(UserMgtConstants.UI_ADMIN_PERMISSION_ROOT);
-                String displayName = regRoot.getProperty(UserMgtConstants.DISPLAY_NAME);
+                
+                tenentRegistry = UserMgtDSComponent.getRegistryService().getGovernanceSystemRegistry(tenantId);           
+                Collection appRoot;
+                
+                if (tenentRegistry.resourceExists(APPLICATIONS_PATH)) {
+                    appRoot = (Collection) tenentRegistry.get(APPLICATIONS_PATH);                       
+                    parent = (Collection) tenentRegistry.newCollection();
+                    parent.setProperty(UserMgtConstants.DISPLAY_NAME, "All Permissions");  
+                    parent.setChildren(new String[]{regRoot.getPath(),appRoot.getPath()});
+                }
+
+                String displayName = null;
+
+                if (parent != null) {
+                    displayName = parent.getProperty(UserMgtConstants.DISPLAY_NAME);
+                } else {
+                    displayName = regRoot.getProperty(UserMgtConstants.DISPLAY_NAME);
+                }
+                
                 nodeRoot = new UIPermissionNode(UserMgtConstants.UI_ADMIN_PERMISSION_ROOT,
                         displayName);
             }
-            buildUIPermissionNode(regRoot, nodeRoot, registry, realm.getAuthorizationManager(),
-                    roleName, null);
+            
+            if (parent != null) {
+                buildUIPermissionNode(parent, nodeRoot, registry, tenentRegistry,
+                        realm.getAuthorizationManager(), roleName, null);
+            } else {
+                buildUIPermissionNode(regRoot, nodeRoot, registry, tenentRegistry,
+                        realm.getAuthorizationManager(), roleName, null);
+            }
+            
             return nodeRoot;
         } catch (UserStoreException e) {
             // previously logged so logging not needed
@@ -1971,7 +2032,7 @@ public class UserRealmProxy {
     }
 
     private void buildUIPermissionNode(Collection parent, UIPermissionNode parentNode,
-            Registry registry, AuthorizationManager authMan, String roleName, String userName)
+            Registry registry, Registry tenantRegistry, AuthorizationManager authMan, String roleName, String userName)
             throws RegistryException, UserStoreException {
 
         boolean isSelected = false;
@@ -1982,35 +2043,44 @@ public class UserRealmProxy {
             isSelected = authMan.isUserAuthorized(userName, parentNode.getResourcePath(),
                     UserMgtConstants.EXECUTE_ACTION);
         }
-        if(isSelected){
-            buildUIPermissionNodeAllSelected(parent, parentNode, registry);
+        if (isSelected) {
+            buildUIPermissionNodeAllSelected(parent, parentNode, registry, tenantRegistry);
             parentNode.setSelected(true);
-        }  else {
-             buildUIPermissionNodeNotAllSelected(parent, parentNode,registry,
-                     authMan, roleName, userName);
+        } else {
+            buildUIPermissionNodeNotAllSelected(parent, parentNode, registry, tenantRegistry,
+                    authMan, roleName, userName);
         }
     }
 
-    private void buildUIPermissionNodeAllSelected (Collection parent, UIPermissionNode parentNode,
-            Registry registry)
-            throws RegistryException, UserStoreException {
+    private void buildUIPermissionNodeAllSelected(Collection parent, UIPermissionNode parentNode,
+            Registry registry, Registry tenantRegistry) throws RegistryException,
+            UserStoreException {
 
-        String [] children = parent.getChildren();
+        String[] children = parent.getChildren();
         UIPermissionNode[] childNodes = new UIPermissionNode[children.length];
-        for (int i = 0 ; i < children.length; i++) {
+        for (int i = 0; i < children.length; i++) {
             String child = children[i];
-            Resource resource = registry.get(child);
+            Resource resource = null;
+
+            if (registry.resourceExists(child)) {
+                resource = registry.get(child);
+            } else if (tenantRegistry != null) {
+                resource = tenantRegistry.get(child);
+            } else {
+                throw new RegistryException("Permission resource not found in the registry.");
+            }
 
             childNodes[i] = getUIPermissionNode(resource, registry, true);
             if (resource instanceof Collection) {
-                buildUIPermissionNodeAllSelected((Collection) resource, childNodes[i], registry);
+                buildUIPermissionNodeAllSelected((Collection) resource, childNodes[i], registry,
+                        tenantRegistry);
             }
         }
         parentNode.setNodeList(childNodes);
     }
 
     private void buildUIPermissionNodeNotAllSelected(Collection parent, UIPermissionNode parentNode,
-            Registry registry, AuthorizationManager authMan, String roleName, String userName)
+            Registry registry, Registry tenantRegistry, AuthorizationManager authMan, String roleName, String userName)
             throws RegistryException, UserStoreException {
 
         String [] children = parent.getChildren();
@@ -2018,7 +2088,16 @@ public class UserRealmProxy {
 
         for (int i = 0 ; i < children.length; i++) {
             String child = children[i];
-            Resource resource = registry.get(child);
+            Resource resource = null;
+            
+            if (tenantRegistry != null && child.startsWith("/permission/applications")){
+                resource = tenantRegistry.get(child);
+            } else if (registry.resourceExists(child)){
+                resource = registry.get(child);
+            } else {
+                throw new RegistryException("Permission resource not found in the registry.");
+            }
+            
             boolean isSelected = false;
             if (roleName != null) {
                 isSelected = authMan.isRoleAuthorized(roleName, child,
@@ -2030,7 +2109,7 @@ public class UserRealmProxy {
             childNodes[i] = getUIPermissionNode(resource, registry, isSelected);
             if (resource instanceof Collection) {
                 buildUIPermissionNodeNotAllSelected((Collection) resource, childNodes[i],
-                        registry, authMan,roleName, userName);
+                        registry,tenantRegistry, authMan,roleName, userName);
             }
         }
         parentNode.setNodeList(childNodes);
@@ -2082,4 +2161,14 @@ public class UserRealmProxy {
 			throw new UserAdminException("Unable to check shared role enabled", e);
 		}
 	}
+	
+
+    public String[] concatArrays(String[] o1, String[] o2) {
+        String[] ret = new String[o1.length + o2.length];
+
+        System.arraycopy(o1, 0, ret, 0, o1.length);
+        System.arraycopy(o2, 0, ret, o1.length, o2.length);
+
+        return ret;
+    }
 }

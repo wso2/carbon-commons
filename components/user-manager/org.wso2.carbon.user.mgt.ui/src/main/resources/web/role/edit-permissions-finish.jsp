@@ -24,6 +24,7 @@
 <%@ page import="java.text.MessageFormat" %>
 <%@ page import="java.util.ResourceBundle" %>
 <%@page import="org.wso2.carbon.ui.util.CharacterEncoder"%>
+<%@page import="java.net.URLEncoder" %>
 
 <%
 
@@ -39,9 +40,9 @@
         String prevUser = request.getParameter("prevUser");
         String prevPageNumber = request.getParameter("prevPageNumber");
         if("view".equals(prevPage)){
-            forwardTo = "../user/view-roles.jsp?username="+prevUser + "&pageNumber=" + prevPageNumber;
+            forwardTo = "../user/view-roles.jsp?username="+URLEncoder.encode(prevUser) + "&pageNumber=" + prevPageNumber;
         }else if("edit".equals(prevPage)){
-            forwardTo = "../user/edit-user-roles.jsp?username="+prevUser + "&pageNumber=" +prevPageNumber ;
+            forwardTo = "../user/edit-user-roles.jsp?username="+URLEncoder.encode(prevUser) + "&pageNumber=" +prevPageNumber ;
         }
     }
 

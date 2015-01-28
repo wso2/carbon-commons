@@ -28,6 +28,7 @@
 <%@ page import="org.wso2.carbon.user.mgt.ui.PaginatedNamesBean" %>
 <%@ page import="org.wso2.carbon.user.mgt.ui.Util" %>
 <%@ page import="java.util.*" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.FlaggedName" %>
 <%@ page import="org.wso2.carbon.user.mgt.ui.UserAdminUIConstants" %>
 <%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.UserRealmInfo" %>
@@ -343,7 +344,7 @@
                                       numberOfPages="<%=numberOfPages%>"
                                       noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                                       page="edit-user-roles.jsp" pageNumberParameterName="pageNumber"
-                                      parameters="<%=\"username=\"+userName%>"/>
+                                      parameters="<%="username="+userName%>"/>
                             <%
                                 if ( roles != null && roles.length > 0) {
                             %>
@@ -429,7 +430,7 @@
                                   numberOfPages="<%=numberOfPages%>"
                                   noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                                   page="edit-user-roles.jsp" pageNumberParameterName="pageNumber"
-                                  parameters="<%=\"username=\"+userName%>"/>
+                                  parameters="<%="username="+userName%>"/>
                 <%
                     if (roles != null && roles.length > 0 && exceededDomains != null) {
                         if(exceededDomains.getItemName() != null || exceededDomains.getItemDisplayName() != null){
