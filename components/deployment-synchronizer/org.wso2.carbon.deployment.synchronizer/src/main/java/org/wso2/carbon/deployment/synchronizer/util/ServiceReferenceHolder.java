@@ -19,14 +19,12 @@
 package org.wso2.carbon.deployment.synchronizer.util;
 
 import org.wso2.carbon.registry.core.service.RegistryService;
-import org.wso2.carbon.registry.eventing.services.EventingService;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
 public final class ServiceReferenceHolder {
 
     private static ConfigurationContextService configurationContextService;
     private static RegistryService registryService;
-    private static EventingService eventingService;
 
     private ServiceReferenceHolder() {
 
@@ -48,11 +46,4 @@ public final class ServiceReferenceHolder {
         ServiceReferenceHolder.registryService = registryService;
     }
 
-    public static EventingService getEventingService() {
-        return eventingService;
-    }
-
-    public static void setEventingService(EventingService eventingService) {
-        ServiceReferenceHolder.eventingService = eventingService;
-    }
 }
