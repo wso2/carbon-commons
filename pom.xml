@@ -104,6 +104,12 @@
         <!--<module>features/message-flows</module>-->
     </modules>
 
+    <scm>
+        <url>https://github.com/wso2/carbon-commons.git</url>
+        <developerConnection>scm:git:https://github.com/wso2/carbon-commons.git</developerConnection>
+        <connection>scm:git:https://github.com/wso2/carbon-commons.git</connection>
+        <tag>HEAD</tag>
+    </scm>
 
     <dependencyManagement>
         <dependencies>
@@ -1877,6 +1883,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <configuration>
                     <preparationGoals>clean install</preparationGoals>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
             <plugin>
@@ -2017,6 +2024,9 @@
         </carbon.platform.package.export.version>
         <carbon.platform.package.import.version.range>[4.3.0.SNAPSHOT, 4.4.0)
         </carbon.platform.package.import.version.range>
+
+        <!-- for maven release process -->
+        <project.scm.id>my-scm-server</project.scm.id>
 
         <version.javax.servlet>3.0.0.v201112011016</version.javax.servlet>
 
@@ -2242,6 +2252,13 @@
                 <enabled>false</enabled>
             </releases>
         </repository>
+
+        <repository>
+            <id>nexus-releases</id>
+            <name>WSO2 Release Distribution Repository</name>
+            <url>http://maven.wso2.org/nexus/service/local/staging/deploy/maven2/</url>
+        </repository>
+
     </repositories>
 
 
