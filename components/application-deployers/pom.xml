@@ -42,13 +42,13 @@
 
     <modules>
         <module>org.wso2.carbon.application.deployer.mashup</module>
-        <module>org.wso2.carbon.application.deployer.synapse</module>
+<!--        <module>org.wso2.carbon.application.deployer.synapse</module> 
         <module>org.wso2.carbon.application.deployer.bpel</module>
         <module>org.wso2.carbon.application.deployer.humantask</module>
         <module>org.wso2.carbon.application.deployer.bpmn</module>
         <module>org.wso2.carbon.application.deployer.brs</module>
         <module>org.wso2.carbon.application.deployer.gadget</module>
-        <module>org.wso2.carbon.application.deployer.bam</module>
+        <module>org.wso2.carbon.application.deployer.bam</module> -->
     </modules>
 </project>
 

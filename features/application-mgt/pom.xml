@@ -37,7 +37,7 @@
         <module>org.wso2.carbon.application.mgt.ui.feature</module>
         <module>org.wso2.carbon.application.mgt.feature</module>
 
-        <module>org.wso2.carbon.application.mgt.synapse.server.feature</module>
+<!--        <module>org.wso2.carbon.application.mgt.synapse.server.feature</module>
         <module>org.wso2.carbon.application.mgt.synapse.ui.feature</module>
         <module>org.wso2.carbon.application.mgt.synapse.feature</module>
         <module>org.wso2.carbon.application.mgt.bpel.server.feature</module>
@@ -46,18 +46,18 @@
         <module>org.wso2.carbon.application.mgt.humantask.server.feature</module>
         <module>org.wso2.carbon.application.mgt.humantask.ui.feature</module>
         <module>org.wso2.carbon.application.mgt.humantask.feature</module>
-
+-->
     </modules>
 
         <dependencies>
-	    	<dependency>
+<!--	    	<dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.bpel.skeleton</artifactId>
             </dependency>
 	    	<dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.humantask.skeleton</artifactId>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt</artifactId>
@@ -74,7 +74,7 @@
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.stub</artifactId>
             </dependency>
-            <dependency>
+<!--            <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.synapse</artifactId>
             </dependency>
@@ -122,6 +122,7 @@
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.mgt.webapp.stub</artifactId>
             </dependency>
+-->
         </dependencies>
 
 </project>

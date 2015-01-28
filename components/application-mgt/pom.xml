@@ -37,12 +37,13 @@
         <module>org.wso2.carbon.application.mgt</module>
         <module>org.wso2.carbon.application.mgt.ui</module>
         <module>org.wso2.carbon.application.upload</module>
-        <module>org.wso2.carbon.application.mgt.synapse</module>
+<!--        <module>org.wso2.carbon.application.mgt.synapse</module>
         <module>org.wso2.carbon.application.mgt.bpel</module>
         <module>org.wso2.carbon.application.mgt.humantask</module>
         <module>org.wso2.carbon.application.mgt.synapse.ui</module>
         <module>org.wso2.carbon.application.mgt.bpel.ui</module>
         <module>org.wso2.carbon.application.mgt.humantask.ui</module>
+-->
     </modules>
 </project>
 
