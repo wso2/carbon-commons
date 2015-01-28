@@ -27,7 +27,6 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.identity.entitlement.proxy</artifactId>
-    <version>4.3.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Identity Entitlement PDP Proxy</name>
     <description>A custom wso2 products or solution</description>
@@ -35,11 +34,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.user.mgt.stub</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.identity.entitlement.stub</artifactId>
         </dependency>
         <dependency>
@@ -135,7 +134,7 @@
             <artifactId>opensaml2</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.ws.security.wso2</groupId>
+            <groupId>org.apache.ws.security</groupId>
             <artifactId>wss4j</artifactId>
         </dependency>
         <dependency>

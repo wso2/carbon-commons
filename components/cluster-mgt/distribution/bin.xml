@@ -26,8 +26,8 @@
             <outputDirectory>carbon-clustermgt-${pom.version}</outputDirectory>
             <includes>
                 <include>org.wso2.carbon:org.wso2.carbon.cluster.mgt.core:jar</include>
-                <include>org.wso2.carbon:org.wso2.carbon.cluster.mgt.admin:jar</include>
-                <include>org.wso2.carbon:org.wso2.carbon.cluster.mgt.admin.ui:jar</include>
+                <include>org.wso2.carbon.commons:org.wso2.carbon.cluster.mgt.admin:jar</include>
+                <include>org.wso2.carbon.commons:org.wso2.carbon.cluster.mgt.admin.ui:jar</include>
             </includes>
         </dependencySet>
     </dependencySets>

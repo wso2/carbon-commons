@@ -23,23 +23,21 @@
         <module>service-stubs/org.wso2.carbon.transport.jms.stub</module>
         <module>service-stubs/org.wso2.carbon.transport.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.datasource.stub</module>
-        <!--<module>service-stubs/org.wso2.carbon.throttling.agent.stub</module>-->
-
-        <!--<module>service-stubs/cluster-mgt</module>-->
-        <!--<module>service-stubs/logging</module>-->
-        <!--<module>service-stubs/remote-tasks</module>-->
-        <!--<module>service-stubs/reporting</module>-->
-        <!--<module>service-stubs/url-mapper</module>-->
-        <!--<module>service-stubs/userstore-config</module>-->
-        <!--<module>service-stubs/user-manager</module>-->
-        <!--<module>service-stubs/remote-usermgt</module>-->
-        <!--<module>service-stubs/event</module>-->
-        <!--<module>service-stubs/ndatasource</module>-->
-        <!--<module>service-stubs/soap-tracer</module>-->
-        <!--<module>service-stubs/wsdl-tools</module>-->
-        <!--<module>service-stubs/system-statistics</module>-->
-        <!--<module>service-stubs/message-flows</module>-->
-
+        <module>service-stubs/org.wso2.carbon.throttling.agent.stub</module>
+        <module>service-stubs/cluster-mgt</module>
+        <module>service-stubs/logging</module>
+        <module>service-stubs/remote-tasks</module>
+        <module>service-stubs/reporting</module>
+        <module>service-stubs/url-mapper</module>
+        <module>service-stubs/userstore-config</module>
+        <module>service-stubs/user-manager</module>
+        <module>service-stubs/remote-usermgt</module>
+        <module>service-stubs/event</module>
+        <module>service-stubs/ndatasource</module>
+        <module>service-stubs/soap-tracer</module>
+        <module>service-stubs/wsdl-tools</module>
+        <module>service-stubs/system-statistics</module>
+        <module>service-stubs/message-flows</module>
         <module>components/authentication</module>
         <module>components/data-sources</module>
         <module>components/application-deployers</module>
@@ -52,37 +50,35 @@
 	<module>components/ganalytics</module>
 	<module>components/caching-invalidator</module>
 
-        <!--<module>components/cluster-mgt</module>-->
-        <!--<module>components/url-mapper</module>-->
-        <!--<module>components/transaction-manager</module>-->
-        <!--<module>components/hostobjects</module>-->
-        <!--<module>components/ntask</module>-->
-        <!--<module>components/reporting</module>-->
-        <!--<module>components/doc-request-processor</module>-->
-        <!--<module>components/tryit</module>-->
-        <!--<module>components/wsdl2form</module>-->
-        <!--<module>components/logging</module>-->
-        <!--<module>components/userstore-config</module>-->
-        <!--<module>components/user-manager</module>-->
-        <!--<module>components/remote-usermgt</module>-->
-        <!--<module>components/event</module>-->
-        <!--<module>components/ndatasource</module>-->
-        <!--<module>components/ws-discovery-core</module>-->
-        <!--<module>components/soap-tracer</module>-->
-        <!--<module>components/wsdl-tools</module>-->
-        <!--<module>components/system-statistics</module>-->
-        <!--<module>components/message-flows</module>-->
-
-        <module>features/application-deployers</module>
-        <module>features/application-mgt</module>
-        <module>features/deployment-synchronizer</module>
-        <module>features/ws-discovery</module>
-        <module>features/transport-mgt</module>
-        <module>features/transport-commons</module>
-        <module>features/data-bridge</module>
-        <module>features/data-sources</module>
-	<module>features/caching-invalidator</module>
-
+        <module>components/cluster-mgt</module>
+        <module>components/url-mapper</module>
+        <module>components/transaction-manager</module>
+        <module>components/hostobjects</module>
+        <module>components/ntask</module>
+        <module>components/reporting</module>
+        <module>components/doc-request-processor</module>
+        <module>components/tryit</module>
+        <module>components/wsdl2form</module>
+        <module>components/logging</module>
+        <module>components/userstore-config</module>
+        <module>components/user-manager</module>
+        <module>components/remote-usermgt</module>
+        <module>components/event</module>
+        <module>components/ndatasource</module>
+        <module>components/ws-discovery-core</module>
+        <module>components/soap-tracer</module>
+        <module>components/wsdl-tools</module>
+        <module>components/system-statistics</module>
+        <module>components/message-flows</module>
+        <!--<module>features/application-deployers</module>-->
+        <!--<module>features/application-mgt</module>-->
+        <!--<module>features/deployment-synchronizer</module>-->
+        <!--<module>features/ws-discovery</module>-->
+        <!--<module>features/transport-mgt</module>-->
+        <!--<module>features/transport-commons</module>-->
+        <!--<module>features/data-bridge</module>-->
+        <!--<module>features/data-sources</module>-->
+	<!--<module>features/caching-invalidator</module>-->
         <!--<module>features/cluster-mgt</module>-->
         <!--<module>features/hostobjects</module>-->
         <!--<module>features/logging-mgt</module>-->
@@ -529,17 +525,17 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.rampart.wso2</groupId>
+                <groupId>org.apache.rampart</groupId>
                 <artifactId>rampart-core</artifactId>
                 <version>${rampart.wso2.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.rampart.wso2</groupId>
+                <groupId>org.apache.rampart</groupId>
                 <artifactId>rampart-policy</artifactId>
                 <version>${rampart.wso2.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.rampart.wso2</groupId>
+                <groupId>org.apache.rampart</groupId>
                 <artifactId>rampart-trust</artifactId>
                 <version>${rampart.wso2.version}</version>
             </dependency>
@@ -1252,7 +1248,7 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon</groupId>
+                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.identity.entitlement.stub</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -1377,9 +1373,9 @@
                 <version>${carbon.platform.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon</groupId>
+                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.databridge.core</artifactId>
-                <version>${carbon.platform.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
@@ -1524,7 +1520,7 @@
                 <version>${org.wso2.balana.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.ws.security.wso2</groupId>
+                <groupId>org.apache.ws.security</groupId>
                 <artifactId>wss4j</artifactId>
                 <version>${org.apache.ws.security.wso2.version}</version>
             </dependency>
@@ -1701,7 +1697,7 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon</groupId>
+                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.ndatasource.stub</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -2092,7 +2088,7 @@
         <version.javax.servlet>3.0.0.v201112011016</version.javax.servlet>
 
         <!-- Rampart Version -->
-        <rampart.wso2.version>1.6.1.wso2v13-SNAPSHOT</rampart.wso2.version>
+        <rampart.wso2.version>1.6.1-wso2v13-SNAPSHOT</rampart.wso2.version>
 
         <slf4j.wso2.version>1.5.10.wso2v1</slf4j.wso2.version>
 
@@ -2180,7 +2176,7 @@
         <opensaml2.version>2.4.1.wso2v1</opensaml2.version>
         <opensaml2.wso2.version>2.4.1.wso2v1</opensaml2.wso2.version>
 
-        <wss4j.version>1.5.11.wso2v1</wss4j.version>
+        <wss4j.version>1.5.11-wso2v8-SNAPSHOT</wss4j.version>
 
         <synapse-nhttp-transport.version>2.1.1-wso2v8</synapse-nhttp-transport.version>
         <com.google.code.gson.version>2.2.4</com.google.code.gson.version>
@@ -2195,8 +2191,8 @@
         <commons-collections.wso2.version>3.2.0.wso2v1</commons-collections.wso2.version>
         <org.wso2.securevault.version>1.0.0</org.wso2.securevault.version>
         <org.testng.version>6.3.1</org.testng.version>
-        <org.wso2.balana.version>1.0.0-wso2v2</org.wso2.balana.version>
-        <org.apache.ws.security.wso2.version>1.5.9.wso2v1</org.apache.ws.security.wso2.version>
+        <org.wso2.balana.version>1.0.0.wso2v8-SNAPSHOT</org.wso2.balana.version>
+        <org.apache.ws.security.wso2.version>1.5.11-wso2v8-SNAPSHOT</org.apache.ws.security.wso2.version>
         <slf4j.version>1.6.1</slf4j.version>
 
         <!-- Misc -->
