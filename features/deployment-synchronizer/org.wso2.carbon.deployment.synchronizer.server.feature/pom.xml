@@ -40,10 +40,6 @@
             <artifactId>org.wso2.carbon.deployment.synchronizer</artifactId>
         </dependency>
 	<dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.registry.eventing</artifactId>
-        </dependency>
-	<dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.email.verification</artifactId>
             </dependency>
@@ -75,7 +71,6 @@
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.deployment.synchronizer</bundleDef>
                             </bundles>
 			    <importBundles>
-				<importBundleDef>org.wso2.carbon:org.wso2.carbon.registry.eventing</importBundleDef>
 				<importBundleDef>org.wso2.carbon:org.wso2.carbon.email.verification</importBundleDef>
 			    </importBundles>
 			    <importFeatures>

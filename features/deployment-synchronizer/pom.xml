@@ -54,10 +54,6 @@
                 <artifactId>org.wso2.carbon.deployment.synchronizer.stub</artifactId>
             </dependency>
 	    <dependency>
-            	<groupId>org.wso2.carbon</groupId>
-	        <artifactId>org.wso2.carbon.registry.eventing</artifactId>
-            </dependency>
-	    <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.email.verification</artifactId>
             </dependency>
