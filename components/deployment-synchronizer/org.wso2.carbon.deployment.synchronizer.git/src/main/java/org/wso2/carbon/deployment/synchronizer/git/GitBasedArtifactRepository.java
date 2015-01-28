@@ -37,8 +37,8 @@ import org.wso2.carbon.deployment.synchronizer.git.stratos2.S2GitRepositoryManag
 import org.wso2.carbon.deployment.synchronizer.git.util.CarbonUtilities;
 import org.wso2.carbon.deployment.synchronizer.git.util.FileUtilities;
 import org.wso2.carbon.deployment.synchronizer.git.util.GitUtilities;
-import org.wso2.carbon.deployment.synchronizer.internal.DeploymentSynchronizerConstants;
-import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryConfigParameter;
+import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerConstants;
+import org.wso2.carbon.deployment.synchronizer.util.RepositoryConfigParameter;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 import java.io.File;

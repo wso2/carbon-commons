@@ -40,7 +40,7 @@ public interface DeploymentSynchronizerService {
      *
      * @param filePath Location of the repository in file system
      * @return true if auto commit is enabled on repository and false otherwise
-     * @throws DeploymentSynchronizerException if a deployment synchronizer does
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException if a deployment synchronizer does
      * not exist for the specified path
      */
     public boolean isAutoCommitOn(String filePath) throws DeploymentSynchronizerException;
@@ -50,7 +50,7 @@ public interface DeploymentSynchronizerService {
      *
      * @param filePath Location of the repository in file system
      * @return true if auto checkout is enabled on repository and false otherwise
-     * @throws DeploymentSynchronizerException if a deployment synchronizer does not exist
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException if a deployment synchronizer does not exist
      * for the specified path
      */
     public boolean isAutoCheckoutOn(String filePath) throws DeploymentSynchronizerException;
@@ -60,7 +60,7 @@ public interface DeploymentSynchronizerService {
      *
      * @param filePath Location of the repository in file system
      * @return a long timestamp value
-     * @throws DeploymentSynchronizerException if a deployment synchronizer does not exist
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException if a deployment synchronizer does not exist
      * for the specified path
      */
     public long getLastCommitTime(String filePath) throws DeploymentSynchronizerException;
@@ -70,7 +70,7 @@ public interface DeploymentSynchronizerService {
      *
      * @param filePath Location of the repository in file system
      * @return a long timestamp value
-     * @throws DeploymentSynchronizerException if a deployment synchronizer does not exist
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException if a deployment synchronizer does not exist
      * for the specified path
      */
     public long getLastCheckoutTime(String filePath) throws DeploymentSynchronizerException;
@@ -79,7 +79,7 @@ public interface DeploymentSynchronizerService {
      * Invoke the checkout operation on the specified repository
      *
      * @param filePath Location of the repository in file system
-     * @throws DeploymentSynchronizerException if a deployment synchronizer does not exist
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException if a deployment synchronizer does not exist
      * for the specified path
      * @return true if files were checked out or updated, false otherwise
      */
@@ -91,7 +91,7 @@ public interface DeploymentSynchronizerService {
      * @param filePath Location of the repository in file system
      * @param depth Depth given to check-out, eg 0 - empty, 3 - infinite
      * @return true if files were checked out or updated, false otherwise
-     * @throws DeploymentSynchronizerException on error
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException on error
      */
     public boolean checkout(String filePath, int depth) throws DeploymentSynchronizerException;
 
@@ -102,7 +102,7 @@ public interface DeploymentSynchronizerService {
      * @param filePath - location of the file in the repository
      * @param depth Depth given to update, (eg 0 - empty, 3 - infinite)
      * @return true if files were updated, false otherwise
-     * @throws DeploymentSynchronizerException on error
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException on error
      */
     public boolean update(String rootPath, String filePath, int depth) throws DeploymentSynchronizerException;
 
@@ -110,7 +110,7 @@ public interface DeploymentSynchronizerService {
      * Invoke the commit operation on the specified repository
      *
      * @param filePath Location of the repository in file system
-     * @throws DeploymentSynchronizerException if a deployment synchronizer does not exist
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException if a deployment synchronizer does not exist
      * for the specified path
      * @return true if file changes were committed, false otherwise
      */
@@ -123,7 +123,7 @@ public interface DeploymentSynchronizerService {
      * @param rootPath repo path at which the dep synch is registered
      * @param filePath Location of the repository in file system
      * @return rue if file changes were committed, false otherwise
-     * @throws DeploymentSynchronizerException if a deployment synchronizer does not exist
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException if a deployment synchronizer does not exist
      * for the specified path
      */
     public boolean commit(String rootPath, String filePath) throws DeploymentSynchronizerException;
