@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon</groupId>
+        <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>user-manager-feature</artifactId>
         <version>4.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -38,12 +38,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.user.mgt.server.feature</artifactId>
             <type>zip</type>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.user.mgt.ui.feature</artifactId>
             <type>zip</type>
         </dependency>
@@ -68,10 +68,10 @@
 
                             <includedFeatures>
                                 <includedFeatureDef>
-                                    org.wso2.carbon:org.wso2.carbon.user.mgt.server.feature:${project.version}
+                                    org.wso2.carbon.commons:org.wso2.carbon.user.mgt.server.feature:${project.version}
                                 </includedFeatureDef>
                                 <includedFeatureDef>
-                                    org.wso2.carbon:org.wso2.carbon.user.mgt.ui.feature:4.3.0-SNAPSHOT
+                                    org.wso2.carbon.commons:org.wso2.carbon.user.mgt.ui.feature:4.3.0-SNAPSHOT
                                 </includedFeatureDef>
                             </includedFeatures>
                         </configuration>
