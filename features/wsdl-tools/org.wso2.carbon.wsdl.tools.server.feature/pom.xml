@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon</groupId>
+        <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>wsdl-tools-feature</artifactId>
         <version>4.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -37,15 +37,15 @@
     </description>
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.wsdl2code</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.java2wsdl</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.tools.wsdlvalidator</artifactId>
         </dependency>
         <dependency>
@@ -78,9 +78,9 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.wsdl2code</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.java2wsdl</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.tools.wsdlvalidator
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.wsdl2code</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.java2wsdl</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.tools.wsdlvalidator
                                 </bundleDef>
                                 <bundleDef>org.wso2.wsdl.validator.wso2:wsdl-validator</bundleDef>
                             </bundles>

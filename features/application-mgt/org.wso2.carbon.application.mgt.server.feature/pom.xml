@@ -68,8 +68,8 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.application.mgt:${project.version}</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.application.upload</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.application.mgt:${project.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.application.upload</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>

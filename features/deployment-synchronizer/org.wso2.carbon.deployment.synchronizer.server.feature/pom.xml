@@ -68,7 +68,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.deployment.synchronizer</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.deployment.synchronizer</bundleDef>
                             </bundles>
 			    <importBundles>
 				<importBundleDef>org.wso2.carbon:org.wso2.carbon.email.verification</importBundleDef>

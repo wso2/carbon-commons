@@ -70,7 +70,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.deployment.synchronizer.subversion
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.deployment.synchronizer.subversion
                                 </bundleDef>
                                 <bundleDef>org.tigris:svn-client-adapter</bundleDef>
                             </bundles>
