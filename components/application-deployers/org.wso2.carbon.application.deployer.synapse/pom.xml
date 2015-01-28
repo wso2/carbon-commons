@@ -19,13 +19,12 @@ rg.wso2.carbon:org.wso2.carbon.application.deployer.synapse:bundle:4.3.0-SNAPSHO
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon</groupId>
+        <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>application-deployers</artifactId>
         <version>4.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.wso2.carbon</groupId>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.application.deployer.synapse</artifactId>
     <version>4.3.0-SNAPSHOT</version>
@@ -36,7 +35,7 @@ rg.wso2.carbon:org.wso2.carbon.application.deployer.synapse:bundle:4.3.0-SNAPSHO
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.application.deployer</artifactId>
         </dependency>
         <dependency>
@@ -44,7 +43,7 @@ rg.wso2.carbon:org.wso2.carbon.application.deployer.synapse:bundle:4.3.0-SNAPSHO
             <artifactId>synapse-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.mediation.initializer</artifactId>
         </dependency>
     </dependencies>
