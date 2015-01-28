@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon</groupId>
+        <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>ntask-features</artifactId>
         <version>4.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -37,19 +37,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.ntask.core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.ntask.solutions</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.ntask.common</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.remote-tasks.stub</artifactId>
         </dependency>
         <dependency>
@@ -92,12 +92,12 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon:org.wso2.carbon.ntask.core:4.3.0-SNAPSHOT
+                                    org.wso2.carbon.commons:org.wso2.carbon.ntask.core:4.3.0-SNAPSHOT
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.ntask.common</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.ntask.solutions
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.ntask.common</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.ntask.solutions
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.remote-tasks.stub
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.remote-tasks.stub
                                 </bundleDef>
                                 <bundleDef>org.quartz-scheduler.wso2:quartz</bundleDef>
                                 <bundleDef>org.slf4j:slf4j-log4j12</bundleDef>

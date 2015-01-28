@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon</groupId>
+        <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>reporting-features</artifactId>
         <version>4.3.0-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
@@ -36,23 +36,21 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.reporting.template.ui</artifactId>
-            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.reporting.stub</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.reporting.template.stub</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.reporting.custom.ui</artifactId>
-             <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -79,13 +77,13 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.reporting.template.ui:${project.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.ui:${project.version}
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.reporting.template.stub:${project.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.stub:${project.version}
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.reporting.stub:${project.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.stub:${project.version}
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.reporting.custom.ui:${project.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.custom.ui:${project.version}
                                 </bundleDef>
                             </bundles>
                             <importBundles>
