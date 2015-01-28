@@ -56,10 +56,6 @@
                 <artifactId>org.wso2.carbon.ui</artifactId>
             </dependency>
             <dependency>
-                <groupId>org.apache.rampart</groupId>
-                <artifactId>rampart-core</artifactId>
-            </dependency>
-            <dependency>
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
                 <scope>test</scope>

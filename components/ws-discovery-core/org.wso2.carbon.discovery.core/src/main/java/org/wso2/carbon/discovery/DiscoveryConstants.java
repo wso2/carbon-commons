@@ -103,4 +103,7 @@ public class DiscoveryConstants {
     public static final String DISCOVERY_HEADER_SERVICE_NAME = "serviceName";
     public static final String DISCOVERY_HEADER_WSDL_URI = "wsdlURI";
 
+    //need to get rid of direct rampart compile-time dependency
+    public final static String KEY_RAMPART_POLICY = "rampartPolicy";
+
 }

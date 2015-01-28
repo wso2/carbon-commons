@@ -26,7 +26,6 @@ import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.util.JavaUtils;
 import org.apache.neethi.Policy;
 import org.apache.neethi.PolicyEngine;
-import org.apache.rampart.RampartMessageData;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.context.RegistryType;
 import org.wso2.carbon.core.util.ParameterUtil;
@@ -299,7 +298,7 @@ public class DiscoveryMgtUtils {
                 ConfigHolder.getInstance().getClientConfigurationContext(), proxy.getUrl());
         if (proxy.getPolicy() != null) {
             client.engageModule("rampart");
-            client.setProperty(RampartMessageData.KEY_RAMPART_POLICY,
+            client.setProperty(DiscoveryConstants.KEY_RAMPART_POLICY,
                     getPolicy(proxy.getPolicy(), registry));
         }
         TargetService[] services = client.probe(types, scopes, pd.getRule());
@@ -329,7 +328,7 @@ public class DiscoveryMgtUtils {
                 ConfigHolder.getInstance().getClientConfigurationContext(), proxy.getUrl());
         if (proxy.getPolicy() != null) {
             client.engageModule("rampart");
-            client.setProperty(RampartMessageData.KEY_RAMPART_POLICY,
+            client.setProperty(DiscoveryConstants.KEY_RAMPART_POLICY,
                     getPolicy(proxy.getPolicy(), registry));
         }
         TargetService service = client.resolve(id);

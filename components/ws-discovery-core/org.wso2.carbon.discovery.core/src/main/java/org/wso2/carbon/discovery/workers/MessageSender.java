@@ -28,7 +28,6 @@ import org.apache.axis2.description.Parameter;
 import org.apache.axis2.engine.AxisConfiguration;
 import org.apache.axis2.util.JavaUtils;
 import org.apache.neethi.Policy;
-import org.apache.rampart.RampartMessageData;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.context.RegistryType;
 import org.wso2.carbon.discovery.DiscoveryConstants;
@@ -208,7 +207,7 @@ public class MessageSender {
         if (policy != null) {
             serviceClient.engageModule("rampart");
             serviceClient.getOptions().setProperty(
-                    RampartMessageData.KEY_RAMPART_POLICY, policy);
+                    DiscoveryConstants.KEY_RAMPART_POLICY, policy);
         }
 
         return serviceClient;

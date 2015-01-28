@@ -10,6 +10,12 @@
     <name>WSO2 Carbon - Platform Aggregator Pom</name>
     <url>http://wso2.org</url>
 
+    <parent>
+        <groupId>org.wso2</groupId>
+        <artifactId>wso2</artifactId>
+        <version>1</version>
+    </parent>
+
     <modules>
         <module>service-stubs/org.wso2.carbon.adc.repositoryinformation.service.stub</module>
         <module>service-stubs/org.wso2.carbon.application.mgt.bpel.stub</module>
@@ -525,6 +531,7 @@
             </dependency>
 
             <dependency>
+<<<<<<< Updated upstream
                 <groupId>org.apache.rampart</groupId>
                 <artifactId>rampart-core</artifactId>
                 <version>${rampart.wso2.version}</version>
@@ -541,6 +548,8 @@
             </dependency>
 
             <dependency>
+=======
+>>>>>>> Stashed changes
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
                 <version>${xmlunit.version}</version>
@@ -1882,6 +1891,17 @@
                     <target>1.6</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <preparationGoals>clean install</preparationGoals>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -1987,38 +2007,6 @@
             <modules>
             </modules>
         </profile>
-        <profile>
-            <id>builder</id>
-            <activation>
-                <property>
-                    <name>builder</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <modules>
-                <module>components/application-deployers</module>
-                <module>components/application-mgt</module>
-                <module>components/deployment-synchronizer</module>
-                <module>components/ws-discovery</module>
-                <!--module>components/idp-mgt</module-->
-            </modules>
-        </profile>
-        <profile>
-            <id>sonar-profile</id>
-            <activation>
-                <property>
-                    <name>bamboo</name>
-                    <value>sonar</value>
-                </property>
-            </activation>
-            <modules>
-                <module>components/application-deployers</module>
-                <module>components/application-mgt</module>
-                <module>components/deployment-synchronizer</module>
-                <module>components/ws-discovery</module>
-                <!--module>components/idp-mgt</module-->
-            </modules>
-        </profile>
     </profiles>
 
     <properties>
@@ -2087,9 +2075,12 @@
         <version.javax.servlet.jsp>2.2.0.v201112011158</version.javax.servlet.jsp>
         <version.javax.servlet>3.0.0.v201112011016</version.javax.servlet>
 
+<<<<<<< Updated upstream
         <!-- Rampart Version -->
         <rampart.wso2.version>1.6.1-wso2v13-SNAPSHOT</rampart.wso2.version>
 
+=======
+>>>>>>> Stashed changes
         <slf4j.wso2.version>1.5.10.wso2v1</slf4j.wso2.version>
 
         <libthrift.wso2.version>0.8.0.wso2v1</libthrift.wso2.version>
