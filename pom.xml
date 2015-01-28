@@ -531,25 +531,6 @@
             </dependency>
 
             <dependency>
-<<<<<<< Updated upstream
-                <groupId>org.apache.rampart</groupId>
-                <artifactId>rampart-core</artifactId>
-                <version>${rampart.wso2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rampart</groupId>
-                <artifactId>rampart-policy</artifactId>
-                <version>${rampart.wso2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rampart</groupId>
-                <artifactId>rampart-trust</artifactId>
-                <version>${rampart.wso2.version}</version>
-            </dependency>
-
-            <dependency>
-=======
->>>>>>> Stashed changes
                 <groupId>xmlunit</groupId>
                 <artifactId>xmlunit</artifactId>
                 <version>${xmlunit.version}</version>
@@ -2075,12 +2056,6 @@
         <version.javax.servlet.jsp>2.2.0.v201112011158</version.javax.servlet.jsp>
         <version.javax.servlet>3.0.0.v201112011016</version.javax.servlet>
 
-<<<<<<< Updated upstream
-        <!-- Rampart Version -->
-        <rampart.wso2.version>1.6.1-wso2v13-SNAPSHOT</rampart.wso2.version>
-
-=======
->>>>>>> Stashed changes
         <slf4j.wso2.version>1.5.10.wso2v1</slf4j.wso2.version>
 
         <libthrift.wso2.version>0.8.0.wso2v1</libthrift.wso2.version>
