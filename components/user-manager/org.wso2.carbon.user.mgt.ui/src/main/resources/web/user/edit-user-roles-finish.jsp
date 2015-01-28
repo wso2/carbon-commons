@@ -26,6 +26,7 @@
 <%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.FlaggedName" %>
 <%@ page import="org.wso2.carbon.user.mgt.ui.UserAdminUIConstants" %>
 <%@ page import="java.util.*" %>
+<%@ page import="java.net.URLEncoder" %>
 
 <%
     boolean logout = false;
@@ -84,6 +85,8 @@
                     deletedList.toArray(new String[deletedList.size()]));
         } else {
             client.addRemoveRolesOfUser(username, selectedRoles, null);
+            session.removeAttribute(UserAdminUIConstants.USER_LIST_UNASSIGNED_ROLE_CACHE);
+            session.removeAttribute(UserAdminUIConstants.USER_LIST_UNASSIGNED_ROLE_CACHE_EXCEEDED);
         }
        
         String message = MessageFormat.format(resourceBundle.getString("user.update"), username);
@@ -106,13 +109,13 @@
         } else if(viewUsers){
 %>
             <script type="text/javascript">
-                location.href = "view-roles.jsp?username=<%=username%>";
+                location.href = "view-roles.jsp?username=<%=URLEncoder.encode(username)%>";
             </script>
 <%
         } else {
 %>
             <script type="text/javascript">
-                location.href = "edit-user-roles.jsp?username=<%=username%>" + "&pageNumber=<%=pageNumber%>";
+                location.href = "edit-user-roles.jsp?username=<%=URLEncoder.encode(username)%>" + "&pageNumber=<%=pageNumber%>";
             </script>
 <%
         }
@@ -122,13 +125,13 @@
         if(viewUsers){
 %>
             <script type="text/javascript">
-                location.href = "view-roles.jsp?username=<%=username%>";
+                location.href = "view-roles.jsp?username=<%=URLEncoder.encode(username)%>";
             </script>
 <%
         } else {
 %>
             <script type="text/javascript">
-                location.href = "edit-user-roles.jsp?username=<%=username%>";
+                location.href = "edit-user-roles.jsp?username=<%=URLEncoder.encode(username)%>";
             </script>
 <%
         }

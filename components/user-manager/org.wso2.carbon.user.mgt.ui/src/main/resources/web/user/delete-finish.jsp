@@ -20,11 +20,13 @@
 <%@page import="org.wso2.carbon.ui.CarbonUIMessage" %>
 <%@page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%@ page import="org.wso2.carbon.user.mgt.ui.UserAdminClient" %>
+<%@ page import="java.net.URLEncoder" %>
 <%
 	String BUNDLE = "org.wso2.carbon.userstore.ui.i18n.Resources";
     ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE, request.getLocale());
     String forwardTo = null;
-    String username = CharacterEncoder.getSafeText(request.getParameter("username"));
+    String username =
+            CharacterEncoder.getSafeText(request.getParameter("username"));
     try {
 
         String cookie = (String) session.getAttribute(ServerConstants.ADMIN_SERVICE_COOKIE);

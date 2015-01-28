@@ -239,7 +239,7 @@
                               numberOfPages="<%=numberOfPages%>"
                               noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                               page="add-step2.jsp" pageNumberParameterName="pageNumber"
-                                parameters="<%=\"username=\"+userName%>"/>
+                                parameters="<%="username="+userName%>"/>
             
             <form method="post" action="add-finish.jsp" onsubmit="return doValidation();" name="edit_users" id="edit_users">
                 <table class="styledLeft">
@@ -321,7 +321,7 @@
                                       numberOfPages="<%=numberOfPages%>"
                                       noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                                       page="add-step2.jsp" pageNumberParameterName="pageNumber"
-                                      parameters="<%=\"username=\"+userName%>"/>
+                                      parameters="<%="username="+userName%>"/>
                     <%
                         if (roles != null) {
                             if(roles.length > 0){

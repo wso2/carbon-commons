@@ -31,6 +31,7 @@
 <%@ page import="org.wso2.carbon.user.mgt.ui.UserAdminUIConstants" %>
 <%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.UserRealmInfo" %>
 <%@ page import="java.text.MessageFormat" %>
+<%@ page import="java.net.URLEncoder" %>
 <script type="text/javascript" src="../userstore/extensions/js/vui.js"></script>
 <script type="text/javascript" src="../admin/js/main.js"></script>
 
@@ -232,7 +233,7 @@
         function deleteUser(user) {
             function doDelete() {
                 var userName = user;
-                location.href = 'delete-finish.jsp?username=' + userName;
+                location.href = 'delete-finish.jsp?username=' + encodeURIComponent(userName);
             }
 
             CARBON.showConfirmationDialog("<fmt:message key="confirm.delete.user"/> \'" + user + "\'?", doDelete, null);
@@ -395,18 +396,29 @@
                                 CarbonUIUtil.isUserAuthorized(request,
                                          "/permission/admin/configure/security/usermgt/passwords") &&
                                     users[i].getEditable()) { //if passwords are managed externally do not allow to change passwords.
+                            	if(userName.equals(currentUser)){
                         %>
-                        <a href="change-passwd.jsp?username=<%=userName%>&disPlayName=<%=disPlayName%>" class="icon-link"
+                        <a href="change-passwd.jsp?isUserChange=true&returnPath=user-mgt.jsp" class="icon-link"
+                           style="background-image:url(../admin/images/edit.gif);"><fmt:message
+                                key="change.password"/></a>
+                                
+                        <% 
+                            	}else{
+                        %>
+                        
+                        <a href="change-passwd.jsp?username=<%=java.net.URLEncoder.encode(userName,"UTF-8")%>&disPlayName=<%=java.net.URLEncoder.encode(disPlayName,"UTF-8")%>" class="icon-link"
                            style="background-image:url(../admin/images/edit.gif);"><fmt:message
                                 key="change.password"/></a>
                         <%
+                            	}
                             }
                         %>
 
                         <%
                             if(CarbonUIUtil.isUserAuthorized(request, "/permission/admin/configure/security")){
                         %>
-                        <a href="edit-user-roles.jsp?username=<%=userName%>&disPlayName=<%=disPlayName%>" class="icon-link"
+                        <a href="edit-user-roles.jsp?username=<%=
+                        java.net.URLEncoder.encode(userName,"UTF-8")%>&disPlayName=<%=disPlayName%>" class="icon-link"
                            style="background-image:url(../admin/images/edit.gif);"><fmt:message
                                 key="edit.roles"/></a>
                         <%
@@ -416,7 +428,7 @@
                         <%
                             if(CarbonUIUtil.isUserAuthorized(request, "/permission/admin/configure/security")){
                         %>
-                        <a href="view-roles.jsp?username=<%=userName%>&disPlayName=<%=disPlayName%>" class="icon-link"
+                        <a href="view-roles.jsp?username=<%=java.net.URLEncoder.encode(userName,"UTF-8")%>&disPlayName=<%=java.net.URLEncoder.encode(disPlayName,"UTF-8")%>" class="icon-link"
                            style="background-image:url(images/view.gif);"><fmt:message
                                 key="view.roles"/></a>
                         <%
@@ -442,7 +454,7 @@
                             if (CarbonUIUtil.isContextRegistered(config, "/identity-authorization/" ) &&
                                     CarbonUIUtil.isUserAuthorized(request, "/permission/admin/configure/security/")) {
                         %>
-                            <a href="../identity-authorization/permission-root.jsp?userName=<%=userName%>&fromUserMgt=true"
+                            <a href="../identity-authorization/permission-root.jsp?userName=<%=java.net.URLEncoder.encode(userName,"UTF-8")%>&fromUserMgt=true"
                                class="icon-link"
                                style="background-image:url(../admin/images/edit.gif);"><fmt:message key="authorization"/></a>
                         <%
@@ -456,7 +468,7 @@
                                 && CarbonUIUtil.isUserAuthorized(request,
                                                                  "/permission/admin/configure/security/usermgt/profiles")) {
                         %>
-                        <a href="../userprofile/index.jsp?username=<%=userName%>&disPlayName=<%=disPlayName%>&fromUserMgt=true"
+                        <a href="../userprofile/index.jsp?username=<%=java.net.URLEncoder.encode(userName,"UTF-8")%>&disPlayName=<%=java.net.URLEncoder.encode(disPlayName,"UTF-8")%>&fromUserMgt=true"
                            class="icon-link"
                            style="background-image:url(../userprofile/images/my-prof.gif);">User
                                                                                             Profile</a>

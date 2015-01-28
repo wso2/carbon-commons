@@ -30,6 +30,7 @@
 <%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.UserRealmInfo" %>
 <%@ page import="java.util.ResourceBundle" %>
 <%@ page import="java.text.MessageFormat" %>
+<%@ page import="java.net.URLEncoder" %>
 <script type="text/javascript" src="../userstore/extensions/js/vui.js"></script>
 <script type="text/javascript" src="../admin/js/main.js"></script>
 <jsp:include page="../dialog/display_messages.jsp"/>
@@ -156,7 +157,7 @@
                     } else if (reason == "Password Mismatch") {
                         CARBON.showWarningDialog("<fmt:message key="password.mismatch"/>");
                     } else if (reason == "No conformance") {
-                        CARBON.showWarningDialog("<fmt:message key="password.conformance"/>");
+                        CARBON.showWarningDialog("<fmt:message key="password.conformance"/>"  + pwdRegEX);
                     }
                     return false;
                 }

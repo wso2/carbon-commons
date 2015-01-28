@@ -245,7 +245,7 @@
                                   numberOfPages="<%=numberOfPages%>"
                                   noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                                   page="add-step3.jsp" pageNumberParameterName="pageNumber"
-                                  parameters="<%=\"roleName=\"+roleName%>"/>
+                                  parameters="<%="roleName="+roleName%>"/>
 
 
 
@@ -326,7 +326,7 @@
                                   numberOfPages="<%=numberOfPages%>"
                                   noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                                   page="add-step3.jsp" pageNumberParameterName="pageNumber"
-                                  parameters="<%=\"roleName=\"+roleName%>"/>
+                                  parameters="<%="roleName="+roleName%>"/>
 
                 <%
                     if (users != null) {
