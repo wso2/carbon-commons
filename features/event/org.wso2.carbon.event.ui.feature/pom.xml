@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon</groupId>
+        <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>event-feature</artifactId>
         <version>4.3.0-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
@@ -36,19 +36,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.event.ui</artifactId>
         </dependency>
 	 <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.event.stub</artifactId>
         </dependency>
          <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.event.client.stub</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.event.common.feature</artifactId>
             <type>zip</type>
         </dependency>
@@ -76,10 +76,10 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.event.ui</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.event.stub</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.event.client.stub</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.um.ws.api.stub</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.event.ui</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.event.stub</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.event.client.stub</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.um.ws.api.stub</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.ui:${carbon.kernel.version}</importFeatureDef>
@@ -87,7 +87,7 @@
                                 <importFeatureDef>org.wso2.carbon.registry.core.ui</importFeatureDef>
                             </importFeatures>
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.event.common.feature:${wso2carbon.version.event}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.common.feature:${wso2carbon.version.event}</includedFeatureDef>
                             </includedFeatures>
                         </configuration>
                     </execution>

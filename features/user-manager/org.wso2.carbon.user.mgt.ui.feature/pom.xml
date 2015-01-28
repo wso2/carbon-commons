@@ -20,7 +20,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>org.wso2.carbon</groupId>
+        <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>user-manager-feature</artifactId>
         <version>4.3.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -37,28 +37,28 @@
     </description>
     <dependencies>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.user.mgt.ui</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.user.mgt.common</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.user.mgt.stub</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.identity.user.store.configuration.ui</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.identity.user.store.configuration</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.identity.user.store.configuration.stub</artifactId>
         </dependency>
     </dependencies>
@@ -88,19 +88,19 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.user.mgt.ui</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.user.mgt.stub</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.user.mgt.common
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.user.mgt.ui</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.user.mgt.stub</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.user.mgt.common
                                 </bundleDef>
 
                                 <bundleDef>
-                                    org.wso2.carbon:org.wso2.carbon.identity.user.store.configuration.ui
+                                    org.wso2.carbon.commons:org.wso2.carbon.identity.user.store.configuration.ui
                                 </bundleDef>
                                 <bundleDef>
-                                    org.wso2.carbon:org.wso2.carbon.identity.user.store.configuration.stub
+                                    org.wso2.carbon.commons:org.wso2.carbon.identity.user.store.configuration.stub
                                 </bundleDef>
                                 <bundleDef>
-                                    org.wso2.carbon:org.wso2.carbon.identity.user.store.configuration
+                                    org.wso2.carbon.commons:org.wso2.carbon.identity.user.store.configuration
                                 </bundleDef>
                             </bundles>
                             <importFeatures>
