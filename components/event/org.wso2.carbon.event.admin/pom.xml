@@ -19,14 +19,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <groupId>org.wso2.carbon</groupId>
+        <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>event</artifactId>
         <version>4.3.0-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.wso2.carbon</groupId>
     <artifactId>org.wso2.carbon.event.admin</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Eventing Admin</name>
@@ -57,7 +56,7 @@
             <version>${rhino.wso2.version}</version>
         </dependency>-->
         <dependency>
-            <groupId>org.wso2.carbon</groupId>
+            <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.event.core</artifactId>
         </dependency>
     </dependencies>
