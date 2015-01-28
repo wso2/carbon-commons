@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.deployment.synchronizer.internal.repository;
+package org.wso2.carbon.deployment.synchronizer.repository;
 
 import org.apache.axis2.context.ConfigurationContext;
 import org.apache.axis2.util.JavaUtils;
@@ -28,10 +28,10 @@ import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
 import org.wso2.carbon.deployment.synchronizer.internal.DeploymentSynchronizationManager;
 import org.wso2.carbon.deployment.synchronizer.internal.DeploymentSynchronizer;
 import org.wso2.carbon.deployment.synchronizer.internal.DeploymentSynchronizerConstants;
-import org.wso2.carbon.deployment.synchronizer.internal.util.DeploymentSynchronizerConfiguration;
-import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryConfigParameter;
-import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryReferenceHolder;
-import org.wso2.carbon.deployment.synchronizer.internal.util.ServiceReferenceHolder;
+import org.wso2.carbon.deployment.synchronizer.util.DeploymentSynchronizerConfiguration;
+import org.wso2.carbon.deployment.synchronizer.util.RepositoryConfigParameter;
+import org.wso2.carbon.deployment.synchronizer.util.RepositoryReferenceHolder;
+import org.wso2.carbon.deployment.synchronizer.util.ServiceReferenceHolder;
 import org.wso2.carbon.registry.core.Resource;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.registry.core.session.UserRegistry;
@@ -56,7 +56,7 @@ public class CarbonRepositoryUtils {
      *
      * @param tenantId ID of the tenant
      * @return a DeploymentSynchronizer instance or null if the synchronizer is disabled
-     * @throws DeploymentSynchronizerException If an error occurs while initializing the synchronizer
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException If an error occurs while initializing the synchronizer
      */
     public static DeploymentSynchronizer newCarbonRepositorySynchronizer(int tenantId)
             throws DeploymentSynchronizerException {
@@ -93,7 +93,7 @@ public class CarbonRepositoryUtils {
      *
      * @param tenantId Tenant ID
      * @return a DeploymentSynchronizerConfiguration instance
-     * @throws DeploymentSynchronizerException if an error occurs while accessing the registry
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException if an error occurs while accessing the registry
      */
     public static DeploymentSynchronizerConfiguration getActiveSynchronizerConfiguration(
             int tenantId) throws DeploymentSynchronizerException {
@@ -240,7 +240,7 @@ public class CarbonRepositoryUtils {
      *
      * @param tenantId Tenant ID
      * @return true if deployment synchronizer is enabled for the repository
-     * @throws DeploymentSynchronizerException if an error occurs while loading configuration from the registry
+     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException if an error occurs while loading configuration from the registry
      */
     public static boolean isSynchronizerEnabled(int tenantId) throws DeploymentSynchronizerException {
         DeploymentSynchronizerConfiguration config = getActiveSynchronizerConfiguration(tenantId);
@@ -253,7 +253,7 @@ public class CarbonRepositoryUtils {
      *
      * @param tenantId Tenant ID
      * @return a DeploymentSynchronizerConfiguration object or null
-     * @throws RegistryException if the registry cannot be accessed
+     * @throws org.wso2.carbon.registry.core.exceptions.RegistryException if the registry cannot be accessed
      */
     public static DeploymentSynchronizerConfiguration getDeploymentSyncConfigurationFromRegistry(
             int tenantId) throws RegistryException {
@@ -281,12 +281,12 @@ public class CarbonRepositoryUtils {
         config.setRepositoryType(resource.getProperty(
                 DeploymentSynchronizerConstants.REPOSITORY_TYPE));
 
-        ArtifactRepository repository = 
+        ArtifactRepository repository =
                 RepositoryReferenceHolder.getInstance().getRepositoryByType(config.getRepositoryType());
         if(repository == null){
             throw new RegistryException("No Repository found for type " + config.getRepositoryType());
         }
-        
+
         List<RepositoryConfigParameter> parameters = repository.getParameters();
 
         //If repository specific configuration parameters are found.
@@ -312,7 +312,7 @@ public class CarbonRepositoryUtils {
      *
      * @param config The configuration to be saved
      * @param tenantId Tenant ID to select the configuration registry
-     * @throws RegistryException if an error occurs while accessing the registry
+     * @throws org.wso2.carbon.registry.core.exceptions.RegistryException if an error occurs while accessing the registry
      */
     public static void persistConfiguration(DeploymentSynchronizerConfiguration config,
                                             int tenantId) throws RegistryException {

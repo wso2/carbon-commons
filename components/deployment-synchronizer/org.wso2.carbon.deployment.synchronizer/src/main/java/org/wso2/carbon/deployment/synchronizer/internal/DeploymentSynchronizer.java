@@ -307,7 +307,7 @@ public class DeploymentSynchronizer {
         }
     }
 
-    public boolean syncGhostMetaArtifacts() throws DeploymentSynchronizerException{
+    public boolean syncGhostMetaArtifacts() throws DeploymentSynchronizerException {
         log.info("Doing ghost meta artifacts sync up...");
         boolean hasFailed = false;
         if (autoCheckout && lastCheckoutTime == -1L) {

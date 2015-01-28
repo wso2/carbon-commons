@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.deployment.synchronizer.internal.util;
+package org.wso2.carbon.deployment.synchronizer.util;
 
 public class RepositoryConfigParameter {
 

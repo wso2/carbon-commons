@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.deployment.synchronizer;
 
-import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryConfigParameter;
+import org.wso2.carbon.deployment.synchronizer.util.RepositoryConfigParameter;
 
 import java.util.List;
 
