@@ -17,10 +17,14 @@
     <modules>
         <!-- Service Stubs -->
         <module>service-stubs/org.wso2.carbon.adc.repositoryinformation.service.stub</module>
+<!--
         <module>service-stubs/org.wso2.carbon.application.mgt.bpel.stub</module>
         <module>service-stubs/org.wso2.carbon.application.mgt.humantask.stub</module>
+-->
         <module>service-stubs/org.wso2.carbon.application.mgt.stub</module>
+<!--
         <module>service-stubs/org.wso2.carbon.application.mgt.synapse.stub</module>
+-->
         <module>service-stubs/org.wso2.carbon.deployment.synchronizer.stub</module>
         <module>service-stubs/org.wso2.carbon.discovery.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.oauth.stub</module>
