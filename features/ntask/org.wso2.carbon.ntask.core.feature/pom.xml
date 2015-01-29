@@ -92,7 +92,7 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.ntask.core:4.3.0-SNAPSHOT
+                                    org.wso2.carbon.commons:org.wso2.carbon.ntask.core
                                 </bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.ntask.common</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.ntask.solutions
