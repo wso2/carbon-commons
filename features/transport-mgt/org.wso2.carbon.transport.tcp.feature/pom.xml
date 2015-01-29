@@ -62,7 +62,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.transport.tcp</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.transport.tcp</bundleDef>
                             </bundles>
                             <importBundles>
                             </importBundles>

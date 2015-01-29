@@ -66,7 +66,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.discovery.module</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.discovery.module</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.discovery.core</importFeatureDef>

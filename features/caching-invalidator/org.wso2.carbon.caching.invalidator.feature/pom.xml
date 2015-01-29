@@ -64,7 +64,7 @@
                                 </properties>
                             </adviceFile>
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.caching.invalidator.server.feature</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.caching.invalidator.server.feature</includedFeatureDef>
                             </includedFeatures>
                         </configuration>
                     </execution>

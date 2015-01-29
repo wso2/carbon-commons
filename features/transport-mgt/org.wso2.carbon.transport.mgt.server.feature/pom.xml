@@ -76,10 +76,10 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.transport.mgt</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.transport.http</bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.transport.https</bundleDef>
-				<bundleDef>org.wso2.carbon:org.wso2.carbon.transport.local</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.transport.mgt</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.transport.http</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.transport.https</bundleDef>
+				<bundleDef>org.wso2.carbon.commons:org.wso2.carbon.transport.local</bundleDef>
                             </bundles>
                             <importBundles>
                             </importBundles>

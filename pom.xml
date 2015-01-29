@@ -956,7 +956,7 @@
                 <type>zip</type>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
+                <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.ui.menu.tools</artifactId>
                 <version>${carbon.kernel.version}</version>
             </dependency>

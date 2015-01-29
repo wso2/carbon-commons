@@ -68,7 +68,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.caching.invalidator</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.caching.invalidator</bundleDef>
                             </bundles>
                             <importBundles>
                                 <importBundleDef>com.rabbitmq.wso2:amqp-client</importBundleDef>
