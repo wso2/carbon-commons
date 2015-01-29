@@ -155,12 +155,13 @@ public class TransportAdmin extends AbstractAdmin {
 	 * Lists all the transports exposed by a given service. By default if WSDL not specifically
 	 * restricts then the service will expose all the active transports.All transports already
 	 * loaded in to axis2configuration are considered as active.
+         * 
+         * Deprecated
 	 *
 	 * @param serviceName Name of the service where exposed transports are listed.
 	 * @return TransportSummary[]
 	 * @throws Exception on error
 	 */
-        @Deprecated
 	public TransportSummary[] listExposedTransports(String serviceName) throws Exception {
                 return new TransportSummary[0];
 
@@ -266,11 +267,13 @@ public class TransportAdmin extends AbstractAdmin {
 	 * Adds transport to a given service. Any active available transport can be exposed by a
 	 * service. All transports already loaded in to axis2configuration are considered as active.
 	 * We no longer provide UI options to add transports to services
+         * 
+         * Deprecated
+         * 
 	 * @param serviceName Name of the service where new transport to be added.
 	 * @param transport Name of the transport to be added.
 	 * @throws Exception on error
 	 */
-        @Deprecated
 	public void addExposedTransports(String serviceName, String transport) throws Exception {
                 /*
 		ServiceAdmin admin;
