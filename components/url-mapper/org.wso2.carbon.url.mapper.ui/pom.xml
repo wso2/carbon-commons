@@ -46,7 +46,7 @@
                             org.wso2.carbon.url.mapper.ui.*
                         </Export-Package>
                         <Import-Package>
-                            org.wso2.carbon.url.mapper.stub.*;version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.url.mapper.stub.*;version="${carbon.commons.imp.package.version}",
                             *;resolution:=optional
                         </Import-Package>
                         <Carbon-Component>UIBundle</Carbon-Component>

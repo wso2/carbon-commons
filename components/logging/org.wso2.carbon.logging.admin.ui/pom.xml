@@ -45,7 +45,7 @@
                             org.wso2.carbon.logging.admin.ui.*
                         </Export-Package>
 			<Import-Package>
-                            org.wso2.carbon.logging.admin.stub.*; version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.logging.admin.stub.*; version="${carbon.commons.imp.package.version}",
                             *;resolution:=optional
 			</Import-Package>
 			<!--Embed-Dependency>org.wso2.carbon.logging.admin.stub;scope=compile|runtime;inline=true</Embed-Dependency-->

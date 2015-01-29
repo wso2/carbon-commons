@@ -49,7 +49,7 @@
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.deployment.synchronizer.stub.*;
-                            version="${carbon.platform.package.import.version.range}",
+                            version="${carbon.commons.imp.package.version}",
                             !org.wso2.carbon.deployment.synchronizer.ui.*,
                             *;resolution:=optional
                         </Import-Package>

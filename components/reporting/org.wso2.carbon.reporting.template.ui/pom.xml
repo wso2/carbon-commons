@@ -67,10 +67,10 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                        	org.wso2.carbon.reporting.template.ui.*;version="${carbon.platform.package.export.version}"
+                        	org.wso2.carbon.reporting.template.ui.*;version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package>
-                        	org.wso2.carbon.reporting.template.stub.*;version="${carbon.platform.package.import.version.range}"
+                        	org.wso2.carbon.reporting.template.stub.*;version="${carbon.commons.imp.package.version}"
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Carbon-Component>UIBundle</Carbon-Component>                     

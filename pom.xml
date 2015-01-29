@@ -1860,6 +1860,11 @@
         <carbon.kernel.imp.pkg.version>[4.3.0, 4.4.0)
         </carbon.kernel.imp.pkg.version>
 
+        <carbon.commons.exp.package.version>4.3.0
+        </carbon.commons.exp.package.version>
+        <carbon.commons.imp.package.version>[4.3.0, 4.4.0)
+        </carbon.commons.imp.package.version>
+
         <older.version>4.1.0</older.version>
         <previous.version>4.2.0</previous.version>
         <previous.version.422>4.2.2</previous.version.422>
@@ -1875,11 +1880,6 @@
         <jgit.version>2.3.1.wso2v2</jgit.version>
         <jsch.version>0.1.49.wso2v1</jsch.version>
         <gitblit.version>1.2.0.wso2v1</gitblit.version>
-        <!-- Carbon platform version comes here-->
-        <carbon.platform.package.export.version>4.3.0-SNAPSHOT
-        </carbon.platform.package.export.version>
-        <carbon.platform.package.import.version.range>[4.3.0.SNAPSHOT, 4.4.0)
-        </carbon.platform.package.import.version.range>
 
         <!-- for maven release process -->
         <project.scm.id>my-scm-server</project.scm.id>

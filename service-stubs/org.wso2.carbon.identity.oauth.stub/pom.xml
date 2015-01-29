@@ -119,8 +119,8 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.carbon.identity.oauth.stub.*;version="${carbon.platform.package.export.version}",
-							org.wso2.carbon.identity.oauth2.stub.*;version="${carbon.platform.package.export.version}",
+                            org.wso2.carbon.identity.oauth.stub.*;version="${carbon.commons.exp.package.version}",
+							org.wso2.carbon.identity.oauth2.stub.*;version="${carbon.commons.exp.package.version}",
                         </Export-Package>
                         <Import-Package>
                             !org.wso2.carbon.identity.oauth.stub.*,

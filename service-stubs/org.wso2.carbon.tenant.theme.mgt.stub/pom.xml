@@ -98,7 +98,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.carbon.theme.mgt.stub.*; version="${carbon.platform.package.export.version}",
+                            org.wso2.carbon.theme.mgt.stub.*; version="${carbon.commons.exp.package.version}",
                         </Export-Package>
                         <Import-Package>
                             !org.wso2.carbon.theme.mgt.stub.*;
