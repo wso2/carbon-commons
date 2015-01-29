@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>logging-stubs</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.1-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -53,7 +53,7 @@
                                     <pathelement location="${settings.localRepository}/org/apache/axis2/wso2/axis2/${orbit.version.axis2}/axis2-${orbit.version.axis2}.jar" />
                                 </path>
                                 <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
-                                    <arg line="-uri src/main/resources/LogAdmin.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.logging.admin.stub                                     -ns2p http://org.apache.axis2/xsd=org.wso2.carbon.logging.admin.stub.types.axis2,http://data.service.logging.carbon.wso2.org/xsd=org.wso2.carbon.logging.admin.stub.types.carbon" />
+                                    <arg line="-uri src/main/resources/LogAdmin.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.logging.admin.stub -ns2p http://org.apache.axis2/xsd=org.wso2.carbon.logging.admin.stub.types.axis2,http://data.service.logging.carbon.wso2.org/xsd=org.wso2.carbon.logging.admin.stub.types.carbon" />
                                     <classpath refid="wsdl2java.classpath" />
                                     <classpath refid="maven.dependency.classpath" />
                                     <classpath refid="maven.compile.classpath" />

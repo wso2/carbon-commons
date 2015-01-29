@@ -19,13 +19,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>deployment-synchronizer</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.1-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.deployment.synchronizer.subversion</artifactId>
-    <version>4.3.0</version>
+    <version>4.3.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Subversion Based Deployment Synchronizer</name>
     <url>http://wso2.org</url>

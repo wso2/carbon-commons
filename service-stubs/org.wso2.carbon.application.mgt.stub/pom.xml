@@ -21,14 +21,14 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>carbon-commons</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.application.mgt.stub</artifactId>
     <packaging>bundle</packaging>
-    <version>4.3.0</version>
+    <version>4.3.1-SNAPSHOT</version>
     <name>WSO2 Carbon - Aplication Management Stub</name>
     <url>http://wso2.org</url>
 
@@ -55,11 +55,11 @@
 
                                 </path>
                                 <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
-                                    <arg line="-uri src/main/resources/ApplicationAdmin.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.application.mgt.stub                                      -ns2p http://mgt.application.carbon.wso2.org=org.wso2.carbon.application.mgt.stub,http://mgt.application.carbon.wso2.org/xsd=org.wso2.carbon.application.mgt.stub.types.carbon,http://org.apache.axis2/xsd=org.wso2.carbon.application.mgt.stub.types.axis2" />
+                                    <arg line="-uri src/main/resources/ApplicationAdmin.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.application.mgt.stub -ns2p http://mgt.application.carbon.wso2.org=org.wso2.carbon.application.mgt.stub,http://mgt.application.carbon.wso2.org/xsd=org.wso2.carbon.application.mgt.stub.types.carbon,http://org.apache.axis2/xsd=org.wso2.carbon.application.mgt.stub.types.axis2" />
                                     <classpath refid="wsdl2java.classpath" />
                                 </java>
                                 <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
-                                    <arg line="-uri src/main/resources/CarbonAppUploader.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.application.mgt.stub.upload                                      -ns2p http://upload.application.carbon.wso2.org=org.wso2.carbon.application.mgt.stub.upload,http://upload.application.carbon.wso2.org/xsd=org.wso2.carbon.application.mgt.stub.upload.types.carbon,http://org.apache.axis2/xsd=org.wso2.carbon.application.mgt.stub.upload.types.axis2" />
+                                    <arg line="-uri src/main/resources/CarbonAppUploader.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.application.mgt.stub.upload -ns2p http://upload.application.carbon.wso2.org=org.wso2.carbon.application.mgt.stub.upload,http://upload.application.carbon.wso2.org/xsd=org.wso2.carbon.application.mgt.stub.upload.types.carbon,http://org.apache.axis2/xsd=org.wso2.carbon.application.mgt.stub.upload.types.axis2" />
                                     <classpath refid="wsdl2java.classpath" />
                                 </java>
                             </tasks>

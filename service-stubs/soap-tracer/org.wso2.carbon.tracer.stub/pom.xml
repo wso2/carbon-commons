@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>soap-tracer-stubs</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.1-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -52,7 +52,7 @@
                                     <pathelement location="${settings.localRepository}/org/apache/axis2/wso2/axis2/${orbit.version.axis2}/axis2-${orbit.version.axis2}.jar" />
                                 </path>
                                 <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
-                                    <arg line="-uri src/main/resources/TracerAdmin.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.tracer.stub                                     -ns2p http://service.tracer.carbon.wso2.org/xsd=org.wso2.carbon.tracer.stub.types.carbon,http://org.apache.axis2/xsd=org.wso2.carbon.tracer.stub.types.axis2" />
+                                    <arg line="-uri src/main/resources/TracerAdmin.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.tracer.stub -ns2p http://service.tracer.carbon.wso2.org/xsd=org.wso2.carbon.tracer.stub.types.carbon,http://org.apache.axis2/xsd=org.wso2.carbon.tracer.stub.types.axis2" />
                                     <classpath refid="wsdl2java.classpath" />
                                 </java>
                             </tasks>

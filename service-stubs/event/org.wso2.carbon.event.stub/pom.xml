@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>event-stubs</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.1-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -57,7 +57,7 @@
                                     <classpath refid="wsdl2java.classpath" />
                                 </java>
                                 <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
-                                     <arg line="-uri src/main/resources/TopicManagerAdminService.wsdl -u -uw -sn TopicManagerAdminService -o target/generated-code                                      -ns2p http://internal.admin.event.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.xsd,http://exception.internal.admin.event.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.exception.xsd,http://internal.admin.event.carbon.wso2.org=org.wso2.carbon.event.stub.internal,http://topic.core.event.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.xsd,http://subscription.core.event.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.xsd,http://commons.qpid.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.xsd" />
+                                     <arg line="-uri src/main/resources/TopicManagerAdminService.wsdl -u -uw -sn TopicManagerAdminService -o target/generated-code -ns2p http://internal.admin.event.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.xsd,http://exception.internal.admin.event.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.exception.xsd,http://internal.admin.event.carbon.wso2.org=org.wso2.carbon.event.stub.internal,http://topic.core.event.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.xsd,http://subscription.core.event.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.xsd,http://commons.qpid.carbon.wso2.org/xsd=org.wso2.carbon.event.stub.internal.xsd" />
                                     <!--&lt;!&ndash;http://wso2.org/carbon/cep/admin/xsd=org.wso2.carbon.cep.ui,
                                     http://core.cep.carbon.wso2.org/xsd=org.wso2.carbon.cep.ui.types,&ndash;&gt;
                                    " />-->
