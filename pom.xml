@@ -25,10 +25,9 @@
         <module>service-stubs/org.wso2.carbon.discovery.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.oauth.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.entitlement.stub</module>
-<!--
-        <module>service-stubs/org.wso2.carbon.datasource.stub</module>
--->
         <module>service-stubs/org.wso2.carbon.throttling.agent.stub</module>
+        <module>service-stubs/org.wso2.carbon.email.verification.stub</module>
+        <module>service-stubs/org.wso2.carbon.tenant.common.stub</module>
         <module>service-stubs/cluster-mgt</module>
         <module>service-stubs/logging</module>
         <module>service-stubs/remote-tasks</module>
@@ -47,16 +46,10 @@
         <!-- Components -->
 	<module>components/tenant-mgt-common</module>
         <module>components/authentication</module>
-<!--
-        <module>components/data-sources</module>
--->
         <module>components/application-deployers</module>
         <module>components/deployment-synchronizer</module>
         <module>components/application-mgt</module>
         <module>components/ws-discovery</module>
-<!--
-        <module>components/entitlement-commons</module>
--->
         <module>components/data-bridge</module>
         <module>components/ganalytics</module>
         <module>components/caching-invalidator</module>
@@ -80,6 +73,8 @@
         <module>components/wsdl-tools</module>
         <module>components/system-statistics</module>
         <module>components/message-flows</module>
+        <module>components/email-verification</module>
+	
 
         <!-- Features -->
         <module>features/application-deployers</module>
@@ -287,6 +282,16 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.datasource</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+	    <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.email.verification.stub</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+	    <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.email.verification</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

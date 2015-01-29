@@ -38,4 +38,12 @@ public interface TenantMgtListener {
                                          String newPlan) throws StratosException;
     
     public int getListenerOrder();
+
+    /**
+     * On Pre delete method will delete product specific data
+     *
+     * @param tenantId	- Tenant Id
+     * @throws StratosException
+     */
+    public void onPreDelete(int tenantId) throws StratosException;
 }
