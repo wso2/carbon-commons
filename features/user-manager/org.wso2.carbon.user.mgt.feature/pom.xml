@@ -71,7 +71,7 @@
                                     org.wso2.carbon.commons:org.wso2.carbon.user.mgt.server.feature:${project.version}
                                 </includedFeatureDef>
                                 <includedFeatureDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.user.mgt.ui.feature:4.3.0-SNAPSHOT
+                                    org.wso2.carbon.commons:org.wso2.carbon.user.mgt.ui.feature:${project.version}
                                 </includedFeatureDef>
                             </includedFeatures>
                         </configuration>

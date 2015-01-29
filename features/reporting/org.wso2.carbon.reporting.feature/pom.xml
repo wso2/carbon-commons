@@ -77,7 +77,7 @@
                                 <importFeatureDef>org.wso2.carbon.core:${carbon.kernel.version}</importFeatureDef>
                             </importFeatures>
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.server.feature:4.3.0-SNAPSHOT</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.server.feature:${project.version}</includedFeatureDef>
                                 <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.server.feature:${project.version}
                                 </includedFeatureDef>
                                 <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.ui.feature:${project.version}

@@ -68,8 +68,8 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.admin.ui:4.3.0-SNAPSHOT</bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.view.ui:4.3.0-SNAPSHOT</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.admin.ui:${project.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.view.ui:${project.version}</bundleDef>
                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.admin.stub:${project.version}</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.view.stub:${project.version}</bundleDef>
                             </bundles>
