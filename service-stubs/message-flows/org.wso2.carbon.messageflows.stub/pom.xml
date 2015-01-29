@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>message-flows-stubs</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -76,7 +76,7 @@
                                     <pathelement location="${settings.localRepository}/org/apache/axis2/wso2/axis2/${orbit.version.axis2}/axis2-${orbit.version.axis2}.jar" />
                                 </path>
                                 <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
-                                    <arg line="-uri src/main/resources/FlowsAdminService.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.viewflows.stub                                     -ns2p http://service.viewflows.carbon.wso2.org=org.wso2.carbon.viewflows.stub,http://viewflows.carbon.wso2.org/xsd=org.wso2.carbon.viewflows.stub.types" />
+                                    <arg line="-uri src/main/resources/FlowsAdminService.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.viewflows.stub -ns2p http://service.viewflows.carbon.wso2.org=org.wso2.carbon.viewflows.stub,http://viewflows.carbon.wso2.org/xsd=org.wso2.carbon.viewflows.stub.types" />
                                     <classpath refid="wsdl2java.classpath" />
                                 </java>
                             </tasks>

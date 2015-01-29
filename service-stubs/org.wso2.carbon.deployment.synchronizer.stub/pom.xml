@@ -21,12 +21,12 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>carbon-commons</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.1-SNAPSHOT</version>
 	<relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>4.3.0</version>
+    <version>4.3.1-SNAPSHOT</version>
     <artifactId>org.wso2.carbon.deployment.synchronizer.stub</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Deployment Synchronizer Stub</name>
@@ -75,7 +75,7 @@
                                     <pathelement location="${settings.localRepository}/org/apache/axis2/wso2/axis2/${orbit.version.axis2}/axis2-${orbit.version.axis2}.jar" />
                                 </path>
                                 <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
-                                    <arg line="-uri src/main/resources/DeploymentSynchronizerAdmin.wsdl -p org.wso2.carbon.deployment.synchronizer.stub.types                                     -ns2p http://util.internal.synchronizer.deployment.carbon.wso2.org/xsd=org.wso2.carbon.deployment.synchronizer.stub.types.util,http://org.apache.synapse/xsd=org.wso2.carbon.deployment.synchronizer.stub.types.synapse,http://synchronizer.deployment.carbon.wso2.org/xsd=org.wso2.carbon.deployment.synchronizer.stub.types -u -uw -o target/generated-code" />
+                                    <arg line="-uri src/main/resources/DeploymentSynchronizerAdmin.wsdl -p org.wso2.carbon.deployment.synchronizer.stub.types -ns2p http://util.internal.synchronizer.deployment.carbon.wso2.org/xsd=org.wso2.carbon.deployment.synchronizer.stub.types.util,http://org.apache.synapse/xsd=org.wso2.carbon.deployment.synchronizer.stub.types.synapse,http://synchronizer.deployment.carbon.wso2.org/xsd=org.wso2.carbon.deployment.synchronizer.stub.types -u -uw -o target/generated-code" />
                                     <classpath refid="wsdl2java.classpath" />
                                 </java>
                             </tasks>

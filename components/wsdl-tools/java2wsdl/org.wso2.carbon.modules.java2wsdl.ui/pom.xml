@@ -19,13 +19,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>java2wsdl</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.java2wsdl.ui</artifactId>
-    <version>4.3.0</version>
+    <version>4.3.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Java2wsdl UI</name>
     <description>This is the UI module of the project.</description>

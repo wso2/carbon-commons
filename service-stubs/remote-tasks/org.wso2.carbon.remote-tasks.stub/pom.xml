@@ -21,13 +21,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>remote-tasks-stubs</artifactId>
-        <version>4.3.0</version>
+        <version>4.3.1-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.remote-tasks.stub</artifactId>
-    <version>4.3.0</version>
+    <version>4.3.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Remote Tasks Stub</name>
     <url>http://wso2.org</url>
@@ -54,7 +54,7 @@
                                     <pathelement location="${settings.localRepository}/org/apache/axis2/wso2/axis2/${orbit.version.axis2}/axis2-${orbit.version.axis2}.jar" />
                                 </path>
                                 <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
-                                    <arg line="-uri src/main/resources/RemoteTaskAdmin.wsdl -u -uw -sn RemoteTaskAdmin -o target/generated-code -ns2p  http://common.remotetasks.carbon.wso2.org/xsd=org.wso2.carbon.remotetasks.stub.admin.common.xsd,http://admin.core.remotetasks.carbon.wso2.org=org.wso2.carbon.remotetasks.stub.admin.common" />
+                                    <arg line="-uri src/main/resources/RemoteTaskAdmin.wsdl -u -uw -sn RemoteTaskAdmin -o target/generated-code -ns2p http://common.remotetasks.carbon.wso2.org/xsd=org.wso2.carbon.remotetasks.stub.admin.common.xsd,http://admin.core.remotetasks.carbon.wso2.org=org.wso2.carbon.remotetasks.stub.admin.common" />
                                     <classpath refid="wsdl2java.classpath" />
                                 </java>
                             </tasks>
