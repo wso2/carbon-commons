@@ -20,12 +20,12 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>email-verification</artifactId>
-        <version>4.3.1</version>
+        <version>4.3.2-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.email.verification</artifactId>
-    <version>4.3.1</version>
+    <version>4.3.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Email Verification BE</name>
     <description>Email verification BE component for WSO2 Carbon</description>
