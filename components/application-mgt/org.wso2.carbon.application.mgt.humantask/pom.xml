@@ -74,7 +74,7 @@
                         <Import-Package>
                             org.wso2.carbon.application.deployer.*,
                             org.wso2.carbon.humantask.skeleton.mgt.services.*;
-                            version="${carbon.platform.package.import.version.range}",
+                            version="${carbon.commons.imp.package.version}",
                             *;resolution:=optional
                         </Import-Package>
                         <Export-Package>

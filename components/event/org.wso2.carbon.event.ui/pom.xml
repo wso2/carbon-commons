@@ -85,7 +85,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Carbon-Component>UIBundle</Carbon-Component>
                        <Import-Package>
-                            org.wso2.carbon.event.stub.*;version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.event.stub.*;version="${carbon.commons.imp.package.version}",
 							org.wso2.carbon.event.api.*,
 							org.wso2.carbon.event.client.*,
                             org.wso2.carbon.utils,

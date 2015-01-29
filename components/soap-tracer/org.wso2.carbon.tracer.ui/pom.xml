@@ -44,11 +44,11 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.carbon.tracer.ui.*;version="${carbon.commons.export.package.version}"
+                            org.wso2.carbon.tracer.ui.*;version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package>
                             !org.wso2.carbon.tracer.ui.*,
-                            org.wso2.carbon.tracer.stub.*;version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.tracer.stub.*;version="${carbon.commons.imp.package.version}",
                             org.wso2.carbon.ui.*,
                             org.apache.commons.lang.*,
                             *;resolution:=optional

@@ -106,7 +106,7 @@
                             *;resolution:=optional
                         </Import-Package>
                         <Export-Package>
-                            org.wso2.carbon.event.client.stub.*;version="${carbon.commons.export.package.version}",
+                            org.wso2.carbon.event.client.stub.*;version="${carbon.commons.exp.package.version}",
                         </Export-Package>
                     </instructions>
                 </configuration>

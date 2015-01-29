@@ -65,7 +65,7 @@
                         <Carbon-Component>UIBundle</Carbon-Component>
                         <Import-Package>
                             !org.wso2.carbon.application.mgt.ui.fileupload,
-                            org.wso2.carbon.application.mgt.stub.*;version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.application.mgt.stub.*;version="${carbon.commons.imp.package.version}",
                             javax.servlet.*;version="${imp.pkg.version.javax.servlet}",
                             *;resolution:=optional
                         </Import-Package>

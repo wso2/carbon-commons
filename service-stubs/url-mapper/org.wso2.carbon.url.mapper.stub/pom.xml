@@ -88,7 +88,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
                             org.wso2.carbon.url.mapper.stub.*;
-                            version="${carbon.commons.export.package.version}"
+                            version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package>
                             !org.wso2.carbon.url.mapper.stub.*,

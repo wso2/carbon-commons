@@ -83,7 +83,7 @@
                             org.wso2.carbon.event.common.*,
                         </Export-Package>
                         <Import-Package>
-                            org.wso2.carbon.um.ws.api.stub.*;version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.um.ws.api.stub.*;version="${carbon.commons.imp.package.version}",
                             org.wso2.carbon.utils,
                             org.apache.axis2.*; version="${axis2.osgi.version.range}",
                             org.apache.axiom.*; version="${axiom.osgi.version.range}",

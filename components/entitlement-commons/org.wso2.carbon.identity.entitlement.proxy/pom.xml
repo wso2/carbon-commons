@@ -167,7 +167,7 @@
 							!org.apache.axis2.databinding.utils.reader,
 							!org.pache.axis2.databinding.utils.writer,
                             !org.wso2.carbon.identity.entitlement.proxy.*,
-                            org.wso2.carbon.identity.entitlement.stub.*;version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.identity.entitlement.stub.*;version="${carbon.commons.imp.package.version}",
                             org.wso2.carbon.authenticator.stub.*;version="${carbon.kernel.imp.pkg.version}",
                             *; resolution:=optional
                         </Import-Package>

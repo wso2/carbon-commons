@@ -64,10 +64,9 @@
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.transport.jms.stub.*;
-                            version="${carbon.platform.package.import.version.range}",
+                            version="${carbon.commons.imp.package.version}",
                             org.wso2.carbon.transport.jms.stub.types.carbon.*;
-                            version="${carbon.platform.package.import.version.range}",
-                            org.wso2.carbon.transport.jms.stub.types.axis2.*;
+                            version="${carbon.placarbon.commons.imp.package.version                      org.wso2.carbon.transport.jms.stub.types.axis2.*;
                             version="${carbon.platform.package.import.version.range}"
                             *;resolution:=optional
                         </Import-Package>

@@ -51,7 +51,7 @@
                         </Export-Package>
                         <Import-Package>
                             org.wso2.carbon.discovery.admin.stub.*;
-                            version="${carbon.commons.export.package.version}",
+                            version="${carbon.commons.exp.package.version}",
                             *;resolution:=optional
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>

@@ -98,7 +98,7 @@
                             !rg.wso2.carbon.um.ws.api.*,
                             javax.xml.namespace.*;version="0.0.0",
                             org.wso2.carbon.um.ws.api.stub.*;
-                            version="${carbon.platform.package.import.version.range}",
+                            version="${carbon.commons.imp.package.version}",
                             *;resolution:=optional
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>

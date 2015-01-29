@@ -96,7 +96,7 @@
                         </Private-Package>
                         <Export-Package>
                             org.wso2.carbon.cluster.mgt.admin.stub.*;
-                            version="${carbon.commons.export.package.version}"
+                            version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package>
                             !org.wso2.carbon.cluster.mgt.admin.stub.*
