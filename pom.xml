@@ -4,7 +4,7 @@
     <groupId>org.wso2.carbon.commons</groupId>
     <artifactId>carbon-commons</artifactId>
     <packaging>pom</packaging>
-    <version>4.3.1-SNAPSHOT</version>
+    <version>4.3.1</version>
     <name>WSO2 Carbon - Platform Aggregator Pom</name>
     <url>http://wso2.org</url>
 
@@ -109,7 +109,7 @@
         <url>https://github.com/wso2/carbon-commons.git</url>
         <developerConnection>scm:git:https://github.com/wso2/carbon-commons.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/carbon-commons.git</connection>
-        <tag>HEAD</tag>
+        <tag>4.3.1</tag>
     </scm>
 
     <dependencyManagement>
