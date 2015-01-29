@@ -102,7 +102,7 @@
                             *;resolution:=optional
                         </Import-Package>
                         <Export-Package>
-                            org.wso2.carbon.remotetasks.stub.*;version="${carbon.platform.package.export.version}",
+                            org.wso2.carbon.remotetasks.stub.*;version="${carbon.commons.export.package.version}",
                         </Export-Package>
                     </instructions>
                 </configuration>

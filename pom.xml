@@ -1860,6 +1860,9 @@
         <carbon.kernel.imp.pkg.version>[4.3.0, 4.4.0)
         </carbon.kernel.imp.pkg.version>
 
+        <carbon.commons.export.package.version>4.3.0
+        </carbon.commons.export.package.version>
+
         <older.version>4.1.0</older.version>
         <previous.version>4.2.0</previous.version>
         <previous.version.422>4.2.2</previous.version.422>

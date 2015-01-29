@@ -67,7 +67,7 @@
                          <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                          <Bundle-Name>${project.artifactId}</Bundle-Name>
                          <Export-Package>
-                            org.wso2.carbon.user.mgt.ui.*;version="${carbon.platform.package.export.version}",
+                            org.wso2.carbon.user.mgt.ui.*;version="${carbon.commons.export.package.version}",
                             org.wso2.carbon.userstore.ui.*
                          </Export-Package>
                          <Import-Package>

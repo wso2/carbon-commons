@@ -78,7 +78,7 @@
                             *;resolution:=optional
                         </Import-Package>
                         <Export-Package>
-                            org.wso2.carbon.cluster.mgt.admin.ui.*;version="${carbon.platform.package.export.version}"
+                            org.wso2.carbon.cluster.mgt.admin.ui.*;version="${carbon.commons.export.package.version}"
                         </Export-Package>
                         <Carbon-Component>UIBundle</Carbon-Component>
                         <DynamicImport-Package>*</DynamicImport-Package>

@@ -89,7 +89,7 @@
 						</Bundle-SymbolicName>
 						<Bundle-Vendor>WSO2 Inc</Bundle-Vendor>
 						<Export-Package>
-							org.wso2.carbon.ndatasource.stub.*;version="${carbon.platform.package.export.version}"
+							org.wso2.carbon.ndatasource.stub.*;version="${carbon.commons.export.package.version}"
 						</Export-Package>
 						<Import-Package>
 							!org.wso2.carbon.ndatasource.stub.*,
