@@ -21,14 +21,14 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>url-mapper-stubs</artifactId>
-        <version>4.3.1-SNAPSHOT</version>
+        <version>4.3.2-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.url.mapper.stub</artifactId>
     <packaging>bundle</packaging>
-    <version>4.3.1-SNAPSHOT</version>
+    <version>4.3.2-SNAPSHOT</version>
     <name>Url Mapper Module</name>
     <url>http://wso2.org</url>
 
@@ -56,7 +56,7 @@
 
 
                                 <java classname="org.apache.axis2.wsdl.WSDL2Java" fork="true">
-                                    <arg line="-uri src/main/resources/UrlMapperAdminService.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.url.mapper.stub -ns2p   http://data.mapper.url.carbon.wso2.org/xsd=org.wso2.carbon.url.mapper.stub.types.carbon, http://mapper.url.carbon.wso2.org=org.wso2.carbon.url.mapper.stub" />
+                                    <arg line="-uri src/main/resources/UrlMapperAdminService.wsdl -u -uw -o target/generated-code -p org.wso2.carbon.url.mapper.stub -ns2p http://data.mapper.url.carbon.wso2.org/xsd=org.wso2.carbon.url.mapper.stub.types.carbon, http://mapper.url.carbon.wso2.org=org.wso2.carbon.url.mapper.stub" />
                                     <classpath refid="wsdl2java.classpath" />
                                     <classpath refid="maven.dependency.classpath" />
                                     <classpath refid="maven.compile.classpath" />
