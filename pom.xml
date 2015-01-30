@@ -1840,7 +1840,7 @@
         <carbon.kernel.imp.pkg.version>[4.3.0, 4.4.0)
         </carbon.kernel.imp.pkg.version>
 
-        <carbon.commons.version>${project.version}</carbon.commons.version>
+        <carbon.commons.version>4.3.2-SNAPSHOT</carbon.commons.version>
         <carbon.commons.exp.package.version>4.3.2</carbon.commons.exp.package.version>
         <carbon.commons.imp.package.version>[4.3.0, 4.4.0)</carbon.commons.imp.package.version>
 
