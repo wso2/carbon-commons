@@ -57,7 +57,7 @@
                             <id>org.wso2.carbon.transaction.manager</id>
                             <propertiesFile>../../../etc/feature.properties</propertiesFile>
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.transaction.manager.server.feature:${project.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.transaction.manager.server.feature:${carbon.commons.version}</includedFeatureDef>
                             </includedFeatures>
                         </configuration>
                     </execution>

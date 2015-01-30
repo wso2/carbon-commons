@@ -36,8 +36,7 @@
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.discovery.core</artifactId>
-            <version>${project.version}</version>
-        </dependency>        
+        </dependency>
     </dependencies>
     
     <build>

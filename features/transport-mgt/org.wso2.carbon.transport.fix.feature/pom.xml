@@ -70,7 +70,7 @@
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.transport.mgt.server:${project.version}
+                                    org.wso2.carbon.transport.mgt.server:${carbon.commons.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

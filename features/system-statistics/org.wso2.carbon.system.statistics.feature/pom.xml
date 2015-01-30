@@ -65,8 +65,8 @@
                                 <importFeatureDef>org.wso2.carbon.core:${carbon.kernel.version}</importFeatureDef>
                             </importFeatures>
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.system.statistics.server.feature:${project.version}</includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.system.statistics.ui.feature:${project.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.system.statistics.server.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.system.statistics.ui.feature:${carbon.commons.version}</includedFeatureDef>
                             </includedFeatures>
                         </configuration>
                     </execution>
