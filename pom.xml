@@ -41,6 +41,7 @@
         <module>service-stubs/message-flows</module>
 
         <!-- Components -->
+        <module>components/user-manager</module>
 	<module>components/tenant-mgt-common</module>
         <module>components/authentication</module>
         <module>components/application-deployers</module>
@@ -61,7 +62,6 @@
         <module>components/wsdl2form</module>
         <module>components/logging</module>
         <module>components/userstore-config</module>
-        <module>components/user-manager</module>
         <module>components/remote-usermgt</module>
         <module>components/event</module>
         <module>components/ndatasource</module>
