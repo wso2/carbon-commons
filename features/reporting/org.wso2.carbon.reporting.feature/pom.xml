@@ -75,12 +75,12 @@
                                 <importFeatureDef>org.wso2.carbon.core:${carbon.kernel.version}</importFeatureDef>
                             </importFeatures>
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.server.feature:${project.version}</includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.server.feature:${project.version}
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.server.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.server.feature:${carbon.commons.version}
                                 </includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.ui.feature:${project.version}
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.ui.feature:${carbon.commons.version}
                                 </includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.ui.feature:${project.version}
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.ui.feature:${carbon.commons.version}
                                 </includedFeatureDef>
                             </includedFeatures>
                         </configuration>

@@ -37,11 +37,5 @@
         <module>org.wso2.carbon.event.common.feature</module>
     </modules>
 
-    <properties>
-        <wso2carbon.version.event>${project.version}</wso2carbon.version.event>
-        <wso2carbon.version.qpid>${project.version}</wso2carbon.version.qpid>
-        <wso2carbon.version.rulecep>${project.version}</wso2carbon.version.rulecep>
-    </properties>
-
 </project>
 

@@ -22,7 +22,6 @@
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.core</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -96,13 +95,13 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.core:${project.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.core:${carbon.commons.version}</bundleDef>
                                 <bundleDef>com.google.guava:guava</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.identity.authentication</bundleDef>
                             </bundles>
                             <importFeatures>
                                  <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
-                                 <importFeatureDef>org.wso2.carbon.databridge.commons.server:${project.version}</importFeatureDef>
+                                 <importFeatureDef>org.wso2.carbon.databridge.commons.server:${carbon.commons.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>

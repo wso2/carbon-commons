@@ -17,14 +17,7 @@
     <modules>
         <!-- Service Stubs -->
         <module>service-stubs/org.wso2.carbon.adc.repositoryinformation.service.stub</module>
-<!--
-        <module>service-stubs/org.wso2.carbon.application.mgt.bpel.stub</module>
-        <module>service-stubs/org.wso2.carbon.application.mgt.humantask.stub</module>
--->
         <module>service-stubs/org.wso2.carbon.application.mgt.stub</module>
-<!--
-        <module>service-stubs/org.wso2.carbon.application.mgt.synapse.stub</module>
--->
         <module>service-stubs/org.wso2.carbon.deployment.synchronizer.stub</module>
         <module>service-stubs/org.wso2.carbon.discovery.stub</module>
         <module>service-stubs/org.wso2.carbon.identity.oauth.stub</module>
@@ -86,9 +79,6 @@
         <module>features/deployment-synchronizer</module>
         <module>features/ws-discovery</module>
         <module>features/data-bridge</module>
-<!--
-        <module>features/data-sources</module>
--->
         <module>features/caching-invalidator</module>
         <module>features/cluster-mgt</module>
         <module>features/hostobjects</module>
@@ -1710,7 +1700,47 @@
                 <artifactId>js</artifactId>
                 <version>${rhino.wso2.version}</version>
             </dependency>
-
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.caching.invalidator.server.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.commons.server.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.commons.thrift.server.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.agent.thrift.server.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.core.server.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.receiver.thrift.server.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.caching.invalidator</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1872,10 +1902,9 @@
         <carbon.kernel.imp.pkg.version>[4.3.0, 4.4.0)
         </carbon.kernel.imp.pkg.version>
 
-        <carbon.commons.exp.package.version>4.3.0
-        </carbon.commons.exp.package.version>
-        <carbon.commons.imp.package.version>[4.3.0, 4.4.0)
-        </carbon.commons.imp.package.version>
+        <carbon.commons.version>4.3.2-SNAPSHOT</carbon.commons.version>
+        <carbon.commons.exp.package.version>4.3.2</carbon.commons.exp.package.version>
+        <carbon.commons.imp.package.version>[4.3.0, 4.4.0)</carbon.commons.imp.package.version>
 
         <older.version>4.1.0</older.version>
         <previous.version>4.2.0</previous.version>

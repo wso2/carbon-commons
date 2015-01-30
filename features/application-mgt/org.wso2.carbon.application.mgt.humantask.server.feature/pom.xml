@@ -73,7 +73,7 @@
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.application.deployer.humantask:${project.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.application.deployer.humantask:${carbon.commons.version}</importFeatureDef>
                                 <importFeatureDef>org.wso2.carbon.humantask.server:${carbon.platform.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>

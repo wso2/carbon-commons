@@ -41,7 +41,7 @@
 								<importFeatureDef>org.wso2.carbon.core:${carbon.kernel.version}</importFeatureDef>
 							</importFeatures>
 							<includedFeatures>
-								<includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.ui.feature:${project.version}</includedFeatureDef>
+								<includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.ui.feature:${carbon.commons.version}</includedFeatureDef>
 							</includedFeatures>
 						</configuration>
 					</execution>

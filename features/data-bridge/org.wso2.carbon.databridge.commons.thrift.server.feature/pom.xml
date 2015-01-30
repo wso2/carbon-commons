@@ -20,13 +20,10 @@
             <groupId>libthrift.wso2</groupId>
             <artifactId>libthrift</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>
-            <version>${project.version}</version>
         </dependency>
-
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -61,7 +58,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.commons.thrift:${project.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.commons.thrift:${carbon.commons.version}</bundleDef>
                                 <bundleDef>libthrift.wso2:libthrift:0.7.0.wso2v2</bundleDef>
                                 <bundleDef>org.slf4j:slf4j-log4j12</bundleDef>
                                 <bundleDef>org.slf4j:slf4j-api</bundleDef>
@@ -69,7 +66,7 @@
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.databridge.commons.server:${project.version}
+                                    org.wso2.carbon.databridge.commons.server:${carbon.commons.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

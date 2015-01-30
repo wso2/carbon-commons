@@ -63,7 +63,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.application.deployer.synapse:${project.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.application.deployer.synapse:${carbon.commons.version}</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.apache.synapse.wso2:2.1.2-wso2v4</importFeatureDef>

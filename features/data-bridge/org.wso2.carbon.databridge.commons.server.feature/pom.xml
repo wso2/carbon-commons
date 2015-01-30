@@ -25,7 +25,6 @@
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.commons</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -66,7 +65,7 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.commons:${project.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.commons:${carbon.commons.version}</bundleDef>
                                 <bundleDef>org.json.wso2:json</bundleDef>
                                 <bundleDef>com.google.code.gson:gson</bundleDef>
                             </bundles>

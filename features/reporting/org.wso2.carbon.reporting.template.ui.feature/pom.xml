@@ -75,13 +75,13 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.ui:${project.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.ui:${carbon.commons.version}
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.stub:${project.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.template.stub:${carbon.commons.version}
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.stub:${project.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.stub:${carbon.commons.version}
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.custom.ui:${project.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.custom.ui:${carbon.commons.version}
                                 </bundleDef>
                             </bundles>
                             <importBundles>

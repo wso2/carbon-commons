@@ -76,8 +76,4 @@
             <artifactId>org.wso2.carbon.discovery.stub</artifactId>
         </dependency>
     </dependencies>
-
-    <properties>
-        <wso2carbon.version.discovery>${project.version}</wso2carbon.version.discovery>
-    </properties>
 </project>
