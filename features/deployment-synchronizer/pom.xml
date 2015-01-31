@@ -52,7 +52,7 @@
                 <artifactId>org.wso2.carbon.deployment.synchronizer.stub</artifactId>
             </dependency>
 	    <dependency>
-                <groupId>org.wso2.carbon</groupId>
+                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.email.verification</artifactId>
             </dependency>
             <dependency>

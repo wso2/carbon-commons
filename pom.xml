@@ -44,7 +44,6 @@
         <module>components/user-manager</module>
 	<module>components/tenant-mgt-common</module>
         <module>components/authentication</module>
-        <module>components/application-deployers</module>
         <module>components/deployment-synchronizer</module>
         <module>components/application-mgt</module>
         <module>components/ws-discovery</module>
@@ -74,7 +73,6 @@
 	
 
         <!-- Features -->
-        <module>features/application-deployers</module>
         <module>features/application-mgt</module>
         <module>features/deployment-synchronizer</module>
         <module>features/ws-discovery</module>
@@ -387,39 +385,8 @@
 
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.mediation.initializer</artifactId>
-                <version>${previous.version.422}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.application.deployer</artifactId>
                 <version>${carbon.kernel.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.application.deployer.webapp</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.application.deployer.synapse</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.application.deployer.bpel</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.application.deployer.brs</artifactId>
-                <version>${carbon.commons.version}</version>
             </dependency>
 
             <dependency>
@@ -427,33 +394,10 @@
                 <artifactId>org.wso2.carbon.application.deployer.gadget</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.application.deployer.bpmn</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.application.deployer.humantask</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.application.deployer.cep</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.application.deployer.bam</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.application.deployer.mashup</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
 
@@ -492,11 +436,6 @@
                 <scope>test</scope>
             </dependency>
 
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.mediation.registry</artifactId>
-                <version>${previous.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.tracer</artifactId>
@@ -651,11 +590,6 @@
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.deployment.synchronizer.stub</artifactId>
                 <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon</groupId>
-                <artifactId>org.wso2.carbon.email.verification</artifactId>
-                <version>${previous.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
@@ -1844,9 +1778,6 @@
         <carbon.commons.exp.package.version>4.3.2</carbon.commons.exp.package.version>
         <carbon.commons.imp.package.version>[4.3.0, 4.4.0)</carbon.commons.imp.package.version>
 
-        <older.version>4.1.0</older.version>
-        <previous.version>4.2.0</previous.version>
-        <previous.version.422>4.2.2</previous.version.422>
         <version.jettison>1.3.4</version.jettison>
         <orbit.version.axiom>1.2.11.wso2v5</orbit.version.axiom>
         <orbit.version.axis2>1.6.1.wso2v11</orbit.version.axis2>
