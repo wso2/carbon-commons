@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>application-mgt-features</artifactId>
-        <version>4.3.2-SNAPSHOT</version>
+        <version>4.3.3-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -28,7 +28,7 @@
     <artifactId>org.wso2.carbon.application.mgt.ui.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Application Management UI Feature</name>
-    <version>4.3.2-SNAPSHOT</version>
+    <version>4.3.3-SNAPSHOT</version>
     <url>http://wso2.org</url>
     <description>This feature contains the core bundles required for Front-end Application Management functionality</description>
     
