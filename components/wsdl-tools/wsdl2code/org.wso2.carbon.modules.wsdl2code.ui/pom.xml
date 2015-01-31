@@ -19,13 +19,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>wsdl2code</artifactId>
-        <version>4.3.2-SNAPSHOT</version>
+        <version>4.3.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.wsdl2code.ui</artifactId>
-    <version>4.3.2-SNAPSHOT</version>
+    <version>4.3.2</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - WSDL2Code UI</name>
     <description>This is the UI module of the project.</description>
