@@ -21,12 +21,12 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>carbon-commons</artifactId>
-        <version>4.3.3</version>
+        <version>4.3.4-SNAPSHOT</version>
 	<relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>4.3.3</version>
+    <version>4.3.4-SNAPSHOT</version>
     <artifactId>org.wso2.carbon.deployment.synchronizer.stub</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Deployment Synchronizer Stub</name>
