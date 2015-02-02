@@ -1773,6 +1773,8 @@
         <carbon.kernel.version>4.3.0</carbon.kernel.version>
         <carbon.kernel.imp.pkg.version>[4.3.0, 4.4.0)
         </carbon.kernel.imp.pkg.version>
+        <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
+
 
         <carbon.commons.version>4.3.3-SNAPSHOT</carbon.commons.version>
         <carbon.commons.exp.package.version>4.3.2</carbon.commons.exp.package.version>
