@@ -4,7 +4,7 @@
     <groupId>org.wso2.carbon.commons</groupId>
     <artifactId>carbon-commons</artifactId>
     <packaging>pom</packaging>
-    <version>4.3.3-SNAPSHOT</version>
+    <version>4.3.3</version>
     <name>WSO2 Carbon - Platform Aggregator Pom</name>
     <url>http://wso2.org</url>
 
@@ -101,7 +101,7 @@
         <url>https://github.com/wso2/carbon-commons.git</url>
         <developerConnection>scm:git:https://github.com/wso2/carbon-commons.git</developerConnection>
         <connection>scm:git:https://github.com/wso2/carbon-commons.git</connection>
-        <tag>HEAD</tag>
+        <tag>4.3.3</tag>
     </scm>
 
     <dependencyManagement>
@@ -1776,7 +1776,7 @@
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
 
 
-        <carbon.commons.version>4.3.3-SNAPSHOT</carbon.commons.version>
+        <carbon.commons.version>4.3.3</carbon.commons.version>
         <carbon.commons.exp.package.version>4.3.2</carbon.commons.exp.package.version>
         <carbon.commons.imp.package.version>[4.3.0, 4.4.0)</carbon.commons.imp.package.version>
 
