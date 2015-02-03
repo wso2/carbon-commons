@@ -82,7 +82,9 @@
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.ui:${carbon.kernel.version}</importFeatureDef>
                                 <importFeatureDef>org.wso2.carbon.event.common:${carbon.commons.version}</importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.registry.core.ui</importFeatureDef>
+<!--
+                                <importFeatureDef>org.wso2.carbon.registry.core.ui:${carbon.registry.version}</importFeatureDef>
+-->
                             </importFeatures>
                             <includedFeatures>
                                 <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.common.feature:${carbon.commons.version}</includedFeatureDef>
