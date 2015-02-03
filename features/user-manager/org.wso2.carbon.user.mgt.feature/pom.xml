@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>user-manager-feature</artifactId>
-        <version>4.3.4</version>
+        <version>4.3.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.user.mgt.feature</artifactId>
-    <version>4.3.4</version>
+    <version>4.3.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>User Management Feature</name>
     <url>http://wso2.org</url>
