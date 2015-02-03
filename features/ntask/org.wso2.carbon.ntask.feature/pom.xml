@@ -20,14 +20,14 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>ntask-features</artifactId>
-        <version>4.3.4-SNAPSHOT</version>
+        <version>4.3.4</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.ntask.feature</artifactId>
     <packaging>pom</packaging>
-    <version>4.3.4-SNAPSHOT</version>
+    <version>4.3.4</version>
     <name>WSO2 Carbon - Tasks Feature</name>
     <url>http://wso2.org</url>
     <description>This feature contains the bundles required for tasks functionality</description>
