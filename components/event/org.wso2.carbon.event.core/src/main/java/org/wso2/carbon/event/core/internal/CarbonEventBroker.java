@@ -17,7 +17,7 @@
 package org.wso2.carbon.event.core.internal;
 
 import org.apache.axiom.util.UIDGenerator;
-import org.wso2.carbon.base.MultitenantConstants;
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.event.core.EventBroker;
 import org.wso2.carbon.event.core.Message;
 import org.wso2.carbon.event.core.delivery.DeliveryManager;
@@ -33,27 +33,26 @@ import org.wso2.carbon.event.core.util.EventBrokerConstants;
 import org.wso2.carbon.user.api.AuthorizationManager;
 import org.wso2.carbon.user.api.UserRealm;
 import org.wso2.carbon.user.api.UserStoreException;
-import org.wso2.carbon.context.CarbonContext;
 
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 /**
- * carbon event broker implemenation.
+ * Carbon event broker implementation
  */
 public class CarbonEventBroker implements EventBroker {
 
     private SubscriptionManager subscriptionManager;
-
     private TopicManager topicManager;
-
-    private DeliveryManager delivaryManager;
-
+    private DeliveryManager deliveryManager;
     private CarbonNotificationManager notificationManager;
-
     private ExecutorService executor;
 
+    /**
+     * Initializes the carbon event broker. Loads subscriptions new notifier manager set to delivery manager
+     * @throws EventBrokerConfigurationException
+     */
     public void init() throws EventBrokerConfigurationException {
 
         this.notificationManager = new CarbonNotificationManager();
@@ -61,12 +60,16 @@ public class CarbonEventBroker implements EventBroker {
         // notify method with the given subscription details.
         // this way delivery manager can use the persisted repository of the subscription manager
         // to notify subscriptions if wanted.
-        this.delivaryManager.setNotificationManager(this.notificationManager);
+        this.deliveryManager.setNotificationManager(this.notificationManager);
         // re subscribe the already existing subscriptions.
         // TODO: do the validations eg. expiraty time
         loadExistingSubscriptions();
     }
 
+    /**
+     * Loads existing subscriptions. Delivery manager is subscribed with non expired subscriptions
+     * @throws EventBrokerConfigurationException
+     */
     private void loadExistingSubscriptions() throws EventBrokerConfigurationException {
         try {
             Calendar calendar = Calendar.getInstance();
@@ -76,15 +79,19 @@ public class CarbonEventBroker implements EventBroker {
                         subscription.setTenantDomain(EventBrokerHolder.getInstance().getTenantDomain());
                         subscription.setTenantId(EventBrokerHolder.getInstance().getTenantId());
                     }
-                    delivaryManager.subscribe(subscription);
+                    deliveryManager.subscribe(subscription);
                 }
             }
         } catch (EventBrokerException e) {
-            throw new EventBrokerConfigurationException("Can not get the subscriptions ", e);
+            throw new EventBrokerConfigurationException("Cannot get the subscriptions ", e);
         }
     }
 
-    public void initializeTenant() throws EventBrokerException {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initializeTenant() throws EventBrokerException, UserStoreException {
 
         // first we need to authorize all the roles to the topic root
         try {
@@ -92,25 +99,29 @@ public class CarbonEventBroker implements EventBroker {
             if (topicStoragePath != null) {
                 UserRealm userRealm =
                         EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(EventBrokerHolder.getInstance().getTenantId());
-                AuthorizationManager authzManager = userRealm.getAuthorizationManager();
+                AuthorizationManager authManager = userRealm.getAuthorizationManager();
                 for (String role : userRealm.getUserStoreManager().getRoleNames()) {
-					if (!authzManager.isRoleAuthorized(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE)) {
-                		authzManager.authorizeRole(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
-                	}
-                	if (!authzManager.isRoleAuthorized(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_PUBLISH)) {
-                		authzManager.authorizeRole(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
+                    if (!authManager.isRoleAuthorized(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE)) {
+                        authManager.authorizeRole(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
+                    }
+                    if (!authManager.isRoleAuthorized(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_PUBLISH)) {
+                        authManager.authorizeRole(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
                     }
                 }
             }
         } catch (EventBrokerException e) {
-            throw new EventBrokerConfigurationException("Can not get the subscriptions ", e);
+            throw new EventBrokerConfigurationException("Cannot get the subscriptions ", e);
         } catch (UserStoreException e) {
-            throw new EventBrokerConfigurationException("Can not get roles from user store", e);
+            throw new EventBrokerConfigurationException("Cannot get roles from user store", e);
         }
-        this.delivaryManager.initializeTenant();
+        this.deliveryManager.initializeTenant();
         loadExistingSubscriptions();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String subscribe(Subscription subscription)
             throws EventBrokerException {
 
@@ -127,7 +138,7 @@ public class CarbonEventBroker implements EventBroker {
         // generates an id for the subscription
         subscription.setId(UIDGenerator.generateUID());
         this.topicManager.addTopic(subscription.getTopicName());
-        this.delivaryManager.subscribe(subscription);
+        this.deliveryManager.subscribe(subscription);
 
         if (subscription.getEventDispatcherName() != null){
             // we persists a subscription only if it has a event dispatcher
@@ -136,12 +147,18 @@ public class CarbonEventBroker implements EventBroker {
         } else {
             if (subscription.getEventDispatcher() == null){
                 throw new EventBrokerException(" subscription url, event " +
-                        "dispatcher name and event dispatcher is null");
+                                               "dispatcher name and event dispatcher is null");
             }
         }
         return subscription.getId();
     }
 
+    /**
+     * Gets existing subscription for a given new subscription topic that are not expired
+     * @param newSubscription the new subscription
+     * @return the existing subscription
+     * @throws EventBrokerException
+     */
     private Subscription getExistingNonExpiredSubscription(Subscription newSubscription)
             throws EventBrokerException {
         Subscription[] subscriptions =
@@ -161,83 +178,132 @@ public class CarbonEventBroker implements EventBroker {
         return existingSubscription;
     }
 
-    public void unsubscribe(String id) throws EventBrokerException {
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void unSubscribe(String id) throws EventBrokerException {
         this.subscriptionManager.unSubscribe(id);
-        this.delivaryManager.unSubscribe(id);
+        this.deliveryManager.unSubscribe(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Subscription getSubscription(String id) throws EventBrokerException {
         return this.subscriptionManager.getSubscription(id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void renewSubscription(Subscription subscription) throws EventBrokerException {
         // save the new expiration time to registry
         this.subscriptionManager.renewSubscription(subscription);
-        this.delivaryManager.renewSubscription(subscription);
+        this.deliveryManager.renewSubscription(subscription);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public List<Subscription> getAllSubscriptions(String filter) throws EventBrokerException {
         return this.subscriptionManager.getAllSubscriptions();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void publish(Message message, String topicName) throws EventBrokerException {
         publish(message, topicName, EventBrokerConstants.EB_NON_PERSISTENT);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void publish(Message message, String topicName, int deliveryMode) throws EventBrokerException {
-         EventPublisher eventPublisher =
+        EventPublisher eventPublisher =
                 new EventPublisher(message,
-                        topicName,
-                        this.delivaryManager,
-                        deliveryMode,
-                        CarbonContext.getThreadLocalCarbonContext().getTenantId());
+                                   topicName,
+                                   this.deliveryManager,
+                                   deliveryMode,
+                                   CarbonContext.getThreadLocalCarbonContext().getTenantId());
         this.executor.execute(eventPublisher);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void publishRobust(Message message, String topicName) throws EventBrokerException {
         publishRobust(message, topicName, EventBrokerConstants.EB_NON_PERSISTENT);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void publishRobust(Message message, String topicName, int deliveryMode) throws EventBrokerException {
-         this.delivaryManager.publish(message, topicName, deliveryMode);
+        this.deliveryManager.publish(message, topicName, deliveryMode);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void registerEventDispatcher(String eventDispatcherName, EventDispatcher eventDispatcher) {
         this.notificationManager.registerEventDispatcher(eventDispatcherName, eventDispatcher);
     }
 
-    public SubscriptionManager getSubscriptionManager() {
-        return subscriptionManager;
-    }
-
+    /**
+     * Sets new subscription manager
+     * @param subscriptionManager new subscription manager
+     */
     public void setSubscriptionManager(SubscriptionManager subscriptionManager) {
         this.subscriptionManager = subscriptionManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TopicManager getTopicManager() {
         return topicManager;
     }
 
+    /**
+     * Sets new topic manager
+     * @param topicManager new topic manager
+     */
     public void setTopicManager(TopicManager topicManager) {
         this.topicManager = topicManager;
     }
 
-    public DeliveryManager getDelivaryManager() {
-        return delivaryManager;
+    /**
+     * Sets the delivery manager
+     * @param deliveryManager new delivery manager
+     */
+    public void setDeliveryManager(DeliveryManager deliveryManager) {
+        this.deliveryManager = deliveryManager;
     }
 
-    public void setDelivaryManager(DeliveryManager delivaryManager) {
-        this.delivaryManager = delivaryManager;
-    }
-
+    /**
+     * Sets the executor service
+     * @param executor new executor service
+     */
     public void setExecutor(ExecutorService executor) {
         this.executor = executor;
     }
 
     /**
-     * this method is used for any clean up methods of the carbon broker manager or any of
+     * Cleans up the delivery broker
+     * @throws EventBrokerException
      */
     public void cleanUp() throws EventBrokerException {
-         this.delivaryManager.cleanUp();
+        this.deliveryManager.cleanUp();
     }
 }

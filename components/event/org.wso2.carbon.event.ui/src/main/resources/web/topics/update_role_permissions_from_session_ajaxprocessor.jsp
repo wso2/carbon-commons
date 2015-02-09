@@ -6,12 +6,13 @@
 <%@ page import="org.wso2.carbon.event.stub.internal.xsd.TopicRolePermission" %>
 <%@ page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.net.URLDecoder" %>
 <%
     ConfigurationContext configContext = (ConfigurationContext) config.getServletContext()
             .getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
-//Server URL which is defined in the server.xml
+    //Server URL which is defined in the server.xml
     String serverURL = CarbonUIUtil.getServerURL(config.getServletContext(),
-                                                 session) + "TopicManagerAdminService.TopicManagerAdminServiceHttpsSoap12Endpoint";
+            session) + "TopicManagerAdminService.TopicManagerAdminServiceHttpsSoap12Endpoint";
     TopicManagerAdminServiceStub stub = new TopicManagerAdminServiceStub(configContext, serverURL);
 
     String cookie = (String) session.getAttribute(org.wso2.carbon.utils.ServerConstants.ADMIN_SERVICE_COOKIE);
@@ -23,33 +24,15 @@
     String message = "";
 
     String topic = (String) session.getAttribute("topic");
-    String permissions = request.getParameter("permissions");
-    String[] permissionParams = new String[0];
-    if (permissions != null && !"".equals(permissions)) {
-         permissionParams = permissions.split(",");
-    }
-
-    ArrayList<TopicRolePermission> topicRolePermissionArrayList = new ArrayList<TopicRolePermission>();
-    for (int i = 0; i < permissionParams.length; i++) {
-        String role = permissionParams[i];
-        i++;
-        String allowedSub = permissionParams[i];
-        i++;
-        String allowedPub = permissionParams[i];
-        TopicRolePermission topicRolePermission = new TopicRolePermission();
-        topicRolePermission.setRoleName(role);
-        topicRolePermission.setAllowedToSubscribe(Boolean.parseBoolean(allowedSub));
-        topicRolePermission.setAllowedToPublish(Boolean.parseBoolean(allowedPub));
-        topicRolePermissionArrayList.add(topicRolePermission);
-    }
-    session.removeAttribute("topicRolePermission");
-
+    ArrayList<TopicRolePermission> topicRolePermissionArrayList = (ArrayList<TopicRolePermission>) session.getAttribute("topicRolePermissions");
     TopicRolePermission[] topicRolePermissions = new TopicRolePermission[topicRolePermissionArrayList.size()];
+
     try {
         stub.updatePermission(topic, topicRolePermissionArrayList.toArray(topicRolePermissions));
-        message = "Updated permissions successfully";
+        message = "Topic added successfully";
     } catch (Exception e) {
         message = "Error in adding/updating permissions : " + e.getMessage();
     }
-    session.setAttribute("topicRolePermission", stub.getTopicRolePermissions(topic));
+
+    session.removeAttribute("topicRolePermissions");
 %><%=message%>

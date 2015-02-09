@@ -21,22 +21,59 @@ import org.wso2.carbon.event.core.exception.EventBrokerException;
 import java.util.List;
 
 /**
- * interface to mange the subscriptions with a persistance storage. Event Broker implemantiaon
+ * interface to mange the subscriptions with a persistence storage. Event Broker implementation
  * call this interface to add new subscriptions.
- * At the restart of the server it can retrive all the subscriptions and resubscribes.
+ * At the restart of the server it can retrieve all the subscriptions and resubscribes.
  */
 public interface SubscriptionManager {
 
+    /**
+     * When adding a subscription first it stores in the registry as as set of property values
+     * then add the subscription details to the topic index
+     *
+     * @param subscription the subscription to be added
+     * @throws EventBrokerException
+     */
     public void addSubscription(Subscription subscription) throws EventBrokerException;
 
+    /**
+     * Get all the subscriptions. it get the subscription ids from the topic index and get
+     * relevant subscriptions.
+     *
+     * @return a list of subscriptions
+     * @throws EventBrokerException
+     */
     public List<Subscription> getAllSubscriptions() throws EventBrokerException;
 
+    /**
+     * Gets the subscription
+     * @param id the subscription id
+     * @return the relevant subscription
+     * @throws EventBrokerException
+     */
     public Subscription getSubscription(String id) throws EventBrokerException;
 
+    /**
+     * Un-Subscribing to a destination. Destination can be queue or topic.
+     *
+     * @param subscriptionID the subscription ID
+     * @throws EventBrokerException
+     */
     public void unSubscribe(String subscriptionID) throws EventBrokerException;
 
+    /**
+     * Renewing a subscription
+     * @param subscription the subscription
+     * @throws EventBrokerException
+     */
     public void renewSubscription(Subscription subscription) throws EventBrokerException;
 
+    /**
+     * Gets the topic storage path
+     *
+     * @return the storage path
+     * @throws EventBrokerException
+     */
     public String getTopicStoragePath() throws EventBrokerException;
 
 }
