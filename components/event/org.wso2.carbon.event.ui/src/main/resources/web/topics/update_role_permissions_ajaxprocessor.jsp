@@ -47,7 +47,8 @@
     TopicRolePermission[] topicRolePermissions = new TopicRolePermission[topicRolePermissionArrayList.size()];
     try {
         stub.updatePermission(topic, topicRolePermissionArrayList.toArray(topicRolePermissions));
-        message = "Updated permissions successfully";
+        // message content is decided when showing the pop-up as this is used when adding a new topic and also when updating permission roles for a topic.
+        message = "";
     } catch (Exception e) {
         message = "Error in adding/updating permissions : " + e.getMessage();
     }

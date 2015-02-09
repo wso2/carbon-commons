@@ -185,7 +185,6 @@ function addTopicToBackEnd(topic) {
                     CARBON.showErrorDialog("" + o.responseText, function() {
                     });
                 }
-
                 else {
                     addPermissions();
                 }
@@ -303,7 +302,8 @@ function addPermissions() {
                         location.href = "../topics/topics.jsp"
                     });
                 } else {
-                    CARBON.showInfoDialog("" + o.responseText, function() {
+                    var message = "Topic added successfully";
+                    CARBON.showInfoDialog("" + message, function() {
                         location.href = "../topics/topics.jsp"
                     });
                 }
@@ -344,7 +344,8 @@ function updatePermissions() {
                         location.href = "../topics/topic_manage.jsp"
                     });
                 } else {
-                    CARBON.showInfoDialog("" + o.responseText, function() {
+                    var message = "Updated permissions successfully";
+                    CARBON.showInfoDialog("" + message, function() {
                         location.href = "../topics/topic_manage.jsp"
                     });
                 }
