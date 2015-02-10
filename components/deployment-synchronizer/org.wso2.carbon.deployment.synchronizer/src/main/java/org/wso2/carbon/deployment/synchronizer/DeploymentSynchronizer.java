@@ -134,7 +134,7 @@ public class DeploymentSynchronizer {
     /**
      * Commit the artifacts in the file system repository to the remote repository
      *
-     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException If an error occurs while committing the artifacts
+     * @throws DeploymentSynchronizerException If an error occurs while committing the artifacts
      */
     public synchronized boolean commit() throws DeploymentSynchronizerException {
         if (log.isDebugEnabled()) {
@@ -151,7 +151,7 @@ public class DeploymentSynchronizer {
     /**
      * Commit the artifacts from the given path in the file system repository to the remote repository
      *
-     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException If an error occurs while committing the artifacts
+     * @throws DeploymentSynchronizerException If an error occurs while committing the artifacts
      */
     public synchronized boolean commit(String filePath) throws DeploymentSynchronizerException {
         if (log.isDebugEnabled()) {
@@ -170,7 +170,7 @@ public class DeploymentSynchronizer {
      * Checkout the artifacts stored in the repository to the file system. If the artifacts
      * have already been checked out, an update will be executed instead.
      *
-     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException If an error occurs while checking out or updating the resources
+     * @throws DeploymentSynchronizerException If an error occurs while checking out or updating the resources
      */
     public synchronized boolean checkout() throws DeploymentSynchronizerException {
         if (log.isDebugEnabled()) {
@@ -188,7 +188,7 @@ public class DeploymentSynchronizer {
      * Checkout the artifacts stored in the repository to the file system. If the artifacts
      * have already been checked out, an update will be executed instead.
      *
-     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException If an error occurs while checking out or updating the resources
+     * @throws DeploymentSynchronizerException If an error occurs while checking out or updating the resources
      */
     public synchronized boolean checkout(String filePath, int depth) throws DeploymentSynchronizerException {
         if (log.isDebugEnabled()) {
@@ -206,7 +206,7 @@ public class DeploymentSynchronizer {
      * Checkout the artifacts stored in the repository to the file system. If the artifacts
      * have already been checked out, an update will be executed instead.
      *
-     * @throws org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException If an error occurs while checking out or updating the resources
+     * @throws DeploymentSynchronizerException If an error occurs while checking out or updating the resources
      */
     public synchronized boolean update(String rootPath, String filePath, int depth) throws DeploymentSynchronizerException {
         if (log.isDebugEnabled()) {
