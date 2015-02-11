@@ -28,7 +28,7 @@ import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.deployment.GhostDeployerUtils;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
-public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizerService {
+public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizerService, org.wso2.carbon.core.deployment.DeploymentSynchronizer {
 
     private DeploymentSynchronizationManager syncManager = DeploymentSynchronizationManager.getInstance();
 
