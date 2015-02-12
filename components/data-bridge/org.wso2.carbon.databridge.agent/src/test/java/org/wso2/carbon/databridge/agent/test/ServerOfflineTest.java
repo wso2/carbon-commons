@@ -64,15 +64,15 @@ public class ServerOfflineTest extends TestCase {
         testServer.start(port);
         testServer.addStreamDefinition(STREAM_DEFN, -1234);
 
-        HADataPublisherTestUtil.setKeyStoreParams();
-        HADataPublisherTestUtil.setTrustStoreParams();
+        DataPublisherTestUtil.setKeyStoreParams();
+        DataPublisherTestUtil.setTrustStoreParams();
     }
 
     public void testSendingEventsWhileServerOffline()
             throws DataEndpointAuthenticationException, DataEndpointAgentConfigurationException, TransportException,
             DataEndpointException, DataEndpointConfigurationException, SocketException {
-        AgentHolder.setConfigPath(HADataPublisherTestUtil.getDataAgentConfigPath());
-        String hostName = HADataPublisherTestUtil.LOCAL_HOST;
+        AgentHolder.setConfigPath(DataPublisherTestUtil.getDataAgentConfigPath());
+        String hostName = DataPublisherTestUtil.LOCAL_HOST;
         DataPublisher dataPublisher = new DataPublisher("tcp://" + hostName + ":7611",
                 "tcp://" + hostName + ":7711", "admin", "admin");
         Event event = new Event();
@@ -93,8 +93,8 @@ public class ServerOfflineTest extends TestCase {
 
     public void testBlockingEventSendingAndServerStartup()
             throws DataEndpointAuthenticationException, DataEndpointAgentConfigurationException, TransportException, DataEndpointException, DataEndpointConfigurationException, MalformedStreamDefinitionException, DataBridgeException, StreamDefinitionStoreException, SocketException {
-        AgentHolder.setConfigPath(HADataPublisherTestUtil.getDataAgentConfigPath());
-        String hostName = HADataPublisherTestUtil.LOCAL_HOST;
+        AgentHolder.setConfigPath(DataPublisherTestUtil.getDataAgentConfigPath());
+        String hostName = DataPublisherTestUtil.LOCAL_HOST;
         DataPublisher dataPublisher = new DataPublisher("tcp://" + hostName + ":7631",
                 "tcp://" + hostName + ":7731", "admin", "admin");
         Event event = new Event();
@@ -107,8 +107,8 @@ public class ServerOfflineTest extends TestCase {
         testServer.addStreamDefinition(STREAM_DEFN, -1234);
         testServer.stopAndStartDuration(7631, 10000, 1000);
 
-        HADataPublisherTestUtil.setKeyStoreParams();
-        HADataPublisherTestUtil.setTrustStoreParams();
+        DataPublisherTestUtil.setKeyStoreParams();
+        DataPublisherTestUtil.setTrustStoreParams();
 
         int queueSize = AgentHolder.getInstance().getDataEndpointAgent("Thrift").
                 getDataEndpointAgentConfiguration().getQueueSize();
@@ -127,8 +127,8 @@ public class ServerOfflineTest extends TestCase {
 
     public void testNonBlockingEventSendingAndServerStartup()
             throws DataEndpointAuthenticationException, DataEndpointAgentConfigurationException, TransportException, DataEndpointException, DataEndpointConfigurationException, MalformedStreamDefinitionException, DataBridgeException, StreamDefinitionStoreException, SocketException {
-        AgentHolder.setConfigPath(HADataPublisherTestUtil.getDataAgentConfigPath());
-        String hostName = HADataPublisherTestUtil.LOCAL_HOST;
+        AgentHolder.setConfigPath(DataPublisherTestUtil.getDataAgentConfigPath());
+        String hostName = DataPublisherTestUtil.LOCAL_HOST;
         DataPublisher dataPublisher = new DataPublisher("tcp://" + hostName + ":7651",
                 "tcp://" + hostName + ":7751", "admin", "admin");
         Event event = new Event();
@@ -141,8 +141,8 @@ public class ServerOfflineTest extends TestCase {
         testServer.addStreamDefinition(STREAM_DEFN, -1234);
         testServer.stopAndStartDuration(7651, 10000, 1000);
 
-        HADataPublisherTestUtil.setKeyStoreParams();
-        HADataPublisherTestUtil.setTrustStoreParams();
+        DataPublisherTestUtil.setKeyStoreParams();
+        DataPublisherTestUtil.setTrustStoreParams();
 
         int queueSize = AgentHolder.getInstance().getDataEndpointAgent("Thrift").
                 getDataEndpointAgentConfiguration().getQueueSize();
@@ -163,8 +163,8 @@ public class ServerOfflineTest extends TestCase {
             DataEndpointAuthenticationException, DataEndpointAgentConfigurationException,
             TransportException, DataEndpointException, DataEndpointConfigurationException,
             MalformedStreamDefinitionException, DataBridgeException, StreamDefinitionStoreException {
-        AgentHolder.setConfigPath(HADataPublisherTestUtil.getDataAgentConfigPath());
-        String hostName = HADataPublisherTestUtil.LOCAL_HOST;
+        AgentHolder.setConfigPath(DataPublisherTestUtil.getDataAgentConfigPath());
+        String hostName = DataPublisherTestUtil.LOCAL_HOST;
 
         startServer(7641);
 

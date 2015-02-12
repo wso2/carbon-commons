@@ -72,7 +72,7 @@ public class TestServer {
     }
 
     public void start(int receiverPort) throws DataBridgeException {
-        HADataPublisherTestUtil.setKeyStoreParams();
+        DataPublisherTestUtil.setKeyStoreParams();
         streamDefinitionStore = getStreamDefinitionStore();
         numberOfEventsReceived = new AtomicInteger(0);
         DataBridge databridge = new DataBridge(new AuthenticationHandler() {
@@ -191,7 +191,7 @@ public class TestServer {
 
             try {
                 if (thriftDataReceiver != null){
-                    thriftDataReceiver.start(HADataPublisherTestUtil.LOCAL_HOST);
+                    thriftDataReceiver.start(DataPublisherTestUtil.LOCAL_HOST);
                 }else {
                     start(port);
                 }

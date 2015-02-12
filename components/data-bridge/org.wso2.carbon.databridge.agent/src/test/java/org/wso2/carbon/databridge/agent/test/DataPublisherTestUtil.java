@@ -19,7 +19,7 @@ package org.wso2.carbon.databridge.agent.test;
 
 import java.io.File;
 
-public class HADataPublisherTestUtil {
+public class DataPublisherTestUtil {
     public static final String LOCAL_HOST = "localhost";
 
     public static void setTrustStoreParams() {
@@ -67,7 +67,7 @@ public class HADataPublisherTestUtil {
         if (!filePath.exists()) {
             filePath = new File("test" + File.separator + "resources");
         }
-        return filePath.getAbsolutePath() + File.separator + "ha-data-agent-conf.xml";
+        return filePath.getAbsolutePath() + File.separator + "data-agent-conf.xml";
     }
 
 }
