@@ -17,5 +17,13 @@
 */
 package org.wso2.carbon.event.publisher.internal;
 
+import org.wso2.carbon.databridge.commons.Event;
+import org.wso2.carbon.event.publisher.EventType;
+
 public class EventConverter {
+
+    public static Object convertEvent(Event event, EventType outputEventType){
+
+    }
+
 }

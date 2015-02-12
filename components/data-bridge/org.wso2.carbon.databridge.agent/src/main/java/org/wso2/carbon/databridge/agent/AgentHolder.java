@@ -112,7 +112,9 @@ public class AgentHolder {
     private void addAgentConfiguration(Iterator agentConfIterator) throws DataEndpointAgentConfigurationException {
         String name = null, endpointClass = null, trustStore = null, trustStorePw = null, clientPoolFactoryClass = null,
                 secureClientPoolFactoryClass = null;
-        int queueSize = 0, batchSize = 0, reconnectionInterval = 0;
+        int queueSize = 0, batchSize = 0, reconnectionInterval = 0, maxTransportPoolSize = 0,
+                maxIdleConnections = 0, evictionTimePeriod = 0, minIdleTimeInPool = 0, secureMaxTransportPoolSize = 0,
+                secureMaxIdleConnections = 0, secureEvictionTimePeriod = 0, secureMinIdleTimeInPool = 0;
         while (agentConfIterator.hasNext()) {
             OMElement element = (OMElement) agentConfIterator.next();
             if (element.getQName().getLocalPart().
@@ -121,20 +123,51 @@ public class AgentHolder {
             } else if (element.getQName().getLocalPart().
                     equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_ENDPOINT_CLASS)) {
                 endpointClass = element.getText().trim();
-            } else if (element.getQName().getLocalPart().equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_TRUST_STORE_LOCATION)) {
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_TRUST_STORE_LOCATION)) {
                 trustStore = element.getText().trim();
-            } else if (element.getQName().getLocalPart().equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_TRUST_STORE_PASSWORD)) {
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_TRUST_STORE_PASSWORD)) {
                 trustStorePw = element.getText().trim();
-            } else if (element.getQName().getLocalPart().equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_QUEUE_SIZE)) {
+            } else if (element.getQName().getLocalPart()
+                    .equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_QUEUE_SIZE)) {
                 queueSize = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_BATCH_SIZE)) {
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_BATCH_SIZE)) {
                 batchSize = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_CLIENT_POOL_FACTORY_CLASS)) {
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_CLIENT_POOL_FACTORY_CLASS)) {
                 clientPoolFactoryClass = element.getText().trim();
-            } else if (element.getQName().getLocalPart().equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_CLIENT_POOL_FACTORY_CLASS)) {
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_CLIENT_POOL_FACTORY_CLASS)) {
                 secureClientPoolFactoryClass = element.getText().trim();
-            } else if (element.getQName().getLocalPart().equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_RECONNECTION_INTERVAL)) {
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_RECONNECTION_INTERVAL)) {
                 reconnectionInterval = Integer.parseInt(element.getText().trim());
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_MAX_TRANSPORT_POOL_SIZE)) {
+                maxTransportPoolSize = Integer.parseInt(element.getText().trim());
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_MAX_IDLE_CONNECTIONS)) {
+                maxIdleConnections = Integer.parseInt(element.getText().trim());
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_EVICTION_TIME_PERIOD)) {
+                evictionTimePeriod = Integer.parseInt(element.getText().trim());
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_MIN_IDLE_TIME_IN_POOL)) {
+                minIdleTimeInPool = Integer.parseInt(element.getText().trim());
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS)) {
+                secureMaxTransportPoolSize = Integer.parseInt(element.getText().trim());
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS)) {
+                secureMaxIdleConnections = Integer.parseInt(element.getText().trim());
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_EVICTION_TIME_PERIOD)) {
+                secureEvictionTimePeriod = Integer.parseInt(element.getText().trim());
+            } else if (element.getQName().getLocalPart().
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL)) {
+                secureMinIdleTimeInPool = Integer.parseInt(element.getText().trim());
             }
         }
         if (name == null || name.isEmpty()) {
@@ -145,16 +178,26 @@ public class AgentHolder {
             throw new DataEndpointAgentConfigurationException("Endpoint class name is not set in "
                     + DataEndpointConstants.DATA_AGENT_CONF_FILE_NAME + " for name: " + name);
         }
+
         DataEndpointAgentConfiguration agentConfiguration = new DataEndpointAgentConfiguration(name, endpointClass);
-        agentConfiguration.setTrustStore(trustStore);
-        agentConfiguration.setTrustStorePassword(trustStorePw);
+        if (trustStore != null) agentConfiguration.setTrustStore(trustStore);
+        if (trustStorePw != null) agentConfiguration.setTrustStorePassword(trustStorePw);
         if (queueSize != 0) agentConfiguration.setQueueSize(queueSize);
         if (batchSize != 0) agentConfiguration.setBatchSize(batchSize);
-        agentConfiguration.setClientPoolFactoryClass(clientPoolFactoryClass);
-        agentConfiguration.setSecureClientPoolFactoryClass(secureClientPoolFactoryClass);
+        if (clientPoolFactoryClass != null) agentConfiguration.setClientPoolFactoryClass(clientPoolFactoryClass);
+        if (secureClientPoolFactoryClass != null)
+            agentConfiguration.setSecureClientPoolFactoryClass(secureClientPoolFactoryClass);
         if (reconnectionInterval != 0) agentConfiguration.setReconnectionInterval(reconnectionInterval);
+        if (maxTransportPoolSize != 0) agentConfiguration.setMaxTransportPoolSize(maxTransportPoolSize);
+        if (maxIdleConnections != 0) agentConfiguration.setMaxIdleConnections(maxIdleConnections);
+        if (evictionTimePeriod != 0) agentConfiguration.setEvictionTimePeriod(evictionTimePeriod);
+        if (minIdleTimeInPool != 0) agentConfiguration.setMinIdleTimeInPool(minIdleTimeInPool);
+        if (secureMaxTransportPoolSize != 0) agentConfiguration.
+                setSecureMaxTransportPoolSize(secureMaxTransportPoolSize);
+        if (secureMaxIdleConnections != 0) agentConfiguration.setMaxIdleConnections(secureMaxIdleConnections);
+        if (secureEvictionTimePeriod != 0) agentConfiguration.setEvictionTimePeriod(secureEvictionTimePeriod);
+        if (secureMinIdleTimeInPool != 0) agentConfiguration.setSecureMinIdleTimeInPool(secureMinIdleTimeInPool);
         DataEndpointAgent agent = new DataEndpointAgent(agentConfiguration);
-        //TODO: load all config properties for data endpoint configuration
         addDataEndpointAgent(agent);
     }
 

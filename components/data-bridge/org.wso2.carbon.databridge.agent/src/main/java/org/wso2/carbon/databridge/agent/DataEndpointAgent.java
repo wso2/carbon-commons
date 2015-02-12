@@ -26,17 +26,15 @@ import org.wso2.carbon.databridge.agent.internal.client.AbstractSecureClientPool
 import org.wso2.carbon.databridge.agent.internal.client.ClientPool;
 import org.wso2.carbon.databridge.agent.internal.client.SecureClientPool;
 import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointAgentConfiguration;
-import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpoint;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 
 public class DataEndpointAgent {
 
-    private ArrayList<HADataPublisher> haDataPublishers
-            = new ArrayList<HADataPublisher>();
+    private ArrayList<DataPublisher> dataPublishers
+            = new ArrayList<DataPublisher>();
 
     private GenericKeyedObjectPool transportPool;
     private GenericKeyedObjectPool securedTransportPool;
@@ -94,8 +92,8 @@ public class DataEndpointAgent {
         }
     }
 
-    public void addHADataPublisher(HADataPublisher haDataPublisher) {
-        haDataPublishers.add(haDataPublisher);
+    public void addHADataPublisher(DataPublisher dataPublisher) {
+        dataPublishers.add(dataPublisher);
     }
 
     public DataEndpointAgentConfiguration getDataEndpointAgentConfiguration() {
@@ -110,9 +108,9 @@ public class DataEndpointAgent {
         return securedTransportPool;
     }
 
-    public void shutDown(HADataPublisher haDataPublisher) throws DataEndpointException {
-        haDataPublishers.remove(haDataPublisher);
-        if(haDataPublishers.isEmpty()){
+    public void shutDown(DataPublisher dataPublisher) throws DataEndpointException {
+        dataPublishers.remove(dataPublisher);
+        if(dataPublishers.isEmpty()){
             try {
                 transportPool.close();
                 securedTransportPool.close();

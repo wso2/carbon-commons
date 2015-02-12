@@ -44,28 +44,28 @@ public class DataEndpointConstants {
     public static final String FAILOVER_URL_GROUP_SEPARATOR = "|";
 
     public static final int DEFAULT_DATA_AGENT_MAX_TRANSPORT_POOL_SIZE = 250;
-    public static final String DATA_AGENT_MAX_TRANSPORT_POOL_SIZE = "maxTransportPoolSize";
+    public static final String DATA_AGENT_MAX_TRANSPORT_POOL_SIZE = "MaxTransportPoolSize";
 
     public static final int DEFAULT_DATA_AGENT_MAX_IDLE_CONNECTIONS = 250;
-    public static final String DATA_AGENT_MAX_IDLE_CONNECTIONS = "maxIdleConnections";
+    public static final String DATA_AGENT_MAX_IDLE_CONNECTIONS = "MaxIdleConnections";
 
     public static final int DEFAULT_DATA_AGENT_EVICTION_TIME_PERIOD = 5500;
-    public static final String DATA_AGENT_EVICTION_TIME_PERIOD = "evictionTimePeriod";
+    public static final String DATA_AGENT_EVICTION_TIME_PERIOD = "EvictionTimePeriod";
 
     public static final int DEFAULT_DATA_AGENT_MIN_IDLE_TIME_IN_POOL = 5500;
-    public static final String DATA_AGENT_MIN_IDLE_TIME_IN_POOL = "minIdleTimeInPool";
+    public static final String DATA_AGENT_MIN_IDLE_TIME_IN_POOL = "MinIdleTimeInPool";
 
     public static final int DEFAULT_DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE = 5500;
-    public static final String DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE = "secureMaxTransportPoolSize";
+    public static final String DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE = "SecureMaxTransportPoolSize";
 
     public static final int DEFAULT_DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS = 250;
-    public static final String DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS = "secureMaxIdleConnections";
+    public static final String DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS = "SecureMaxIdleConnections";
 
     public static final int DEFAULT_DATA_AGENT_SECURE_EVICTION_TIME_PERIOD = 5500;
-    public static final String DATA_AGENT_SECURE_EVICTION_TIME_PERIOD = "secureEvictionTimePeriod";
+    public static final String DATA_AGENT_SECURE_EVICTION_TIME_PERIOD = "SecureEvictionTimePeriod";
 
     public static final int DEFAULT_DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL = 5500;
-    public static final String DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL = "secureMinIdleTimeInPool";
+    public static final String DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL = "SecureMinIdleTimeInPool";
 
     public static final int DEFAULT_DATA_AGENT_RECONNECTION_INTERVAL = 30;
     public static final String DATA_AGENT_RECONNECTION_INTERVAL = "ReconnectionInterval";
