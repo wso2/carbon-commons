@@ -25,7 +25,7 @@ public class DataEndpointConstants {
     private DataEndpointConstants() {
     }
 
-    public static final String DATA_AGENT_CONF_FILE_NAME = "ha-data-agent-conf.xml";
+    public static final String DATA_AGENT_CONF_FILE_NAME = "data-agent-conf.xml";
     public static final String DATA_AGENT_CONF_FILE_PATH = CarbonUtils.getCarbonConfigDirPath() + File.separator
             + "data-bridge" + File.separator + DATA_AGENT_CONF_FILE_NAME;
     public static final String DATA_AGENT_ENDPOINT_NAME = "Name";

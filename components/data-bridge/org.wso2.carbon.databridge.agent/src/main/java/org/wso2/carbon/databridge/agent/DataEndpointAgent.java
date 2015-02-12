@@ -57,27 +57,19 @@ public class DataEndpointAgent {
                     dataEndpointAgentConfiguration.getTrustStorePassword()));
             this.transportPool = new ClientPool().getClientPool(
                     clientPoolFactory,
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_MAX_TRANSPORT_POOL_SIZE)),
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_MAX_IDLE_CONNECTIONS)),
+                    dataEndpointAgentConfiguration.getMaxTransportPoolSize(),
+                    dataEndpointAgentConfiguration.getMaxIdleConnections(),
                     true,
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_EVICTION_TIME_PERIOD)),
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_MIN_IDLE_TIME_IN_POOL)));
+                    dataEndpointAgentConfiguration.getEvictionTimePeriod(),
+                    dataEndpointAgentConfiguration.getMinIdleTimeInPool());
 
             this.securedTransportPool = new SecureClientPool().getClientPool(
                     secureClientPoolFactory,
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE)),
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS)),
+                    dataEndpointAgentConfiguration.getSecureMaxTransportPoolSize(),
+                    dataEndpointAgentConfiguration.getSecureMaxIdleConnections(),
                     true,
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_SECURE_EVICTION_TIME_PERIOD)),
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL)));
+                    dataEndpointAgentConfiguration.getSecureEvictionTimePeriod(),
+                    dataEndpointAgentConfiguration.getSecureMinIdleTimeInPool());
 
         } catch (InstantiationException e) {
             throw new DataEndpointAgentConfigurationException("Error while creating the client pool " + e.getMessage(), e);
