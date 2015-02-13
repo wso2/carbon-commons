@@ -1776,6 +1776,46 @@
             <modules>
             </modules>
         </profile>
+        <profile>
+            <id>sonar-profile</id>
+            <activation>
+                <property>
+                    <name>bamboo</name>
+                    <value>sonar</value>
+                </property>
+            </activation>
+            <modules>
+                <module>components/user-manager</module>
+                <module>components/tenant-mgt-common</module>
+                <module>components/authentication</module>
+                <module>components/deployment-synchronizer</module>
+                <module>components/application-mgt</module>
+                <module>components/ws-discovery</module>
+                <module>components/data-bridge</module>
+                <module>components/ganalytics</module>
+                <module>components/caching-invalidator</module>
+                <module>components/cluster-mgt</module>
+                <module>components/url-mapper</module>
+                <module>components/transaction-manager</module>
+                <module>components/hostobjects</module>
+                <module>components/ntask</module>
+                <module>components/reporting</module>
+                <module>components/doc-request-processor</module>
+                <module>components/tryit</module>
+                <module>components/wsdl2form</module>
+                <module>components/logging</module>
+                <module>components/userstore-config</module>
+                <module>components/remote-usermgt</module>
+                <module>components/event</module>
+                <module>components/ndatasource</module>
+                <module>components/ws-discovery-core</module>
+                <module>components/soap-tracer</module>
+                <module>components/wsdl-tools</module>
+                <module>components/system-statistics</module>
+                <module>components/message-flows</module>
+                <module>components/email-verification</module>
+            </modules>
+        </profile>
     </profiles>
 
     <properties>
