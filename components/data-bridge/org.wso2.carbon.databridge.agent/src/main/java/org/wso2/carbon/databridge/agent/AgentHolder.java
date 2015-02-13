@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointAgentConfiguration;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
+import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -71,7 +72,8 @@ public class AgentHolder {
 
     private void loadConfiguration() throws DataEndpointAgentConfigurationException {
         BufferedInputStream inputStream = null;
-        if (configPath == null) configPath = DataEndpointConstants.DATA_AGENT_CONF_FILE_PATH;
+        if (configPath == null) configPath = CarbonUtils.getCarbonConfigDirPath()
+                + DataEndpointConstants.DATA_AGENT_CONF_FILE_PATH;
         try {
             inputStream = new BufferedInputStream(new FileInputStream(new File(configPath)));
             XMLStreamReader parser = XMLInputFactory.newInstance().
@@ -88,12 +90,12 @@ public class AgentHolder {
             }
         } catch (FileNotFoundException e) {
             String errorMessage = DataEndpointConstants.DATA_AGENT_CONF_FILE_NAME
-                    + "cannot be found in the path : " + DataEndpointConstants.DATA_AGENT_CONF_FILE_PATH;
+                    + "cannot be found in the path : " + configPath;
             log.error(errorMessage, e);
             throw new DataEndpointAgentConfigurationException(errorMessage, e);
         } catch (XMLStreamException e) {
             String errorMessage = "Invalid XML for " + DataEndpointConstants.DATA_AGENT_CONF_FILE_NAME
-                    + " located in the path : " + DataEndpointConstants.DATA_AGENT_CONF_FILE_PATH;
+                    + " located in the path : " + configPath;
             log.error(errorMessage, e);
             throw new DataEndpointAgentConfigurationException(errorMessage, e);
         } finally {
@@ -157,7 +159,7 @@ public class AgentHolder {
                     equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_MIN_IDLE_TIME_IN_POOL)) {
                 minIdleTimeInPool = Integer.parseInt(element.getText().trim());
             } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS)) {
+                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE)) {
                 secureMaxTransportPoolSize = Integer.parseInt(element.getText().trim());
             } else if (element.getQName().getLocalPart().
                     equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS)) {

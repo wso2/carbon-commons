@@ -28,6 +28,7 @@ import org.apache.thrift.transport.TSSLTransportFactory;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentSecurityException;
+import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationException;
 import org.wso2.carbon.databridge.agent.internal.client.AbstractSecureClientPoolFactory;
 import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
 import org.wso2.carbon.databridge.commons.thrift.service.secure.ThriftSecureEventTransmissionService;
@@ -45,9 +46,9 @@ public class ThriftSecureClientPoolFactory extends AbstractSecureClientPoolFacto
 
     @Override
     public Object createClient(String protocol, String hostName, int port) throws
-            DataEndpointAgentSecurityException {
+            DataEndpointAgentSecurityException{
         String trustStore, trustStorePw;
-        if (protocol.equalsIgnoreCase(DataEndpointConfiguration.Protocol.TCP.toString())) {
+        if (protocol.equalsIgnoreCase(DataEndpointConfiguration.Protocol.SSL.toString())) {
             if (params == null) {
                 if (getTrustStore() == null) {
                     trustStore = System.getProperty("javax.net.ssl.trustStore");
@@ -82,45 +83,49 @@ public class ThriftSecureClientPoolFactory extends AbstractSecureClientPoolFacto
                 throw new DataEndpointAgentSecurityException("Error while trying to connect to " + protocol + "://" + hostName + ":" + port,
                         e);
             }
-        } else {
-            //TODO:Error  thrown when connecting in http in tests...
-            try {
-                TrustManager easyTrustManager = new X509TrustManager() {
-                    public void checkClientTrusted(
-                            java.security.cert.X509Certificate[] x509Certificates,
-                            String s)
-                            throws java.security.cert.CertificateException {
-                    }
-
-                    public void checkServerTrusted(
-                            java.security.cert.X509Certificate[] x509Certificates,
-                            String s)
-                            throws java.security.cert.CertificateException {
-                    }
-
-                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                        return null;
-                    }
-                };
-                SSLContext sslContext = SSLContext.getInstance("TLS");
-                sslContext.init(null, new TrustManager[]{easyTrustManager}, null);
-                SSLSocketFactory sf = new SSLSocketFactory(sslContext);
-                sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-                Scheme httpsScheme = new Scheme("https", sf, port);
-
-                DefaultHttpClient client = new DefaultHttpClient();
-                client.getConnectionManager().getSchemeRegistry().register(httpsScheme);
-
-                THttpClient tclient = new THttpClient("https://" + hostName + ":" + port + "/securedThriftReceiver", client);
-                TProtocol tProtocol = new TCompactProtocol(tclient);
-                ThriftSecureEventTransmissionService.Client authClient = new ThriftSecureEventTransmissionService.Client(tProtocol);
-                tclient.open();
-                return authClient;
-            } catch (Exception e) {
-                throw new DataEndpointAgentSecurityException("Cannot create Secure client for " +
-                        "https://" + hostName + ":" + port + "/securedThriftReceiver", e);
-            }
         }
+        throw new DataEndpointAgentSecurityException("Unsupported protocol :"+protocol
+                +" used to authenticate the client, only "+ DataEndpointConfiguration.Protocol.SSL.toString()
+                +" is supported");
+//        else {
+//            //TODO:Error  thrown when connecting in http in tests...
+//            try {
+//                TrustManager easyTrustManager = new X509TrustManager() {
+//                    public void checkClientTrusted(
+//                            java.security.cert.X509Certificate[] x509Certificates,
+//                            String s)
+//                            throws java.security.cert.CertificateException {
+//                    }
+//
+//                    public void checkServerTrusted(
+//                            java.security.cert.X509Certificate[] x509Certificates,
+//                            String s)
+//                            throws java.security.cert.CertificateException {
+//                    }
+//
+//                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+//                        return null;
+//                    }
+//                };
+//                SSLContext sslContext = SSLContext.getInstance("TLS");
+//                sslContext.init(null, new TrustManager[]{easyTrustManager}, null);
+//                SSLSocketFactory sf = new SSLSocketFactory(sslContext);
+//                sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+//                Scheme httpsScheme = new Scheme("https", sf, port);
+//
+//                DefaultHttpClient client = new DefaultHttpClient();
+//                client.getConnectionManager().getSchemeRegistry().register(httpsScheme);
+//
+//                THttpClient tclient = new THttpClient("https://" + hostName + ":" + port + "/securedThriftReceiver", client);
+//                TProtocol tProtocol = new TCompactProtocol(tclient);
+//                ThriftSecureEventTransmissionService.Client authClient = new ThriftSecureEventTransmissionService.Client(tProtocol);
+//                tclient.open();
+//                return authClient;
+//            } catch (Exception e) {
+//                throw new DataEndpointAgentSecurityException("Cannot create Secure client for " +
+//                        "https://" + hostName + ":" + port + "/securedThriftReceiver", e);
+//            }
+//        }
     }
 
     @Override

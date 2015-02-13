@@ -22,7 +22,7 @@ import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 
 public class SecureClientPool {
 
-    private static volatile GenericKeyedObjectPool socketPool = null;
+    private volatile GenericKeyedObjectPool socketPool = null;
 
     public GenericKeyedObjectPool getClientPool(AbstractSecureClientPoolFactory factory,
                                                 int maxActive,

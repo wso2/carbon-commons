@@ -53,7 +53,6 @@ public class DataPublisherTestUtil {
         String keyStore = filePath.getAbsolutePath();
         System.setProperty("Security.KeyStore.Location", keyStore + File.separator + "wso2carbon.jks");
         System.setProperty("Security.KeyStore.Password", "wso2carbon");
-
     }
 
     public static String getDataAgentConfigPath() {
