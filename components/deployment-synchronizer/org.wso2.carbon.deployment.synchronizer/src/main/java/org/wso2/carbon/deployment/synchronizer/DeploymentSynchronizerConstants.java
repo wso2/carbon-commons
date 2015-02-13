@@ -53,7 +53,7 @@ public class DeploymentSynchronizerConstants {
     // Defaults
     public static final int DEFAULT_POOL_SIZE = 20;
     public static final long DEFAULT_AUTO_SYNC_PERIOD = 60L;
-    public static final String DEFAULT_REPOSITORY_TYPE = REPOSITORY_TYPE_REGISTRY;
+    public static final String DEFAULT_REPOSITORY_TYPE = REPOSITORY_TYPE_SVN;
 
     public static final String EVENT_RECEIVER_SERVICE = "AutoCheckoutService";
 }
