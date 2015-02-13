@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>reporting</artifactId>
-        <version>4.3.5</version>
+        <version>4.3.6-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>	
     <artifactId>org.wso2.carbon.reporting.template.ui</artifactId>
-    <version>4.3.5</version>
+    <version>4.3.6-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon Component  - Reporting Template - UI</name>
     <description>org.wso2.carbon.reporting.template.ui represent the UI aspects of org.wso2.carbon.reporting.template.core bundle</description>
