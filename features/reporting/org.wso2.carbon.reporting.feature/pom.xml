@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>reporting-features</artifactId>
-        <version>4.3.5</version>
+        <version>4.3.6-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -28,7 +28,7 @@
     <artifactId>org.wso2.carbon.reporting.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Reporting Feature</name>
-    <version>4.3.5</version>
+    <version>4.3.6-SNAPSHOT</version>
     <url>http://wso2.org</url>
     <description>This feature contains the bundles required for Reporting</description>
 
