@@ -19,12 +19,12 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>userstore-config</artifactId>
-        <version>4.3.5-SNAPSHOT</version>
+        <version>4.3.5</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>4.3.5-SNAPSHOT</version>
+    <version>4.3.5</version>
     <artifactId>org.wso2.carbon.identity.user.store.configuration.ui</artifactId>
     <name>WSO2 Carbon - Identity User Store Configuration UI</name>
     <packaging>bundle</packaging>
