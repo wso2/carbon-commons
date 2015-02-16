@@ -31,7 +31,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class StreamTypeHolder {
     private int tenantId;
     private Map<String, StreamAttributeComposite> attributeCompositeMap = new ConcurrentHashMap<String, StreamAttributeComposite>();
-    private EventDispatcher eventDispatcherCallback;
 
     public StreamTypeHolder(int tenantId) {
         this.tenantId = tenantId;
@@ -55,11 +54,6 @@ public class StreamTypeHolder {
         if (null != type) {
             return type.getAttributeTypes();
         }
-        PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantDomain(true);
-        type = attributeCompositeMap.get(streamId);
-        if (null != type) {
-            return type.getAttributeTypes();
-        }
         return null;
     }
 
@@ -70,9 +64,4 @@ public class StreamTypeHolder {
     public void putStreamDefinition(StreamDefinition streamDefinition) {
         this.attributeCompositeMap.put(streamDefinition.getStreamId(), new StreamAttributeComposite(streamDefinition));
     }
-
-    public void setEventDispatcherCallback(EventDispatcher eventDispatcherCallback){
-        this.eventDispatcherCallback = eventDispatcherCallback;
-    }
-
 }
