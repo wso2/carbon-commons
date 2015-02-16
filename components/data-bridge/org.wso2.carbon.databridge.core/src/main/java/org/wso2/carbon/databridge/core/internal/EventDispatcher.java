@@ -224,7 +224,7 @@ public class EventDispatcher {
         }
     }
 
-    public void updateStreamDefinitionHolder(AgentSession agentSession) {
+    public synchronized void updateStreamDefinitionHolder(AgentSession agentSession) {
         int tenantId = agentSession.getCredentials().getTenantId();
         StreamTypeHolder streamTypeHolder = domainNameStreamTypeHolderCache.get(tenantId);
 
@@ -244,16 +244,34 @@ public class EventDispatcher {
         }
     }
 
-    private void updateDomainNameStreamTypeHolderCache(
+    private synchronized void updateDomainNameStreamTypeHolderCache(
             StreamDefinition streamDefinition, int tenantId) {
         StreamTypeHolder streamTypeHolder = getStreamDefinitionHolder(tenantId);
         streamTypeHolder.putStreamDefinition(streamDefinition);
     }
 
-    private StreamTypeHolder initDomainNameStreamTypeHolderCache(int tenantId) {
+    public synchronized void reloadDomainNameStreamTypeHolderCache(int tenantId){
+        StreamTypeHolder streamTypeHolder = getStreamDefinitionHolder(tenantId);
+        Collection<StreamDefinition> allStreamDefinitions =
+                streamDefinitionStore.getAllStreamDefinitions(tenantId);
+        for (StreamDefinition streamDefinition: allStreamDefinitions){
+            if (!streamTypeHolder.getAttributeCompositeMap().containsKey(streamDefinition.getStreamId())){
+                streamTypeHolder.putStreamDefinition(streamDefinition);
+                for (AgentCallback agentCallback : subscribers) {
+                    agentCallback.definedStream(streamDefinition, tenantId);
+                }
+                for (RawDataAgentCallback agentCallback : rawDataSubscribers) {
+                    agentCallback.definedStream(streamDefinition, tenantId);
+                }
+            }
+        }
+    }
+
+    private synchronized StreamTypeHolder initDomainNameStreamTypeHolderCache(int tenantId) {
         StreamTypeHolder streamTypeHolder = domainNameStreamTypeHolderCache.get(tenantId);
         if (null == streamTypeHolder) {
             streamTypeHolder = new StreamTypeHolder(tenantId);
+            streamTypeHolder.setEventDispatcherCallback(this);
             Collection<StreamDefinition> allStreamDefinitions =
                     streamDefinitionStore.getAllStreamDefinitions(tenantId);
             if (null != allStreamDefinitions) {
@@ -272,7 +290,7 @@ public class EventDispatcher {
         return streamTypeHolder;
     }
 
-    private StreamTypeHolder updateDomainNameStreamTypeHolderCache(int tenantId) {
+    private synchronized StreamTypeHolder updateDomainNameStreamTypeHolderCache(int tenantId) {
         StreamTypeHolder streamTypeHolder = domainNameStreamTypeHolderCache.get(tenantId);
         if (null != streamTypeHolder) {
             Collection<StreamDefinition> allStreamDefinitions =
