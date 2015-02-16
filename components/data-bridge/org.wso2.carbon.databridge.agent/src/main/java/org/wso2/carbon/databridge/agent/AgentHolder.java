@@ -112,8 +112,7 @@ public class AgentHolder {
 
 
     private void addAgentConfiguration(Iterator agentConfIterator) throws DataEndpointAgentConfigurationException {
-        String name = null, endpointClass = null, trustStore = null, trustStorePw = null, clientPoolFactoryClass = null,
-                secureClientPoolFactoryClass = null;
+        String name = null, endpointClass = null, trustStore = null, trustStorePw = null;
         int queueSize = 0, batchSize = 0, reconnectionInterval = 0, maxTransportPoolSize = 0,
                 maxIdleConnections = 0, evictionTimePeriod = 0, minIdleTimeInPool = 0, secureMaxTransportPoolSize = 0,
                 secureMaxIdleConnections = 0, secureEvictionTimePeriod = 0, secureMinIdleTimeInPool = 0;
@@ -137,12 +136,6 @@ public class AgentHolder {
             } else if (element.getQName().getLocalPart().
                     equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_BATCH_SIZE)) {
                 batchSize = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_CLIENT_POOL_FACTORY_CLASS)) {
-                clientPoolFactoryClass = element.getText().trim();
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_CLIENT_POOL_FACTORY_CLASS)) {
-                secureClientPoolFactoryClass = element.getText().trim();
             } else if (element.getQName().getLocalPart().
                     equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_RECONNECTION_INTERVAL)) {
                 reconnectionInterval = Integer.parseInt(element.getText().trim());
@@ -186,9 +179,6 @@ public class AgentHolder {
         if (trustStorePw != null) agentConfiguration.setTrustStorePassword(trustStorePw);
         if (queueSize != 0) agentConfiguration.setQueueSize(queueSize);
         if (batchSize != 0) agentConfiguration.setBatchSize(batchSize);
-        if (clientPoolFactoryClass != null) agentConfiguration.setClientPoolFactoryClass(clientPoolFactoryClass);
-        if (secureClientPoolFactoryClass != null)
-            agentConfiguration.setSecureClientPoolFactoryClass(secureClientPoolFactoryClass);
         if (reconnectionInterval != 0) agentConfiguration.setReconnectionInterval(reconnectionInterval);
         if (maxTransportPoolSize != 0) agentConfiguration.setMaxTransportPoolSize(maxTransportPoolSize);
         if (maxIdleConnections != 0) agentConfiguration.setMaxIdleConnections(maxIdleConnections);
@@ -196,8 +186,8 @@ public class AgentHolder {
         if (minIdleTimeInPool != 0) agentConfiguration.setMinIdleTimeInPool(minIdleTimeInPool);
         if (secureMaxTransportPoolSize != 0) agentConfiguration.
                 setSecureMaxTransportPoolSize(secureMaxTransportPoolSize);
-        if (secureMaxIdleConnections != 0) agentConfiguration.setMaxIdleConnections(secureMaxIdleConnections);
-        if (secureEvictionTimePeriod != 0) agentConfiguration.setEvictionTimePeriod(secureEvictionTimePeriod);
+        if (secureMaxIdleConnections != 0) agentConfiguration.setSecureMaxIdleConnections(secureMaxIdleConnections);
+        if (secureEvictionTimePeriod != 0) agentConfiguration.setSecureEvictionTimePeriod(secureEvictionTimePeriod);
         if (secureMinIdleTimeInPool != 0) agentConfiguration.setSecureMinIdleTimeInPool(secureMinIdleTimeInPool);
         DataEndpointAgent agent = new DataEndpointAgent(agentConfiguration);
         addDataEndpointAgent(agent);

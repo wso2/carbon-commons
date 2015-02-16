@@ -95,6 +95,16 @@ public class BinaryDataEndpoint extends DataEndpoint {
         }
     }
 
+    @Override
+    public String getClientPoolFactoryClass() {
+        return null;
+    }
+
+    @Override
+    public String getSecureClientPoolFactoryClass() {
+        return null;
+    }
+
 //    public void sendEvent(String streamId, Object[] event, boolean flush) throws IOException {
 //        StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoMap.get(streamId);
 //

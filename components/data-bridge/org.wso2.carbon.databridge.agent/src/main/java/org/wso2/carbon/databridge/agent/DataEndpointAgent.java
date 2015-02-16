@@ -26,6 +26,7 @@ import org.wso2.carbon.databridge.agent.internal.client.AbstractSecureClientPool
 import org.wso2.carbon.databridge.agent.internal.client.ClientPool;
 import org.wso2.carbon.databridge.agent.internal.client.SecureClientPool;
 import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointAgentConfiguration;
+import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpoint;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 
 import java.lang.reflect.InvocationTargetException;
@@ -49,10 +50,12 @@ public class DataEndpointAgent {
 
     private void initialize() throws DataEndpointAgentConfigurationException {
         try {
+            DataEndpoint dataEndpoint = (DataEndpoint)(DataEndpointAgent.class.getClassLoader().
+                    loadClass(dataEndpointAgentConfiguration.getClassName()).newInstance());
             AbstractClientPoolFactory clientPoolFactory = (AbstractClientPoolFactory) (DataEndpointAgent.class.getClassLoader().
-                    loadClass(dataEndpointAgentConfiguration.getClientPoolFactoryClass()).newInstance());
+                    loadClass(dataEndpoint.getClientPoolFactoryClass()).newInstance());
             AbstractSecureClientPoolFactory secureClientPoolFactory = (AbstractSecureClientPoolFactory) (DataEndpointAgent.class.getClassLoader().
-                    loadClass(dataEndpointAgentConfiguration.getSecureClientPoolFactoryClass()).getConstructor(String.class, String.class).newInstance(
+                    loadClass(dataEndpoint.getSecureClientPoolFactoryClass()).getConstructor(String.class, String.class).newInstance(
                     dataEndpointAgentConfiguration.getTrustStore(),
                     dataEndpointAgentConfiguration.getTrustStorePassword()));
             this.transportPool = new ClientPool().getClientPool(
@@ -84,7 +87,7 @@ public class DataEndpointAgent {
         }
     }
 
-    public void addHADataPublisher(DataPublisher dataPublisher) {
+    public void addDataPublisher(DataPublisher dataPublisher) {
         dataPublishers.add(dataPublisher);
     }
 

@@ -17,8 +17,6 @@
 */
 package org.wso2.carbon.databridge.agent.util;
 
-import org.wso2.carbon.utils.CarbonUtils;
-
 import java.io.File;
 
 public class DataEndpointConstants {
@@ -34,8 +32,6 @@ public class DataEndpointConstants {
     public static final String DATA_AGENT_TRUST_STORE_PASSWORD = "TrustSorePassword";
     public static final String DATA_AGENT_QUEUE_SIZE = "QueueSize";
     public static final String DATA_AGENT_BATCH_SIZE = "BatchSize";
-    public static final String DATA_AGENT_CLIENT_POOL_FACTORY_CLASS = "ClientPoolFactoryClass";
-    public static final String DATA_AGENT_SECURE_CLIENT_POOL_FACTORY_CLASS = "SecureClientPoolFactoryClass";
 
     public static final int DEFAULT_DATA_AGENT_QUEUE_SIZE = 100000;
     public static final int DEFAULT_DATA_AGENT_BATCH_SIZE = 100;

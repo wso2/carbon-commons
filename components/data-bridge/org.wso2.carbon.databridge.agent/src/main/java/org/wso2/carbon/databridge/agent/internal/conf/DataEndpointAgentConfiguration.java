@@ -18,18 +18,14 @@
 
 package org.wso2.carbon.databridge.agent.internal.conf;
 
-import org.wso2.carbon.databridge.agent.DataEndpointAgent;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 
-import java.util.HashMap;
 
 public class DataEndpointAgentConfiguration {
     private String dataEndpointName;
     private String className;
     private String trustStore;
     private String trustStorePassword;
-    private String clientPoolFactoryClass;
-    private String secureClientPoolFactoryClass;
     private int reconnectionInterval;
     private int queueSize;
     private int batchSize;
@@ -42,10 +38,7 @@ public class DataEndpointAgentConfiguration {
     private int secureMinIdleTimeInPool;
     private int secureEvictionTimePeriod;
 
-    private HashMap<String, String> config;
-
     public DataEndpointAgentConfiguration(String dataEndpointName, String className) {
-        this.config = new HashMap<String, String>();
         this.dataEndpointName = dataEndpointName;
         this.className = className;
         this.queueSize = DataEndpointConstants.DEFAULT_DATA_AGENT_QUEUE_SIZE;
@@ -59,28 +52,8 @@ public class DataEndpointAgentConfiguration {
         this.secureMaxIdleConnections = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS;
         this.secureMinIdleTimeInPool = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL;
         this.secureEvictionTimePeriod = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_EVICTION_TIME_PERIOD;
-//        initialize();
-
     }
 
-//    private void initialize() {
-//        this.config.put(DataEndpointConstants.DATA_AGENT_MAX_TRANSPORT_POOL_SIZE,
-//                String.valueOf(DataEndpointConstants.DEFAULT_DATA_AGENT_MAX_TRANSPORT_POOL_SIZE));
-//        this.config.put(DataEndpointConstants.DATA_AGENT_MAX_IDLE_CONNECTIONS,
-//                String.valueOf(DataEndpointConstants.DEFAULT_DATA_AGENT_MAX_IDLE_CONNECTIONS));
-//        this.config.put(DataEndpointConstants.DATA_AGENT_MIN_IDLE_TIME_IN_POOL,
-//                String.valueOf(DataEndpointConstants.DEFAULT_DATA_AGENT_MIN_IDLE_TIME_IN_POOL));
-//        this.config.put(DataEndpointConstants.DATA_AGENT_EVICTION_TIME_PERIOD,
-//                String.valueOf(DataEndpointConstants.DEFAULT_DATA_AGENT_EVICTION_TIME_PERIOD));
-//        this.config.put(DataEndpointConstants.DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE,
-//                String.valueOf(DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE));
-//        this.config.put(DataEndpointConstants.DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS,
-//                String.valueOf(DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS));
-//        this.config.put(DataEndpointConstants.DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL,
-//                String.valueOf(DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL));
-//        this.config.put(DataEndpointConstants.DATA_AGENT_SECURE_EVICTION_TIME_PERIOD,
-//                String.valueOf(DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_EVICTION_TIME_PERIOD));
-//    }
 
     public String getDataEndpointName() {
         return dataEndpointName;
@@ -88,14 +61,6 @@ public class DataEndpointAgentConfiguration {
 
     public String getClassName() {
         return className;
-    }
-
-    public void add(String configName, String value) {
-        config.put(configName, value);
-    }
-
-    public String get(String configName) {
-        return config.get(configName);
     }
 
     public String getTrustStore() {
@@ -128,23 +93,6 @@ public class DataEndpointAgentConfiguration {
 
     public void setBatchSize(int batchSize) {
         this.batchSize = batchSize;
-    }
-
-    public String getClientPoolFactoryClass() {
-        return clientPoolFactoryClass;
-    }
-
-
-    public void setClientPoolFactoryClass(String clientPoolFactoryClass) {
-        this.clientPoolFactoryClass = clientPoolFactoryClass;
-    }
-
-    public String getSecureClientPoolFactoryClass() {
-        return secureClientPoolFactoryClass;
-    }
-
-    public void setSecureClientPoolFactoryClass(String secureClientPoolFactoryClass) {
-        this.secureClientPoolFactoryClass = secureClientPoolFactoryClass;
     }
 
     public int getReconnectionInterval() {

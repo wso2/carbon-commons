@@ -44,7 +44,7 @@ public class DataPublisher {
         dataEndpointAgent = AgentHolder.getInstance().getDefaultDataEndpointAgent();
         processEndpoints(dataEndpointAgent.getDataEndpointAgentConfiguration().
                 getDataEndpointName(), dataEndpointAgent, receiverURLSet, authURLSet, username, password);
-        dataEndpointAgent.addHADataPublisher(this);
+        dataEndpointAgent.addDataPublisher(this);
     }
 
     public DataPublisher(String receiverURLSet, String username, String password)
@@ -55,7 +55,7 @@ public class DataPublisher {
         processEndpoints(dataEndpointAgent.getDataEndpointAgentConfiguration().
                 getDataEndpointName(), dataEndpointAgent, receiverURLSet, DataPublisherUtil.
                 getDefaultAuthURLSet(receiverURLSet), username, password);
-        dataEndpointAgent.addHADataPublisher(this);
+        dataEndpointAgent.addDataPublisher(this);
     }
 
     public DataPublisher(String type, String receiverURLSet, String authURLSet, String username, String password)
@@ -65,7 +65,7 @@ public class DataPublisher {
         dataEndpointAgent = AgentHolder.getInstance().getDataEndpointAgent(type);
         processEndpoints(dataEndpointAgent.getDataEndpointAgentConfiguration().
                 getDataEndpointName(), dataEndpointAgent, receiverURLSet, authURLSet, username, password);
-        dataEndpointAgent.addHADataPublisher(this);
+        dataEndpointAgent.addDataPublisher(this);
     }
 
 

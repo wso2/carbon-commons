@@ -22,12 +22,6 @@
         <Name>Thrift</Name>
         <DataEndpointClass>org.wso2.carbon.databridge.agent.internal.endpoint.thrift.ThriftDataEndpoint
         </DataEndpointClass>
-        <ClientPoolFactoryClass>
-            org.wso2.carbon.databridge.agent.internal.endpoint.thrift.client.ThriftClientPoolFactory
-        </ClientPoolFactoryClass>
-        <SecureClientPoolFactoryClass>
-            org.wso2.carbon.databridge.agent.internal.endpoint.thrift.client.ThriftSecureClientPoolFactory
-        </SecureClientPoolFactoryClass>
         <TrustSore>
             /home/sinthuja/projects/my_scratch/sinthuja/datapublisher/org.wso2.carbon.databridge.agent/4.2.0/src/main/resources/client-truststore.jks
         </TrustSore>
@@ -43,17 +37,6 @@
         <SecureMaxIdleConnections>250</SecureMaxIdleConnections>
         <SecureEvictionTimePeriod>5500</SecureEvictionTimePeriod>
         <SecureMinIdleTimeInPool>5000</SecureMinIdleTimeInPool>
-        <!--<Configuration>-->
-            <!--<property name="maxTransportPoolSize">250</property>-->
-            <!--<property name="maxIdleConnections">250</property>-->
-            <!--<property name="evictionTimePeriod">5500</property>-->
-            <!--<property name="minIdleTimeInPool">5000</property>-->
-
-            <!--<property name="secureMaxTransportPoolSize">250</property>-->
-            <!--<property name="secureMaxIdleConnections">250</property>-->
-            <!--<property name="secureEvictionTimePeriod">5500</property>-->
-            <!--<property name="secureMinIdleTimeInPool">5000</property>-->
-        <!--</Configuration>-->
     </Agent>
 </DataAgentsConfiguration>
 
