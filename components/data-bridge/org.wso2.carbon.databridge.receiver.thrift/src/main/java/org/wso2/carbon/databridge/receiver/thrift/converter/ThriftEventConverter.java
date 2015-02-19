@@ -20,6 +20,7 @@ package org.wso2.carbon.databridge.receiver.thrift.converter;
 
 
 import com.google.gson.Gson;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.commons.AttributeType;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.thrift.data.ThriftEventBundle;
@@ -27,6 +28,7 @@ import org.wso2.carbon.databridge.commons.utils.EventDefinitionConverterUtils;
 import org.wso2.carbon.databridge.core.EventConverter;
 import org.wso2.carbon.databridge.core.StreamTypeHolder;
 import org.wso2.carbon.databridge.core.exception.EventConversionException;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +111,16 @@ public final class ThriftEventConverter implements EventConverter {
                 event.setTimeStamp(timeStamp);
                 AttributeType[][] attributeTypeOrder = streamTypeHolder.getDataType(streamId);
                 if (attributeTypeOrder == null) {
-                    throw new EventConversionException("No StreamDefinition for streamId " + streamId + " present in cache ");
+                    PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+                    if (privilegedCarbonContext.getTenantDomain() == null) {
+                        privilegedCarbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+                        privilegedCarbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+                    }
+                    streamTypeHolder.reloadStreamTypeHolder();
+                    attributeTypeOrder = streamTypeHolder.getDataType(streamId);
+                    if (attributeTypeOrder == null) {
+                        throw new EventConversionException("No StreamDefinition for streamId " + streamId + " present in cache ");
+                    }
                 }
                 event.setMetaData(this.toObjectArray(thriftEventBundle, attributeTypeOrder[0], indexCounter));
                 event.setCorrelationData(this.toObjectArray(thriftEventBundle, attributeTypeOrder[1], indexCounter));

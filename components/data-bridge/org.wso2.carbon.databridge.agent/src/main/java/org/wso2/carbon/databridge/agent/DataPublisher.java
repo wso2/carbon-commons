@@ -24,7 +24,7 @@ import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
 import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpoint;
 import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpointFactory;
 import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpointGroup;
-import org.wso2.carbon.databridge.agent.util.HADataPublisherUtil;
+import org.wso2.carbon.databridge.agent.util.DataPublisherUtil;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
 
@@ -32,42 +32,40 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class HADataPublisher {
-    private static final Log log = LogFactory.getLog(HADataPublisher.class);
-
-    private ArrayList<DataEndpointGroup> endpointGroups
-            = new ArrayList<DataEndpointGroup>();
+public class DataPublisher {
+    private static final Log log = LogFactory.getLog(DataPublisher.class);
+    private ArrayList<DataEndpointGroup> endpointGroups = new ArrayList<DataEndpointGroup>();
     private DataEndpointAgent dataEndpointAgent;
 
-    public HADataPublisher(String receiverURLSet, String authURLSet, String username, String password)
+    public DataPublisher(String receiverURLSet, String authURLSet, String username, String password)
             throws DataEndpointAgentConfigurationException,
             DataEndpointException, DataEndpointConfigurationException,
             DataEndpointAuthenticationException, TransportException {
         dataEndpointAgent = AgentHolder.getInstance().getDefaultDataEndpointAgent();
         processEndpoints(dataEndpointAgent.getDataEndpointAgentConfiguration().
                 getDataEndpointName(), dataEndpointAgent, receiverURLSet, authURLSet, username, password);
-        dataEndpointAgent.addHADataPublisher(this);
+        dataEndpointAgent.addDataPublisher(this);
     }
 
-    public HADataPublisher(String receiverURLSet, String username, String password)
+    public DataPublisher(String receiverURLSet, String username, String password)
             throws DataEndpointAgentConfigurationException,
             DataEndpointException, DataEndpointConfigurationException,
             DataEndpointAuthenticationException, TransportException {
         dataEndpointAgent = AgentHolder.getInstance().getDefaultDataEndpointAgent();
         processEndpoints(dataEndpointAgent.getDataEndpointAgentConfiguration().
-                getDataEndpointName(), dataEndpointAgent, receiverURLSet, HADataPublisherUtil.
+                getDataEndpointName(), dataEndpointAgent, receiverURLSet, DataPublisherUtil.
                 getDefaultAuthURLSet(receiverURLSet), username, password);
-        dataEndpointAgent.addHADataPublisher(this);
+        dataEndpointAgent.addDataPublisher(this);
     }
 
-    public HADataPublisher(String type, String receiverURLSet, String authURLSet, String username, String password)
+    public DataPublisher(String type, String receiverURLSet, String authURLSet, String username, String password)
             throws DataEndpointAgentConfigurationException,
             DataEndpointException, DataEndpointConfigurationException,
             DataEndpointAuthenticationException, TransportException {
         dataEndpointAgent = AgentHolder.getInstance().getDataEndpointAgent(type);
         processEndpoints(dataEndpointAgent.getDataEndpointAgentConfiguration().
                 getDataEndpointName(), dataEndpointAgent, receiverURLSet, authURLSet, username, password);
-        dataEndpointAgent.addHADataPublisher(this);
+        dataEndpointAgent.addDataPublisher(this);
     }
 
 
@@ -75,9 +73,9 @@ public class HADataPublisher {
                                   String receiverURLSet, String authURLSet, String username, String password)
             throws DataEndpointConfigurationException, DataEndpointAgentConfigurationException,
             DataEndpointException, DataEndpointAuthenticationException, TransportException {
-        ArrayList receiverURLGroups = HADataPublisherUtil.getEndpointGroups(receiverURLSet);
-        ArrayList authURLGroups = HADataPublisherUtil.getEndpointGroups(authURLSet);
-        HADataPublisherUtil.validateURLs(receiverURLGroups, authURLGroups);
+        ArrayList receiverURLGroups = DataPublisherUtil.getEndpointGroups(receiverURLSet);
+        ArrayList authURLGroups = DataPublisherUtil.getEndpointGroups(authURLSet);
+        DataPublisherUtil.validateURLs(receiverURLGroups, authURLGroups);
 
         for (int i = 0; i < receiverURLGroups.size(); i++) {
             Object[] receiverGroup = (Object[]) receiverURLGroups.get(i);
@@ -148,6 +146,47 @@ public class HADataPublisher {
             }
         }
         return sent;
+    }
+
+    public boolean tryPublish(Event event, long timeoutMS) {
+        boolean sent = true;
+        for (DataEndpointGroup endpointGroup : endpointGroups) {
+            try {
+                endpointGroup.tryPublish(event, timeoutMS);
+            } catch (EventQueueFullException e) {
+                log.error("Unable to process the event for endpoint group "
+                        + endpointGroup.toString() + ", dropping the event. ", e);
+                if (log.isDebugEnabled()) log.debug("Dropped Event: " + event.toString() + " for the endpoint group " +
+                        endpointGroup.toString());
+                sent = false;
+            }
+        }
+        return sent;
+    }
+
+    public boolean tryPublish(String streamId, Object[] metaDataArray, Object[] correlationDataArray,
+                              Object[] payloadDataArray, long timeoutMS) {
+        return tryPublish(new Event(streamId, System.currentTimeMillis(), metaDataArray,
+                correlationDataArray, payloadDataArray), timeoutMS);
+    }
+
+    public boolean tryPublish(String streamId, Object[] metaDataArray, Object[] correlationDataArray,
+                              Object[] payloadDataArray, Map<String, String> arbitraryDataMap, long timeoutMS) {
+        return tryPublish(new Event(streamId, System.currentTimeMillis(), metaDataArray,
+                correlationDataArray, payloadDataArray, arbitraryDataMap), timeoutMS);
+    }
+
+    public boolean tryPublish(String streamId, long timeStamp, Object[] metaDataArray,
+                              Object[] correlationDataArray, Object[] payloadDataArray, long timeoutMS) {
+        return tryPublish(new Event(streamId, timeStamp, metaDataArray, correlationDataArray, payloadDataArray),
+                timeoutMS);
+    }
+
+    public boolean tryPublish(String streamId, long timeStamp, Object[] metaDataArray,
+                              Object[] correlationDataArray, Object[] payloadDataArray,
+                              Map<String, String> arbitraryDataMap, long timeoutMS) {
+        return tryPublish(new Event(streamId, timeStamp, metaDataArray, correlationDataArray,
+                payloadDataArray, arbitraryDataMap), timeoutMS);
     }
 
     public boolean tryPublish(String streamId, Object[] metaDataArray, Object[] correlationDataArray,

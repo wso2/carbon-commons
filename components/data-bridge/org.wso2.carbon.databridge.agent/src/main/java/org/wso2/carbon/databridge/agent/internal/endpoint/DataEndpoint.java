@@ -227,4 +227,8 @@ public abstract class DataEndpoint {
     public void shutdown(){
         connectionService.shutdown();
     }
+
+    public abstract String getClientPoolFactoryClass();
+
+    public abstract String getSecureClientPoolFactoryClass();
 }

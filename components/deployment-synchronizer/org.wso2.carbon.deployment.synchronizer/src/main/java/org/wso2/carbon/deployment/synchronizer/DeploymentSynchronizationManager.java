@@ -16,13 +16,11 @@
 * under the License.
 */
 
-package org.wso2.carbon.deployment.synchronizer.internal;
+package org.wso2.carbon.deployment.synchronizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.base.ServerConfiguration;
-import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
-import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 import java.util.Map;
@@ -61,7 +59,7 @@ public final class DeploymentSynchronizationManager {
      *
      * @param serverConfig Active Carbon ServerConfiguration
      */
-    void init(ServerConfiguration serverConfig) {
+    public void init(ServerConfiguration serverConfig) {
         if (log.isDebugEnabled()) {
             log.debug("Initializing deployment synchronization manager");
         }
@@ -80,7 +78,7 @@ public final class DeploymentSynchronizationManager {
      * destroy all the created synchronizers, cancel any existing scheduled tasks and then
      * free up any additional resources.
      */
-    void shutdown() {
+    public void shutdown() {
         for (DeploymentSynchronizer repository : synchronizers.values()) {
             repository.stop();
         }
@@ -154,7 +152,7 @@ public final class DeploymentSynchronizationManager {
             return synchronizers.remove(filePath);
         }
     }
-    
+
     public DeploymentSynchronizer deleteSynchronizer(int tenantId) {
         String filePath = MultitenantUtils.getAxis2RepositoryPath(tenantId);
         synchronized (filePath.intern()) {

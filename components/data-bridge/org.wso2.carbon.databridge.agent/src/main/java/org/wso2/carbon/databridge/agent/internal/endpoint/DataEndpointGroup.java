@@ -22,12 +22,11 @@ import com.lmax.disruptor.*;
 import com.lmax.disruptor.dsl.Disruptor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.databridge.agent.AgentHolder;
 import org.wso2.carbon.databridge.agent.DataEndpointAgent;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.agent.exception.EventQueueFullException;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
-import org.wso2.carbon.databridge.agent.util.HADataPublisherUtil;
+import org.wso2.carbon.databridge.agent.util.DataPublisherUtil;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
 
@@ -40,13 +39,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DataEndpointGroup implements DataEndpointFailureCallback {
     private static final Log log = LogFactory.getLog(DataEndpointGroup.class);
-
     private ArrayList<DataEndpoint> dataEndpoints;
     private ArrayList<DataEndpoint> failedEventsDataEndpoints;
     private HAType haType;
     private EventQueue eventQueue;
     private int reconnectionInterval;
-
     private AtomicInteger currentDataPublisherIndex = new AtomicInteger();
     private AtomicInteger maximumDataPublisherIndex = new AtomicInteger();
     private ScheduledExecutorService reconnectionService = Executors.newScheduledThreadPool(1);
@@ -77,7 +74,11 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
         eventQueue.tryPut(event);
     }
 
-    public void publish(Event event){
+    public void tryPublish(Event event, long timeoutMS) throws EventQueueFullException {
+        eventQueue.tryPut(event, timeoutMS);
+    }
+
+    public void publish(Event event) {
         eventQueue.put(event);
     }
 
@@ -99,7 +100,7 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
         }
 
         public void tryPut(Event event) throws EventQueueFullException {
-            long sequence = 0;
+            long sequence;
             try {
                 sequence = this.ringBuffer.tryNext(1);
                 Event bufferedEvent = this.ringBuffer.get(sequence);
@@ -110,9 +111,27 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
             }
         }
 
+
+        public void tryPut(Event event, long timeoutMS) throws EventQueueFullException {
+            long sequence;
+            long stopTime = System.currentTimeMillis() + timeoutMS;
+            while (true) {
+                try {
+                    sequence = this.ringBuffer.tryNext(1);
+                    Event bufferedEvent = this.ringBuffer.get(sequence);
+                    updateEvent(bufferedEvent, event);
+                    this.ringBuffer.publish(sequence);
+                    break;
+                } catch (InsufficientCapacityException ex) {
+                    if (stopTime > System.currentTimeMillis()) {
+                        throw new EventQueueFullException("Cannot send events because the event queue is full", ex);
+                    }
+                }
+            }
+        }
+
         private void put(Event event) {
-            long sequence = 0;
-            sequence = this.ringBuffer.next();
+            long sequence = this.ringBuffer.next();
             Event bufferedEvent = this.ringBuffer.get(sequence);
             updateEvent(bufferedEvent, event);
             this.ringBuffer.publish(sequence);
@@ -127,7 +146,7 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
             oldEvent.setTimeStamp(newEvent.getTimeStamp());
         }
 
-        private void shutdown(){
+        private void shutdown() {
             eventQueue.shutdown();
         }
     }
@@ -198,6 +217,7 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
+                        //Ignored
                     }
                 }
             }
@@ -240,7 +260,7 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
                         dataEndpoint.deactivate();
                     }
                 } else {
-                    String[] urlElements = HADataPublisherUtil.getProtocolHostPort(
+                    String[] urlElements = DataPublisherUtil.getProtocolHostPort(
                             dataEndpoint.getDataEndpointConfiguration().getReceiverURL());
                     if (!isServerExists(urlElements[1], Integer.parseInt(urlElements[2]))) {
                         dataEndpoint.deactivate();
@@ -288,10 +308,10 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
         return group;
     }
 
-    public void shutdown(){
+    public void shutdown() {
         eventQueue.shutdown();
         reconnectionService.shutdown();
-        for (DataEndpoint dataEndpoint: dataEndpoints){
+        for (DataEndpoint dataEndpoint : dataEndpoints) {
             dataEndpoint.shutdown();
         }
     }

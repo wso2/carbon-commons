@@ -4,7 +4,7 @@
     <groupId>org.wso2.carbon.commons</groupId>
     <artifactId>carbon-commons</artifactId>
     <packaging>pom</packaging>
-    <version>4.3.5-SNAPSHOT</version>
+    <version>4.3.6-SNAPSHOT</version>
     <name>WSO2 Carbon - Platform Aggregator Pom</name>
     <url>http://wso2.org</url>
 
@@ -1132,6 +1132,16 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.agent</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+            	<groupId>com.googlecode.disruptor.wso2</groupId>
+            	<artifactId>disruptor</artifactId>
+            	<version>${orbit.version.distruptor}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.statistics</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
@@ -1766,6 +1776,46 @@
             <modules>
             </modules>
         </profile>
+        <profile>
+            <id>sonar-profile</id>
+            <activation>
+                <property>
+                    <name>bamboo</name>
+                    <value>sonar</value>
+                </property>
+            </activation>
+            <modules>
+                <module>components/user-manager</module>
+                <module>components/tenant-mgt-common</module>
+                <module>components/authentication</module>
+                <module>components/deployment-synchronizer</module>
+                <module>components/application-mgt</module>
+                <module>components/ws-discovery</module>
+                <module>components/data-bridge</module>
+                <module>components/ganalytics</module>
+                <module>components/caching-invalidator</module>
+                <module>components/cluster-mgt</module>
+                <module>components/url-mapper</module>
+                <module>components/transaction-manager</module>
+                <module>components/hostobjects</module>
+                <module>components/ntask</module>
+                <module>components/reporting</module>
+                <module>components/doc-request-processor</module>
+                <module>components/tryit</module>
+                <module>components/wsdl2form</module>
+                <module>components/logging</module>
+                <module>components/userstore-config</module>
+                <module>components/remote-usermgt</module>
+                <module>components/event</module>
+                <module>components/ndatasource</module>
+                <module>components/ws-discovery-core</module>
+                <module>components/soap-tracer</module>
+                <module>components/wsdl-tools</module>
+                <module>components/system-statistics</module>
+                <module>components/message-flows</module>
+                <module>components/email-verification</module>
+            </modules>
+        </profile>
     </profiles>
 
     <properties>
@@ -1776,8 +1826,8 @@
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
 
 
-        <carbon.commons.version>4.3.5-SNAPSHOT</carbon.commons.version>
-        <carbon.commons.exp.package.version>4.3.2</carbon.commons.exp.package.version>
+        <carbon.commons.version>4.3.6-SNAPSHOT</carbon.commons.version>
+        <carbon.commons.exp.package.version>${carbon.commons.version}</carbon.commons.exp.package.version>
         <carbon.commons.imp.package.version>[4.3.0, 4.4.0)</carbon.commons.imp.package.version>
 
         <version.jettison>1.3.4</version.jettison>
@@ -1969,6 +2019,7 @@
         <hector-core.version>1.1-0</hector-core.version>
         <perf4j.version>0.9.12.wso2v1</perf4j.version>
         <highscale.version>1.0.wso2v1</highscale.version>
+        <orbit.version.distruptor>2.10.4-wso2v2</orbit.version.distruptor>
     </properties>
 
     <repositories>

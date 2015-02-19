@@ -18,22 +18,13 @@
 package org.wso2.carbon.databridge.agent.internal.endpoint.thrift;
 
 import org.apache.thrift.TException;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TCompactProtocol;
-import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.THttpClient;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
-import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
 import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpoint;
-import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
+import org.wso2.carbon.databridge.agent.internal.endpoint.thrift.client.ThriftClientPoolFactory;
+import org.wso2.carbon.databridge.agent.internal.endpoint.thrift.client.ThriftSecureClientPoolFactory;
 import org.wso2.carbon.databridge.commons.Event;
-import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
 import org.wso2.carbon.databridge.commons.exception.SessionTimeoutException;
-import org.wso2.carbon.databridge.commons.exception.TransportException;
 import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
 import org.wso2.carbon.databridge.commons.thrift.data.ThriftEventBundle;
 import org.wso2.carbon.databridge.commons.thrift.exception.ThriftAuthenticationException;
@@ -91,6 +82,16 @@ public class ThriftDataEndpoint extends DataEndpoint {
         } catch (TException e) {
             throw new DataEndpointException("Cannot send Events", e);
         }
+    }
+
+    @Override
+    public String getClientPoolFactoryClass() {
+        return ThriftClientPoolFactory.class.getCanonicalName();
+    }
+
+    @Override
+    public String getSecureClientPoolFactoryClass() {
+        return ThriftSecureClientPoolFactory.class.getCanonicalName();
     }
 
 }

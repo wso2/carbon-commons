@@ -31,12 +31,11 @@ import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
 
 public class DataEndpointAgent {
 
-    private ArrayList<HADataPublisher> haDataPublishers
-            = new ArrayList<HADataPublisher>();
+    private ArrayList<DataPublisher> dataPublishers
+            = new ArrayList<DataPublisher>();
 
     private GenericKeyedObjectPool transportPool;
     private GenericKeyedObjectPool securedTransportPool;
@@ -51,35 +50,29 @@ public class DataEndpointAgent {
 
     private void initialize() throws DataEndpointAgentConfigurationException {
         try {
+            DataEndpoint dataEndpoint = (DataEndpoint)(DataEndpointAgent.class.getClassLoader().
+                    loadClass(dataEndpointAgentConfiguration.getClassName()).newInstance());
             AbstractClientPoolFactory clientPoolFactory = (AbstractClientPoolFactory) (DataEndpointAgent.class.getClassLoader().
-                    loadClass(dataEndpointAgentConfiguration.getClientPoolFactoryClass()).newInstance());
+                    loadClass(dataEndpoint.getClientPoolFactoryClass()).newInstance());
             AbstractSecureClientPoolFactory secureClientPoolFactory = (AbstractSecureClientPoolFactory) (DataEndpointAgent.class.getClassLoader().
-                    loadClass(dataEndpointAgentConfiguration.getSecureClientPoolFactoryClass()).getConstructor(String.class, String.class).newInstance(
+                    loadClass(dataEndpoint.getSecureClientPoolFactoryClass()).getConstructor(String.class, String.class).newInstance(
                     dataEndpointAgentConfiguration.getTrustStore(),
                     dataEndpointAgentConfiguration.getTrustStorePassword()));
             this.transportPool = new ClientPool().getClientPool(
                     clientPoolFactory,
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_MAX_TRANSPORT_POOL_SIZE)),
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_MAX_IDLE_CONNECTIONS)),
+                    dataEndpointAgentConfiguration.getMaxTransportPoolSize(),
+                    dataEndpointAgentConfiguration.getMaxIdleConnections(),
                     true,
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_EVICTION_TIME_PERIOD)),
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_MIN_IDLE_TIME_IN_POOL)));
+                    dataEndpointAgentConfiguration.getEvictionTimePeriod(),
+                    dataEndpointAgentConfiguration.getMinIdleTimeInPool());
 
             this.securedTransportPool = new SecureClientPool().getClientPool(
                     secureClientPoolFactory,
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE)),
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS)),
+                    dataEndpointAgentConfiguration.getSecureMaxTransportPoolSize(),
+                    dataEndpointAgentConfiguration.getSecureMaxIdleConnections(),
                     true,
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_SECURE_EVICTION_TIME_PERIOD)),
-                    Integer.parseInt(dataEndpointAgentConfiguration.
-                            get(DataEndpointConstants.DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL)));
+                    dataEndpointAgentConfiguration.getSecureEvictionTimePeriod(),
+                    dataEndpointAgentConfiguration.getSecureMinIdleTimeInPool());
 
         } catch (InstantiationException e) {
             throw new DataEndpointAgentConfigurationException("Error while creating the client pool " + e.getMessage(), e);
@@ -94,8 +87,8 @@ public class DataEndpointAgent {
         }
     }
 
-    public void addHADataPublisher(HADataPublisher haDataPublisher) {
-        haDataPublishers.add(haDataPublisher);
+    public void addDataPublisher(DataPublisher dataPublisher) {
+        dataPublishers.add(dataPublisher);
     }
 
     public DataEndpointAgentConfiguration getDataEndpointAgentConfiguration() {
@@ -110,9 +103,9 @@ public class DataEndpointAgent {
         return securedTransportPool;
     }
 
-    public void shutDown(HADataPublisher haDataPublisher) throws DataEndpointException {
-        haDataPublishers.remove(haDataPublisher);
-        if(haDataPublishers.isEmpty()){
+    public void shutDown(DataPublisher dataPublisher) throws DataEndpointException {
+        dataPublishers.remove(dataPublisher);
+        if(dataPublishers.isEmpty()){
             try {
                 transportPool.close();
                 securedTransportPool.close();

@@ -19,7 +19,7 @@ package org.wso2.carbon.databridge.agent.test;
 
 import java.io.File;
 
-public class HADataPublisherTestUtil {
+public class DataPublisherTestUtil {
     public static final String LOCAL_HOST = "localhost";
 
     public static void setTrustStoreParams() {
@@ -53,7 +53,6 @@ public class HADataPublisherTestUtil {
         String keyStore = filePath.getAbsolutePath();
         System.setProperty("Security.KeyStore.Location", keyStore + File.separator + "wso2carbon.jks");
         System.setProperty("Security.KeyStore.Password", "wso2carbon");
-
     }
 
     public static String getDataAgentConfigPath() {
@@ -67,7 +66,7 @@ public class HADataPublisherTestUtil {
         if (!filePath.exists()) {
             filePath = new File("test" + File.separator + "resources");
         }
-        return filePath.getAbsolutePath() + File.separator + "ha-data-agent-conf.xml";
+        return filePath.getAbsolutePath() + File.separator + "data-agent-conf.xml";
     }
 
 }

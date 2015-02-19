@@ -21,16 +21,15 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationExcep
 import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HADataPublisherUtil {
+public class DataPublisherUtil {
 
-    public static ArrayList getEndpointGroups(String urlSet)
+    public static ArrayList<Object[]> getEndpointGroups(String urlSet)
             throws DataEndpointConfigurationException {
         ArrayList<String> urlGroups = new ArrayList<String>();
-        ArrayList endPointGroups = new ArrayList();
+        ArrayList<Object[]> endPointGroups = new ArrayList<Object[]>();
         Pattern regex = Pattern.compile("\\{.*?\\}");
         Matcher regexMatcher = regex.matcher(urlSet);
         while (regexMatcher.find()) {
@@ -140,14 +139,14 @@ public class HADataPublisherUtil {
     }
 
     public static String getDefaultAuthURLSet(String receiverURLSet) throws DataEndpointConfigurationException {
-        ArrayList receiverURLGroups = HADataPublisherUtil.getEndpointGroups(receiverURLSet);
+        ArrayList<Object[]> receiverURLGroups = DataPublisherUtil.getEndpointGroups(receiverURLSet);
         String authURLSet = "";
         for (int i = 0; i < receiverURLGroups.size(); i++) {
-            Object[] receiverGroup = (Object[]) receiverURLGroups.get(i);
+            Object[] receiverGroup = receiverURLGroups.get(i);
             boolean failOver = (Boolean) receiverGroup[0];
             authURLSet += "{";
             for (int j = 1; j < receiverGroup.length; j++) {
-                authURLSet += HADataPublisherUtil.getDefaultAuthUrl(receiverGroup[j].toString());
+                authURLSet += DataPublisherUtil.getDefaultAuthUrl(receiverGroup[j].toString());
                 if (j != receiverGroup.length - 1) {
                     if (failOver) authURLSet += DataEndpointConstants.FAILOVER_URL_GROUP_SEPARATOR;
                     else authURLSet += DataEndpointConstants.LB_URL_GROUP_SEPARATOR;
