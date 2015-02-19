@@ -313,6 +313,21 @@
                                    value="<fmt:message key="user.search"/>"/>
                         </td>
                 <%
+                    } else {
+                %>
+                        <td class="leftCol-big" style="padding-right: 0 !important;"><fmt:message key="list.users"/></td>
+                        <td>
+                            <input type="text" name="<%=UserAdminUIConstants.USER_LIST_FILTER%>"
+                                   value="<%=filter%>"/>
+                      
+                            <input class="button" type="submit"
+                                   value="<fmt:message key="user.search"/>"/>
+                        </td>
+                <%
+                    }
+                %>
+                    </tr>
+                <%
                     if(CarbonUIUtil.isContextRegistered(config, "/identity-mgt/") && !multipleUserStores){
                 %>
                     <tr>
