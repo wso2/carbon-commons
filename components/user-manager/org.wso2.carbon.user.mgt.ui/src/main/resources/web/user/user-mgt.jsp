@@ -313,46 +313,31 @@
                                    value="<fmt:message key="user.search"/>"/>
                         </td>
                 <%
-                    } else {
-                %>
-                        <td class="leftCol-big" style="padding-right: 0 !important;"><fmt:message key="list.users"/></td>
-                        <td>
-                            <input type="text" name="<%=UserAdminUIConstants.USER_LIST_FILTER%>"
-                                   value="<%=filter%>"/>
-                      
-                            <input class="button" type="submit"
-                                   value="<fmt:message key="user.search"/>"/>
-                        </td>
-                <%
-                    }
-                %>
-                    </tr>
-                <%
                     if(CarbonUIUtil.isContextRegistered(config, "/identity-mgt/") && !multipleUserStores){
                 %>
-                <tr>
-                    <td><fmt:message key="claim.uri"/></td>
-                    <td><select id="claimUri" name="claimUri">
-                        <option value="Select" selected="selected">Select</option>
-                        <%
-                            if(claimUris != null){
+                    <tr>
+                        <td><fmt:message key="claim.uri"/></td>
+                        <td><select id="claimUri" name="claimUri">
+                            <option value="Select" selected="selected">Select</option>
+                            <%
+                                if(claimUris != null){
 
-                                for(String claim : claimUris) {
-                                    if(claimUri != null && claim.equals(claimUri)) {
-                        %>
-                        <option selected="selected" value="<%=claim%>"><%=claim%></option>
-                        <%
-                        } else {
-                        %>
-                        <option value="<%=claim%>"><%=claim%></option>
-                        <%
+                                    for(String claim : claimUris) {
+                                        if(claimUri != null && claim.equals(claimUri)) {
+                            %>
+                                    <option selected="selected" value="<%=claim%>"><%=claim%></option>
+                            <%
+                                        } else {
+                            %>
+                                    <option value="<%=claim%>"><%=claim%></option>
+                            <%
+                                        }
                                     }
                                 }
-                            }
-                        %>
-                    </select>
-                    </td>
-                </tr>
+                            %>
+                        </select>
+                        </td>
+                    </tr>
                 <%
                     }
                 %>
