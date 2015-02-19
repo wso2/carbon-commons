@@ -18,7 +18,7 @@
 package org.wso2.carbon.user.mgt.ui;
 
 /**
- *
+ * 
  */
 public class UserAdminUIConstants {
 
@@ -49,12 +49,12 @@ public class UserAdminUIConstants {
     public static final String USER_LIST_UNASSIGNED_ROLE_FILTER = "org.wso2.carbon.user.unassigned.role.filter";
     public static final String USER_LIST_VIEW_ROLE_FILTER = "org.wso2.carbon.user.view.role.filter";
     public static final String USER_LIST_ASSIGN_ROLE_FILTER = "org.wso2.carbon.user.assign.filter";
-    public static final String USER_CLAIM_FILTER = "org.wso2.carbon.user.claim.filter";
 
     public static final String USER_LIST_DOMAIN_FILTER = "org.wso2.carbon.user.domain.filter";
     public static final String USER_LIST_DOMAIN_UNASSIGNED_ROLE_FILTER = "org.wso2.carbon.user.domain.unassigned.role.filter";
     public static final String USER_LIST_DOMAIN_VIEW_ROLE_FILTER = "org.wso2.carbon.user.domain.view.role.filter";
     public static final String USER_LIST_DOMAIN_ASSIGN_ROLE_FILTER = "org.wso2.carbon.user.domain.assign.filter";
+    public static final String USER_CLAIM_FILTER = "org.wso2.carbon.user.claim.filter";
 
     public static final String ROLE_LIST_FILTER = "org.wso2.carbon.role.filter";
     public static final String ROLE_LIST_UNASSIGNED_USER_FILTER = "org.wso2.carbon.role.unassigned.user.filter";
@@ -64,7 +64,7 @@ public class UserAdminUIConstants {
     public static final String ROLE_LIST_DOMAIN_FILTER = "org.wso2.carbon.role.domain.filter";
     public static final String ROLE_LIST_DOMAIN_UNASSIGNED_USER_FILTER = "org.wso2.carbon.role.domain.unassigned.user.filter";
     public static final String ROLE_LIST_DOMAIN_VIEW_USER_FILTER = "org.wso2.carbon.role.domain.view.user.filter";
-    public static final String ROLE_LIST_DOMAIN_ASSIGN_USER_FILTER = "org.wso2.carbon.role.domain.assign.filter";
+    public static final String ROLE_LIST_DOMAIN_ASSIGN_USER_FILTER = "org.wso2.carbon.role.domain.assign.filter";    
     // caches
     public static final String USER_LIST_CACHE = "user.list.cache";
     public static final String USER_LIST_CACHE_EXCEEDED = "user.list.cache.exceeded.domains";
@@ -90,8 +90,8 @@ public class UserAdminUIConstants {
 
     public static final String ROLE_LIST_ADD_ROLE_USER_CACHE = "role.list.add.role.cache";
     public static final String ROLE_LIST_ADD_ROLE_USER_CACHE_EXCEEDED = "role.list.add.role.cache.exceeded.domains";
-
+    
     public static final String SHARED_ROLE_ENABLED = "shared.role.enabled";
-
+    
 
 }
