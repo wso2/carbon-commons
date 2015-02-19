@@ -111,9 +111,9 @@ public class UserRealmProxy {
                         users.add(name);
                     }
                 }
-	            if(allUsers.length>0){
-		            users.add(allUsers[allUsers.length-1]);
-	            }
+                if (allUsers.length > 0) {
+                    users.add(allUsers[allUsers.length - 1]);
+                }
                 return users.toArray(new FlaggedName[users.size()]);
             } else {
                 return allUsers;
