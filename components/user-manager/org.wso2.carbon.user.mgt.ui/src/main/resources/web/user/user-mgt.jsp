@@ -328,7 +328,7 @@
                 %>
                     </tr>
                 <%
-                    if(CarbonUIUtil.isContextRegistered(config, "/identity-mgt/")){
+                    if(CarbonUIUtil.isContextRegistered(config, "/identity-mgt/") && !multipleUserStores){
                 %>
                 <tr>
                     <td><fmt:message key="claim.uri"/></td>
