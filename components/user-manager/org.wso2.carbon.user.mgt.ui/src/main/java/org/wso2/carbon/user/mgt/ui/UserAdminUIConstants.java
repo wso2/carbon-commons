@@ -49,6 +49,7 @@ public class UserAdminUIConstants {
     public static final String USER_LIST_UNASSIGNED_ROLE_FILTER = "org.wso2.carbon.user.unassigned.role.filter";
     public static final String USER_LIST_VIEW_ROLE_FILTER = "org.wso2.carbon.user.view.role.filter";
     public static final String USER_LIST_ASSIGN_ROLE_FILTER = "org.wso2.carbon.user.assign.filter";
+	public static final String USER_CLAIM_FILTER = "org.wso2.carbon.user.claim.filter";
 
     public static final String USER_LIST_DOMAIN_FILTER = "org.wso2.carbon.user.domain.filter";
     public static final String USER_LIST_DOMAIN_UNASSIGNED_ROLE_FILTER = "org.wso2.carbon.user.domain.unassigned.role.filter";
