@@ -13,9 +13,13 @@ import org.wso2.carbon.event.core.topic.TopicRolePermission;
 import java.util.Calendar;
 
 /**
- * Provides necessary topic related functions as a web service
+ * Provides topic related functions as a web service.
  */
 public class TopicManagerAdminService {
+
+    /**
+     * Logger to log information, warning, errors.
+     */
     private static Log log = LogFactory.getLog(TopicManagerAdminService.class);
 
     /**
@@ -29,8 +33,8 @@ public class TopicManagerAdminService {
         try {
             return eventBroker.getTopicManager().getTopicTree();
         } catch (EventBrokerException e) {
-            log.error(e.getMessage(), e);
-            throw new EventAdminException("Error in accessing topic manager ", e);
+            log.error("Error in accessing topic manager", e);
+            throw new EventAdminException("Error in accessing topic manager", e);
         }
     }
 
@@ -48,7 +52,7 @@ public class TopicManagerAdminService {
         try {
             return eventBroker.getTopicManager().getTopicRolePermission(topic);
         } catch (EventBrokerException e) {
-            log.error(e.getMessage(), e);
+            log.error("Error in accessing topic manager", e);
             throw new EventAdminException("Error in accessing topic manager", e);
         }
     }
@@ -68,8 +72,8 @@ public class TopicManagerAdminService {
                 throw new EventAdminException("Topic with name : " + topic + " already exists!");
             }
         } catch (EventBrokerException e) {
-            log.error(e.getMessage(), e);
-            throw new EventAdminException(e.getMessage(), e);
+            log.error("Error in adding a topic", e);
+            throw new EventAdminException("Error in adding a topic", e);
         }
     }
 
@@ -88,7 +92,8 @@ public class TopicManagerAdminService {
         try {
             eventBroker.getTopicManager().updatePermissions(topic, topicRolePermissions);
         } catch (EventBrokerException e) {
-            throw new EventAdminException("Error: " + e.getMessage(), e);
+            log.error("Error in updating permissions for topic", e);
+            throw new EventAdminException("Error in updating permissions for topic", e);
         }
     }
 
@@ -132,7 +137,7 @@ public class TopicManagerAdminService {
             }
             return subscriptionsDTO;
         } catch (EventBrokerException e) {
-            log.error(e.getMessage(), e);
+            log.error("Error in accessing topic manager", e);
             throw new EventAdminException("Error in accessing topic manager", e);
         }
     }
@@ -151,7 +156,7 @@ public class TopicManagerAdminService {
         try {
             return adaptSubscriptions(eventBroker.getTopicManager().getSubscriptions(topic, true));
         } catch (EventBrokerException e) {
-            log.error(e.getMessage(), e);
+            log.error("Error in accessing topic manager", e);
             throw new EventAdminException("Error in accessing topic manager", e);
         }
     }
@@ -170,7 +175,7 @@ public class TopicManagerAdminService {
         try {
             return eventBroker.getTopicManager().getSubscriptions(topic, true).length;
         } catch (EventBrokerException e) {
-            log.error(e.getMessage(), e);
+            log.error("Error in accessing topic manager", e);
             throw new EventAdminException("Error in accessing topic manager", e);
         }
     }
@@ -190,33 +195,44 @@ public class TopicManagerAdminService {
         try {
             return adaptSubscriptions(eventBroker.getTopicManager().getJMSSubscriptions(topic));
         } catch (EventBrokerException e) {
-            log.error(e.getMessage(), e);
+            log.error("Cannot get the jms subscriptions", e);
             throw new EventAdminException("Cannot get the jms subscriptions", e);
         }
     }
 
     /**
-     * Converting carbon event core subscription to carbon event internal subscription
+     * Gets user roles through topic manager
      *
-     * @param coreSubscription A carbon event core subscriptions
-     * @return A carbon event internal subscription
+     * @return A string array of roles
+     * @throws EventAdminException
      */
-    private Subscription adaptSubscription(
-            org.wso2.carbon.event.core.subscription.Subscription coreSubscription) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(coreSubscription.getCreatedTime());
-        Subscription adminSubscription = new Subscription();
-        adminSubscription.setCreatedTime(calendar);
-        adminSubscription.setEventDispatcher(coreSubscription.getEventDispatcher());
-        adminSubscription.setEventDispatcherName(coreSubscription.getEventDispatcherName());
-        adminSubscription.setEventFilter(coreSubscription.getEventFilter());
-        adminSubscription.setEventSinkURL(coreSubscription.getEventSinkURL());
-        adminSubscription.setExpires(coreSubscription.getExpires());
-        adminSubscription.setId(coreSubscription.getId());
-        adminSubscription.setOwner(coreSubscription.getOwner());
-        adminSubscription.setTopicName(coreSubscription.getTopicName());
-        adminSubscription.setMode(coreSubscription.getMode());
-        return adminSubscription;
+    public String[] getUserRoles() throws EventAdminException {
+        EventBroker eventBroker = EventAdminHolder.getInstance().getEventBroker();
+        try {
+            return eventBroker.getTopicManager().getBackendRoles();
+        } catch (EventBrokerException e) {
+            log.error("Error in getting user roles from topic manager", e);
+            throw new EventAdminException("Error in getting user roles from topic manager", e);
+        }
+    }
+
+    /**
+     * Removes a topic
+     * Suppressing warning as this is used as a web service
+     *
+     * @param topic Topic name
+     * @return true if topic existed to delete and deleted, false otherwise.
+     * @throws EventAdminException
+     */
+    @SuppressWarnings("UnusedDeclaration")
+    public boolean removeTopic(String topic) throws EventAdminException {
+        EventBroker eventBroker = EventAdminHolder.getInstance().getEventBroker();
+        try {
+            return eventBroker.getTopicManager().removeTopic(topic);
+        } catch (EventBrokerException e) {
+            log.error("Error in removing a topic", e);
+            throw new EventAdminException("Error in removing a topic", e);
+        }
     }
 
     /**
@@ -250,37 +266,26 @@ public class TopicManagerAdminService {
     }
 
     /**
-     * Gets user roles through topic manager
+     * Converting carbon event core subscription to carbon event internal subscription
      *
-     * @return A string array of roles
-     * @throws EventAdminException
+     * @param coreSubscription A carbon event core subscriptions
+     * @return A carbon event internal subscription
      */
-    public String[] getUserRoles() throws EventAdminException {
-        EventBroker eventBroker = EventAdminHolder.getInstance().getEventBroker();
-        try {
-            return eventBroker.getTopicManager().getBackendRoles();
-        } catch (EventBrokerException e) {
-            log.error(e.getMessage(), e);
-            throw new EventAdminException("Error in getting User Roles from topic manager", e);
-        }
-    }
-
-    /**
-     * Removes a topic
-     * Suppressing warning as this is used as a web service
-     *
-     * @param topic Topic name
-     * @return true if topic existed to delete and deleted, false otherwise.
-     * @throws EventAdminException
-     */
-    @SuppressWarnings("UnusedDeclaration")
-    public boolean removeTopic(String topic) throws EventAdminException {
-        EventBroker eventBroker = EventAdminHolder.getInstance().getEventBroker();
-        try {
-            return eventBroker.getTopicManager().removeTopic(topic);
-        } catch (EventBrokerException e) {
-            log.error(e.getMessage(), e);
-            throw new EventAdminException(e.getMessage(), e);
-        }
+    private Subscription adaptSubscription(
+            org.wso2.carbon.event.core.subscription.Subscription coreSubscription) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(coreSubscription.getCreatedTime());
+        Subscription adminSubscription = new Subscription();
+        adminSubscription.setCreatedTime(calendar);
+        adminSubscription.setEventDispatcher(coreSubscription.getEventDispatcher());
+        adminSubscription.setEventDispatcherName(coreSubscription.getEventDispatcherName());
+        adminSubscription.setEventFilter(coreSubscription.getEventFilter());
+        adminSubscription.setEventSinkURL(coreSubscription.getEventSinkURL());
+        adminSubscription.setExpires(coreSubscription.getExpires());
+        adminSubscription.setId(coreSubscription.getId());
+        adminSubscription.setOwner(coreSubscription.getOwner());
+        adminSubscription.setTopicName(coreSubscription.getTopicName());
+        adminSubscription.setMode(coreSubscription.getMode());
+        return adminSubscription;
     }
 }

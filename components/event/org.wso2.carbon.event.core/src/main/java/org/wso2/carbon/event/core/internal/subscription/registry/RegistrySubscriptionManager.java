@@ -64,6 +64,7 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
 
     /**
      * Adds topic storage path and index storage path to user registry
+     *
      * @param topicStoragePath topic storage path. the path where topics will be stored.
      * @param indexStoragePath index storage path.
      * @throws EventBrokerConfigurationException
@@ -150,7 +151,7 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
      * calculates the resource stored path using subscription id and the topic name
      *
      * @param subscriptionID the subscription ID
-     * @param topicName topic name
+     * @param topicName      topic name
      * @return the resource path
      */
     private String getResourcePath(String subscriptionID, String topicName) {
@@ -187,7 +188,7 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
      * Calculates the JMS subscription stored path for a WSSubscription using subscription id and the topic name
      *
      * @param subscriptionID the subscription ID
-     * @param topicName the topic name
+     * @param topicName      the topic name
      * @return the JMS subscription resource path for a subscription
      */
     private String getJMSSubResourcePath(String subscriptionID, String topicName) {
@@ -243,14 +244,12 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
                     // some properties stays with registry we need to skip them.
                     if (!subscriptionID.startsWith("registry")) {
                         topicName = topicIndexResource.getProperty(subscriptionID);
-                        if (userRegistry.resourceExists(getResourcePath(subscriptionID, topicName))) {
-                            subscriptionResource = userRegistry.get(getResourcePath(subscriptionID, topicName));
-                            subscription = JavaUtil.getSubscription(subscriptionResource);
-                            subscription.setId(subscriptionID);
-                            subscription.setTopicName(topicName);
-                            subscription.setTenantId(EventBrokerHolder.getInstance().getTenantId());
-                            subscriptions.add(subscription);
-                        }
+                        subscriptionResource = userRegistry.get(getResourcePath(subscriptionID, topicName));
+                        subscription = JavaUtil.getSubscription(subscriptionResource);
+                        subscription.setId(subscriptionID);
+                        subscription.setTopicName(topicName);
+                        subscription.setTenantId(EventBrokerHolder.getInstance().getTenantId());
+                        subscriptions.add(subscription);
                     }
                 }
             }

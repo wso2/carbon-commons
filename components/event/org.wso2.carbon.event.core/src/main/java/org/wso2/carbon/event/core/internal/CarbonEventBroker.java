@@ -92,28 +92,6 @@ public class CarbonEventBroker implements EventBroker {
      */
     @Override
     public void initializeTenant() throws EventBrokerException, UserStoreException {
-
-        // first we need to authorize all the roles to the topic root
-        try {
-            String topicStoragePath = subscriptionManager.getTopicStoragePath();
-            if (topicStoragePath != null) {
-                UserRealm userRealm =
-                        EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(EventBrokerHolder.getInstance().getTenantId());
-                AuthorizationManager authManager = userRealm.getAuthorizationManager();
-                for (String role : userRealm.getUserStoreManager().getRoleNames()) {
-                    if (!authManager.isRoleAuthorized(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE)) {
-                        authManager.authorizeRole(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
-                    }
-                    if (!authManager.isRoleAuthorized(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_PUBLISH)) {
-                        authManager.authorizeRole(role, topicStoragePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
-                    }
-                }
-            }
-        } catch (EventBrokerException e) {
-            throw new EventBrokerConfigurationException("Cannot get the subscriptions ", e);
-        } catch (UserStoreException e) {
-            throw new EventBrokerConfigurationException("Cannot get roles from user store", e);
-        }
         this.deliveryManager.initializeTenant();
         loadExistingSubscriptions();
     }
