@@ -82,7 +82,7 @@
     java.lang.String errorAttribute = (java.lang.String) session.getAttribute(UserAdminUIConstants.DO_USER_LIST);
 
     String claimUri = request.getParameter("claimUri");
-    if(claimUri==null||claimUri.length()==0){
+    if (claimUri == null || claimUri.length() == 0) {
         claimUri = (java.lang.String) session.getAttribute(UserAdminUIConstants.USER_CLAIM_FILTER);
     }
     session.setAttribute(UserAdminUIConstants.USER_CLAIM_FILTER,claimUri);
@@ -119,8 +119,8 @@
     if(!UserAdminUIConstants.ALL_DOMAINS.equalsIgnoreCase(selectedDomain)){
         modifiedFilter = selectedDomain + UserAdminUIConstants.DOMAIN_SEPARATOR + filter;
         modifiedFilter = modifiedFilter.trim();
-        userDomainSelector =selectedDomain+UserAdminUIConstants.DOMAIN_SEPARATOR + "*";
-    }else{
+        userDomainSelector = selectedDomain + UserAdminUIConstants.DOMAIN_SEPARATOR + "*";
+    } else {
         userDomainSelector = "*";
     }
 
@@ -179,12 +179,12 @@
             }
 
             if (filter.length() > 0) {
-                if(claimUri!=null && !"select".equalsIgnoreCase(claimUri)){
+                if (claimUri != null && !"select".equalsIgnoreCase(claimUri)) {
                     ClaimValue claimValue = new ClaimValue();
                     claimValue.setClaimURI(claimUri);
                     claimValue.setValue(filter);
-                    datas = client.listUserByClaim(claimValue, userDomainSelector,-1);
-                }else{
+                    datas = client.listUserByClaim(claimValue, userDomainSelector, -1);
+                } else {
                     datas = client.listAllUsers(modifiedFilter, -1);
                 }
                 List<FlaggedName> dataList = new ArrayList<FlaggedName>(Arrays.asList(datas));
