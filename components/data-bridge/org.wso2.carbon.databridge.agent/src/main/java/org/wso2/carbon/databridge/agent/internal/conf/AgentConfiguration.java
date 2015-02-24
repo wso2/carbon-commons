@@ -18,10 +18,13 @@
 
 package org.wso2.carbon.databridge.agent.internal.conf;
 
+import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 
+import javax.xml.bind.annotation.XmlElement;
 
-public class DataEndpointAgentConfiguration {
+
+public class AgentConfiguration {
     private String dataEndpointName;
     private String className;
     private String trustStore;
@@ -38,47 +41,51 @@ public class DataEndpointAgentConfiguration {
     private int secureMinIdleTimeInPool;
     private int secureEvictionTimePeriod;
 
-    public DataEndpointAgentConfiguration(String dataEndpointName, String className) {
-        this.dataEndpointName = dataEndpointName;
-        this.className = className;
-        this.queueSize = DataEndpointConstants.DEFAULT_DATA_AGENT_QUEUE_SIZE;
-        this.batchSize = DataEndpointConstants.DEFAULT_DATA_AGENT_BATCH_SIZE;
-        this.reconnectionInterval = DataEndpointConstants.DEFAULT_DATA_AGENT_RECONNECTION_INTERVAL;
-        this.maxTransportPoolSize = DataEndpointConstants.DEFAULT_DATA_AGENT_MAX_TRANSPORT_POOL_SIZE;
-        this.maxIdleConnections = DataEndpointConstants.DEFAULT_DATA_AGENT_MAX_IDLE_CONNECTIONS;
-        this.minIdleTimeInPool = DataEndpointConstants.DEFAULT_DATA_AGENT_MIN_IDLE_TIME_IN_POOL;
-        this.evictionTimePeriod = DataEndpointConstants.DEFAULT_DATA_AGENT_EVICTION_TIME_PERIOD;
-        this.secureMaxTransportPoolSize = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE;
-        this.secureMaxIdleConnections = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS;
-        this.secureMinIdleTimeInPool = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL;
-        this.secureEvictionTimePeriod = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_EVICTION_TIME_PERIOD;
-    }
+//    public AgentConfiguration(String dataEndpointName, String className) {
+//        this.dataEndpointName = dataEndpointName;
+//        this.className = className;
+//        this.queueSize = DataEndpointConstants.DEFAULT_DATA_AGENT_QUEUE_SIZE;
+//        this.batchSize = DataEndpointConstants.DEFAULT_DATA_AGENT_BATCH_SIZE;
+//        this.reconnectionInterval = DataEndpointConstants.DEFAULT_DATA_AGENT_RECONNECTION_INTERVAL;
+//        this.maxTransportPoolSize = DataEndpointConstants.DEFAULT_DATA_AGENT_MAX_TRANSPORT_POOL_SIZE;
+//        this.maxIdleConnections = DataEndpointConstants.DEFAULT_DATA_AGENT_MAX_IDLE_CONNECTIONS;
+//        this.minIdleTimeInPool = DataEndpointConstants.DEFAULT_DATA_AGENT_MIN_IDLE_TIME_IN_POOL;
+//        this.evictionTimePeriod = DataEndpointConstants.DEFAULT_DATA_AGENT_EVICTION_TIME_PERIOD;
+//        this.secureMaxTransportPoolSize = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE;
+//        this.secureMaxIdleConnections = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS;
+//        this.secureMinIdleTimeInPool = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL;
+//        this.secureEvictionTimePeriod = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_EVICTION_TIME_PERIOD;
+//    }
 
-
+    @XmlElement(name = "Name")
     public String getDataEndpointName() {
         return dataEndpointName;
     }
 
+    @XmlElement(name = "DataEndpointClass")
     public String getClassName() {
         return className;
     }
 
+    @XmlElement(name = "TrustSore")
     public String getTrustStore() {
         return trustStore;
     }
 
     public void setTrustStore(String trustStore) {
-        this.trustStore = trustStore;
+        this.trustStore = trustStore.trim();
     }
 
+    @XmlElement(name = "TrustSorePassword")
     public String getTrustStorePassword() {
         return trustStorePassword;
     }
 
     public void setTrustStorePassword(String trustStorePassword) {
-        this.trustStorePassword = trustStorePassword;
+        this.trustStorePassword = trustStorePassword.trim();
     }
 
+    @XmlElement(name = "QueueSize")
     public int getQueueSize() {
         return queueSize;
     }
@@ -87,6 +94,7 @@ public class DataEndpointAgentConfiguration {
         this.queueSize = queueSize;
     }
 
+    @XmlElement(name = "BatchSize")
     public int getBatchSize() {
         return batchSize;
     }
@@ -95,6 +103,7 @@ public class DataEndpointAgentConfiguration {
         this.batchSize = batchSize;
     }
 
+    @XmlElement(name = "ReconnectionInterval")
     public int getReconnectionInterval() {
         return reconnectionInterval;
     }
@@ -103,6 +112,7 @@ public class DataEndpointAgentConfiguration {
         this.reconnectionInterval = reconnectionInterval;
     }
 
+    @XmlElement(name = "MaxTransportPoolSize")
     public int getMaxTransportPoolSize() {
         return maxTransportPoolSize;
     }
@@ -111,6 +121,7 @@ public class DataEndpointAgentConfiguration {
         this.maxTransportPoolSize = maxTransportPoolSize;
     }
 
+    @XmlElement(name = "MaxIdleConnections")
     public int getMaxIdleConnections() {
         return maxIdleConnections;
     }
@@ -119,6 +130,7 @@ public class DataEndpointAgentConfiguration {
         this.maxIdleConnections = maxIdleConnections;
     }
 
+    @XmlElement(name = "MinIdleTimeInPool")
     public int getMinIdleTimeInPool() {
         return minIdleTimeInPool;
     }
@@ -127,6 +139,7 @@ public class DataEndpointAgentConfiguration {
         this.minIdleTimeInPool = minIdleTimeInPool;
     }
 
+    @XmlElement(name = "EvictionTimePeriod")
     public int getEvictionTimePeriod() {
         return evictionTimePeriod;
     }
@@ -135,6 +148,7 @@ public class DataEndpointAgentConfiguration {
         this.evictionTimePeriod = evictionTimePeriod;
     }
 
+    @XmlElement(name = "SecureMaxTransportPoolSize")
     public int getSecureMaxTransportPoolSize() {
         return secureMaxTransportPoolSize;
     }
@@ -143,6 +157,7 @@ public class DataEndpointAgentConfiguration {
         this.secureMaxTransportPoolSize = secureMaxTransportPoolSize;
     }
 
+    @XmlElement(name = "SecureMaxIdleConnections")
     public int getSecureMinIdleTimeInPool() {
         return secureMinIdleTimeInPool;
     }
@@ -151,6 +166,7 @@ public class DataEndpointAgentConfiguration {
         this.secureMinIdleTimeInPool = secureMinIdleTimeInPool;
     }
 
+    @XmlElement(name = "SecureEvictionTimePeriod")
     public int getSecureMaxIdleConnections() {
         return secureMaxIdleConnections;
     }
@@ -159,12 +175,32 @@ public class DataEndpointAgentConfiguration {
         this.secureMaxIdleConnections = secureMaxIdleConnections;
     }
 
+    @XmlElement(name = "SecureMinIdleTimeInPool")
     public int getSecureEvictionTimePeriod() {
         return secureEvictionTimePeriod;
     }
 
     public void setSecureEvictionTimePeriod(int secureEvictionTimePeriod) {
         this.secureEvictionTimePeriod = secureEvictionTimePeriod;
+    }
+
+    public void setDataEndpointName(String dataEndpointName) {
+        this.dataEndpointName = dataEndpointName.trim();
+    }
+
+    public void setClassName(String className) {
+        this.className = className.trim();
+    }
+
+    public void validate() throws DataEndpointAgentConfigurationException {
+        if (this.dataEndpointName == null || this.dataEndpointName.isEmpty()) {
+            throw new DataEndpointAgentConfigurationException("Endpoint name is not set in "
+                    + DataEndpointConstants.DATA_AGENT_CONF_FILE_NAME);
+        }
+        if (this.className == null || this.className.isEmpty()) {
+            throw new DataEndpointAgentConfigurationException("Endpoint class name is not set in "
+                    + DataEndpointConstants.DATA_AGENT_CONF_FILE_NAME + " for name: " + this.dataEndpointName);
+        }
     }
 }
 

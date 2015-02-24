@@ -15,10 +15,10 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-
-package org.wso2.carbon.databridge.agent.test;
+package org.wso2.carbon.databridge.agent.test.binary;
 
 import org.apache.log4j.Logger;
+import org.wso2.carbon.databridge.agent.test.DataPublisherTestUtil;
 import org.wso2.carbon.databridge.commons.Credentials;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.StreamDefinition;
@@ -31,27 +31,29 @@ import org.wso2.carbon.databridge.core.definitionstore.InMemoryStreamDefinitionS
 import org.wso2.carbon.databridge.core.exception.DataBridgeException;
 import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
 import org.wso2.carbon.databridge.core.internal.authentication.AuthenticationHandler;
+import org.wso2.carbon.databridge.receiver.binary.BinaryDataReceiver;
+import org.wso2.carbon.databridge.receiver.binary.conf.BinaryDataReceiverConfiguration;
 import org.wso2.carbon.databridge.receiver.thrift.ThriftDataReceiver;
 import org.wso2.carbon.user.api.UserStoreException;
 
+import java.io.IOException;
 import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class TestServer {
-    Logger log = Logger.getLogger(TestServer.class);
-    ThriftDataReceiver thriftDataReceiver;
+public class BinaryTestServer {
+    Logger log = Logger.getLogger(BinaryTestServer.class);
+    BinaryDataReceiver binaryDataReceiver;
     InMemoryStreamDefinitionStore streamDefinitionStore;
     AtomicInteger numberOfEventsReceived;
     RestarterThread restarterThread;
 
-    public void startTestServer() throws DataBridgeException, InterruptedException {
-        TestServer testServer = new TestServer();
-        testServer.start(7611);
+    public void startTestServer() throws DataBridgeException, InterruptedException, IOException {
+        BinaryTestServer testServer = new BinaryTestServer();
+        testServer.start(9611, 9711);
         Thread.sleep(100000000);
         testServer.stop();
     }
-
 
     public void addStreamDefinition(StreamDefinition streamDefinition, int tenantId)
             throws StreamDefinitionStoreException {
@@ -64,14 +66,14 @@ public class TestServer {
         getStreamDefinitionStore().saveStreamDefinitionToStore(streamDefinition, tenantId);
     }
 
-    private InMemoryStreamDefinitionStore getStreamDefinitionStore(){
-        if (streamDefinitionStore == null){
+    private InMemoryStreamDefinitionStore getStreamDefinitionStore() {
+        if (streamDefinitionStore == null) {
             streamDefinitionStore = new InMemoryStreamDefinitionStore();
         }
         return streamDefinitionStore;
     }
 
-    public void start(int receiverPort) throws DataBridgeException {
+    public void start(int tcpPort, int securePort) throws DataBridgeException, IOException {
         DataPublisherTestUtil.setKeyStoreParams();
         streamDefinitionStore = getStreamDefinitionStore();
         numberOfEventsReceived = new AtomicInteger(0);
@@ -104,7 +106,9 @@ public class TestServer {
             }
         }, streamDefinitionStore);
 
-        thriftDataReceiver = new ThriftDataReceiver(receiverPort, databridge);
+        BinaryDataReceiverConfiguration dataReceiverConfiguration = new BinaryDataReceiverConfiguration(securePort, tcpPort);
+
+        binaryDataReceiver = new BinaryDataReceiver(dataReceiverConfiguration, databridge);
 
         databridge.subscribe(new AgentCallback() {
             int totalSize = 0;
@@ -128,14 +132,14 @@ public class TestServer {
 
         });
 
-            String address = "localhost";
-            log.info("Test Server starting on " + address);
-            thriftDataReceiver.start(address);
-            log.info("Test Server Started");
+        String address = "localhost";
+        log.info("Test Server starting on " + address);
+        binaryDataReceiver.start();
+        log.info("Test Server Started");
     }
 
     public int getNumberOfEventsReceived() {
-       if(numberOfEventsReceived != null) return numberOfEventsReceived.get();
+        if (numberOfEventsReceived != null) return numberOfEventsReceived.get();
         else return 0;
     }
 
@@ -144,13 +148,13 @@ public class TestServer {
     }
 
     public void stop() {
-        thriftDataReceiver.stop();
+        binaryDataReceiver.stop();
         log.info("Test Server Stopped");
     }
 
-    public void stopAndStartDuration(int port, long stopAfterTimeMilliSeconds, long startAfterTimeMS)
+    public void stopAndStartDuration(int port, int sslPort, long stopAfterTimeMilliSeconds, long startAfterTimeMS)
             throws SocketException, DataBridgeException {
-        restarterThread = new RestarterThread(port, stopAfterTimeMilliSeconds, startAfterTimeMS);
+        restarterThread = new RestarterThread(port, sslPort, stopAfterTimeMilliSeconds, startAfterTimeMS);
         Thread thread = new Thread(restarterThread);
         thread.start();
     }
@@ -163,12 +167,14 @@ public class TestServer {
     class RestarterThread implements Runnable {
         int eventReceived;
         int port;
+        int sslPort;
 
         long stopAfterTimeMilliSeconds;
         long startAfterTimeMS;
 
-        RestarterThread(int port, long stopAfterTime, long startAfterTime) {
+        RestarterThread(int port, int sslPort, long stopAfterTime, long startAfterTime) {
             this.port = port;
+            this.sslPort = sslPort;
             stopAfterTimeMilliSeconds = stopAfterTime;
             startAfterTimeMS = startAfterTime;
         }
@@ -179,23 +185,25 @@ public class TestServer {
                 Thread.sleep(stopAfterTimeMilliSeconds);
             } catch (InterruptedException e) {
             }
-            if (thriftDataReceiver != null) thriftDataReceiver.stop();
+            if (binaryDataReceiver != null) binaryDataReceiver.stop();
 
             eventReceived = getNumberOfEventsReceived();
 
-            log.info("Number of events received in server shutdown :"+ eventReceived);
+            log.info("Number of events received in server shutdown :" + eventReceived);
             try {
                 Thread.sleep(startAfterTimeMS);
             } catch (InterruptedException e) {
             }
 
             try {
-                if (thriftDataReceiver != null){
-                    thriftDataReceiver.start(DataPublisherTestUtil.LOCAL_HOST);
-                }else {
-                    start(port);
+                if (binaryDataReceiver != null) {
+                    binaryDataReceiver.start();
+                } else {
+                    start(port, sslPort);
                 }
             } catch (DataBridgeException e) {
+                log.error(e);
+            } catch (IOException e) {
                 log.error(e);
             }
 

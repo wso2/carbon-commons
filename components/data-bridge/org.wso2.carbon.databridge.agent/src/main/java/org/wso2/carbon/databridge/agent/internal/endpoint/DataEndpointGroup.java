@@ -58,8 +58,8 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
         this.dataEndpoints = new ArrayList<DataEndpoint>();
         this.failedEventsDataEndpoints = new ArrayList<DataEndpoint>();
         this.haType = haType;
-        this.reconnectionInterval = agent.getDataEndpointAgentConfiguration().getReconnectionInterval();
-        this.eventQueue = new EventQueue(agent.getDataEndpointAgentConfiguration().getQueueSize());
+        this.reconnectionInterval = agent.getAgentConfiguration().getReconnectionInterval();
+        this.eventQueue = new EventQueue(agent.getAgentConfiguration().getQueueSize());
         this.reconnectionService.scheduleAtFixedRate(new ReconnectionTask(), reconnectionInterval,
                 reconnectionInterval, TimeUnit.SECONDS);
     }
@@ -93,13 +93,13 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
             }
         };
 
-        public EventQueue(int queueSize) {
+        EventQueue(int queueSize) {
             eventQueue = new Disruptor<Event>(EVENT_FACTORY, queueSize, Executors.newCachedThreadPool());
             eventQueue.handleEventsWith(new EventQueueWorker());
             this.ringBuffer = eventQueue.start();
         }
 
-        public void tryPut(Event event) throws EventQueueFullException {
+        private void tryPut(Event event) throws EventQueueFullException {
             long sequence;
             try {
                 sequence = this.ringBuffer.tryNext(1);
@@ -112,7 +112,7 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
         }
 
 
-        public void tryPut(Event event, long timeoutMS) throws EventQueueFullException {
+        private void tryPut(Event event, long timeoutMS) throws EventQueueFullException {
             long sequence;
             long stopTime = System.currentTimeMillis() + timeoutMS;
             while (true) {

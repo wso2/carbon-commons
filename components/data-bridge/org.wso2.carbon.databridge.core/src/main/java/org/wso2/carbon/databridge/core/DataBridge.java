@@ -51,8 +51,8 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
     private EventDispatcher eventDispatcher;
     private Authenticator authenticator;
     private AuthenticationHandler authenticatorHandler;
-    private OMElement initialConfig;
     private List<StreamAddRemoveListener> streamAddRemoveListenerList = new ArrayList<StreamAddRemoveListener>();
+    private DataBridgeConfiguration dataBridgeConfiguration;
 
     public DataBridge(AuthenticationHandler authenticationHandler,
                       AbstractStreamDefinitionStore streamDefinitionStore,
@@ -225,12 +225,12 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
         }
     }
 
-    public OMElement getInitialConfig() {
-        return initialConfig;
+    public DataBridgeConfiguration getInitialConfig() {
+        return this.dataBridgeConfiguration;
     }
 
-    public void setInitialConfig(OMElement initialConfig) {
-        this.initialConfig = initialConfig;
+    public void setInitialConfig(DataBridgeConfiguration initialConfig) {
+        this.dataBridgeConfiguration = initialConfig;
     }
 
     /**

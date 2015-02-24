@@ -212,10 +212,10 @@ public abstract class DataEndpoint {
     }
 
     void resetFailedEvents() {
-       hasFailedEvents.set(false);
+        hasFailedEvents.set(false);
     }
 
-    boolean isConnected(){
+    boolean isConnected() {
         return active;
     }
 
@@ -224,7 +224,14 @@ public abstract class DataEndpoint {
                 ", Authentication URL : " + getDataEndpointConfiguration().getAuthURL() + ")";
     }
 
-    public void shutdown(){
+    public void shutdown() {
+        if (isPublishing.get()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+            }
+        }
+        connectionWorker.disconnect(getDataEndpointConfiguration());
         connectionService.shutdown();
     }
 

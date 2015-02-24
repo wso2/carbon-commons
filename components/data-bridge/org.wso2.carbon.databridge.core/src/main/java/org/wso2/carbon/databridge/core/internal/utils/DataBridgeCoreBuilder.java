@@ -47,9 +47,9 @@ public final class DataBridgeCoreBuilder {
 
     public static List<String[]> loadStreamDefinitionXML() throws DataBridgeConfigurationException {
         List<String[]> streamDefinitionList = new ArrayList<String[]>();
-
         String carbonHome = System.getProperty(ServerConstants.CARBON_CONFIG_DIR_PATH);
-        String path = carbonHome + File.separator + DataBridgeConstants.DATA_BRIDGE_DIR + File.separator + DataBridgeConstants.STREAM_DEFINITIONS_XML;
+        String path = carbonHome + File.separator + DataBridgeConstants.DATA_BRIDGE_DIR +
+                File.separator + DataBridgeConstants.STREAM_DEFINITIONS_XML;
         File file = new File(path);
         if (file.exists() && !file.isDirectory()) {
             OMElement config = loadXML(path, DataBridgeConstants.STREAM_DEFINITIONS_XML);
@@ -62,8 +62,8 @@ public final class DataBridgeCoreBuilder {
                     OMElement streamDefinition = (OMElement) streamDefinitionIterator.next();
                     String domainName = streamDefinition.getAttributeValue(new QName(DataBridgeConstants.DOMAIN_NAME_ATTRIBUTE));
 
-                    if(domainName==null||domainName.equals("")){
-                        domainName= MultitenantConstants.SUPER_TENANT_DOMAIN_NAME;
+                    if (domainName == null || domainName.equals("")) {
+                        domainName = MultitenantConstants.SUPER_TENANT_DOMAIN_NAME;
                     }
                     streamDefinitionList.add(new String[]{domainName, streamDefinition.getText()});
                 }
@@ -73,10 +73,9 @@ public final class DataBridgeCoreBuilder {
         return streamDefinitionList;
     }
 
-    public static OMElement loadConfigXML() throws DataBridgeConfigurationException {
+    public static String getDatabridgeConfigPath() {
         String carbonHome = System.getProperty(ServerConstants.CARBON_CONFIG_DIR_PATH);
-        String path = carbonHome + File.separator + DataBridgeConstants.DATA_BRIDGE_DIR + File.separator + DataBridgeConstants.DATA_BRIDGE_CONFIG_XML;
-        return loadXML(path, DataBridgeConstants.DATA_BRIDGE_CONFIG_XML);
+        return carbonHome + File.separator + DataBridgeConstants.DATA_BRIDGE_DIR + File.separator + DataBridgeConstants.DATA_BRIDGE_CONFIG_XML;
     }
 
     public static OMElement loadXML(String path, String fileName) throws DataBridgeConfigurationException {
@@ -108,62 +107,6 @@ public final class DataBridgeCoreBuilder {
                 String errorMessage = "Can not close the input stream";
                 log.error(errorMessage, e);
             }
-        }
-    }
-
-    public static void populateStreamDefinitions(OMElement config,
-                                                 List<String[]> streamDefinitionList) {
-
-    }
-
-    public static void populateRuntimeParameters(OMElement config,
-                                                 DataBridgeConfiguration dataBridgeConfiguration) {
-        OMElement workerThreads = config.getFirstChildWithName(
-                new QName(DataBridgeConstants.DATA_BRIDGE_NAMESPACE,
-                        DataBridgeConstants.WORKER_THREADS_ELEMENT)
-        );
-        if (workerThreads != null) {
-            try {
-                dataBridgeConfiguration.setWorkerThreads(Integer.parseInt(workerThreads.getText()));
-            } catch (NumberFormatException ignored) {
-
-            }
-        }
-        OMElement eventBufferCapacity = config.getFirstChildWithName(
-                new QName(DataBridgeConstants.DATA_BRIDGE_NAMESPACE,
-                        DataBridgeConstants.EVENT_BUFFER_CAPACITY_ELEMENT)
-        );
-        if (eventBufferCapacity != null) {
-            try {
-                dataBridgeConfiguration.setEventBufferCapacity(Integer.parseInt(eventBufferCapacity.getText()));
-            } catch (NumberFormatException ignored) {
-
-            }
-        }
-        OMElement clientTimeout = config.getFirstChildWithName(
-                new QName(DataBridgeConstants.DATA_BRIDGE_NAMESPACE,
-                        DataBridgeConstants.CLIENT_TIMEOUT_ELEMENT)
-        );
-        if (clientTimeout != null) {
-            try {
-                dataBridgeConfiguration.setClientTimeOut(Integer.parseInt(clientTimeout.getText()));
-            } catch (NumberFormatException ignored) {
-
-            }
-        }
-
-    }
-
-    public static void populateConfigurations(DataBridgeConfiguration dataBridgeConfiguration,
-                                              OMElement bridgeConfig)
-            throws DataBridgeConfigurationException {
-
-        if (bridgeConfig != null) {
-            if (!bridgeConfig.getQName().equals(
-                    new QName(DataBridgeConstants.DATA_BRIDGE_NAMESPACE, DataBridgeConstants.DATA_BRIDGE_ROOT_ELEMENT))) {
-                throw new DataBridgeConfigurationException("Invalid root element in data Bridge server config");
-            }
-            DataBridgeCoreBuilder.populateRuntimeParameters(bridgeConfig, dataBridgeConfiguration);
         }
     }
 }

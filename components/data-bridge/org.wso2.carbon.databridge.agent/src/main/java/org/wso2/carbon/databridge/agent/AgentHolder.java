@@ -17,52 +17,52 @@
 */
 package org.wso2.carbon.databridge.agent;
 
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
-import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointAgentConfiguration;
+import org.wso2.carbon.databridge.agent.internal.conf.AgentConfiguration;
+import org.wso2.carbon.databridge.agent.internal.conf.DataAgentsConfiguration;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 import org.wso2.carbon.utils.CarbonUtils;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.Map;
 
 public class AgentHolder {
     private static Log log = LogFactory.getLog(AgentHolder.class);
-
     private static String configPath;
     private static AgentHolder instance;
+    private Map<String, DataEndpointAgent> dataEndpointAgents;
+    private String defaultDataEndpointAgentName;
 
-    private HashMap<String, DataEndpointAgent> dataEndpointAgents;
-
-    private AgentHolder() {
-        dataEndpointAgents = new HashMap<String, DataEndpointAgent>();
+    private AgentHolder() throws DataEndpointAgentConfigurationException {
         try {
-            loadConfiguration();
+            dataEndpointAgents = new HashMap<String, DataEndpointAgent>();
+            DataAgentsConfiguration dataAgentsConfiguration = loadConfiguration();
+            boolean isDefault = true;
+            for (AgentConfiguration agentConfiguration : dataAgentsConfiguration.getAgentConfigurations()) {
+                addAgentConfiguration(agentConfiguration, isDefault);
+                if (isDefault) isDefault = false;
+            }
         } catch (DataEndpointAgentConfigurationException e) {
             log.error("Unable to complete initialization of agents." + e.getMessage(), e);
+            throw e;
         }
     }
 
-    public static AgentHolder getInstance() {
+    public static AgentHolder getInstance() throws DataEndpointAgentConfigurationException {
         if (instance == null) {
             instance = new AgentHolder();
         }
         return instance;
     }
 
-    public void addDataEndpointAgent(DataEndpointAgent dataEndpointAgent) {
-        dataEndpointAgents.put(dataEndpointAgent.getDataEndpointAgentConfiguration().getDataEndpointName(),
-                dataEndpointAgent);
-    }
-
-    public synchronized DataEndpointAgent getDataEndpointAgent(String type) throws DataEndpointAgentConfigurationException {
+    public synchronized DataEndpointAgent getDataEndpointAgent(String type)
+            throws DataEndpointAgentConfigurationException {
         DataEndpointAgent agent = this.dataEndpointAgents.get(type);
         if (agent == null) {
             throw new DataEndpointAgentConfigurationException("No data agent configured for the type: " + type);
@@ -70,136 +70,35 @@ public class AgentHolder {
         return agent;
     }
 
-    private void loadConfiguration() throws DataEndpointAgentConfigurationException {
-        BufferedInputStream inputStream = null;
+    private DataAgentsConfiguration loadConfiguration()
+            throws DataEndpointAgentConfigurationException {
         if (configPath == null) configPath = CarbonUtils.getCarbonConfigDirPath()
                 + DataEndpointConstants.DATA_AGENT_CONF_FILE_PATH;
         try {
-            inputStream = new BufferedInputStream(new FileInputStream(new File(configPath)));
-            XMLStreamReader parser = XMLInputFactory.newInstance().
-                    createXMLStreamReader(inputStream);
-            StAXOMBuilder builder = new StAXOMBuilder(parser);
-            OMElement omElement = builder.getDocumentElement();
-            omElement.build();
-
-            Iterator agentIterator = omElement.getChildElements();
-            while (agentIterator.hasNext()) {
-                OMElement endPointConf = (OMElement) agentIterator.next();
-                Iterator endPointIterator = endPointConf.getChildElements();
-                addAgentConfiguration(endPointIterator);
-            }
-        } catch (FileNotFoundException e) {
-            String errorMessage = DataEndpointConstants.DATA_AGENT_CONF_FILE_NAME
-                    + "cannot be found in the path : " + configPath;
-            log.error(errorMessage, e);
-            throw new DataEndpointAgentConfigurationException(errorMessage, e);
-        } catch (XMLStreamException e) {
-            String errorMessage = "Invalid XML for " + DataEndpointConstants.DATA_AGENT_CONF_FILE_NAME
-                    + " located in the path : " + configPath;
-            log.error(errorMessage, e);
-            throw new DataEndpointAgentConfigurationException(errorMessage, e);
-        } finally {
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-            } catch (IOException e) {
-                String errorMessage = "Can not close the input stream";
-                log.error(errorMessage, e);
-            }
+            File file = new File(configPath);
+            JAXBContext jaxbContext = JAXBContext.newInstance(DataAgentsConfiguration.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            DataAgentsConfiguration dataAgentsConfiguration = (DataAgentsConfiguration) jaxbUnmarshaller.unmarshal(file);
+            dataAgentsConfiguration.validateConfigurations();
+            return dataAgentsConfiguration;
+        } catch (JAXBException e) {
+            throw new DataEndpointAgentConfigurationException("Error while loading the configuration file "
+                    + configPath, e);
         }
     }
 
 
-    private void addAgentConfiguration(Iterator agentConfIterator) throws DataEndpointAgentConfigurationException {
-        String name = null, endpointClass = null, trustStore = null, trustStorePw = null;
-        int queueSize = 0, batchSize = 0, reconnectionInterval = 0, maxTransportPoolSize = 0,
-                maxIdleConnections = 0, evictionTimePeriod = 0, minIdleTimeInPool = 0, secureMaxTransportPoolSize = 0,
-                secureMaxIdleConnections = 0, secureEvictionTimePeriod = 0, secureMinIdleTimeInPool = 0;
-        while (agentConfIterator.hasNext()) {
-            OMElement element = (OMElement) agentConfIterator.next();
-            if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_ENDPOINT_NAME)) {
-                name = element.getText().trim();
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_ENDPOINT_CLASS)) {
-                endpointClass = element.getText().trim();
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_TRUST_STORE_LOCATION)) {
-                trustStore = element.getText().trim();
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_TRUST_STORE_PASSWORD)) {
-                trustStorePw = element.getText().trim();
-            } else if (element.getQName().getLocalPart()
-                    .equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_QUEUE_SIZE)) {
-                queueSize = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_BATCH_SIZE)) {
-                batchSize = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_RECONNECTION_INTERVAL)) {
-                reconnectionInterval = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_MAX_TRANSPORT_POOL_SIZE)) {
-                maxTransportPoolSize = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_MAX_IDLE_CONNECTIONS)) {
-                maxIdleConnections = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_EVICTION_TIME_PERIOD)) {
-                evictionTimePeriod = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_MIN_IDLE_TIME_IN_POOL)) {
-                minIdleTimeInPool = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE)) {
-                secureMaxTransportPoolSize = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS)) {
-                secureMaxIdleConnections = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_EVICTION_TIME_PERIOD)) {
-                secureEvictionTimePeriod = Integer.parseInt(element.getText().trim());
-            } else if (element.getQName().getLocalPart().
-                    equalsIgnoreCase(DataEndpointConstants.DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL)) {
-                secureMinIdleTimeInPool = Integer.parseInt(element.getText().trim());
-            }
-        }
-        if (name == null || name.isEmpty()) {
-            throw new DataEndpointAgentConfigurationException("Endpoint name is not set in "
-                    + DataEndpointConstants.DATA_AGENT_CONF_FILE_NAME);
-        }
-        if (endpointClass == null || endpointClass.isEmpty()) {
-            throw new DataEndpointAgentConfigurationException("Endpoint class name is not set in "
-                    + DataEndpointConstants.DATA_AGENT_CONF_FILE_NAME + " for name: " + name);
-        }
-
-        DataEndpointAgentConfiguration agentConfiguration = new DataEndpointAgentConfiguration(name, endpointClass);
-        if (trustStore != null) agentConfiguration.setTrustStore(trustStore);
-        if (trustStorePw != null) agentConfiguration.setTrustStorePassword(trustStorePw);
-        if (queueSize != 0) agentConfiguration.setQueueSize(queueSize);
-        if (batchSize != 0) agentConfiguration.setBatchSize(batchSize);
-        if (reconnectionInterval != 0) agentConfiguration.setReconnectionInterval(reconnectionInterval);
-        if (maxTransportPoolSize != 0) agentConfiguration.setMaxTransportPoolSize(maxTransportPoolSize);
-        if (maxIdleConnections != 0) agentConfiguration.setMaxIdleConnections(maxIdleConnections);
-        if (evictionTimePeriod != 0) agentConfiguration.setEvictionTimePeriod(evictionTimePeriod);
-        if (minIdleTimeInPool != 0) agentConfiguration.setMinIdleTimeInPool(minIdleTimeInPool);
-        if (secureMaxTransportPoolSize != 0) agentConfiguration.
-                setSecureMaxTransportPoolSize(secureMaxTransportPoolSize);
-        if (secureMaxIdleConnections != 0) agentConfiguration.setSecureMaxIdleConnections(secureMaxIdleConnections);
-        if (secureEvictionTimePeriod != 0) agentConfiguration.setSecureEvictionTimePeriod(secureEvictionTimePeriod);
-        if (secureMinIdleTimeInPool != 0) agentConfiguration.setSecureMinIdleTimeInPool(secureMinIdleTimeInPool);
+    private void addAgentConfiguration(AgentConfiguration agentConfiguration, boolean defaultAgent)
+            throws DataEndpointAgentConfigurationException {
         DataEndpointAgent agent = new DataEndpointAgent(agentConfiguration);
-        addDataEndpointAgent(agent);
+        dataEndpointAgents.put(agent.getAgentConfiguration().getDataEndpointName(), agent);
+        if (defaultAgent) {
+            defaultDataEndpointAgentName = agent.getAgentConfiguration().getDataEndpointName();
+        }
     }
 
     public DataEndpointAgent getDefaultDataEndpointAgent() throws DataEndpointAgentConfigurationException {
-        Iterator iterator = dataEndpointAgents.keySet().iterator();
-        if (iterator.hasNext()) {
-            return dataEndpointAgents.get(iterator.next());
-        } else {
-            throw new DataEndpointAgentConfigurationException("No Data Endpoints configuration are available");
-        }
+        return getDataEndpointAgent(defaultDataEndpointAgentName);
     }
 
     public static void setConfigPath(String configPath) {

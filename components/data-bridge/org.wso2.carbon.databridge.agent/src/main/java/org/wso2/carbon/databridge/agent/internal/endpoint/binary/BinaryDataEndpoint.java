@@ -19,63 +19,54 @@ package org.wso2.carbon.databridge.agent.internal.endpoint.binary;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.thrift.TException;
+import org.wso2.carbon.base.MultitenantConstants;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpoint;
-import org.wso2.carbon.databridge.agent.internal.endpoint.thrift.ThriftEventConverter;
+import org.wso2.carbon.databridge.agent.internal.endpoint.binary.client.BinaryClientPoolFactory;
+import org.wso2.carbon.databridge.agent.internal.endpoint.binary.client.BinarySecureClientPoolFactory;
 import org.wso2.carbon.databridge.commons.Event;
+import org.wso2.carbon.databridge.commons.binary.BinaryMessageConstants;
 import org.wso2.carbon.databridge.commons.exception.SessionTimeoutException;
 import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
-import org.wso2.carbon.databridge.commons.thrift.data.ThriftEventBundle;
-import org.wso2.carbon.databridge.commons.thrift.exception.ThriftAuthenticationException;
-import org.wso2.carbon.databridge.commons.thrift.exception.ThriftSessionExpiredException;
-import org.wso2.carbon.databridge.commons.thrift.exception.ThriftUndefinedEventTypeException;
-import org.wso2.carbon.databridge.commons.thrift.service.general.ThriftEventTransmissionService;
-import org.wso2.carbon.databridge.commons.thrift.service.secure.ThriftSecureEventTransmissionService;
+import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class BinaryDataEndpoint extends DataEndpoint {
-    private static Log log = LogFactory.getLog(BinaryDataEndpoint.class);
+
     @Override
     protected String connect(Object client, String userName, String password) throws DataEndpointAuthenticationException {
-        //TODO: need to handle authentication
         Socket socket = (Socket) client;
-        if (!socket.isConnected()) {
-            String hostAddress = socket.getInetAddress().getHostAddress();
-            int port = socket.getPort();
-            try {
-                socket.close();
-            } catch (IOException e) {
-                //ignored
-            }
-            try {
-                socket = new Socket(hostAddress, port);
-
-            } catch (IOException e) {
-                throw new DataEndpointAuthenticationException("Error while connecting to TCP endpoint with hostname :" +
-                        hostAddress + ",  port:" + port);
+        try {
+            return sendAndReceiveResponse(socket, BinaryEventConverter.createBinaryLoginMessage(userName, password),
+                    BinaryMessageConstants.LOGIN_OPERATION);
+        } catch (Exception e) {
+            if (e instanceof DataEndpointAuthenticationException) {
+                throw (DataEndpointAuthenticationException) e;
+            } else {
+                throw new DataEndpointAuthenticationException("Error while trying to login to data receiver :"
+                        + socket.getRemoteSocketAddress().toString(), e);
             }
         }
-        return UUID.randomUUID().toString();
     }
 
     @Override
     protected void disconnect(Object client, String sessionId) throws DataEndpointAuthenticationException {
-        Socket socket = null;
+        Socket socket = (Socket) client;
         try {
-            socket = (Socket) client;
-            socket.close();
-        } catch (IOException e) {
-            log.warn("Cannot close the socket successfully from " + socket.getLocalAddress().getHostAddress()
-                    + ":" + socket.getPort());
+            sendAndReceiveResponse(socket, BinaryEventConverter.createBinaryLogoutMessage(sessionId),
+                    BinaryMessageConstants.LOGOUT_OPERATION);
+        } catch (Exception e) {
+            if (e instanceof DataEndpointAuthenticationException) {
+                throw (DataEndpointAuthenticationException) e;
+            } else {
+                throw new DataEndpointAuthenticationException("Error while trying to logout to data receiver :"
+                        + socket.getRemoteSocketAddress().toString(), e);
+            }
         }
     }
 
@@ -87,83 +78,87 @@ public class BinaryDataEndpoint extends DataEndpoint {
     protected void send(Object client, ArrayList<Event> events) throws DataEndpointException,
             SessionTimeoutException, UndefinedEventTypeException {
         Socket socket = (Socket) client;
+        String sessionId = getDataEndpointConfiguration().getSessionId();
         try {
-            OutputStream outputStream = socket.getOutputStream();
-
-        } catch (IOException e) {
-            throw new DataEndpointException("Unable to send te events to the data endpoint. "+e.getMessage(), e);
+            //TODO: propagate tenantId from method
+            sendAndReceiveResponse(socket, BinaryEventConverter.createBinaryPublishMessage(events, sessionId,
+                            MultitenantConstants.SUPER_TENANT_ID),
+                    BinaryMessageConstants.PUBLISH_OPERATION);
+        } catch (Exception e) {
+            if (e instanceof DataEndpointException) {
+                throw (DataEndpointException) e;
+            } else {
+                throw new DataEndpointException("Error while trying to publish events to data receiver :"
+                        + socket.getRemoteSocketAddress().toString(), e);
+            }
         }
     }
 
     @Override
     public String getClientPoolFactoryClass() {
-        return null;
+        return BinaryClientPoolFactory.class.getCanonicalName();
     }
 
     @Override
     public String getSecureClientPoolFactoryClass() {
-        return null;
+        return BinarySecureClientPoolFactory.class.getCanonicalName();
     }
 
-//    public void sendEvent(String streamId, Object[] event, boolean flush) throws IOException {
-//        StreamRuntimeInfo streamRuntimeInfo = streamRuntimeInfoMap.get(streamId);
-//
-//        ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
-//
-//        byte streamIdSize = streamRuntimeInfo.getStreamIdSize();
-//        ByteBuffer buf = ByteBuffer.allocate(streamRuntimeInfo.getFixedMessageSize() + streamIdSize + 1);
-//        buf.put(streamIdSize);
-//        buf.put((streamRuntimeInfo.getStreamId()).getBytes(DEFAULT_CHARSET));
-//
-//        int[] stringDataIndex = new int[streamRuntimeInfo.getNoOfStringAttributes()];
-//        int stringIndex = 0;
-//        int stringSize = 0;
-//        Attribute.Type[] types = streamRuntimeInfo.getAttributeTypes();
-//        for (int i = 0, typesLength = types.length; i < typesLength; i++) {
-//            Attribute.Type type = types[i];
-//            switch (type) {
-//                case INT:
-//                    buf.putInt((Integer) event[i]);
-//                    continue;
-//                case LONG:
-//                    buf.putLong((Long) event[i]);
-//                    continue;
-//                case BOOL:
-//                    buf.put((byte) (((Boolean) event[i]) ? 1 : 0));
-//                    continue;
-//                case FLOAT:
-//                    buf.putFloat((Float) event[i]);
-//                    continue;
-//                case DOUBLE:
-//                    buf.putDouble((Double) event[i]);
-//                    continue;
-//                case STRING:
-//                    short length = (short) ((String) event[i]).length();
-//                    buf.putShort(length);
-//                    stringDataIndex[stringIndex] = i;
-//                    stringIndex++;
-//                    stringSize += length;
-//            }
-//        }
-//        arrayOutputStream.write(buf.array());
-//
-//        buf = ByteBuffer.allocate(stringSize);
-//        for (int aStringIndex : stringDataIndex) {
-//            buf.put(((String) event[aStringIndex]).getBytes(DEFAULT_CHARSET));
-//        }
-//        arrayOutputStream.write(buf.array());
-//
-//        if (!isSynchronous){
-//            publishToDisruptor(arrayOutputStream.toByteArray());
-//        }else {
-//            publishEvent(arrayOutputStream.toByteArray(), flush);
-//        }
-//    }
-//
-//    private void publishEvent(byte[] data, boolean flush) throws IOException {
-//        outputStream.write(data);
-//        if (flush) {
-//            outputStream.flush();
-//        }
-//    }
+    private String sendAndReceiveResponse(Socket socket, String message, String operation) throws Exception {
+        StringBuilder messageBuilder = new StringBuilder();
+        OutputStream outputstream = socket.getOutputStream();
+        InputStream inputStream = socket.getInputStream();
+        OutputStreamWriter outputstreamwriter = new OutputStreamWriter(outputstream);
+        BufferedWriter bufferedwriter = new BufferedWriter(outputstreamwriter);
+        InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        /**
+         * Send to receiver to the logout request
+         */
+        bufferedwriter.write(message);
+        bufferedwriter.flush();
+
+        while ((message = bufferedReader.readLine()) != null) {
+            messageBuilder.append(message).append("\n");
+            if (message.equals(BinaryMessageConstants.END_MESSAGE)) {
+                break;
+            }
+        }
+        /**
+         * validate the response from receiver
+         */
+        return processResponse(messageBuilder.toString(), operation);
+    }
+
+    private String processResponse(String response, String operation) throws Exception {
+        String[] responseLines = response.split("\n");
+        if (responseLines.length > 0) {
+            if (responseLines[0].equals(BinaryMessageConstants.OK_RESPONSE)) {
+                if (operation.equals(BinaryMessageConstants.LOGIN_OPERATION)) {
+                    if (responseLines.length == 3) {
+                        return responseLines[1].replace(BinaryMessageConstants.SESSION_ID_PREFIX, "");
+                    } else {
+                        throw new DataEndpointAuthenticationException("Unexpected response received from data receiver;" +
+                                " expected sessionId is not existing in the response: " + response);
+                    }
+                } else {
+                    return null;
+                }
+            } else if (responseLines[0].equals(BinaryMessageConstants.ERROR_RESPONSE)) {
+                if (responseLines.length >= 5) {
+                    throw (Exception) (BinaryDataEndpoint.class.getClassLoader().
+                            loadClass(responseLines[1]).getConstructor(String.class).newInstance(responseLines[2]));
+                } else {
+                    throw new DataEndpointException("Unexpected error format received from receiver :"
+                            + response);
+                }
+            } else {
+                throw new DataEndpointException("Unexpected response received from data receiver : "
+                        + response);
+            }
+        } else {
+            throw new DataEndpointException("Unexpected empty response received from data receiver");
+        }
+    }
+
 }

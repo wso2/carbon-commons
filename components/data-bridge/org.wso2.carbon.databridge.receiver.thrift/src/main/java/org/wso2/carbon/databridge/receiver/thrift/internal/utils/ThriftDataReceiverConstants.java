@@ -26,12 +26,10 @@ public final class ThriftDataReceiverConstants {
 
     private ThriftDataReceiverConstants() {
     }
-
-    public static final String THRIFT_EVENT_RECEIVER_ELEMENT = "thriftDataReceiver";
-    public static final String SECURE_PORT_ELEMENT = "securePort";
-    public static final String PORT_ELEMENT = "port";
-
-    public static final int CARBON_DEFAULT_PORT_OFFSET = 0;
+    public static final String SECURE_PORT_ELEMENT = "sslPort";
+    public static final String PORT_ELEMENT = "tcpPort";
     public static final String CARBON_CONFIG_PORT_OFFSET_NODE = "Ports.Offset";
     public static final String RECEIVER_HOST_NAME = "hostName";
+    public static final String DEFAULT_HOSTNAME = "0.0.0.0";
+    public static final String DATA_BRIDGE_RECEIVER_NAME = "Thrift";
 }

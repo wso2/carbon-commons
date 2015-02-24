@@ -46,7 +46,7 @@ public final class Authenticator {
     public Authenticator(AuthenticationHandler authenticationHandler,
                          DataBridgeConfiguration dataBridgeConfiguration) {
         this.authenticationHandler = authenticationHandler;
-        sessionCache = new SessionCache(dataBridgeConfiguration.getClientTimeOut() / 1000);
+        sessionCache = new SessionCache(dataBridgeConfiguration.getClientTimeoutMin());
     }
 
     public String authenticate(String userName, String password) throws AuthenticationException {

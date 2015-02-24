@@ -21,14 +21,31 @@ package org.wso2.carbon.databridge.core.conf;
 
 import org.wso2.carbon.databridge.core.internal.utils.DataBridgeConstants;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
+
 /**
  * configuration details related to DataReceiver
  */
+@XmlRootElement(name = "dataBridgeConfiguration")
 public class DataBridgeConfiguration {
-    private int workerThreads = DataBridgeConstants.NO_OF_WORKER_THREADS;
-    private int eventBufferCapacity = DataBridgeConstants.EVENT_BUFFER_CAPACITY;
-    private int clientTimeOut = DataBridgeConstants.CLIENT_TIMEOUT_MS;
 
+    private List<DataReceiver> dataReceivers;
+    private int workerThreads;
+    private int eventBufferCapacity;
+    private int clientTimeoutMin;
+
+    @XmlElement(name = "dataReceiver")
+    public List<DataReceiver> getDataReceivers() {
+        return dataReceivers;
+    }
+
+    public void setDataReceivers(List<DataReceiver> dataReceivers) {
+        this.dataReceivers = dataReceivers;
+    }
+
+    @XmlElement(name = "workerThreads")
     public int getWorkerThreads() {
         return workerThreads;
     }
@@ -37,6 +54,7 @@ public class DataBridgeConfiguration {
         this.workerThreads = workerThreads;
     }
 
+    @XmlElement(name = "eventBufferCapacity")
     public int getEventBufferCapacity() {
         return eventBufferCapacity;
     }
@@ -45,11 +63,21 @@ public class DataBridgeConfiguration {
         this.eventBufferCapacity = eventBufferCapacity;
     }
 
-    public int getClientTimeOut() {
-        return clientTimeOut;
+    @XmlElement(name = "clientTimeoutMin")
+    public int getClientTimeoutMin() {
+        return clientTimeoutMin;
     }
 
-    public void setClientTimeOut(int clientTimeOut) {
-        this.clientTimeOut = clientTimeOut;
+    public void setClientTimeoutMin(int clientTimeoutMin) {
+        this.clientTimeoutMin = clientTimeoutMin;
+    }
+
+    public DataReceiver getDataReceiver(String name){
+        for (DataReceiver dataReceiver: dataReceivers){
+            if (dataReceiver.getName().equalsIgnoreCase(name)){
+                return dataReceiver;
+            }
+        }
+        return null;
     }
 }

@@ -48,7 +48,7 @@ public class DataEndpointFactory {
         try {
             DataEndpointAgent agent = AgentHolder.getInstance().getDataEndpointAgent(endPointType);
             DataEndpoint dataEndpoint = (DataEndpoint) (DataEndpointFactory.class.getClassLoader().
-                    loadClass(agent.getDataEndpointAgentConfiguration().getClassName()).newInstance());
+                    loadClass(agent.getAgentConfiguration().getClassName()).newInstance());
             return dataEndpoint;
         } catch (InstantiationException e) {
             log.error("Error while instantiating the endpoint class for endpoint name " + endPointType, e);
@@ -60,10 +60,10 @@ public class DataEndpointFactory {
                     endPointType + ". " + e.getMessage(), e);
         } catch (ClassNotFoundException e) {
             log.error("Class defined: " + AgentHolder.getInstance().
-                    getDataEndpointAgent(endPointType).getDataEndpointAgentConfiguration().getClassName() +
+                    getDataEndpointAgent(endPointType).getAgentConfiguration().getClassName() +
                     " cannot be found for endpoint name " + endPointType, e);
             throw new DataEndpointException("Class defined: " + AgentHolder.getInstance().
-                    getDataEndpointAgent(endPointType).getDataEndpointAgentConfiguration().getClassName() +
+                    getDataEndpointAgent(endPointType).getAgentConfiguration().getClassName() +
                     " cannot be found for endpoint name " + endPointType + ". " + e.getMessage(), e);
         }
     }
@@ -71,7 +71,7 @@ public class DataEndpointFactory {
     public DataEndpoint getNewDefaultDataEndpoint()
             throws DataEndpointAgentConfigurationException, DataEndpointException {
         String defaultDataEndpointType = AgentHolder.getInstance().getDefaultDataEndpointAgent().
-                getDataEndpointAgentConfiguration().getDataEndpointName();
+                getAgentConfiguration().getDataEndpointName();
         return getNewDataEndpoint(defaultDataEndpointType);
     }
 

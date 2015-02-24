@@ -42,7 +42,8 @@ public class DataPublisher {
             DataEndpointException, DataEndpointConfigurationException,
             DataEndpointAuthenticationException, TransportException {
         dataEndpointAgent = AgentHolder.getInstance().getDefaultDataEndpointAgent();
-        processEndpoints(dataEndpointAgent.getDataEndpointAgentConfiguration().
+        if (authURLSet == null) authURLSet = DataPublisherUtil.getDefaultAuthURLSet(receiverURLSet);
+        processEndpoints(dataEndpointAgent.getAgentConfiguration().
                 getDataEndpointName(), dataEndpointAgent, receiverURLSet, authURLSet, username, password);
         dataEndpointAgent.addDataPublisher(this);
     }
@@ -52,7 +53,7 @@ public class DataPublisher {
             DataEndpointException, DataEndpointConfigurationException,
             DataEndpointAuthenticationException, TransportException {
         dataEndpointAgent = AgentHolder.getInstance().getDefaultDataEndpointAgent();
-        processEndpoints(dataEndpointAgent.getDataEndpointAgentConfiguration().
+        processEndpoints(dataEndpointAgent.getAgentConfiguration().
                 getDataEndpointName(), dataEndpointAgent, receiverURLSet, DataPublisherUtil.
                 getDefaultAuthURLSet(receiverURLSet), username, password);
         dataEndpointAgent.addDataPublisher(this);
@@ -63,7 +64,7 @@ public class DataPublisher {
             DataEndpointException, DataEndpointConfigurationException,
             DataEndpointAuthenticationException, TransportException {
         dataEndpointAgent = AgentHolder.getInstance().getDataEndpointAgent(type);
-        processEndpoints(dataEndpointAgent.getDataEndpointAgentConfiguration().
+        processEndpoints(dataEndpointAgent.getAgentConfiguration().
                 getDataEndpointName(), dataEndpointAgent, receiverURLSet, authURLSet, username, password);
         dataEndpointAgent.addDataPublisher(this);
     }
@@ -94,7 +95,7 @@ public class DataPublisher {
                 DataEndpointConfiguration endpointConfiguration = new DataEndpointConfiguration((String) receiverGroup[j],
                         (String) authGroup[j], username, password, dataEndpointAgent.getTransportPool(),
                         dataEndpointAgent.getSecuredTransportPool(), dataEndpointAgent.
-                        getDataEndpointAgentConfiguration().getBatchSize());
+                        getAgentConfiguration().getBatchSize());
                 DataEndpoint dataEndpoint = DataEndpointFactory.getInstance().getNewDataEndpoint(type);
                 dataEndpoint.initialize(endpointConfiguration);
                 endpointGroup.addDataEndpoint(dataEndpoint);
@@ -216,6 +217,11 @@ public class DataPublisher {
             dataEndpointGroup.shutdown();
         }
         dataEndpointAgent.shutDown(this);
+    }
+
+    public void shutdownWithAgent() throws DataEndpointException {
+        shutdown();
+        dataEndpointAgent.shutDown();
     }
 }
 
