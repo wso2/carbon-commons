@@ -186,7 +186,7 @@ public class OneEndPointDPTest extends TestCase {
         dataPublisher.shutdown();
 
         try {
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
         }
         Assert.assertEquals(numberOfEventsSent, testServer.getNumberOfEventsReceived());

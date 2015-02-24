@@ -72,7 +72,6 @@
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.commons.binary</artifactId>
-            <version>4.3.6-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
@@ -82,7 +81,6 @@
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.receiver.binary</artifactId>
-            <version>4.3.6-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>

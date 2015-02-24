@@ -69,4 +69,18 @@ public class DataPublisherTestUtil {
         return filePath.getAbsolutePath() + File.separator + "data-agent-conf.xml";
     }
 
+    public static String getDataBridgeConfigPath() {
+        File filePath = new File("src" + File.separator + "test" + File.separator + "resources");
+        if (!filePath.exists()) {
+            filePath = new File("test" + File.separator + "resources");
+        }
+        if (!filePath.exists()) {
+            filePath = new File("resources");
+        }
+        if (!filePath.exists()) {
+            filePath = new File("test" + File.separator + "resources");
+        }
+        return filePath.getAbsolutePath() + File.separator + "data-bridge-config.xml";
+    }
+
 }

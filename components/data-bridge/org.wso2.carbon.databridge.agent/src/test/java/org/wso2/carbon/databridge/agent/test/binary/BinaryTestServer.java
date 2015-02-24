@@ -104,7 +104,7 @@ public class BinaryTestServer {
             public void destroyContext(AgentSession agentSession) {
 
             }
-        }, streamDefinitionStore);
+        }, streamDefinitionStore, DataPublisherTestUtil.getDataBridgeConfigPath());
 
         BinaryDataReceiverConfiguration dataReceiverConfiguration = new BinaryDataReceiverConfiguration(securePort, tcpPort);
 
