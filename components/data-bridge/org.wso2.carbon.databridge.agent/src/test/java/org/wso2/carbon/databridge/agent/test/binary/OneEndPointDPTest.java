@@ -36,6 +36,8 @@ import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class OneEndPointDPTest extends TestCase {
@@ -84,6 +86,37 @@ public class OneEndPointDPTest extends TestCase {
         event.setMetaData(new Object[]{"127.0.0.1"});
         event.setCorrelationData(null);
         event.setPayloadData(new Object[]{"WSO2", 123.4, 2, 12.4, 1.3});
+
+        int numberOfEventsSent = 1000;
+        for (int i = 0; i < numberOfEventsSent; i++) {
+            dataPublisher.publish(event);
+        }
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+        }
+        dataPublisher.shutdown();
+        Assert.assertEquals(numberOfEventsSent, testServer.getNumberOfEventsReceived());
+        testServer.resetReceivedEvents();
+        testServer.stop();
+    }
+
+    public void testOneDataEndpointWithArbitraryEventFields() throws DataEndpointAuthenticationException, DataEndpointAgentConfigurationException, TransportException, DataEndpointException, DataEndpointConfigurationException, MalformedStreamDefinitionException, DataBridgeException, StreamDefinitionStoreException, IOException {
+        startServer(9681, 9781);
+        AgentHolder.setConfigPath(DataPublisherTestUtil.getDataAgentConfigPath());
+        String hostName = DataPublisherTestUtil.LOCAL_HOST;
+        DataPublisher dataPublisher = new DataPublisher("Binary", "tcp://" + hostName + ":9681",
+                "ssl://" + hostName + ":9781", "admin", "admin");
+        Event event = new Event();
+        event.setStreamId(DataBridgeCommonsUtils.generateStreamId(STREAM_NAME, VERSION));
+        event.setMetaData(new Object[]{"127.0.0.1"});
+        event.setCorrelationData(null);
+        event.setPayloadData(new Object[]{"WSO2", 123.4, 2, 12.4, 1.3});
+        Map<String, String> arbitrary = new HashMap<String, String>();
+        arbitrary.put("test", "testValue");
+        arbitrary.put("test1", "test123");
+        event.setArbitraryDataMap(arbitrary);
 
         int numberOfEventsSent = 1000;
         for (int i = 0; i < numberOfEventsSent; i++) {

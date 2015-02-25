@@ -23,11 +23,13 @@ public class BinaryDataReceiverConstants {
     public static final int DEFAULT_SSL_RECEIVER_PORT = 9611;
     public static final int DEFAULT_TCP_RECEIVER_PORT = 9711;
     public static final String DATA_BRIDGE_RECEIVER_CONFIG_NAME = "Binary";
-
     public static final String SSL_RECEIVER_PORT_CONFIG_NAME = "sslPort";
     public static final String TCP_RECEIVER_PORT_CONFIG_NAME = "tcpPort";
     public static final String SSL_RECEIVER_THREAD_POOL_SIZE = "sslReceiverThreadPoolSize";
     public static final String TCP_RECEIVER_THREAD_POOL_SIZE = "tcpReceiverThreadPoolSize";
-
     public static final String CARBON_CONFIG_PORT_OFFSET_NODE = "Ports.Offset";
+    public static final String META_DATA_FIELD = "Meta Data";
+    public static final String PAYLOAD_DATA_FIELD = "Payload Data";
+    public static final String CORRELATION_DATA_FIELD = "Correlation Data";
+    public static final String ARBITRARY_DATA_FIELD = "Arbitrary Data";
 }

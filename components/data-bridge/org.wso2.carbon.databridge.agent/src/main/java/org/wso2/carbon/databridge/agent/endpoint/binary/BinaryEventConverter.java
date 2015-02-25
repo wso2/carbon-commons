@@ -20,7 +20,9 @@ package org.wso2.carbon.databridge.agent.endpoint.binary;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.binary.BinaryMessageConstants;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class BinaryEventConverter {
     public static String createBinaryLoginMessage(String userName, String password) {
@@ -61,26 +63,38 @@ public class BinaryEventConverter {
                 append(event.getStreamId()).append("\n");
         message.append(BinaryMessageConstants.TIME_STAMP_PREFIX).
                 append(event.getTimeStamp()).append("\n");
-        if (event.getMetaData() != null) {
+        if (event.getMetaData() != null && event.getMetaData().length != 0) {
             message.append(BinaryMessageConstants.START_META_DATA).append("\n");
             for (Object aMetaData : event.getMetaData()) {
                 message.append(aMetaData.toString()).append("\n");
             }
             message.append(BinaryMessageConstants.END_META_DATA).append("\n");
         }
-        if (event.getCorrelationData() != null) {
+        if (event.getCorrelationData() != null && event.getCorrelationData().length != 0) {
             message.append(BinaryMessageConstants.START_CORRELATION_DATA).append("\n");
             for (Object aCorrelationData : event.getCorrelationData()) {
                 message.append(aCorrelationData.toString()).append("\n");
             }
             message.append(BinaryMessageConstants.END_CORRELATION_DATA).append("\n");
         }
-        if (event.getPayloadData() != null) {
+        if (event.getPayloadData() != null && event.getPayloadData().length != 0) {
             message.append(BinaryMessageConstants.START_PAYLOAD_DATA).append("\n");
             for (Object aPayloadData : event.getPayloadData()) {
                 message.append(aPayloadData.toString()).append("\n");
             }
             message.append(BinaryMessageConstants.END_PAYLOAD_DATA).append("\n");
+        }
+        if (event.getArbitraryDataMap() != null && !event.getArbitraryDataMap().isEmpty()) {
+            message.append(BinaryMessageConstants.START_ARBITRARY_DATA).append("\n");
+            Iterator<String> eventProps = event.getArbitraryDataMap().keySet().iterator();
+            Map<String, String> properties = event.getArbitraryDataMap();
+            while (eventProps.hasNext()) {
+                String propertyName = eventProps.next();
+                message.append(propertyName).append(BinaryMessageConstants.PARAMS_SEPARATOR)
+                        .append(properties.get(propertyName));
+                message.append("\n");
+            }
+            message.append(BinaryMessageConstants.END_ARBITRARY_DATA).append("\n");
         }
         message.append(BinaryMessageConstants.END_EVENT).append("\n");
     }

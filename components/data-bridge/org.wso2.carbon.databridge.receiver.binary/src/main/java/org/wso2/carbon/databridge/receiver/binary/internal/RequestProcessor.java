@@ -102,29 +102,42 @@ public class RequestProcessor {
         } else if (matchedElement.equals(BinaryMessageConstants.TIME_STAMP_PREFIX)) {
             nextExpectedElement = new String[]{BinaryMessageConstants.START_META_DATA,
                     BinaryMessageConstants.START_CORRELATION_DATA,
-                    BinaryMessageConstants.START_PAYLOAD_DATA};
+                    BinaryMessageConstants.START_PAYLOAD_DATA,
+                    BinaryMessageConstants.START_ARBITRARY_DATA};
         } else if (messageLine.equals(BinaryMessageConstants.START_META_DATA)) {
             nextExpectedElement = new String[0];
         } else if (messageLine.equals(BinaryMessageConstants.START_CORRELATION_DATA)) {
             nextExpectedElement = new String[0];
         } else if (messageLine.equals(BinaryMessageConstants.START_PAYLOAD_DATA)) {
             nextExpectedElement = new String[0];
+        } else if (messageLine.equals(BinaryMessageConstants.START_ARBITRARY_DATA)) {
+            nextExpectedElement = new String[0];
         } else if (messageLine.equals(BinaryMessageConstants.END_META_DATA)) {
             nextExpectedElement = new String[]{
                     BinaryMessageConstants.START_CORRELATION_DATA,
                     BinaryMessageConstants.START_PAYLOAD_DATA,
+                    BinaryMessageConstants.START_ARBITRARY_DATA,
                     BinaryMessageConstants.END_EVENT,
                     BinaryMessageConstants.END_MESSAGE};
         } else if (messageLine.equals(BinaryMessageConstants.END_CORRELATION_DATA)) {
             nextExpectedElement = new String[]{
                     BinaryMessageConstants.START_META_DATA,
                     BinaryMessageConstants.START_PAYLOAD_DATA,
+                    BinaryMessageConstants.START_ARBITRARY_DATA,
                     BinaryMessageConstants.END_EVENT,
                     BinaryMessageConstants.END_MESSAGE};
         } else if (messageLine.equals(BinaryMessageConstants.END_PAYLOAD_DATA)) {
             nextExpectedElement = new String[]{
                     BinaryMessageConstants.START_META_DATA,
                     BinaryMessageConstants.START_CORRELATION_DATA,
+                    BinaryMessageConstants.START_ARBITRARY_DATA,
+                    BinaryMessageConstants.END_EVENT,
+                    BinaryMessageConstants.END_MESSAGE};
+        } else if (messageLine.equals(BinaryMessageConstants.END_ARBITRARY_DATA)) {
+            nextExpectedElement = new String[]{
+                    BinaryMessageConstants.START_META_DATA,
+                    BinaryMessageConstants.START_CORRELATION_DATA,
+                    BinaryMessageConstants.START_PAYLOAD_DATA,
                     BinaryMessageConstants.END_EVENT,
                     BinaryMessageConstants.END_MESSAGE};
         } else if (messageLine.equals(BinaryMessageConstants.END_EVENT)) {

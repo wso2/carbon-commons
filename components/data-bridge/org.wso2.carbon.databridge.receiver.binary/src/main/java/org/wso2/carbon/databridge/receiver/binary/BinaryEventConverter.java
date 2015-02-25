@@ -27,8 +27,7 @@ import org.wso2.carbon.databridge.core.StreamTypeHolder;
 import org.wso2.carbon.databridge.core.exception.EventConversionException;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,13 +52,14 @@ public class BinaryEventConverter implements EventConverter {
         String metaDataMessage = null;
         String correlationDataMessage = null;
         String payloadDataMessage = null;
+        String arbitraryDataMessage = null;
         String[] eventProps = eventMessage.split("\n");
         Event event = new Event();
         event.setStreamId(eventProps[0].replace(BinaryMessageConstants.STREAM_ID_PREFIX, ""));
         event.setTimeStamp(Long.parseLong(eventProps[1].replace(BinaryMessageConstants.TIME_STAMP_PREFIX, "")));
         List<String> metaData = getSubMessage(BinaryMessageConstants.START_META_DATA,
                 BinaryMessageConstants.END_META_DATA, eventMessage);
-        if (metaData.size() != 0) {
+        if (!metaData.isEmpty()) {
             if (metaData.size() > 1) {
                 throw new MalformedEventException("More than one meta data element found on event : " + eventMessage);
             }
@@ -67,20 +67,29 @@ public class BinaryEventConverter implements EventConverter {
         }
         List<String> correlationData = getSubMessage(BinaryMessageConstants.START_CORRELATION_DATA,
                 BinaryMessageConstants.END_CORRELATION_DATA, eventMessage);
-        if (correlationData.size() != 0) {
+        if (!correlationData.isEmpty()) {
             if (correlationData.size() > 1) {
-                throw new MalformedEventException("More than one meta data element found on event : " + eventMessage);
+                throw new MalformedEventException("More than one correlation data element found on event : " + eventMessage);
             }
             correlationDataMessage = correlationData.get(0);
         }
         List<String> payloadData = getSubMessage(BinaryMessageConstants.START_PAYLOAD_DATA,
                 BinaryMessageConstants.END_PAYLOAD_DATA, eventMessage);
-        if (payloadData.size() != 0) {
+        if (!payloadData.isEmpty()) {
             if (payloadData.size() > 1) {
-                throw new MalformedEventException("More than one meta data element found on event : " + eventMessage);
+                throw new MalformedEventException("More than one meta payload element found on event : " + eventMessage);
             }
             payloadDataMessage = payloadData.get(0);
         }
+        List<String> arbitraryData = getSubMessage(BinaryMessageConstants.START_ARBITRARY_DATA,
+                BinaryMessageConstants.END_ARBITRARY_DATA, eventMessage);
+        if (!arbitraryData.isEmpty()) {
+            if (arbitraryData.size() > 1) {
+                throw new MalformedEventException("More than one meta arbitrary element found on event : " + eventMessage);
+            }
+            arbitraryDataMessage = arbitraryData.get(0);
+        }
+
         AttributeType[][] attributeTypeOrder = streamTypeHolder.getDataType(event.getStreamId());
         if (attributeTypeOrder == null) {
             PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
@@ -95,9 +104,14 @@ public class BinaryEventConverter implements EventConverter {
                         + " present in cache ");
             }
         }
-        event.setMetaData(this.toObjectArray(metaDataMessage, attributeTypeOrder[0], "Meta Data"));
-        event.setCorrelationData(this.toObjectArray(correlationDataMessage, attributeTypeOrder[1], "Correlation Data"));
-        event.setPayloadData(this.toObjectArray(payloadDataMessage, attributeTypeOrder[2], "Payload Data"));
+        event.setMetaData(this.toObjectArray(metaDataMessage, attributeTypeOrder[0],
+                BinaryDataReceiverConstants.META_DATA_FIELD));
+        event.setCorrelationData(this.toObjectArray(correlationDataMessage, attributeTypeOrder[1],
+                BinaryDataReceiverConstants.CORRELATION_DATA_FIELD));
+        event.setPayloadData(this.toObjectArray(payloadDataMessage, attributeTypeOrder[2],
+                BinaryDataReceiverConstants.PAYLOAD_DATA_FIELD));
+        event.setArbitraryDataMap(this.toStringMap(arbitraryDataMessage,
+                BinaryDataReceiverConstants.ARBITRARY_DATA_FIELD));
         return event;
     }
 
@@ -146,6 +160,25 @@ public class BinaryEventConverter implements EventConverter {
         } else {
             return null;
         }
+    }
+
+    public Map<String, String> toStringMap(String attributeMessage,
+                                           String type) {
+        if (attributeMessage == null) {
+            throw new MalformedEventException("Expected event attribute type: " + type +
+                    " but it's is missing in the event");
+        }
+        String[] attributes = attributeMessage.trim().split("\n");
+        Map<String, String> eventProps = new HashMap<String, String>();
+        for (String aAttribute : attributes) {
+            String[] aProperty = aAttribute.trim().split(BinaryMessageConstants.PARAMS_SEPARATOR);
+            if (aProperty.length != 2) {
+                throw new MalformedEventException("Arbitrary data sent in the events are not in " +
+                        "expected pattern, found : " + Arrays.toString(aProperty));
+            }
+            eventProps.put(aProperty[0], aProperty[1]);
+        }
+        return eventProps;
     }
 
 

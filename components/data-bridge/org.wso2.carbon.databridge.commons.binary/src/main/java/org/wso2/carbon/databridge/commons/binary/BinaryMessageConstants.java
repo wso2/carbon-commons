@@ -33,6 +33,8 @@ public class BinaryMessageConstants {
     public static final String START_META_DATA = "START_META_DATA";
     public static final String START_CORRELATION_DATA = "START_CORRELATION_DATA";
     public static final String START_PAYLOAD_DATA = "START_PAYLOAD";
+    public static final String START_ARBITRARY_DATA = "START_ARBITRARY";
+    public static final String END_ARBITRARY_DATA = "END_ARBITRARY";
     public static final String END_META_DATA = "END_META_DATA";
     public static final String END_CORRELATION_DATA = "END_CORRELATION_DATA";
     public static final String END_PAYLOAD_DATA = "END_PAYLOAD";
