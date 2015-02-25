@@ -110,8 +110,7 @@ public class BinaryEventConverter implements EventConverter {
                 BinaryDataReceiverConstants.CORRELATION_DATA_FIELD));
         event.setPayloadData(this.toObjectArray(payloadDataMessage, attributeTypeOrder[2],
                 BinaryDataReceiverConstants.PAYLOAD_DATA_FIELD));
-        event.setArbitraryDataMap(this.toStringMap(arbitraryDataMessage,
-                BinaryDataReceiverConstants.ARBITRARY_DATA_FIELD));
+        event.setArbitraryDataMap(this.toStringMap(arbitraryDataMessage));
         return event;
     }
 
@@ -162,12 +161,7 @@ public class BinaryEventConverter implements EventConverter {
         }
     }
 
-    public Map<String, String> toStringMap(String attributeMessage,
-                                           String type) {
-        if (attributeMessage == null) {
-            throw new MalformedEventException("Expected event attribute type: " + type +
-                    " but it's is missing in the event");
-        }
+    public Map<String, String> toStringMap(String attributeMessage) {
         String[] attributes = attributeMessage.trim().split("\n");
         Map<String, String> eventProps = new HashMap<String, String>();
         for (String aAttribute : attributes) {
