@@ -21,7 +21,6 @@ package org.wso2.carbon.databridge.receiver.binary;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.base.ServerConfiguration;
-import org.wso2.carbon.databridge.commons.binary.BinaryMessageConstants;
 import org.wso2.carbon.databridge.commons.binary.BinaryMessageConverterUtil;
 import org.wso2.carbon.databridge.core.DataBridgeReceiverService;
 import org.wso2.carbon.databridge.core.exception.DataBridgeException;
@@ -29,7 +28,6 @@ import org.wso2.carbon.databridge.receiver.binary.conf.BinaryDataReceiverConfigu
 import org.wso2.carbon.databridge.receiver.binary.internal.RequestProcessor;
 
 import javax.net.ServerSocketFactory;
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import java.io.*;
@@ -38,23 +36,15 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Binary Transport Receiver implementation.
+ */
 public class BinaryDataReceiver {
     private static final Log log = LogFactory.getLog(BinaryDataReceiver.class);
     private DataBridgeReceiverService dataBridgeReceiverService;
     private BinaryDataReceiverConfiguration binaryDataReceiverConfiguration;
     private ExecutorService sslReceiverExecutorService;
     private ExecutorService tcpReceiverExecutorService;
-
-
-    public BinaryDataReceiver(int sslPort, int tcpPort,
-                              DataBridgeReceiverService dataBridgeReceiverService) {
-        this.dataBridgeReceiverService = dataBridgeReceiverService;
-        this.binaryDataReceiverConfiguration = new BinaryDataReceiverConfiguration(sslPort, tcpPort);
-        this.sslReceiverExecutorService = Executors.newFixedThreadPool(binaryDataReceiverConfiguration.
-                getSizeOfSSLThreadPool());
-        this.tcpReceiverExecutorService = Executors.newFixedThreadPool(binaryDataReceiverConfiguration.
-                getSizeOfTCPThreadPool());
-    }
 
     public BinaryDataReceiver(BinaryDataReceiverConfiguration binaryDataReceiverConfiguration,
                               DataBridgeReceiverService dataBridgeReceiverService) {
@@ -134,7 +124,7 @@ public class BinaryDataReceiver {
                     InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
                     BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
                     BufferedWriter outputStream = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-                    String messageLine = null;
+                    String messageLine;
                     RequestProcessor requestProcessor = new RequestProcessor(dataBridgeReceiverService);
                     while ((messageLine = bufferedreader.readLine()) != null) {
                         if (requestProcessor.isMessageEnded()) {

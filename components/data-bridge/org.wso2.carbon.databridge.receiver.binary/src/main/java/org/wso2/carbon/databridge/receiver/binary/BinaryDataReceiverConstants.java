@@ -17,7 +17,16 @@
 */
 package org.wso2.carbon.databridge.receiver.binary;
 
+/**
+ * Holds the constants that are used in Binary receiver.
+ */
 public class BinaryDataReceiverConstants {
+    /**
+     * To avoid instantiation.
+     */
+    private BinaryDataReceiverConstants(){
+
+    }
     public static final int DEFAULT_SSL_RECEIVER_THREAD_POOL_SIZE = 100;
     public static final int DEFAULT_TCP_RECEIVER_THREAD_POOL_SIZE = 100;
     public static final int DEFAULT_SSL_RECEIVER_PORT = 9611;

@@ -31,6 +31,11 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * This class is a implementation EventConverter to create the event from the Binary message.
+ * This is used within data bridge to create the event from the row message received.
+ *
+ */
 public class BinaryEventConverter implements EventConverter {
     private static BinaryEventConverter instance = new BinaryEventConverter();
 

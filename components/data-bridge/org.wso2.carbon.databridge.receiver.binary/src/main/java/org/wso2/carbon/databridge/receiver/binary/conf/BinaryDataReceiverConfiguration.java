@@ -22,6 +22,9 @@ import org.wso2.carbon.databridge.core.conf.DataReceiver;
 import org.wso2.carbon.databridge.receiver.binary.BinaryDataReceiverConstants;
 import org.wso2.carbon.utils.CarbonUtils;
 
+/**
+ * The receiver configuration for Binary Transport Receiver
+ */
 public class BinaryDataReceiverConfiguration {
     private int sslPort;
     private int tcpPort;
@@ -48,13 +51,6 @@ public class BinaryDataReceiverConfiguration {
         this.sizeOfTCPThreadPool = Integer.parseInt(dataReceiver.getConfiguration(
                 BinaryDataReceiverConstants.TCP_RECEIVER_THREAD_POOL_SIZE,
                 BinaryDataReceiverConstants.DEFAULT_TCP_RECEIVER_THREAD_POOL_SIZE).toString());
-    }
-
-    public BinaryDataReceiverConfiguration(int sslPort, int tcpPort, int sizeOfSSLThreadPool, int sizeOfTCPThreadPool) {
-        this.sslPort = sslPort;
-        this.tcpPort = tcpPort;
-        this.sizeOfSSLThreadPool = sizeOfSSLThreadPool;
-        this.sizeOfTCPThreadPool = sizeOfTCPThreadPool;
     }
 
     public int getSSLPort() {

@@ -47,8 +47,8 @@ public class RequestProcessor {
      * Read the message and validate it, and put the string binary bundle to queue.
      * and pass the event converter for binary message
      *
-     * @param messageLine
-     * @return
+     * @param messageLine One line of binary message received.
+     * @return returns response that needs to be sent back to the client.
      */
     public String consume(String messageLine) throws
             Exception {
