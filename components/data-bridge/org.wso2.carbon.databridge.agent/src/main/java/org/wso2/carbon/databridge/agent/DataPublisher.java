@@ -279,8 +279,10 @@ public class DataPublisher {
      *                             definition of the event, and intermittent data.
      */
     public void publish(String streamId, long timeStamp, Object[] metaDataArray,
-                        Object[] correlationDataArray, Object[] payloadDataArray, Map<String, String> arbitraryDataMap) {
-        publish(new Event(streamId, timeStamp, metaDataArray, correlationDataArray, payloadDataArray, arbitraryDataMap));
+                        Object[] correlationDataArray, Object[] payloadDataArray,
+                        Map<String, String> arbitraryDataMap) {
+        publish(new Event(streamId, timeStamp, metaDataArray, correlationDataArray,
+                payloadDataArray, arbitraryDataMap));
     }
 
     /**
