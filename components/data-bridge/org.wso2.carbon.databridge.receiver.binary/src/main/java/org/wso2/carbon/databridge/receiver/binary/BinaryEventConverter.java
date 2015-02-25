@@ -162,17 +162,20 @@ public class BinaryEventConverter implements EventConverter {
     }
 
     public Map<String, String> toStringMap(String attributeMessage) {
-        String[] attributes = attributeMessage.trim().split("\n");
-        Map<String, String> eventProps = new HashMap<String, String>();
-        for (String aAttribute : attributes) {
-            String[] aProperty = aAttribute.trim().split(BinaryMessageConstants.PARAMS_SEPARATOR);
-            if (aProperty.length != 2) {
-                throw new MalformedEventException("Arbitrary data sent in the events are not in " +
-                        "expected pattern, found : " + Arrays.toString(aProperty));
+        if (attributeMessage != null) {
+            String[] attributes = attributeMessage.trim().split("\n");
+            Map<String, String> eventProps = new HashMap<String, String>();
+            for (String aAttribute : attributes) {
+                String[] aProperty = aAttribute.trim().split(BinaryMessageConstants.PARAMS_SEPARATOR);
+                if (aProperty.length != 2) {
+                    throw new MalformedEventException("Arbitrary data sent in the events are not in " +
+                            "expected pattern, found : " + Arrays.toString(aProperty));
+                }
+                eventProps.put(aProperty[0], aProperty[1]);
             }
-            eventProps.put(aProperty[0], aProperty[1]);
+            return eventProps;
         }
-        return eventProps;
+        return null;
     }
 
 

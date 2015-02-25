@@ -26,6 +26,10 @@ import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * This class implements AbstractClientPoolFactory to handle the Binary transport related connections.
+ *
+ */
 public class BinaryClientPoolFactory extends AbstractClientPoolFactory {
     private static Log log = LogFactory.getLog(BinaryClientPoolFactory.class);
 

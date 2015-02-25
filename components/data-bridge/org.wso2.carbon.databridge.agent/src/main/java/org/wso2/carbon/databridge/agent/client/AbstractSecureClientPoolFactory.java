@@ -17,6 +17,9 @@
 */
 package org.wso2.carbon.databridge.agent.client;
 
+/**
+ * This abstract class needs to be implemented to handling secure communication with the endpoint.
+ */
 public abstract class AbstractSecureClientPoolFactory extends AbstractClientPoolFactory {
 
     private String trustStorePassword;

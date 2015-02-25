@@ -37,15 +37,30 @@ import java.util.ArrayList;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * This class holds the endpoints associated within a group. Also it has a queue
+ * to hold the list of events that needs to be processed by the endpoints with
+ * provided the load balancing, or failover configuration.
+ *
+ */
+
 public class DataEndpointGroup implements DataEndpointFailureCallback {
     private static final Log log = LogFactory.getLog(DataEndpointGroup.class);
+
     private ArrayList<DataEndpoint> dataEndpoints;
+
     private ArrayList<DataEndpoint> failedEventsDataEndpoints;
+
     private HAType haType;
+
     private EventQueue eventQueue;
+
     private int reconnectionInterval;
+
     private AtomicInteger currentDataPublisherIndex = new AtomicInteger();
+    
     private AtomicInteger maximumDataPublisherIndex = new AtomicInteger();
+
     private ScheduledExecutorService reconnectionService = Executors.newScheduledThreadPool(1);
 
     private final Integer START_INDEX = 0;
@@ -81,7 +96,6 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
     public void publish(Event event) {
         eventQueue.put(event);
     }
-
 
     class EventQueue {
         private RingBuffer<Event> ringBuffer;
@@ -271,7 +285,8 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
                 }
             }
             if (!isOneReceiverConnected) {
-                log.info("No receiver is reachable at reconnection, will try to reconnect every " + reconnectionInterval + " sec");
+                log.info("No receiver is reachable at reconnection, will try to reconnect every "
+                        + reconnectionInterval + " sec");
             }
         }
 

@@ -28,6 +28,11 @@ import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
 import org.wso2.carbon.databridge.commons.thrift.service.secure.ThriftSecureEventTransmissionService;
 
 
+/**
+ * This is a Thrift secure transport implementation for AbstractSecureClientPoolFactory
+ * to be used by the Thrift Endpoint.
+ */
+
 public class ThriftSecureClientPoolFactory extends AbstractSecureClientPoolFactory {
 
     private TSSLTransportFactory.TSSLTransportParameters params;

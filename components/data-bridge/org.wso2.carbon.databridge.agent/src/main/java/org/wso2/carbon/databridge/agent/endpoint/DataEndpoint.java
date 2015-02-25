@@ -33,20 +33,34 @@ import java.util.ArrayList;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Abstract class for DataEndpoint, and this is a main class that needs to be implemented
+ * for supporting different transports to DataPublisher. This abstraction provides the additional
+ * functionality to handle failover, asynchronous connection to the endpoint, etc.
+ */
+
 public abstract class DataEndpoint {
+
     private static Log log = LogFactory.getLog(DataEndpoint.class);
 
     private boolean active;
+
     private DataEndpointConnectionWorker connectionWorker;
+
     private GenericKeyedObjectPool transportPool;
+
     private int batchSize;
 
     private AtomicBoolean isPublishing;
+
     private AtomicBoolean hasFailedEvents;
+
     private EventPublisher eventPublisher;
+
     private DataEndpointFailureCallback dataEndpointFailureCallback;
 
     private ExecutorService connectionService;
+
     private ArrayList<Event> events;
 
     public DataEndpoint() {
@@ -97,10 +111,26 @@ public abstract class DataEndpoint {
         connect();
     }
 
-    protected abstract String connect(Object client, String userName, String password)
+    /**
+     * Login to the endpoint and return the sessionId.
+     *
+     * @param client   The client which can be used to connect to the endpoint.
+     * @param userName The username which is used to login,
+     * @param password The password which is required for the login operation.
+     * @return returns the sessionId
+     * @throws DataEndpointAuthenticationException
+     */
+    protected abstract String login(Object client, String userName, String password)
             throws DataEndpointAuthenticationException;
 
-    protected abstract void disconnect(Object client, String sessionId)
+    /**
+     * Logout from the endpoint.
+     *
+     * @param client    The client that is used to logout operation.
+     * @param sessionId The current session Id.
+     * @throws DataEndpointAuthenticationException
+     */
+    protected abstract void logout(Object client, String sessionId)
             throws DataEndpointAuthenticationException;
 
 
@@ -116,6 +146,15 @@ public abstract class DataEndpoint {
         active = false;
     }
 
+    /**
+     * Send the list of events to the actual endpoint.
+     *
+     * @param client The client that can be used to send the events.
+     * @param events List of events that needs to be sent.
+     * @throws DataEndpointException
+     * @throws SessionTimeoutException
+     * @throws UndefinedEventTypeException
+     */
     protected abstract void send(Object client, ArrayList<Event> events) throws
             DataEndpointException, SessionTimeoutException, UndefinedEventTypeException;
 
@@ -150,13 +189,15 @@ public abstract class DataEndpoint {
         dataEndpointFailureCallback = callback;
     }
 
+    /**
+     * Event Publisher worker thread to actually sends the events to the endpoint.
+     */
     class EventPublisher implements Runnable {
         private DataEndpoint dataEndpoint;
 
         EventPublisher(DataEndpoint dataEndpoint) {
             this.dataEndpoint = dataEndpoint;
         }
-
 
         @Override
         public void run() {
@@ -225,14 +266,26 @@ public abstract class DataEndpoint {
         if (isPublishing.get()) {
             try {
                 Thread.sleep(100);
-            } catch (InterruptedException e) {
+            } catch (InterruptedException ignored) {
             }
         }
         connectionWorker.disconnect(getDataEndpointConfiguration());
         connectionService.shutdown();
     }
 
+    /**
+     * Get the class name of implementation for
+     * org.wso2.carbon.databridge.agent.client.AbstractClientPoolFactory class.
+     *
+     * @return Canonical name of the implementing class.
+     */
     public abstract String getClientPoolFactoryClass();
 
+    /**
+     * Get the class name of implementation for
+     * org.wso2.carbon.databridge.agent.client.AbstractSecureClientPoolFactory class.
+     *
+     * @return Canonical name of the implementing class.
+     */
     public abstract String getSecureClientPoolFactoryClass();
 }

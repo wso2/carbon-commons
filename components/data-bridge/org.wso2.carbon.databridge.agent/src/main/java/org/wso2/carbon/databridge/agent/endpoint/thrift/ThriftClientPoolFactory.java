@@ -25,6 +25,9 @@ import org.wso2.carbon.databridge.agent.client.AbstractClientPoolFactory;
 import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
 import org.wso2.carbon.databridge.commons.thrift.service.general.ThriftEventTransmissionService;
 
+/**
+ * This is a Thrift Transport implementation for AbstractClientPoolFactory for Thrift Endpoint.
+ */
 public class ThriftClientPoolFactory extends AbstractClientPoolFactory {
 
     @Override

@@ -24,6 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This is a Util class which does the Binary message transformation for publish, login, logout operations.
+ */
 public class BinaryEventConverter {
     public static String createBinaryLoginMessage(String userName, String password) {
         StringBuilder message = new StringBuilder();

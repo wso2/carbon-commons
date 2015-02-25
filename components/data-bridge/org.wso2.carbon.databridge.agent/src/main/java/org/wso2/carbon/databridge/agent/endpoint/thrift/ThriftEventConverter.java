@@ -29,8 +29,9 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * Util class used to convert Events to thrift format
+ * Util class used to convert Events to thrift format.
  */
+
 public final class ThriftEventConverter {
     private static Log log = LogFactory.getLog(ThriftEventConverter.class);
 

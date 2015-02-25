@@ -33,10 +33,14 @@ import org.wso2.carbon.databridge.commons.thrift.service.secure.ThriftSecureEven
 
 import java.util.ArrayList;
 
+/**
+ * This is the DataEndpoint Implementation for thrift transport.
+ *
+ */
 public class ThriftDataEndpoint extends DataEndpoint {
 
     @Override
-    protected String connect(Object client, String userName, String password)
+    protected String login(Object client, String userName, String password)
             throws DataEndpointAuthenticationException {
         try {
             return ((ThriftSecureEventTransmissionService.Client) client).connect(userName, password);
@@ -48,7 +52,7 @@ public class ThriftDataEndpoint extends DataEndpoint {
     }
 
     @Override
-    protected void disconnect(Object client, String sessionId)
+    protected void logout(Object client, String sessionId)
             throws DataEndpointAuthenticationException {
         try {
             ((ThriftSecureEventTransmissionService.Client) client).disconnect(sessionId);

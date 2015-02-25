@@ -22,7 +22,13 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointSecurityException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.agent.util.DataPublisherUtil;
 
+/**
+ * The abstract class that needs to be implemented when supporting a new non-secure transport
+ * to mainly create, validate and terminate  the client to the endpoint.
+ */
+
 public abstract class AbstractClientPoolFactory extends BaseKeyedPoolableObjectFactory {
+
     @Override
     public Object makeObject(Object key)
             throws DataEndpointException, DataEndpointSecurityException {
@@ -30,19 +36,43 @@ public abstract class AbstractClientPoolFactory extends BaseKeyedPoolableObjectF
         return createClient(urlParams[0].toString(),urlParams[1].toString(), Integer.parseInt(urlParams[2].toString()));
     }
 
-    public abstract Object createClient(String protocol, String hostName, int port) throws DataEndpointException, DataEndpointSecurityException;
+    /**
+     * Make a connection to the receiver and return the client.
+     *
+     * @param protocol protocol that is used to connect to the endpoint
+     * @param hostName hostname of the endpoint
+     * @param port port of the endpoint that is listening to
+     * @return A valid client which has connected to the receiver and can be used
+     *         for rest of the operations regarding the endpoint.
+     * @throws DataEndpointException
+     * @throws DataEndpointSecurityException
+     */
+    public abstract Object createClient(String protocol, String hostName, int port)
+            throws DataEndpointException, DataEndpointSecurityException;
 
     @Override
     public boolean validateObject(Object key, Object obj) {
         return validateClient(obj);
     }
 
+    /**
+     * Check the validity of the client whether it's in the position to make the
+     * communication with endpoint.
+     *
+     * @param client Client object which needs to be validated.
+     * @return Returns true/false based on the client is valid or invalid.
+     */
     public abstract boolean validateClient(Object client);
 
     public void destroyObject(Object key, Object obj) {
         terminateClient(obj);
     }
 
+    /**
+     * Terminates the connection between the client and the endpoint.
+     *
+     * @param client The client which needs to be terminated.
+     */
     public abstract void terminateClient(Object client);
 
 }

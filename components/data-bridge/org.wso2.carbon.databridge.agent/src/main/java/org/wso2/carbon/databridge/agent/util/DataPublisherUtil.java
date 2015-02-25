@@ -24,8 +24,25 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * A Util class which holds all the utility processing methods in the data publisher operation.
+ */
+
 public class DataPublisherUtil {
 
+    /**
+     * Making as private to avoid the instantiation of the class.
+     */
+    private DataPublisherUtil() {
+    }
+
+    /**
+     * Process and extracts the receiver Groups from the string of URL set pattern passed in.
+     *
+     * @param urlSet receiverGroups URL set
+     * @return List of Receiver groups
+     * @throws DataEndpointConfigurationException
+     */
     public static ArrayList<Object[]> getEndpointGroups(String urlSet)
             throws DataEndpointConfigurationException {
         ArrayList<String> urlGroups = new ArrayList<String>();
@@ -50,15 +67,14 @@ public class DataPublisherUtil {
      * for specify the URLs are failover configuration or LB configuration.
      * From the 2nd element onwards the object array will hold the separated URLs
      *
-     * @param aURLGroup
+     * @param aURLGroup one receiver group's URL
      * @return First element - boolean (isFailOver), next elements are each URLs
      * @throws DataEndpointConfigurationException
-     *
      */
     private static Object[] getEndpoints(String aURLGroup)
             throws DataEndpointConfigurationException {
         boolean isLBURL = false, isFailOverURL = false;
-        String[] urls = null;
+        String[] urls;
         if (aURLGroup.contains(",")) isLBURL = true;
         if (aURLGroup.contains("|")) isFailOverURL = true;
 
@@ -81,6 +97,16 @@ public class DataPublisherUtil {
     }
 
 
+    /**
+     * Validate whether the receiverGroup and authenticationGroups are matching with pattern.
+     * Basically if the receiver groups has been configured to be in the failover pattern,
+     * then the authentication URL also needs to be in the same way. Hence this method validates
+     * the provided receiverGroups, and authenticationGroup.
+     *
+     * @param receiverGroups List of Receiver groups
+     * @param authGroups     List of Authentication groups.
+     * @throws DataEndpointConfigurationException
+     */
     public static void validateURLs(ArrayList receiverGroups, ArrayList authGroups)
             throws DataEndpointConfigurationException {
         if (receiverGroups.size() == authGroups.size()) {
@@ -111,6 +137,14 @@ public class DataPublisherUtil {
     }
 
 
+    /**
+     * Returns the URL set string based on the URLs provided. The first element of the array is
+     * a boolean which indicates whether it's failover or load balancing.
+     *
+     * @param urlGroup Array of url and the first element of array should specify
+     *                 whether its load balancing or fail over
+     * @return String representation of URL set.
+     */
     private static String getURLSet(Object[] urlGroup) {
         boolean isFailOver = (Boolean) urlGroup[0];
         String urlSet = "";
@@ -124,20 +158,38 @@ public class DataPublisherUtil {
         return urlSet;
     }
 
-    public static String[] getProtocolHostPort(String url){
+    /**
+     * Extracts and return the protocol, host, port elements from the URL.
+     *
+     * @param url String of URL that needs to be processed.
+     * @return Array which has elements - protocol, host, and port in the given order.
+     */
+    public static String[] getProtocolHostPort(String url) {
         String[] keyElements = url.split(DataEndpointConstants.SEPARATOR);
         String[] urlElements = keyElements[0].split(":");
         return new String[]{urlElements[0], urlElements[1].replace("//", ""), urlElements[2]};
     }
 
-    public static String getDefaultAuthUrl(String receiverURL){
+    /**
+     * Deduce the default authentication URL based on the receiver URL passed in.
+     *
+     * @param receiverURL receiver URL for which it's required to get the authentication URL.
+     * @return default authentication URL.
+     */
+    public static String getDefaultAuthUrl(String receiverURL) {
         String[] urlElements = getProtocolHostPort(receiverURL);
         int port = Integer.parseInt(urlElements[2]);
         String host = urlElements[1];
-        return DataEndpointConfiguration.Protocol.SSL.toString()+"://"+host+":"+
-                (port+DataEndpointConstants.DEFAULT_AUTH_PORT_OFFSET);
+        return DataEndpointConfiguration.Protocol.SSL.toString() + "://" + host + ":" +
+                (port + DataEndpointConstants.DEFAULT_AUTH_PORT_OFFSET);
     }
 
+    /**
+     * Deduce the default authentication URL set based on the receiver URL set passed in.
+     *
+     * @param receiverURLSet receiver URL set for which it's required to get the authentication URL set.
+     * @return default authentication URL set.
+     */
     public static String getDefaultAuthURLSet(String receiverURLSet) throws DataEndpointConfigurationException {
         ArrayList<Object[]> receiverURLGroups = DataPublisherUtil.getEndpointGroups(receiverURLSet);
         String authURLSet = "";

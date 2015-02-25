@@ -103,11 +103,11 @@ public class OneEndPointDPTest extends TestCase {
     }
 
     public void testOneDataEndpointWithArbitraryEventFields() throws DataEndpointAuthenticationException, DataEndpointAgentConfigurationException, TransportException, DataEndpointException, DataEndpointConfigurationException, MalformedStreamDefinitionException, DataBridgeException, StreamDefinitionStoreException, IOException {
-        startServer(9681, 9781);
+        startServer(9601, 9701);
         AgentHolder.setConfigPath(DataPublisherTestUtil.getDataAgentConfigPath());
         String hostName = DataPublisherTestUtil.LOCAL_HOST;
-        DataPublisher dataPublisher = new DataPublisher("Binary", "tcp://" + hostName + ":9681",
-                "ssl://" + hostName + ":9781", "admin", "admin");
+        DataPublisher dataPublisher = new DataPublisher("Binary", "tcp://" + hostName + ":9601",
+                "ssl://" + hostName + ":9701", "admin", "admin");
         Event event = new Event();
         event.setStreamId(DataBridgeCommonsUtils.generateStreamId(STREAM_NAME, VERSION));
         event.setMetaData(new Object[]{"127.0.0.1"});

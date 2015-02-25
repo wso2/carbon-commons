@@ -23,11 +23,18 @@ import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationExce
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
 
-public class DataEndpointConnectionWorker implements Runnable {
-    private static Log log = LogFactory.getLog(DataEndpointConnectionWorker.class);
-    private DataEndpointConfiguration dataEndpointConfiguration;
-    private DataEndpoint dataEndpoint;
+/**
+ * DataEndpoint Connection worker class implementation.
+ *
+ */
 
+public class DataEndpointConnectionWorker implements Runnable {
+
+    private static Log log = LogFactory.getLog(DataEndpointConnectionWorker.class);
+
+    private DataEndpointConfiguration dataEndpointConfiguration;
+
+    private DataEndpoint dataEndpoint;
 
     @Override
     public void run() {
@@ -56,8 +63,8 @@ public class DataEndpointConnectionWorker implements Runnable {
      * Initialize the data endpoint connection worker.
      * A connection worker can be instantiated only ONE time.
      *
-     * @param dataEndpoint
-     * @param dataEndpointConfiguration
+     * @param dataEndpoint DataEndpoint instance to handle the connection.
+     * @param dataEndpointConfiguration DataEndpointConfiguration to handle the connection.
      * @throws DataEndpointException
      */
 
@@ -85,7 +92,7 @@ public class DataEndpointConnectionWorker implements Runnable {
             client = this.dataEndpointConfiguration.getSecuredTransportPool().
                     borrowObject(dataEndpointConfiguration.getAuthKey());
             String sessionId = this.dataEndpoint.
-                    connect(client, dataEndpointConfiguration.getUsername(),
+                    login(client, dataEndpointConfiguration.getUsername(),
                             dataEndpointConfiguration.getPassword());
             dataEndpointConfiguration.setSessionId(sessionId);
         } catch (Throwable e) {
@@ -106,7 +113,7 @@ public class DataEndpointConnectionWorker implements Runnable {
 
         try {
             client = this.dataEndpointConfiguration.getSecuredTransportPool().borrowObject(dataPublisherConfiguration.getAuthKey());
-            this.dataEndpoint.disconnect(client, dataPublisherConfiguration.getSessionId());
+            this.dataEndpoint.logout(client, dataPublisherConfiguration.getSessionId());
         } catch (Exception e) {
             if (log.isDebugEnabled()) {
                 log.error("Cannot connect to the server at " + dataPublisherConfiguration.getAuthKey() + " Authenticator", e);

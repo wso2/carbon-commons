@@ -30,6 +30,11 @@ import org.wso2.carbon.databridge.agent.endpoint.DataEndpoint;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
+/**
+ * One agent is created for a specific data endpoint type,and this has the resources such as transport pool, etc
+ * which are shared by all the data publishers created for the endpoint type.
+ */
+
 public class DataEndpointAgent {
 
     private ArrayList<DataPublisher> dataPublishers = new ArrayList<DataPublisher>();
@@ -50,12 +55,15 @@ public class DataEndpointAgent {
         try {
             DataEndpoint dataEndpoint = (DataEndpoint) (DataEndpointAgent.class.getClassLoader().
                     loadClass(agentConfiguration.getClassName()).newInstance());
-            AbstractClientPoolFactory clientPoolFactory = (AbstractClientPoolFactory) (DataEndpointAgent.class.getClassLoader().
-                    loadClass(dataEndpoint.getClientPoolFactoryClass()).newInstance());
-            AbstractSecureClientPoolFactory secureClientPoolFactory = (AbstractSecureClientPoolFactory) (DataEndpointAgent.class.getClassLoader().
-                    loadClass(dataEndpoint.getSecureClientPoolFactoryClass()).getConstructor(String.class, String.class).newInstance(
-                    agentConfiguration.getTrustStore(),
-                    agentConfiguration.getTrustStorePassword()));
+            AbstractClientPoolFactory clientPoolFactory = (AbstractClientPoolFactory)
+                    (DataEndpointAgent.class.getClassLoader().
+                            loadClass(dataEndpoint.getClientPoolFactoryClass()).newInstance());
+            AbstractSecureClientPoolFactory secureClientPoolFactory = (AbstractSecureClientPoolFactory)
+                    (DataEndpointAgent.class.getClassLoader().
+                            loadClass(dataEndpoint.getSecureClientPoolFactoryClass()).
+                            getConstructor(String.class, String.class).newInstance(
+                            agentConfiguration.getTrustStore(),
+                            agentConfiguration.getTrustStorePassword()));
             ClientPool clientPool = new ClientPool();
             this.transportPool = clientPool.getClientPool(
                     clientPoolFactory,
@@ -74,15 +82,20 @@ public class DataEndpointAgent {
                     agentConfiguration.getSecureMinIdleTimeInPool());
 
         } catch (InstantiationException e) {
-            throw new DataEndpointAgentConfigurationException("Error while creating the client pool " + e.getMessage(), e);
+            throw new DataEndpointAgentConfigurationException("Error while creating the client pool "
+                    + e.getMessage(), e);
         } catch (IllegalAccessException e) {
-            throw new DataEndpointAgentConfigurationException("Error while creating the client pool " + e.getMessage(), e);
+            throw new DataEndpointAgentConfigurationException("Error while creating the client pool "
+                    + e.getMessage(), e);
         } catch (ClassNotFoundException e) {
-            throw new DataEndpointAgentConfigurationException("Error while creating the client pool " + e.getMessage(), e);
+            throw new DataEndpointAgentConfigurationException("Error while creating the client pool "
+                    + e.getMessage(), e);
         } catch (NoSuchMethodException e) {
-            throw new DataEndpointAgentConfigurationException("Error while creating the client pool " + e.getMessage(), e);
+            throw new DataEndpointAgentConfigurationException("Error while creating the client pool "
+                    + e.getMessage(), e);
         } catch (InvocationTargetException e) {
-            throw new DataEndpointAgentConfigurationException("Error while creating the client pool " + e.getMessage(), e);
+            throw new DataEndpointAgentConfigurationException("Error while creating the client pool "
+                    + e.getMessage(), e);
         }
     }
 
@@ -108,9 +121,8 @@ public class DataEndpointAgent {
 
     public DataEndpoint getNewDataEndpoint() throws DataEndpointException {
         try {
-            DataEndpoint dataEndpoint = (DataEndpoint) (DataEndpointAgent.class.getClassLoader().
+            return (DataEndpoint) (DataEndpointAgent.class.getClassLoader().
                     loadClass(this.getAgentConfiguration().getClassName()).newInstance());
-            return dataEndpoint;
         } catch (InstantiationException e) {
             throw new DataEndpointException("Error while instantiating the endpoint class for endpoint name " +
                     this.getAgentConfiguration().getDataEndpointName() + ". " + e.getMessage(), e);

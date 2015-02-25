@@ -32,11 +32,25 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The holder for all Agents created and this is singleton class.
+ * The Agents will be loaded by reading a configuration file data-agent-conf.xml default.
+ */
+
 public class AgentHolder {
+
     private static Log log = LogFactory.getLog(AgentHolder.class);
+
     private static String configPath;
+
     private static AgentHolder instance;
+
     private Map<String, DataEndpointAgent> dataEndpointAgents;
+
+    /**
+     * If there is no data publisher type is passed from,then the default Agent/Publisher will be used.
+     * The first element in the data-agent-conf.xml is taken as default data publisher type.
+     */
     private String defaultDataEndpointAgentName;
 
     private AgentHolder() throws DataEndpointAgentConfigurationException {
@@ -70,6 +84,12 @@ public class AgentHolder {
         return agent;
     }
 
+    /**
+     * Loading by data-agent-conf.xml via JAXB, and validating the configurations.
+     *
+     * @return Loaded DataAgentsConfiguration from config file.
+     * @throws DataEndpointAgentConfigurationException
+     */
     private DataAgentsConfiguration loadConfiguration()
             throws DataEndpointAgentConfigurationException {
         if (configPath == null) configPath = CarbonUtils.getCarbonConfigDirPath()
@@ -78,7 +98,8 @@ public class AgentHolder {
             File file = new File(configPath);
             JAXBContext jaxbContext = JAXBContext.newInstance(DataAgentsConfiguration.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-            DataAgentsConfiguration dataAgentsConfiguration = (DataAgentsConfiguration) jaxbUnmarshaller.unmarshal(file);
+            DataAgentsConfiguration dataAgentsConfiguration = (DataAgentsConfiguration)
+                    jaxbUnmarshaller.unmarshal(file);
             dataAgentsConfiguration.validateConfigurations();
             return dataAgentsConfiguration;
         } catch (JAXBException e) {
@@ -97,10 +118,24 @@ public class AgentHolder {
         }
     }
 
+    /**
+     * Returns the default agent,and the first element in the data-agent-conf.xml
+     * is taken as default data publisher type.
+     *
+     * @return DataEndpointAgent for the default endpoint name.
+     * @throws DataEndpointAgentConfigurationException
+     */
     public DataEndpointAgent getDefaultDataEndpointAgent() throws DataEndpointAgentConfigurationException {
         return getDataEndpointAgent(defaultDataEndpointAgentName);
     }
 
+    /**
+     * Set the data-agent-conf.xml path from which the Agents for all endpoint types will be loaded.
+     * This is a one time operation, and if you are changing form default config path,
+     * then it needs to be done as first step when the JVM started.
+     *
+     * @param configPath The path of the data-bridge-conf.xml
+     */
     public static void setConfigPath(String configPath) {
         AgentHolder.configPath = configPath;
     }

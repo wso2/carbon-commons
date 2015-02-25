@@ -23,6 +23,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
+/**
+ * Wrapper class for the Agent Configuration which are loaded from data-agent-conf.xml.
+ */
+
 @XmlRootElement (name = "DataAgentsConfiguration")
 public class DataAgentsConfiguration {
 
@@ -37,6 +41,11 @@ public class DataAgentsConfiguration {
         this.agentConfigurations = agentConfigurations;
     }
 
+    /**
+     * Validates the all the agent configurations available.
+     *
+     * @throws DataEndpointAgentConfigurationException
+     */
     public void validateConfigurations() throws DataEndpointAgentConfigurationException {
         for (AgentConfiguration agentConfiguration : agentConfigurations){
             agentConfiguration.validate();

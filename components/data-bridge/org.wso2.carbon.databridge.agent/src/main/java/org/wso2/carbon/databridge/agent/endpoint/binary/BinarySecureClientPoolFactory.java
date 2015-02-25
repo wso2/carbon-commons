@@ -29,6 +29,9 @@ import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.net.Socket;
 
+/**
+ * This is a Binary Transport secure implementation for AbstractSecureClientPoolFactory to be used by BinaryEndpoint.
+ */
 public class BinarySecureClientPoolFactory extends AbstractSecureClientPoolFactory {
     private static Log log = LogFactory.getLog(BinarySecureClientPoolFactory.class);
 

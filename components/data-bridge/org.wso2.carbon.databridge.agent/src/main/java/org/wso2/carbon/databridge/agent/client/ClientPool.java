@@ -20,6 +20,10 @@ package org.wso2.carbon.databridge.agent.client;
 
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 
+/**
+ * This class is used hold the secure/non-secure connections for an Agent.
+ */
+
 public class ClientPool {
     private GenericKeyedObjectPool socketPool;
     private GenericKeyedObjectPool secureSocketPool;

@@ -17,7 +17,6 @@
 */
 package org.wso2.carbon.databridge.agent.endpoint.binary;
 
-import org.wso2.carbon.base.MultitenantConstants;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.agent.endpoint.DataEndpoint;
@@ -30,10 +29,14 @@ import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * This class is Binary transport implementation for the Data Endpoint.
+ *
+ */
 public class BinaryDataEndpoint extends DataEndpoint {
 
     @Override
-    protected String connect(Object client, String userName, String password) throws DataEndpointAuthenticationException {
+    protected String login(Object client, String userName, String password) throws DataEndpointAuthenticationException {
         Socket socket = (Socket) client;
         try {
             return sendAndReceiveResponse(socket, BinaryEventConverter.createBinaryLoginMessage(userName, password),
@@ -49,7 +52,7 @@ public class BinaryDataEndpoint extends DataEndpoint {
     }
 
     @Override
-    protected void disconnect(Object client, String sessionId) throws DataEndpointAuthenticationException {
+    protected void logout(Object client, String sessionId) throws DataEndpointAuthenticationException {
         Socket socket = (Socket) client;
         try {
             sendAndReceiveResponse(socket, BinaryEventConverter.createBinaryLogoutMessage(sessionId),

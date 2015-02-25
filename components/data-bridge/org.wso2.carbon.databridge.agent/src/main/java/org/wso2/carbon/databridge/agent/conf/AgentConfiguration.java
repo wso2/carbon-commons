@@ -23,7 +23,9 @@ import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 
 import javax.xml.bind.annotation.XmlElement;
 
-
+/**
+ * This class has the Agent's POJO representation of the XML data-agent-conf.xml.
+ */
 public class AgentConfiguration {
 
     private String dataEndpointName;
@@ -191,6 +193,11 @@ public class AgentConfiguration {
         this.className = className.trim();
     }
 
+    /**
+     * Validates the configurations that valid.
+     *
+     * @throws DataEndpointAgentConfigurationException
+     */
     public void validate() throws DataEndpointAgentConfigurationException {
         if (this.dataEndpointName == null || this.dataEndpointName.isEmpty()) {
             throw new DataEndpointAgentConfigurationException("Endpoint name is not set in "
