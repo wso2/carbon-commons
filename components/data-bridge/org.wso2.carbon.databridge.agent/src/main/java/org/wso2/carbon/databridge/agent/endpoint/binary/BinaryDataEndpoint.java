@@ -15,22 +15,16 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.endpoint.binary;
+package org.wso2.carbon.databridge.agent.endpoint.binary;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.base.MultitenantConstants;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
-import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpoint;
-import org.wso2.carbon.databridge.agent.internal.endpoint.binary.client.BinaryClientPoolFactory;
-import org.wso2.carbon.databridge.agent.internal.endpoint.binary.client.BinarySecureClientPoolFactory;
+import org.wso2.carbon.databridge.agent.endpoint.DataEndpoint;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.binary.BinaryMessageConstants;
 import org.wso2.carbon.databridge.commons.exception.SessionTimeoutException;
 import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
-import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 import java.io.*;
 import java.net.Socket;
@@ -71,18 +65,12 @@ public class BinaryDataEndpoint extends DataEndpoint {
     }
 
     @Override
-    protected void initialize() throws DataEndpointException {
-    }
-
-    @Override
     protected void send(Object client, ArrayList<Event> events) throws DataEndpointException,
             SessionTimeoutException, UndefinedEventTypeException {
         Socket socket = (Socket) client;
         String sessionId = getDataEndpointConfiguration().getSessionId();
         try {
-            //TODO: propagate tenantId from method
-            sendAndReceiveResponse(socket, BinaryEventConverter.createBinaryPublishMessage(events, sessionId,
-                            MultitenantConstants.SUPER_TENANT_ID),
+            sendAndReceiveResponse(socket, BinaryEventConverter.createBinaryPublishMessage(events, sessionId),
                     BinaryMessageConstants.PUBLISH_OPERATION);
         } catch (Exception e) {
             if (e instanceof DataEndpointException) {

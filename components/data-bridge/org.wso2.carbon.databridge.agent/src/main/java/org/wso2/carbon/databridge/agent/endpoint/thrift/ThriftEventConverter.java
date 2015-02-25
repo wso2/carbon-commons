@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.databridge.agent.internal.endpoint.thrift;
+package org.wso2.carbon.databridge.agent.endpoint.thrift;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

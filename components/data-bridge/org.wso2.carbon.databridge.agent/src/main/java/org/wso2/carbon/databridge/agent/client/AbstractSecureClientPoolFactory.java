@@ -15,10 +15,12 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.client;
+package org.wso2.carbon.databridge.agent.client;
 
 public abstract class AbstractSecureClientPoolFactory extends AbstractClientPoolFactory {
+
     private String trustStorePassword;
+
     private String trustStore;
 
     public AbstractSecureClientPoolFactory(String trustStore, String trustStorePassword) {
@@ -32,13 +34,5 @@ public abstract class AbstractSecureClientPoolFactory extends AbstractClientPool
 
     public String getTrustStore() {
         return trustStore;
-    }
-
-    public void setTrustStorePassword(String trustStorePassword) {
-        this.trustStorePassword = trustStorePassword;
-    }
-
-    public void setTrustStore(String trustStore) {
-        this.trustStore = trustStore;
     }
 }

@@ -20,10 +20,9 @@ package org.wso2.carbon.databridge.agent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.databridge.agent.exception.*;
-import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
-import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpoint;
-import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpointFactory;
-import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpointGroup;
+import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
+import org.wso2.carbon.databridge.agent.endpoint.DataEndpoint;
+import org.wso2.carbon.databridge.agent.endpoint.DataEndpointGroup;
 import org.wso2.carbon.databridge.agent.util.DataPublisherUtil;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.TransportException;
@@ -33,8 +32,11 @@ import java.util.Map;
 
 
 public class DataPublisher {
+
     private static final Log log = LogFactory.getLog(DataPublisher.class);
+
     private ArrayList<DataEndpointGroup> endpointGroups = new ArrayList<DataEndpointGroup>();
+
     private DataEndpointAgent dataEndpointAgent;
 
     public DataPublisher(String receiverURLSet, String authURLSet, String username, String password)
@@ -96,7 +98,7 @@ public class DataPublisher {
                         (String) authGroup[j], username, password, dataEndpointAgent.getTransportPool(),
                         dataEndpointAgent.getSecuredTransportPool(), dataEndpointAgent.
                         getAgentConfiguration().getBatchSize());
-                DataEndpoint dataEndpoint = DataEndpointFactory.getInstance().getNewDataEndpoint(type);
+                DataEndpoint dataEndpoint = dataEndpointAgent.getNewDataEndpoint();
                 dataEndpoint.initialize(endpointConfiguration);
                 endpointGroup.addDataEndpoint(dataEndpoint);
             }

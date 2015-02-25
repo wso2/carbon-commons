@@ -20,11 +20,8 @@
 <DataAgentsConfiguration>
     <Agent>
         <Name>Thrift</Name>
-        <DataEndpointClass>org.wso2.carbon.databridge.agent.internal.endpoint.thrift.ThriftDataEndpoint
-        </DataEndpointClass>
-        <TrustSore>
-            /home/sinthuja/projects/my_scratch/sinthuja/datapublisher/org.wso2.carbon.databridge.agent/4.2.0/src/main/resources/client-truststore.jks
-        </TrustSore>
+        <DataEndpointClass>org.wso2.carbon.databridge.agent.endpoint.thrift.ThriftDataEndpoint</DataEndpointClass>
+        <TrustSore>src/main/resources/client-truststore.jks</TrustSore>
         <TrustSorePassword>wso2carbon</TrustSorePassword>
         <QueueSize>131072</QueueSize>
         <BatchSize>1000</BatchSize>
@@ -40,8 +37,7 @@
     </Agent>
     <Agent>
         <Name>Binary</Name>
-        <DataEndpointClass>org.wso2.carbon.databridge.agent.internal.endpoint.binary.BinaryDataEndpoint
-        </DataEndpointClass>
+        <DataEndpointClass>org.wso2.carbon.databridge.agent.endpoint.binary.BinaryDataEndpoint</DataEndpointClass>
         <TrustSore>src/test/resources/client-truststore.jks</TrustSore>
         <TrustSorePassword>wso2carbon</TrustSorePassword>
         <QueueSize>32768</QueueSize>

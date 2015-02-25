@@ -18,7 +18,7 @@
 package org.wso2.carbon.databridge.agent.util;
 
 import org.wso2.carbon.databridge.agent.exception.DataEndpointConfigurationException;
-import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
+import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;

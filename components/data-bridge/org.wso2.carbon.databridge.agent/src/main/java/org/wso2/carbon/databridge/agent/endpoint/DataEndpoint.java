@@ -15,14 +15,14 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.endpoint;
+package org.wso2.carbon.databridge.agent.endpoint;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
-import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
+import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.SessionTimeoutException;
@@ -94,7 +94,6 @@ public abstract class DataEndpoint {
         this.batchSize = dataEndpointConfiguration.getBatchSize();
         connectionWorker = new DataEndpointConnectionWorker();
         connectionWorker.initialize(this, dataEndpointConfiguration);
-        initialize();
         connect();
     }
 
@@ -103,8 +102,6 @@ public abstract class DataEndpoint {
 
     protected abstract void disconnect(Object client, String sessionId)
             throws DataEndpointAuthenticationException;
-
-    protected abstract void initialize() throws DataEndpointException;
 
 
     public boolean isActive() {

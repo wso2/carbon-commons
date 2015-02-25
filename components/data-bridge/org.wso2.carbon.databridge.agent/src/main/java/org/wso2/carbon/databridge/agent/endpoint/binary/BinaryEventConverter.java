@@ -15,7 +15,7 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.endpoint.binary;
+package org.wso2.carbon.databridge.agent.endpoint.binary;
 
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.binary.BinaryMessageConstants;
@@ -41,11 +41,10 @@ public class BinaryEventConverter {
         return message.toString();
     }
 
-    public static String createBinaryPublishMessage(List<Event> events, String sessionId, int tenantId) {
+    public static String createBinaryPublishMessage(List<Event> events, String sessionId) {
         StringBuilder message = new StringBuilder();
         message.append(BinaryMessageConstants.START_MESSAGE).append("\n");
         message.append(BinaryMessageConstants.SESSION_ID_PREFIX).append(sessionId).append("\n");
-        message.append(BinaryMessageConstants.TENANT_ID_PREFIX).append(tenantId).append("\n");
         message.append(BinaryMessageConstants.PUBLISH_OPERATION).append("\n");
         for (Event event : events) {
             appendBinaryMessageBody(event, message);

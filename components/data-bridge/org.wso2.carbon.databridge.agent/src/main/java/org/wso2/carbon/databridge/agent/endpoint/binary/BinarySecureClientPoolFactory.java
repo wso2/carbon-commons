@@ -15,26 +15,19 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.endpoint.binary.client;
+package org.wso2.carbon.databridge.agent.endpoint.binary;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentSecurityException;
+import org.wso2.carbon.databridge.agent.exception.DataEndpointSecurityException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
-import org.wso2.carbon.databridge.agent.internal.client.AbstractSecureClientPoolFactory;
-import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
+import org.wso2.carbon.databridge.agent.client.AbstractSecureClientPoolFactory;
+import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
 
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.net.Socket;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.Security;
-import java.security.cert.CertificateException;
-import java.util.Arrays;
 
 public class BinarySecureClientPoolFactory extends AbstractSecureClientPoolFactory {
     private static Log log = LogFactory.getLog(BinarySecureClientPoolFactory.class);
@@ -44,7 +37,8 @@ public class BinarySecureClientPoolFactory extends AbstractSecureClientPoolFacto
     }
 
     @Override
-    public Object createClient(String protocol, String hostName, int port) throws DataEndpointException, DataEndpointAgentSecurityException {
+    public Object createClient(String protocol, String hostName, int port) throws DataEndpointException,
+            DataEndpointSecurityException {
         if (protocol.equalsIgnoreCase(DataEndpointConfiguration.Protocol.SSL.toString())) {
             try {
                 SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();

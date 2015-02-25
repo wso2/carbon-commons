@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.databridge.agent.internal.conf;
+package org.wso2.carbon.databridge.agent.conf;
 
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
@@ -25,37 +25,36 @@ import javax.xml.bind.annotation.XmlElement;
 
 
 public class AgentConfiguration {
-    private String dataEndpointName;
-    private String className;
-    private String trustStore;
-    private String trustStorePassword;
-    private int reconnectionInterval;
-    private int queueSize;
-    private int batchSize;
-    private int maxTransportPoolSize;
-    private int maxIdleConnections;
-    private int minIdleTimeInPool;
-    private int evictionTimePeriod;
-    private int secureMaxTransportPoolSize;
-    private int secureMaxIdleConnections;
-    private int secureMinIdleTimeInPool;
-    private int secureEvictionTimePeriod;
 
-//    public AgentConfiguration(String dataEndpointName, String className) {
-//        this.dataEndpointName = dataEndpointName;
-//        this.className = className;
-//        this.queueSize = DataEndpointConstants.DEFAULT_DATA_AGENT_QUEUE_SIZE;
-//        this.batchSize = DataEndpointConstants.DEFAULT_DATA_AGENT_BATCH_SIZE;
-//        this.reconnectionInterval = DataEndpointConstants.DEFAULT_DATA_AGENT_RECONNECTION_INTERVAL;
-//        this.maxTransportPoolSize = DataEndpointConstants.DEFAULT_DATA_AGENT_MAX_TRANSPORT_POOL_SIZE;
-//        this.maxIdleConnections = DataEndpointConstants.DEFAULT_DATA_AGENT_MAX_IDLE_CONNECTIONS;
-//        this.minIdleTimeInPool = DataEndpointConstants.DEFAULT_DATA_AGENT_MIN_IDLE_TIME_IN_POOL;
-//        this.evictionTimePeriod = DataEndpointConstants.DEFAULT_DATA_AGENT_EVICTION_TIME_PERIOD;
-//        this.secureMaxTransportPoolSize = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE;
-//        this.secureMaxIdleConnections = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS;
-//        this.secureMinIdleTimeInPool = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL;
-//        this.secureEvictionTimePeriod = DataEndpointConstants.DEFAULT_DATA_AGENT_SECURE_EVICTION_TIME_PERIOD;
-//    }
+    private String dataEndpointName;
+
+    private String className;
+
+    private String trustStore;
+
+    private String trustStorePassword;
+
+    private int reconnectionInterval;
+
+    private int queueSize;
+
+    private int batchSize;
+
+    private int maxTransportPoolSize;
+
+    private int maxIdleConnections;
+
+    private int minIdleTimeInPool;
+
+    private int evictionTimePeriod;
+
+    private int secureMaxTransportPoolSize;
+
+    private int secureMaxIdleConnections;
+
+    private int secureMinIdleTimeInPool;
+
+    private int secureEvictionTimePeriod;
 
     @XmlElement(name = "Name")
     public String getDataEndpointName() {

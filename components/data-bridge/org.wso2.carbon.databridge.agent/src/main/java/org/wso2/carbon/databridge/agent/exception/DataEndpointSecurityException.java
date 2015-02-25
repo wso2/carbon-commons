@@ -17,20 +17,20 @@
 */
 package org.wso2.carbon.databridge.agent.exception;
 
-public class DataEndpointAgentSecurityException extends Exception {
+public class DataEndpointSecurityException extends Exception {
     private String errorMessage;
 
-    public DataEndpointAgentSecurityException(String message) {
+    public DataEndpointSecurityException(String message) {
         super(message);
         errorMessage = message;
     }
 
-    public DataEndpointAgentSecurityException(String message, Throwable cause) {
+    public DataEndpointSecurityException(String message, Throwable cause) {
         super(message, cause);
         errorMessage = message;
     }
 
-    public DataEndpointAgentSecurityException(Throwable cause) {
+    public DataEndpointSecurityException(Throwable cause) {
         super(cause);
     }
 

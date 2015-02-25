@@ -92,8 +92,6 @@ public class RequestProcessor {
         String matchedElement = validateMessageLine(messageLine);
         if (matchedElement.equals(BinaryMessageConstants.SESSION_ID_PREFIX)) {
             sessionId = messageLine.replace(BinaryMessageConstants.SESSION_ID_PREFIX, "");
-            nextExpectedElement = new String[]{BinaryMessageConstants.TENANT_ID_PREFIX};
-        } else if (matchedElement.equals(BinaryMessageConstants.TENANT_ID_PREFIX)) {
             nextExpectedElement = new String[]{BinaryMessageConstants.PUBLISH_OPERATION};
         } else if (messageLine.equals(BinaryMessageConstants.PUBLISH_OPERATION)) {
             nextExpectedElement = new String[]{BinaryMessageConstants.START_EVENT};
@@ -198,7 +196,7 @@ public class RequestProcessor {
         } else if (this.isLogoutMessage) {
             this.dataBridgeReceiverService.logout(this.sessionId);
             return BinaryMessageConverterUtil.getLogoutSuccessResponse();
-        }else {
+        } else {
             return null;
         }
     }

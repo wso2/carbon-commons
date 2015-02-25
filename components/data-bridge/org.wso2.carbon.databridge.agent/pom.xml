@@ -107,8 +107,6 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Private-Package>org.wso2.carbon.databridge.agent.internal.*
-                        </Private-Package>
                         <Export-Package>
                             org.wso2.carbon.databridge.agent.*
                         </Export-Package>

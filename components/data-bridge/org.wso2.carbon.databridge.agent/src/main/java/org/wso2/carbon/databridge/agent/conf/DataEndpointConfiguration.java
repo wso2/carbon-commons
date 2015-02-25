@@ -15,27 +15,34 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.conf;
+package org.wso2.carbon.databridge.agent.conf;
 
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 
 public class DataEndpointConfiguration {
+
     private String receiverURL;
+
     private String authURL;
+
     private String username;
+
     private String password;
 
     private GenericKeyedObjectPool transportPool;
+
     private GenericKeyedObjectPool securedTransportPool;
 
     private int batchSize;
 
     private String publisherKey;
+
     private String authKey;
+
     private String sessionId;
 
-    public enum Protocol{
+    public enum Protocol {
         TCP, SSL;
 
         @Override
@@ -56,7 +63,7 @@ public class DataEndpointConfiguration {
         this.securedTransportPool = securedTransportPool;
         this.publisherKey = this.receiverURL + DataEndpointConstants.SEPARATOR + username +
                 DataEndpointConstants.SEPARATOR + password;
-        this.authKey = this.authURL +DataEndpointConstants.SEPARATOR + username +
+        this.authKey = this.authURL + DataEndpointConstants.SEPARATOR + username +
                 DataEndpointConstants.SEPARATOR + password;
         this.batchSize = batchSize;
     }

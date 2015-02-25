@@ -15,9 +15,8 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.endpoint;
+package org.wso2.carbon.databridge.agent.endpoint;
 
-import org.wso2.carbon.databridge.agent.exception.EventQueueFullException;
 import org.wso2.carbon.databridge.commons.Event;
 
 import java.util.ArrayList;

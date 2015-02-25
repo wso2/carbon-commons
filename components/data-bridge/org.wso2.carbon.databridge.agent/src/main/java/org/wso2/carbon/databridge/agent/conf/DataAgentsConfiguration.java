@@ -15,7 +15,7 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.conf;
+package org.wso2.carbon.databridge.agent.conf;
 
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 
@@ -25,6 +25,7 @@ import java.util.List;
 
 @XmlRootElement (name = "DataAgentsConfiguration")
 public class DataAgentsConfiguration {
+
     private List<AgentConfiguration> agentConfigurations;
 
     @XmlElement (name = "Agent")

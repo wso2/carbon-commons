@@ -21,35 +21,34 @@ package org.wso2.carbon.databridge.agent;
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentConfigurationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
-import org.wso2.carbon.databridge.agent.internal.client.AbstractClientPoolFactory;
-import org.wso2.carbon.databridge.agent.internal.client.AbstractSecureClientPoolFactory;
-import org.wso2.carbon.databridge.agent.internal.client.ClientPool;
-import org.wso2.carbon.databridge.agent.internal.client.SecureClientPool;
-import org.wso2.carbon.databridge.agent.internal.conf.AgentConfiguration;
-import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpoint;
+import org.wso2.carbon.databridge.agent.client.AbstractClientPoolFactory;
+import org.wso2.carbon.databridge.agent.client.AbstractSecureClientPoolFactory;
+import org.wso2.carbon.databridge.agent.client.ClientPool;
+import org.wso2.carbon.databridge.agent.conf.AgentConfiguration;
+import org.wso2.carbon.databridge.agent.endpoint.DataEndpoint;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 public class DataEndpointAgent {
 
-    private ArrayList<DataPublisher> dataPublishers
-            = new ArrayList<DataPublisher>();
+    private ArrayList<DataPublisher> dataPublishers = new ArrayList<DataPublisher>();
 
     private GenericKeyedObjectPool transportPool;
+
     private GenericKeyedObjectPool securedTransportPool;
 
     private AgentConfiguration agentConfiguration;
 
     public DataEndpointAgent(AgentConfiguration agentConfiguration)
             throws DataEndpointAgentConfigurationException {
-            this.agentConfiguration = agentConfiguration;
-            initialize();
+        this.agentConfiguration = agentConfiguration;
+        initialize();
     }
 
     private void initialize() throws DataEndpointAgentConfigurationException {
         try {
-            DataEndpoint dataEndpoint = (DataEndpoint)(DataEndpointAgent.class.getClassLoader().
+            DataEndpoint dataEndpoint = (DataEndpoint) (DataEndpointAgent.class.getClassLoader().
                     loadClass(agentConfiguration.getClassName()).newInstance());
             AbstractClientPoolFactory clientPoolFactory = (AbstractClientPoolFactory) (DataEndpointAgent.class.getClassLoader().
                     loadClass(dataEndpoint.getClientPoolFactoryClass()).newInstance());
@@ -57,7 +56,8 @@ public class DataEndpointAgent {
                     loadClass(dataEndpoint.getSecureClientPoolFactoryClass()).getConstructor(String.class, String.class).newInstance(
                     agentConfiguration.getTrustStore(),
                     agentConfiguration.getTrustStorePassword()));
-            this.transportPool = new ClientPool().getClientPool(
+            ClientPool clientPool = new ClientPool();
+            this.transportPool = clientPool.getClientPool(
                     clientPoolFactory,
                     agentConfiguration.getMaxTransportPoolSize(),
                     agentConfiguration.getMaxIdleConnections(),
@@ -65,7 +65,7 @@ public class DataEndpointAgent {
                     agentConfiguration.getEvictionTimePeriod(),
                     agentConfiguration.getMinIdleTimeInPool());
 
-            this.securedTransportPool = new SecureClientPool().getClientPool(
+            this.securedTransportPool = clientPool.getClientPool(
                     secureClientPoolFactory,
                     agentConfiguration.getSecureMaxTransportPoolSize(),
                     agentConfiguration.getSecureMaxIdleConnections(),
@@ -106,8 +106,26 @@ public class DataEndpointAgent {
         dataPublishers.remove(dataPublisher);
     }
 
+    public DataEndpoint getNewDataEndpoint() throws DataEndpointException {
+        try {
+            DataEndpoint dataEndpoint = (DataEndpoint) (DataEndpointAgent.class.getClassLoader().
+                    loadClass(this.getAgentConfiguration().getClassName()).newInstance());
+            return dataEndpoint;
+        } catch (InstantiationException e) {
+            throw new DataEndpointException("Error while instantiating the endpoint class for endpoint name " +
+                    this.getAgentConfiguration().getDataEndpointName() + ". " + e.getMessage(), e);
+        } catch (IllegalAccessException e) {
+            throw new DataEndpointException("Error while instantiating the endpoint class for endpoint name " +
+                    this.getAgentConfiguration().getDataEndpointName() + ". " + e.getMessage(), e);
+        } catch (ClassNotFoundException e) {
+            throw new DataEndpointException("Class defined: " + this.getAgentConfiguration().getClassName() +
+                    " cannot be found for endpoint name " + this.getAgentConfiguration().getDataEndpointName()
+                    + ". " + e.getMessage(), e);
+        }
+    }
+
     public void shutDown() throws DataEndpointException {
-        if(dataPublishers.isEmpty()){
+        if (dataPublishers.isEmpty()) {
             try {
                 transportPool.close();
                 securedTransportPool.close();

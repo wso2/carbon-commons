@@ -38,7 +38,6 @@ public class BinaryMessageConstants {
     public static final String END_PAYLOAD_DATA = "END_PAYLOAD";
 
     public static final String SESSION_ID_PREFIX = "SESSION_ID__";
-    public static final String TENANT_ID_PREFIX = "TENANT_ID__";
 
     public static final String OK_RESPONSE = "OK";
     public static final String ERROR_RESPONSE = "ERROR";

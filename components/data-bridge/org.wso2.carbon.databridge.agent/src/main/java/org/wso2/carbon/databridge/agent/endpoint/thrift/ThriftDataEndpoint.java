@@ -15,14 +15,12 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.endpoint.thrift;
+package org.wso2.carbon.databridge.agent.endpoint.thrift;
 
 import org.apache.thrift.TException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointAuthenticationException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
-import org.wso2.carbon.databridge.agent.internal.endpoint.DataEndpoint;
-import org.wso2.carbon.databridge.agent.internal.endpoint.thrift.client.ThriftClientPoolFactory;
-import org.wso2.carbon.databridge.agent.internal.endpoint.thrift.client.ThriftSecureClientPoolFactory;
+import org.wso2.carbon.databridge.agent.endpoint.DataEndpoint;
 import org.wso2.carbon.databridge.commons.Event;
 import org.wso2.carbon.databridge.commons.exception.SessionTimeoutException;
 import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
@@ -38,7 +36,8 @@ import java.util.ArrayList;
 public class ThriftDataEndpoint extends DataEndpoint {
 
     @Override
-    protected String connect(Object client, String userName, String password) throws DataEndpointAuthenticationException {
+    protected String connect(Object client, String userName, String password)
+            throws DataEndpointAuthenticationException {
         try {
             return ((ThriftSecureEventTransmissionService.Client) client).connect(userName, password);
         } catch (ThriftAuthenticationException e) {
@@ -49,16 +48,13 @@ public class ThriftDataEndpoint extends DataEndpoint {
     }
 
     @Override
-    protected void disconnect(Object client, String sessionId) throws DataEndpointAuthenticationException {
+    protected void disconnect(Object client, String sessionId)
+            throws DataEndpointAuthenticationException {
         try {
             ((ThriftSecureEventTransmissionService.Client) client).disconnect(sessionId);
         } catch (TException e) {
             throw new DataEndpointAuthenticationException("Thrift Exception", e);
         }
-    }
-
-    @Override
-    protected void initialize() throws DataEndpointException {
     }
 
     @Override

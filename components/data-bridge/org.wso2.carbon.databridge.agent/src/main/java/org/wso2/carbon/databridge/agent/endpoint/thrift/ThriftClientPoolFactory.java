@@ -15,18 +15,14 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.endpoint.thrift.client;
+package org.wso2.carbon.databridge.agent.endpoint.thrift;
 
 import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TCompactProtocol;
 import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.THttpClient;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
+import org.apache.thrift.transport.*;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
-import org.wso2.carbon.databridge.agent.internal.client.AbstractClientPoolFactory;
-import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
+import org.wso2.carbon.databridge.agent.client.AbstractClientPoolFactory;
+import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
 import org.wso2.carbon.databridge.commons.thrift.service.general.ThriftEventTransmissionService;
 
 public class ThriftClientPoolFactory extends AbstractClientPoolFactory {
@@ -34,10 +30,7 @@ public class ThriftClientPoolFactory extends AbstractClientPoolFactory {
     @Override
     public Object createClient(String protocol, String hostName, int port) throws DataEndpointException {
         if (protocol.equalsIgnoreCase(DataEndpointConfiguration.Protocol.TCP.toString())) {
-
-            TTransport receiverTransport = null;
-            receiverTransport = new TSocket(hostName, port);
-
+            TTransport receiverTransport = new TSocket(hostName, port);
             TProtocol tProtocol = new TBinaryProtocol(receiverTransport);
             ThriftEventTransmissionService.Client client = new ThriftEventTransmissionService.Client(tProtocol);
             try {
@@ -45,20 +38,11 @@ public class ThriftClientPoolFactory extends AbstractClientPoolFactory {
             } catch (TTransportException e) {
                 throw new DataEndpointException("Error while making the connection." + e.getMessage(), e);
             }
-
             return client;
-        } else {
-            THttpClient client = null;
-            try {
-                client = new THttpClient("http://" + hostName + ":" + port + "/thriftReceiver");
-                TProtocol tProtocol = new TCompactProtocol(client);
-                ThriftEventTransmissionService.Client publisherClient = new ThriftEventTransmissionService.Client(tProtocol);
-                client.open();
-                return publisherClient;
-            } catch (TTransportException e) {
-                throw new DataEndpointException("Error while making the connection." + e.getMessage(), e);
-            }
         }
+        throw new DataEndpointException("Unsupported protocol :" + protocol
+                + " used to authenticate the client, only " + DataEndpointConfiguration.Protocol.TCP.toString()
+                + " is supported");
     }
 
     @Override

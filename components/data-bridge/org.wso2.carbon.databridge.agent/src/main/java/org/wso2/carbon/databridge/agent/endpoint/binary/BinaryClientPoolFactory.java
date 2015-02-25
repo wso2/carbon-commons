@@ -15,21 +15,13 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.endpoint.binary.client;
+package org.wso2.carbon.databridge.agent.endpoint.binary;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.apache.thrift.protocol.TCompactProtocol;
-import org.apache.thrift.protocol.TProtocol;
-import org.apache.thrift.transport.THttpClient;
-import org.apache.thrift.transport.TSocket;
-import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
-import org.wso2.carbon.databridge.agent.internal.client.AbstractClientPoolFactory;
-import org.wso2.carbon.databridge.agent.internal.conf.DataEndpointConfiguration;
-import org.wso2.carbon.databridge.commons.thrift.service.general.ThriftEventTransmissionService;
+import org.wso2.carbon.databridge.agent.client.AbstractClientPoolFactory;
+import org.wso2.carbon.databridge.agent.conf.DataEndpointConfiguration;
 
 import java.io.IOException;
 import java.net.Socket;

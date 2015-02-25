@@ -15,22 +15,22 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-package org.wso2.carbon.databridge.agent.internal.client;
+package org.wso2.carbon.databridge.agent.client;
 
 import org.apache.commons.pool.BaseKeyedPoolableObjectFactory;
-import org.wso2.carbon.databridge.agent.exception.DataEndpointAgentSecurityException;
+import org.wso2.carbon.databridge.agent.exception.DataEndpointSecurityException;
 import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.agent.util.DataPublisherUtil;
 
 public abstract class AbstractClientPoolFactory extends BaseKeyedPoolableObjectFactory {
     @Override
     public Object makeObject(Object key)
-            throws DataEndpointException, DataEndpointAgentSecurityException {
+            throws DataEndpointException, DataEndpointSecurityException {
        Object[] urlParams = DataPublisherUtil.getProtocolHostPort(key.toString());
         return createClient(urlParams[0].toString(),urlParams[1].toString(), Integer.parseInt(urlParams[2].toString()));
     }
 
-    public abstract Object createClient(String protocol, String hostName, int port) throws DataEndpointException, DataEndpointAgentSecurityException;
+    public abstract Object createClient(String protocol, String hostName, int port) throws DataEndpointException, DataEndpointSecurityException;
 
     @Override
     public boolean validateObject(Object key, Object obj) {
