@@ -68,7 +68,7 @@ public class AgentHolder {
         }
     }
 
-    public static AgentHolder getInstance() throws DataEndpointAgentConfigurationException {
+    public synchronized static AgentHolder getInstance() throws DataEndpointAgentConfigurationException {
         if (instance == null) {
             instance = new AgentHolder();
         }

@@ -19,7 +19,7 @@ package org.wso2.carbon.databridge.agent.endpoint;
 
 import org.wso2.carbon.databridge.commons.Event;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This interface is used to implement a call back for get the notifications upon the unsuccessful event publishing.
@@ -31,15 +31,8 @@ public interface DataEndpointFailureCallback {
      * In case if this couldn't send the events, then the unsuccessful events list needs to be returned back.
      *
      * @param events List failed events
-     * @return list of unsuccessful events which failed after processing.
-     */
-    public ArrayList<Event> tryResendEvents(ArrayList<Event> events);
-
-    /**
-     * Notifies the failed data endpoint.
      *
-     * @param dataEndpoint failed endpoint.
      */
-    public void addFailedDataEndpoint(DataEndpoint dataEndpoint);
+    public void tryResendEvents(List<Event> events);
 
 }

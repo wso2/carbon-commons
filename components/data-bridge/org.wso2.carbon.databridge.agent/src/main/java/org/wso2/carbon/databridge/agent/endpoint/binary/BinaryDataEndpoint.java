@@ -27,7 +27,7 @@ import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is Binary transport implementation for the Data Endpoint.
@@ -68,7 +68,7 @@ public class BinaryDataEndpoint extends DataEndpoint {
     }
 
     @Override
-    protected void send(Object client, ArrayList<Event> events) throws DataEndpointException,
+    protected void send(Object client, List<Event> events) throws DataEndpointException,
             SessionTimeoutException, UndefinedEventTypeException {
         Socket socket = (Socket) client;
         String sessionId = getDataEndpointConfiguration().getSessionId();

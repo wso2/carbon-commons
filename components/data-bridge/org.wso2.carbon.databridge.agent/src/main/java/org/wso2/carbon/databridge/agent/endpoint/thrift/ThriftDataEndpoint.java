@@ -31,7 +31,7 @@ import org.wso2.carbon.databridge.commons.thrift.exception.ThriftUndefinedEventT
 import org.wso2.carbon.databridge.commons.thrift.service.general.ThriftEventTransmissionService;
 import org.wso2.carbon.databridge.commons.thrift.service.secure.ThriftSecureEventTransmissionService;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is the DataEndpoint Implementation for thrift transport.
@@ -62,7 +62,7 @@ public class ThriftDataEndpoint extends DataEndpoint {
     }
 
     @Override
-    protected void send(Object client, ArrayList<Event> events) throws DataEndpointException,
+    protected void send(Object client, List<Event> events) throws DataEndpointException,
             SessionTimeoutException, UndefinedEventTypeException {
         ThriftEventBundle thriftEventBundle = null;
         for (Event event : events) {

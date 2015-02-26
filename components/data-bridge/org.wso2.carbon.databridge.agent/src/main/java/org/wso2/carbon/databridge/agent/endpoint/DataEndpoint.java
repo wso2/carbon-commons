@@ -30,6 +30,7 @@ import org.wso2.carbon.databridge.commons.exception.TransportException;
 import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -43,8 +44,6 @@ public abstract class DataEndpoint {
 
     private static Log log = LogFactory.getLog(DataEndpoint.class);
 
-    private boolean active;
-
     private DataEndpointConnectionWorker connectionWorker;
 
     private GenericKeyedObjectPool transportPool;
@@ -53,29 +52,33 @@ public abstract class DataEndpoint {
 
     private AtomicBoolean isPublishing;
 
-    private AtomicBoolean hasFailedEvents;
-
     private EventPublisher eventPublisher;
 
     private DataEndpointFailureCallback dataEndpointFailureCallback;
 
     private ExecutorService connectionService;
 
-    private ArrayList<Event> events;
+    private List<Event> events;
+
+    private State state;
+
+    public enum State {
+        ACTIVE, UNAVAILABLE, BUSY
+    }
 
     public DataEndpoint() {
         this.batchSize = DataEndpointConstants.DEFAULT_DATA_AGENT_BATCH_SIZE;
-        isPublishing = new AtomicBoolean(false);
-        hasFailedEvents = new AtomicBoolean(false);
-        eventPublisher = new EventPublisher(this);
+        this.state = State.UNAVAILABLE;
+        this.isPublishing = new AtomicBoolean(false);
+        eventPublisher = new EventPublisher();
         connectionService = Executors.newSingleThreadExecutor();
         events = new ArrayList<Event>();
     }
 
-    void collectAndSend(Event event) throws DataEndpointException, UndefinedEventTypeException {
+    void collectAndSend(Event event) {
         events.add(event);
         if (events.size() == batchSize) {
-            isPublishing.set(true);
+            this.state = State.BUSY;
             Thread thread = new Thread(eventPublisher);
             thread.start();
         }
@@ -84,6 +87,7 @@ public abstract class DataEndpoint {
     void flushEvents() {
         if (events.size() != 0) {
             if (isPublishing.compareAndSet(false, true)) {
+                state = State.BUSY;
                 Thread thread = new Thread(eventPublisher);
                 thread.start();
             }
@@ -134,16 +138,16 @@ public abstract class DataEndpoint {
             throws DataEndpointAuthenticationException;
 
 
-    public boolean isActive() {
-        return active && !isPublishing.get();
+    public State getState() {
+        return state;
     }
 
     void activate() {
-        active = true;
+        state = State.ACTIVE;
     }
 
     void deactivate() {
-        active = false;
+        state = State.UNAVAILABLE;
     }
 
     /**
@@ -155,7 +159,7 @@ public abstract class DataEndpoint {
      * @throws SessionTimeoutException
      * @throws UndefinedEventTypeException
      */
-    protected abstract void send(Object client, ArrayList<Event> events) throws
+    protected abstract void send(Object client, List<Event> events) throws
             DataEndpointException, SessionTimeoutException, UndefinedEventTypeException;
 
 
@@ -193,12 +197,6 @@ public abstract class DataEndpoint {
      * Event Publisher worker thread to actually sends the events to the endpoint.
      */
     class EventPublisher implements Runnable {
-        private DataEndpoint dataEndpoint;
-
-        EventPublisher(DataEndpoint dataEndpoint) {
-            this.dataEndpoint = dataEndpoint;
-        }
-
         @Override
         public void run() {
             try {
@@ -221,11 +219,7 @@ public abstract class DataEndpoint {
 
         private void handleFailedEvents() {
             deactivate();
-            events = dataEndpointFailureCallback.tryResendEvents(events);
-            if (!events.isEmpty()) {
-                hasFailedEvents.set(true);
-                dataEndpointFailureCallback.addFailedDataEndpoint(dataEndpoint);
-            }
+            dataEndpointFailureCallback.tryResendEvents(events);
             isPublishing.set(false);
         }
 
@@ -235,26 +229,14 @@ public abstract class DataEndpoint {
             Object client = getClient();
             send(client, events);
             events.clear();
+            state = State.ACTIVE;
             isPublishing.set(false);
             returnClient(client);
         }
     }
 
-    ArrayList<Event> getAndResetFailedEvents() {
-        if (hasFailedEvents.get()) {
-            ArrayList<Event> failedEvents = events;
-            events = new ArrayList<Event>();
-            return failedEvents;
-        }
-        return null;
-    }
-
-    void resetFailedEvents() {
-        hasFailedEvents.set(false);
-    }
-
     boolean isConnected() {
-        return active;
+        return !state.equals(State.UNAVAILABLE);
     }
 
     public String toString() {
@@ -262,8 +244,11 @@ public abstract class DataEndpoint {
                 ", Authentication URL : " + getDataEndpointConfiguration().getAuthURL() + ")";
     }
 
+    /**
+     * Graceful shutdown until publish all the events given to the endpoint.
+     */
     public void shutdown() {
-        if (isPublishing.get()) {
+        while (state.equals(State.BUSY)) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ignored) {

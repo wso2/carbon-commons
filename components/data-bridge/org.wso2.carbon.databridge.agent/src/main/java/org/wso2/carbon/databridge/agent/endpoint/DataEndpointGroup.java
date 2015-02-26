@@ -23,17 +23,16 @@ import com.lmax.disruptor.dsl.Disruptor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.databridge.agent.DataEndpointAgent;
-import org.wso2.carbon.databridge.agent.exception.DataEndpointException;
 import org.wso2.carbon.databridge.agent.exception.EventQueueFullException;
 import org.wso2.carbon.databridge.agent.util.DataEndpointConstants;
 import org.wso2.carbon.databridge.agent.util.DataPublisherUtil;
 import org.wso2.carbon.databridge.commons.Event;
-import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
 
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,15 +40,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * This class holds the endpoints associated within a group. Also it has a queue
  * to hold the list of events that needs to be processed by the endpoints with
  * provided the load balancing, or failover configuration.
- *
  */
 
 public class DataEndpointGroup implements DataEndpointFailureCallback {
     private static final Log log = LogFactory.getLog(DataEndpointGroup.class);
 
-    private ArrayList<DataEndpoint> dataEndpoints;
-
-    private ArrayList<DataEndpoint> failedEventsDataEndpoints;
+    private List<DataEndpoint> dataEndpoints;
 
     private HAType haType;
 
@@ -58,7 +54,7 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
     private int reconnectionInterval;
 
     private AtomicInteger currentDataPublisherIndex = new AtomicInteger();
-    
+
     private AtomicInteger maximumDataPublisherIndex = new AtomicInteger();
 
     private ScheduledExecutorService reconnectionService = Executors.newScheduledThreadPool(1);
@@ -71,7 +67,6 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
 
     public DataEndpointGroup(HAType haType, DataEndpointAgent agent) {
         this.dataEndpoints = new ArrayList<DataEndpoint>();
-        this.failedEventsDataEndpoints = new ArrayList<DataEndpoint>();
         this.haType = haType;
         this.reconnectionInterval = agent.getAgentConfiguration().getReconnectionInterval();
         this.eventQueue = new EventQueue(agent.getAgentConfiguration().getQueueSize());
@@ -125,7 +120,6 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
             }
         }
 
-
         private void tryPut(Event event, long timeoutMS) throws EventQueueFullException {
             long sequence;
             long stopTime = System.currentTimeMillis() + timeoutMS;
@@ -169,8 +163,7 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
 
         @Override
         public void onEvent(Event event, long sequence, boolean endOfBatch) throws Exception {
-            DataEndpoint endpoint = getDataEndpoint();
-            processFailedEventsIfExists();
+            DataEndpoint endpoint = getDataEndpoint(true);
             endpoint.collectAndSend(event);
             if (endOfBatch) {
                 flushAllDataEndpoints();
@@ -180,31 +173,22 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
 
     private void flushAllDataEndpoints() {
         for (DataEndpoint dataEndpoint : dataEndpoints) {
-            if (dataEndpoint.isActive()) {
+            if (dataEndpoint.getState().equals(DataEndpoint.State.ACTIVE)) {
                 dataEndpoint.flushEvents();
             }
         }
     }
 
-    private synchronized void processFailedEventsIfExists()
-            throws UndefinedEventTypeException, DataEndpointException {
-        if (!failedEventsDataEndpoints.isEmpty()) {
-            for (DataEndpoint failedEndpoint : failedEventsDataEndpoints) {
-                if (failedEndpoint.isActive()) {
-                    failedEndpoint.flushEvents();
-                } else {
-                    ArrayList<Event> failedEvents = failedEndpoint.getAndResetFailedEvents();
-                    for (Event event : failedEvents) {
-                        getDataEndpoint().collectAndSend(event);
-                    }
-                }
-                failedEndpoint.resetFailedEvents();
-            }
-            failedEventsDataEndpoints.clear();
-        }
-    }
-
-    public DataEndpoint getDataEndpoint() {
+    /**
+     * Find the next event processable endpoint to the
+     * data endpoint based on load balancing and failover logic, and wait
+     * indefinitely until at least one data endpoint becomes available based
+     * on busywait parameter.
+     *
+     * @param busyWait waitUntil atleast one endpoint becomes available
+     * @return DataEndpoint which can accept and send the events.
+     */
+    private DataEndpoint getDataEndpoint(boolean busyWait) {
         int startIndex;
         if (haType.equals(HAType.FAILOVER)) {
             startIndex = getDataPublisherIndex();
@@ -215,23 +199,37 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
 
         while (true) {
             DataEndpoint dataEndpoint = dataEndpoints.get(index);
-            if (dataEndpoint.isActive()) {
+            if (dataEndpoint.getState().equals(DataEndpoint.State.ACTIVE)) {
                 return dataEndpoint;
+            } else if (haType.equals(HAType.FAILOVER) && dataEndpoint.getState().equals(DataEndpoint.State.BUSY)) {
+                /**
+                 * Wait for some time until the failover endpoint finish publishing
+                 *
+                 */
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException ignored) {
+                    //ignored
+                }
             } else {
                 index++;
                 if (index > maximumDataPublisherIndex.get() - 1) {
                     index = START_INDEX;
                 }
                 if (index == startIndex) {
-                    /**
-                     * Have fully iterated the data publisher list,
-                     * and busy wait until data publisher
-                     * becomes available
-                     */
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        //Ignored
+                    if (busyWait) {
+                        /**
+                         * Have fully iterated the data publisher list,
+                         * and busy wait until data publisher
+                         * becomes available
+                         */
+                        try {
+                            Thread.sleep(10);
+                        } catch (InterruptedException e) {
+                            //Ignored
+                        }
+                    }else {
+                        return null;
                     }
                 }
             }
@@ -246,20 +244,29 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
         return index;
     }
 
-    public ArrayList<Event> tryResendEvents(ArrayList<Event> events) {
-        ArrayList<Event> unsuccessfulEvents = new ArrayList<Event>();
-        for (Event event : events) {
+    public void tryResendEvents(List<Event> events){
+        List<Event> unsuccessfulEvents = trySendActiveEndpoints(events);
+        for (Event event : unsuccessfulEvents) {
             try {
                 eventQueue.tryPut(event);
             } catch (EventQueueFullException e) {
+                log.error("Unable to put the event :" + event, e);
+            }
+        }
+    }
+
+    private List<Event> trySendActiveEndpoints(List<Event> events) {
+        ArrayList<Event> unsuccessfulEvents = new ArrayList<Event>();
+        for (Event event : events) {
+            DataEndpoint endpoint = getDataEndpoint(false);
+            if (endpoint != null) {
+                endpoint.collectAndSend(event);
+            } else {
                 unsuccessfulEvents.add(event);
             }
         }
+        flushAllDataEndpoints();
         return unsuccessfulEvents;
-    }
-
-    public void addFailedDataEndpoint(DataEndpoint dataEndpoint) {
-        this.failedEventsDataEndpoints.add(dataEndpoint);
     }
 
     private class ReconnectionTask implements Runnable {
@@ -305,22 +312,23 @@ public class DataEndpointGroup implements DataEndpointFailureCallback {
     }
 
     public String toString() {
-        String group = "[ ";
+        StringBuilder group = new StringBuilder();
+        group.append("[ ");
         for (int i = 0; i < dataEndpoints.size(); i++) {
             DataEndpoint endpoint = dataEndpoints.get(i);
-            group += endpoint.toString();
+            group.append(endpoint.toString());
             if (i == dataEndpoints.size() - 1) {
-                group += " ]";
-                return group;
+                group.append(" ]");
+                return group.toString();
             } else {
                 if (haType == HAType.FAILOVER) {
-                    group += DataEndpointConstants.FAILOVER_URL_GROUP_SEPARATOR;
+                    group.append(DataEndpointConstants.FAILOVER_URL_GROUP_SEPARATOR);
                 } else {
-                    group += DataEndpointConstants.LB_URL_GROUP_SEPARATOR;
+                    group.append(DataEndpointConstants.LB_URL_GROUP_SEPARATOR);
                 }
             }
         }
-        return group;
+        return group.toString();
     }
 
     public void shutdown() {
