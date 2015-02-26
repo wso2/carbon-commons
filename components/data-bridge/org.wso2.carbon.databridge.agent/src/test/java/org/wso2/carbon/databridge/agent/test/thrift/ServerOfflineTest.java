@@ -181,7 +181,7 @@ public class ServerOfflineTest extends TestCase{
 
         int publishTime = 20000;
 
-        thriftTestServer.stopAndStartDuration(7641, 5000, 30000);
+        thriftTestServer.stopAndStartDuration(7641, 5000, 60000);
         long startTime = System.currentTimeMillis();
 
         int eventsPublished = 0;
