@@ -24,12 +24,17 @@ import org.wso2.carbon.event.core.internal.util.JavaUtil;
 import org.wso2.carbon.event.core.subscription.Subscription;
 import org.wso2.carbon.event.core.subscription.SubscriptionManager;
 import org.wso2.carbon.event.core.util.EventBrokerConstants;
+import org.wso2.carbon.registry.core.RegistryConstants;
 import org.wso2.carbon.registry.core.Resource;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.registry.core.session.UserRegistry;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * subscription manager implementation using registry.
@@ -102,8 +107,6 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
      */
     @Override
     public void addSubscription(Subscription subscription) throws EventBrokerException {
-
-
         try {
             UserRegistry userRegistry =
                     this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
@@ -158,29 +161,30 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
         String resourcePath = this.topicStoragePath;
 
         // first convert the . to /
-        topicName = topicName.replaceAll("\\.", "/");
+        topicName = topicName.replaceAll("\\.", RegistryConstants.PATH_SEPARATOR);
 
-        if (!topicName.startsWith("/")) {
-            resourcePath += "/";
+        if (!topicName.startsWith(RegistryConstants.PATH_SEPARATOR)) {
+            resourcePath = resourcePath + RegistryConstants.PATH_SEPARATOR;
         }
 
         // this topic name can have # and * marks if the user wants to subscribes to the
         // child topics as well. but we consider the topic here as the topic name just before any
         // special character.
         // eg. if topic name is myTopic/*/* then topic name is myTopic
-        if (topicName.contains("*")) {
-            topicName = topicName.substring(0, topicName.indexOf("*"));
-        } else if (topicName.contains("#")) {
-            topicName = topicName.substring(0, topicName.indexOf("#"));
+        if (topicName.indexOf('*') > -1){
+            topicName = topicName.substring(0, topicName.indexOf('*'));
+        } else if (topicName.indexOf('#') > -1){
+            topicName = topicName.substring(0, topicName.indexOf('#'));
         }
 
-        resourcePath += topicName;
+        resourcePath = resourcePath + topicName;
 
-        if (!resourcePath.endsWith("/")) {
-            resourcePath += "/";
+        if (!resourcePath.endsWith(RegistryConstants.PATH_SEPARATOR)) {
+            resourcePath = resourcePath + RegistryConstants.PATH_SEPARATOR;
         }
 
-        resourcePath += EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME + "/" + subscriptionID;
+        resourcePath = resourcePath + EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME +
+                       RegistryConstants.PATH_SEPARATOR + subscriptionID;
         return resourcePath;
     }
 
@@ -195,28 +199,30 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
         String resourcePath = this.topicStoragePath;
 
         // first convert the . to /
-        topicName = topicName.replaceAll("\\.", "/");
+        topicName = topicName.replaceAll("\\.", RegistryConstants.PATH_SEPARATOR);
 
-        if (!topicName.startsWith("/")) {
-            resourcePath = resourcePath + "/";
+        if (!topicName.startsWith(RegistryConstants.PATH_SEPARATOR)) {
+            resourcePath = resourcePath + RegistryConstants.PATH_SEPARATOR;
         }
 
         // this topic name can have # and * marks if the user wants to subscribes to the
         // child topics as well. but we consider the topic here as the topic name just before any
         // special character.
         // eg. if topic name is myTopic/*/* then topic name is myTopic
-        if (topicName.contains("*")) {
-            topicName = topicName.substring(0, topicName.indexOf("*"));
-        } else if (topicName.contains("#")) {
-            topicName = topicName.substring(0, topicName.indexOf("#"));
+        if (topicName.indexOf('*') > -1) {
+            topicName = topicName.substring(0, topicName.indexOf('*'));
+        } else if (topicName.indexOf('#') > -1) {
+            topicName = topicName.substring(0, topicName.indexOf('#'));
         }
 
         resourcePath = resourcePath + topicName;
 
-        if (!resourcePath.endsWith("/")) {
-            resourcePath = resourcePath + "/";
+        if (!resourcePath.endsWith(RegistryConstants.PATH_SEPARATOR)) {
+            resourcePath = resourcePath + RegistryConstants.PATH_SEPARATOR;
         }
-        resourcePath = resourcePath + (EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME + "/" + subscriptionID);
+        resourcePath = resourcePath +
+                       (EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME +
+                        RegistryConstants.PATH_SEPARATOR + subscriptionID);
         return resourcePath;
     }
 
