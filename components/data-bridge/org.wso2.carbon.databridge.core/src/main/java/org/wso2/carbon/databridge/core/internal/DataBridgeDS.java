@@ -35,13 +35,19 @@ import org.wso2.carbon.databridge.core.definitionstore.AbstractStreamDefinitionS
 import org.wso2.carbon.databridge.core.exception.DataBridgeConfigurationException;
 import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
 import org.wso2.carbon.databridge.core.internal.authentication.CarbonAuthenticationHandler;
+import org.wso2.carbon.databridge.core.internal.utils.DataBridgeConstants;
 import org.wso2.carbon.databridge.core.internal.utils.DataBridgeCoreBuilder;
 import org.wso2.carbon.identity.authentication.AuthenticationService;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.ConfigurationContextService;
+import org.wso2.carbon.utils.ServerConstants;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -64,7 +70,6 @@ public class DataBridgeDS {
     private ServiceRegistration receiverServiceRegistration;
     private ServiceRegistration subscriberServiceRegistration;
     private DataBridge databridge;
-    private OMElement initialConfig;
     private ServiceRegistration databridgeRegistration;
 
     /**
@@ -73,37 +78,16 @@ public class DataBridgeDS {
      * @param context
      */
     protected void activate(ComponentContext context) {
-
         try {
-            DataBridgeConfiguration dataBridgeConfiguration = new DataBridgeConfiguration();
-            try {
-                initialConfig = DataBridgeCoreBuilder.loadConfigXML();
-            } catch (DataBridgeConfigurationException e) {
-                log.error("The data Bridge config was not found. Falling back to defaults.");
-            }
-            DataBridgeCoreBuilder.populateConfigurations(dataBridgeConfiguration, initialConfig);
-
+            File file = new File(DataBridgeCoreBuilder.getDatabridgeConfigPath());
+            JAXBContext jaxbContext = JAXBContext.newInstance(DataBridgeConfiguration.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            DataBridgeConfiguration dataBridgeConfiguration = (DataBridgeConfiguration) jaxbUnmarshaller.unmarshal(file);
             if (databridge == null) {
-//                String definitionStoreName = dataBridgeConfiguration.getStreamDefinitionStoreName();
                 AbstractStreamDefinitionStore streamDefinitionStore = DataBridgeServiceValueHolder.getStreamDefinitionStore();
-
-//                try {
-//                    streamDefinitionStore = (AbstractStreamDefinitionStore) DataBridgeDS.class.getClassLoader().loadClass(definitionStoreName).newInstance();
-//
-//                    if (definitionStoreName.equals(DataBridgeConstants.DEFAULT_DEFINITION_STORE)) {
-//                        log.warn("The default stream defintion store is loaded : " + definitionStoreName + ". Please configure a proper definition store.");
-//                    }
-////                    streamDefinitionStore = (AbstractStreamDefinitionStore) Class.forName(definitionStoreName).newInstance();
-//                } catch (Exception e) {
-//                    log.warn("The stream definition store :" + definitionStoreName + " cannot be created. Hence using " + DataBridgeConstants.DEFAULT_DEFINITION_STORE, e);
-//                    //by default if used InMemoryStreamDefinitionStore
-//                    streamDefinitionStore = new InMemoryStreamDefinitionStore();
-//                }
-
-
-                databridge = new DataBridge(new CarbonAuthenticationHandler(authenticationService), streamDefinitionStore, dataBridgeConfiguration);
-                databridge.setInitialConfig(initialConfig);
-
+                databridge = new DataBridge(new CarbonAuthenticationHandler(authenticationService),
+                        streamDefinitionStore, dataBridgeConfiguration);
+                databridge.setInitialConfig(dataBridgeConfiguration);
                 try {
                     List<String[]> streamDefinitionStrings = DataBridgeCoreBuilder.loadStreamDefinitionXML();
                     for (String[] streamDefinitionString : streamDefinitionStrings) {
@@ -151,10 +135,10 @@ public class DataBridgeDS {
 //                        context.getBundleContext().registerService(DataBridge.class.getName(), databridge, null);
                 log.info("Successfully deployed Agent Server ");
             }
-        } catch (DataBridgeConfigurationException e) {
-            log.error("Agent Server Configuration is not correct hence can not create and start Agent Server ", e);
-        } catch (RuntimeException e) {
+        }  catch (RuntimeException e) {
             log.error("Error in starting Agent Server ", e);
+        } catch (JAXBException e) {
+            log.error("Error while loading the Databridge configuration. ", e);
         }
     }
 

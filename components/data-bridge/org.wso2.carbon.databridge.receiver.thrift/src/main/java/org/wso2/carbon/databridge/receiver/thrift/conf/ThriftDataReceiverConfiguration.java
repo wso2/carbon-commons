@@ -20,18 +20,34 @@
 package org.wso2.carbon.databridge.receiver.thrift.conf;
 
 import org.wso2.carbon.databridge.commons.thrift.utils.CommonThriftConstants;
+import org.wso2.carbon.databridge.core.conf.DataBridgeConfiguration;
+import org.wso2.carbon.databridge.core.conf.DataReceiver;
+import org.wso2.carbon.databridge.receiver.thrift.internal.utils.ThriftDataReceiverConstants;
+import org.wso2.carbon.utils.CarbonUtils;
 
 /**
  * configuration details related to DataReceiver
  */
 public class ThriftDataReceiverConfiguration {
-    private int secureDataReceiverPort = CommonThriftConstants.DEFAULT_RECEIVER_PORT + CommonThriftConstants.SECURE_EVENT_RECEIVER_PORT_OFFSET;
-    private int dataReceiverPort = CommonThriftConstants.DEFAULT_RECEIVER_PORT;
+    private int secureDataReceiverPort;
+    private int dataReceiverPort;
     private String receiverHostName;
 
     public ThriftDataReceiverConfiguration(int defaultSslPort, int defaultPort) {
         secureDataReceiverPort = defaultSslPort;
         dataReceiverPort = defaultPort;
+    }
+
+    public ThriftDataReceiverConfiguration(DataBridgeConfiguration dataBridgeConfiguration) {
+        DataReceiver dataReceiver = dataBridgeConfiguration.getDataReceiver(ThriftDataReceiverConstants.
+                DATA_BRIDGE_RECEIVER_NAME);
+        int portOffset = getPortOffset();
+        secureDataReceiverPort = Integer.parseInt(dataReceiver.getConfiguration(ThriftDataReceiverConstants.SECURE_PORT_ELEMENT,
+                CommonThriftConstants.DEFAULT_RECEIVER_PORT+CommonThriftConstants.SECURE_EVENT_RECEIVER_PORT_OFFSET).toString()) + portOffset;
+        dataReceiverPort = Integer.parseInt(dataReceiver.getConfiguration(ThriftDataReceiverConstants.PORT_ELEMENT,
+                CommonThriftConstants.DEFAULT_RECEIVER_PORT).toString()) + portOffset;
+        receiverHostName = dataReceiver.getConfiguration(ThriftDataReceiverConstants.RECEIVER_HOST_NAME,
+                ThriftDataReceiverConstants.DEFAULT_HOSTNAME).toString();
     }
 
     public ThriftDataReceiverConfiguration(int defaultSslPort, int defaultPort,
@@ -64,5 +80,10 @@ public class ThriftDataReceiverConfiguration {
 
     public void setReceiverHostName(String receiverHostName) {
         this.receiverHostName = receiverHostName;
+    }
+
+    public int getPortOffset() {
+        return CarbonUtils.
+                getPortFromServerConfig(ThriftDataReceiverConstants.CARBON_CONFIG_PORT_OFFSET_NODE) + 1;
     }
 }

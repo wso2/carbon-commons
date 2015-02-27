@@ -23,6 +23,7 @@ import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlr
 import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
 import org.wso2.carbon.databridge.commons.exception.SessionTimeoutException;
 import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
+import org.wso2.carbon.databridge.core.conf.DataBridgeConfiguration;
 import org.wso2.carbon.databridge.core.definitionstore.StreamAddRemoveListener;
 import org.wso2.carbon.databridge.core.exception.StreamDefinitionNotFoundException;
 import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
@@ -73,7 +74,7 @@ public interface DataBridgeReceiverService {
 
     public void logout(String sessionId) throws Exception;
 
-    public OMElement getInitialConfig();
+    public DataBridgeConfiguration getInitialConfig();
 
     public void subscribe(StreamAddRemoveListener streamAddRemoveListener);
 

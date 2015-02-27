@@ -7,6 +7,7 @@ import org.wso2.carbon.databridge.commons.exception.DifferentStreamDefinitionAlr
 import org.wso2.carbon.databridge.commons.exception.MalformedStreamDefinitionException;
 import org.wso2.carbon.databridge.commons.exception.SessionTimeoutException;
 import org.wso2.carbon.databridge.commons.exception.UndefinedEventTypeException;
+import org.wso2.carbon.databridge.core.conf.DataBridgeConfiguration;
 import org.wso2.carbon.databridge.core.exception.StreamDefinitionNotFoundException;
 import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
 
@@ -102,7 +103,7 @@ public abstract class AbstractDataReceiver implements DataBridgeReceiverService 
     }
 
     @Override
-    public OMElement getInitialConfig() {
+    public DataBridgeConfiguration getInitialConfig() {
         return getDatabridgeReceiver().getInitialConfig();
     }
 

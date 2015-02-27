@@ -1125,6 +1125,11 @@
                 <artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
+ 	    <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.commons.binary</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>
@@ -1133,6 +1138,11 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.databridge.agent</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.notification.service</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
@@ -1163,6 +1173,11 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.databridge.receiver.thrift</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.receiver.binary</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
@@ -1602,7 +1617,19 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.commons.binary.server.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.databridge.agent.thrift.server.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.agent.server.feature</artifactId>
                 <version>${carbon.commons.version}</version>
                 <type>zip</type>
             </dependency>
@@ -1615,6 +1642,12 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.databridge.receiver.thrift.server.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.databridge.receiver.binary.server.feature</artifactId>
                 <version>${carbon.commons.version}</version>
                 <type>zip</type>
             </dependency>

@@ -32,6 +32,7 @@
 <%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.UserRealmInfo" %>
 <%@ page import="java.text.MessageFormat" %>
 <%@ page import="java.net.URLEncoder" %>
+<%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.ClaimValue"%>
 <script type="text/javascript" src="../userstore/extensions/js/vui.js"></script>
 <script type="text/javascript" src="../admin/js/main.js"></script>
 
@@ -81,6 +82,10 @@
     java.lang.String errorAttribute = (java.lang.String) session.getAttribute(UserAdminUIConstants.DO_USER_LIST);
 
     String claimUri = request.getParameter("claimUri");
+    if (claimUri == null || claimUri.length() == 0) {
+        claimUri = (java.lang.String) session.getAttribute(UserAdminUIConstants.USER_CLAIM_FILTER);
+    }
+    session.setAttribute(UserAdminUIConstants.USER_CLAIM_FILTER,claimUri);
     exceededDomains = (FlaggedName) session.getAttribute(UserAdminUIConstants.USER_LIST_CACHE_EXCEEDED);
 
     //  search filter
@@ -109,11 +114,14 @@
         }
         newFilter = true;
     }
-
+    String userDomainSelector;
     String modifiedFilter = filter.trim();
     if(!UserAdminUIConstants.ALL_DOMAINS.equalsIgnoreCase(selectedDomain)){
         modifiedFilter = selectedDomain + UserAdminUIConstants.DOMAIN_SEPARATOR + filter;
         modifiedFilter = modifiedFilter.trim();
+        userDomainSelector = selectedDomain + UserAdminUIConstants.DOMAIN_SEPARATOR + "*";
+    } else {
+        userDomainSelector = "*";
     }
 
     session.setAttribute(UserAdminUIConstants.USER_LIST_FILTER, filter.trim());
@@ -171,7 +179,14 @@
             }
 
             if (filter.length() > 0) {
-                datas = client.listAllUsers(modifiedFilter, -1);
+                if (claimUri != null && !"select".equalsIgnoreCase(claimUri)) {
+                    ClaimValue claimValue = new ClaimValue();
+                    claimValue.setClaimURI(claimUri);
+                    claimValue.setValue(filter);
+                    datas = client.listUserByClaim(claimValue, userDomainSelector, -1);
+                } else {
+                    datas = client.listAllUsers(modifiedFilter, -1);
+                }
                 List<FlaggedName> dataList = new ArrayList<FlaggedName>(Arrays.asList(datas));
                 exceededDomains = dataList.remove(dataList.size() - 1);
                 session.setAttribute(UserAdminUIConstants.USER_LIST_CACHE_EXCEEDED, exceededDomains);
@@ -312,7 +327,7 @@
                     }
                 %>
                     </tr>
-                <%--<%
+                <%
                     if(CarbonUIUtil.isContextRegistered(config, "/identity-mgt/") && !multipleUserStores){
                 %>
                     <tr>
@@ -340,7 +355,7 @@
                     </tr>
                 <%
                     }
-                %>--%>
+                %>
 				</tbody>
                 </table>
             </form>
