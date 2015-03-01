@@ -28,7 +28,7 @@ import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
 import org.wso2.carbon.deployment.synchronizer.repository.CarbonRepositoryUtils;
 import org.wso2.carbon.deployment.synchronizer.util.DeploymentSynchronizerConfiguration;
 import org.wso2.carbon.deployment.synchronizer.util.RepositoryConfigParameter;
-import org.wso2.carbon.deployment.synchronizer.util.RepositoryReferenceHolder;
+import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryReferenceHolder;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 

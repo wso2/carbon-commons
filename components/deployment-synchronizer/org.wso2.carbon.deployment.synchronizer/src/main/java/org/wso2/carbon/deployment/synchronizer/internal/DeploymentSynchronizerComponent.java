@@ -29,8 +29,9 @@ import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizationManager;
 import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
 import org.wso2.carbon.deployment.synchronizer.repository.CarbonRepositoryUtils;
 import org.wso2.carbon.deployment.synchronizer.services.DeploymentSynchronizerService;
-import org.wso2.carbon.deployment.synchronizer.util.RepositoryReferenceHolder;
-import org.wso2.carbon.deployment.synchronizer.util.ServiceReferenceHolder;
+import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryReferenceHolder;
+import org.wso2.carbon.deployment.synchronizer.internal.util.ServiceReferenceHolder;
+import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.utils.Axis2ConfigurationContextObserver;
 import org.wso2.carbon.utils.ConfigurationContextService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
@@ -43,6 +44,9 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
  * @scr.reference name="repository.reference.service"
  * interface="org.wso2.carbon.deployment.synchronizer.ArtifactRepository" cardinality="0..n"
  * policy="dynamic" bind="addArtifactRepository" unbind="removeArtifactRepository"
+ * @scr.reference name="registry.service" immediate="true"
+ * interface="org.wso2.carbon.registry.core.service.RegistryService" cardinality="1..1"
+ * policy="dynamic" bind="setRegistryService" unbind="unsetRegistryService"
  */
 
 public class DeploymentSynchronizerComponent {
@@ -123,6 +127,20 @@ public class DeploymentSynchronizerComponent {
     protected void removeArtifactRepository(ArtifactRepository artifactRepository){
         RepositoryReferenceHolder repositoryReferenceHolder = RepositoryReferenceHolder.getInstance();
         repositoryReferenceHolder.removeRepository(artifactRepository);
+    }
+
+    protected void setRegistryService(RegistryService service) {
+        if (log.isDebugEnabled()) {
+            log.debug("Registry deployment synchronizer component bound to the registry service");
+        }
+        ServiceReferenceHolder.setRegistryService(service);
+    }
+
+    protected void unsetRegistryService(RegistryService service) {
+        if (log.isDebugEnabled()) {
+            log.debug("Registry deployment synchronizer component unbound from the registry service");
+        }
+        ServiceReferenceHolder.setRegistryService(null);
     }
 
 }
