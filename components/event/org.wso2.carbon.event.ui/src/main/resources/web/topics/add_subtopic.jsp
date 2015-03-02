@@ -171,7 +171,7 @@
 
     //Select the roles according to the submitted search term
     ArrayList<TopicRolePermission> selectedTopicRolePermissions = new ArrayList<TopicRolePermission>();
-    if (searchTerm.equals("*") || searchTerm.equals("")) {
+    if ("*".equals(searchTerm) || "".equals(searchTerm)) {
         selectedTopicRolePermissions = topicRolePermissions;
     } else {
         for (TopicRolePermission permission : topicRolePermissions) {

@@ -30,8 +30,6 @@ import org.wso2.carbon.event.core.subscription.Subscription;
 import org.wso2.carbon.event.core.subscription.SubscriptionManager;
 import org.wso2.carbon.event.core.topic.TopicManager;
 import org.wso2.carbon.event.core.util.EventBrokerConstants;
-import org.wso2.carbon.user.api.AuthorizationManager;
-import org.wso2.carbon.user.api.UserRealm;
 import org.wso2.carbon.user.api.UserStoreException;
 
 import java.util.Calendar;
@@ -39,7 +37,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Carbon event broker implementation
+ * The following class contains the carbon eventing implementation related to subscriptions and
+ * topics.
  */
 public class CarbonEventBroker implements EventBroker {
 
@@ -50,7 +49,9 @@ public class CarbonEventBroker implements EventBroker {
     private ExecutorService executor;
 
     /**
-     * Initializes the carbon event broker. Loads subscriptions new notifier manager set to delivery manager
+     * Initializes the carbon event broker. Loads subscriptions new notifier manager set to delivery
+     * manager.
+     *
      * @throws EventBrokerConfigurationException
      */
     public void init() throws EventBrokerConfigurationException {
@@ -68,15 +69,18 @@ public class CarbonEventBroker implements EventBroker {
 
     /**
      * Loads existing subscriptions. Delivery manager is subscribed with non expired subscriptions
+     *
      * @throws EventBrokerConfigurationException
      */
     private void loadExistingSubscriptions() throws EventBrokerConfigurationException {
         try {
             Calendar calendar = Calendar.getInstance();
-            for (Subscription subscription : this.subscriptionManager.getAllSubscriptions()){
-                if ((subscription.getExpires() == null) || (calendar.before(subscription.getExpires()))){
+            for (Subscription subscription : this.subscriptionManager.getAllSubscriptions()) {
+                if ((subscription.getExpires() == null) ||
+                    (calendar.before(subscription.getExpires()))) {
                     if (EventBrokerHolder.getInstance().getTenantDomain() != null) {
-                        subscription.setTenantDomain(EventBrokerHolder.getInstance().getTenantDomain());
+                        subscription
+                                .setTenantDomain(EventBrokerHolder.getInstance().getTenantDomain());
                         subscription.setTenantId(EventBrokerHolder.getInstance().getTenantId());
                     }
                     deliveryManager.subscribe(subscription);
@@ -106,7 +110,7 @@ public class CarbonEventBroker implements EventBroker {
         //if there is a subscription with the same topic and event sink url then
         //we think it is the same subscription.
         Subscription existingSubscription = getExistingNonExpiredSubscription(subscription);
-        if (existingSubscription != null){
+        if (existingSubscription != null) {
             return existingSubscription.getId();
         }
         if (EventBrokerHolder.getInstance().getTenantDomain() != null) {
@@ -118,12 +122,12 @@ public class CarbonEventBroker implements EventBroker {
         this.topicManager.addTopic(subscription.getTopicName());
         this.deliveryManager.subscribe(subscription);
 
-        if (subscription.getEventDispatcherName() != null){
+        if (subscription.getEventDispatcherName() != null) {
             // we persists a subscription only if it has a event dispatcher
             // name. the subscriptions with only an event dispatcher is not persisted.
             this.subscriptionManager.addSubscription(subscription);
         } else {
-            if (subscription.getEventDispatcher() == null){
+            if (subscription.getEventDispatcher() == null) {
                 throw new EventBrokerException(" subscription url, event " +
                                                "dispatcher name and event dispatcher is null");
             }
@@ -133,6 +137,7 @@ public class CarbonEventBroker implements EventBroker {
 
     /**
      * Gets existing subscription for a given new subscription topic that are not expired
+     *
      * @param newSubscription the new subscription
      * @return the existing subscription
      * @throws EventBrokerException
@@ -145,8 +150,10 @@ public class CarbonEventBroker implements EventBroker {
         Calendar calendar = Calendar.getInstance();
         for (Subscription subscription : subscriptions) {
             if (subscription.getEventSinkURL() != null) {
-                if (subscription.getEventSinkURL().equalsIgnoreCase(newSubscription.getEventSinkURL())) {
-                    if ((subscription.getExpires() == null) || (calendar.before(subscription.getExpires()))) {
+                if (subscription.getEventSinkURL()
+                        .equalsIgnoreCase(newSubscription.getEventSinkURL())) {
+                    if ((subscription.getExpires() == null) ||
+                        (calendar.before(subscription.getExpires()))) {
                         existingSubscription = subscription;
                         break;
                     }
@@ -203,7 +210,8 @@ public class CarbonEventBroker implements EventBroker {
      * {@inheritDoc}
      */
     @Override
-    public void publish(Message message, String topicName, int deliveryMode) throws EventBrokerException {
+    public void publish(Message message, String topicName, int deliveryMode)
+            throws EventBrokerException {
         EventPublisher eventPublisher =
                 new EventPublisher(message,
                                    topicName,
@@ -225,7 +233,8 @@ public class CarbonEventBroker implements EventBroker {
      * {@inheritDoc}
      */
     @Override
-    public void publishRobust(Message message, String topicName, int deliveryMode) throws EventBrokerException {
+    public void publishRobust(Message message, String topicName, int deliveryMode)
+            throws EventBrokerException {
         this.deliveryManager.publish(message, topicName, deliveryMode);
     }
 
@@ -233,12 +242,14 @@ public class CarbonEventBroker implements EventBroker {
      * {@inheritDoc}
      */
     @Override
-    public void registerEventDispatcher(String eventDispatcherName, EventDispatcher eventDispatcher) {
+    public void registerEventDispatcher(String eventDispatcherName,
+                                        EventDispatcher eventDispatcher) {
         this.notificationManager.registerEventDispatcher(eventDispatcherName, eventDispatcher);
     }
 
     /**
      * Sets new subscription manager
+     *
      * @param subscriptionManager new subscription manager
      */
     public void setSubscriptionManager(SubscriptionManager subscriptionManager) {
@@ -255,6 +266,7 @@ public class CarbonEventBroker implements EventBroker {
 
     /**
      * Sets new topic manager
+     *
      * @param topicManager new topic manager
      */
     public void setTopicManager(TopicManager topicManager) {
@@ -263,6 +275,7 @@ public class CarbonEventBroker implements EventBroker {
 
     /**
      * Sets the delivery manager
+     *
      * @param deliveryManager new delivery manager
      */
     public void setDeliveryManager(DeliveryManager deliveryManager) {
@@ -271,6 +284,7 @@ public class CarbonEventBroker implements EventBroker {
 
     /**
      * Sets the executor service
+     *
      * @param executor new executor service
      */
     public void setExecutor(ExecutorService executor) {
@@ -279,6 +293,7 @@ public class CarbonEventBroker implements EventBroker {
 
     /**
      * Cleans up the delivery broker
+     *
      * @throws EventBrokerException
      */
     public void cleanUp() throws EventBrokerException {

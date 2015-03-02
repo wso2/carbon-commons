@@ -8,10 +8,10 @@
 
     for(TopicRolePermission permission: topicRolePermissions){
         if(permission.getRoleName().equals(role)){
-            if(action.equals("subscribe")){
-                permission.setAllowedToSubscribe(checked.equals("true") ? true : false);
-            } else if (action.equals("publish")){
-                permission.setAllowedToPublish(checked.equals("true") ? true : false);
+            if("subscribe".equals(action)){
+                permission.setAllowedToSubscribe("true".equals(checked) ? true : false);
+            } else if ("publish".equals(action)){
+                permission.setAllowedToPublish("true".equals(checked) ? true : false);
             }
         }
     }

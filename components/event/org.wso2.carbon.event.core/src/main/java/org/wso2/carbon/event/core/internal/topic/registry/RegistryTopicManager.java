@@ -389,8 +389,10 @@ public class RegistryTopicManager implements TopicManager {
             if (withChildren) {
                 Collection childResources = (Collection) userRegistry.get(resourcePath);
                 for (String childResourcePath : childResources.getChildren()) {
-                    if ((!childResourcePath.contains(EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME)) &&
-                        (!childResourcePath.contains(EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME))) {
+                    if ((!EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME
+                            .contains(childResourcePath)) &&
+                        (!EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME
+                                .contains(childResourcePath))) {
                         // i.e. this folder is a topic folder
                         pathsQueue.add(childResourcePath);
                     }

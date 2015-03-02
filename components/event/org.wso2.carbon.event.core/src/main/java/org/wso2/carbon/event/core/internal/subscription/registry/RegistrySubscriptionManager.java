@@ -37,38 +37,49 @@ import java.util.Map;
 import java.util.Properties;
 
 /**
- * subscription manager implementation using registry.
- * this subscription manager stores the subscriptions in the registry patch calculated
- * as given
- * subscriptionStoragePath(read from the configuration file) + "/" + topicName
- * + "/system.subscriptions/" + subscriptionID
+ * Subscription manager implementation using registry.
  * <p/>
- * in-order to get the subscriptions quickly it also stores the subscription details in a
- * resource called topicIndex.
- * topic index resource contains
- * subscriptionID , topicName
- * when getting the subscriptions we calculate the subscription stored path using above two
+ * This subscription manager stores the subscriptions in the registry patch calculated as given
+ * subscriptionStoragePath(read from the configuration file) + "/" + topicName +
+ * "/system.subscriptions/" + subscriptionID
+ * <p/>
+ * In-order to get the subscriptions quickly it also stores the subscription details in a resource
+ * called topicIndex.
+ * <p/>
+ * Topic index resource contains subscriptionID , topicName.
+ * <p/>
+ * When getting the subscriptions we calculate the subscription stored path using above two
  * parameters.
  */
 public class RegistrySubscriptionManager implements SubscriptionManager {
 
     /**
-     * registry service to access the registry. this is get from the EBBrokerHolder
+     * Star wildcard - can substitute for exactly one word.
+     */
+    private static final  char STAR_WILDCARD = '*';
+
+    /**
+     * Hash wildcard - can substitute for zero or more words.
+     */
+    private static final char HASH_WILDCARD = '#';
+
+    /**
+     * Registry service to access the registry. this is get from the EBBrokerHolder
      */
     private RegistryService registryService;
 
     /**
-     * root patch which used to start the subscription related details.
+     * Root patch which used to start the subscription related details.
      */
     private String topicStoragePath;
 
     /**
-     * topic index resource path.
+     * Topic index resource path.
      */
     private String indexStoragePath;
 
     /**
-     * Adds topic storage path and index storage path to user registry
+     * Adds topic storage path and index storage path to user registry.
      *
      * @param topicStoragePath topic storage path. the path where topics will be stored.
      * @param indexStoragePath index storage path.
@@ -85,7 +96,8 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
         // when creating subscriptions we going to add entries to this this resource
         try {
             UserRegistry userRegistry =
-                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
+                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance()
+                                                                             .getTenantId());
 
             //create the topic storage path if it does not exists
             if (!userRegistry.resourceExists(this.topicStoragePath)) {
@@ -109,20 +121,30 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
     public void addSubscription(Subscription subscription) throws EventBrokerException {
         try {
             UserRegistry userRegistry =
-                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
-            String resourcePath = getResourcePath(subscription.getId(), subscription.getTopicName());
+                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance()
+                                                                             .getTenantId());
+            String resourcePath =
+                    getResourcePath(subscription.getId(), subscription.getTopicName());
 
             Resource resource = userRegistry.newResource();
-            resource.setProperty(EventBrokerConstants.EB_RES_SUBSCRIPTION_URL, subscription.getEventSinkURL());
-            resource.setProperty(EventBrokerConstants.EB_RES_EVENT_DISPATCHER_NAME, subscription.getEventDispatcherName());
+            resource.setProperty(EventBrokerConstants.EB_RES_SUBSCRIPTION_URL, subscription
+                    .getEventSinkURL());
+            resource.setProperty(EventBrokerConstants.EB_RES_EVENT_DISPATCHER_NAME, subscription
+                    .getEventDispatcherName());
 
             if (subscription.getExpires() != null) {
-                resource.setProperty(EventBrokerConstants.EB_RES_EXPIRS, ConverterUtil.convertToString(subscription.getExpires()));
+                resource.setProperty(EventBrokerConstants.EB_RES_EXPIRS, ConverterUtil
+                        .convertToString(subscription
+                                                 .getExpires()));
             }
             resource.setProperty(EventBrokerConstants.EB_RES_OWNER, subscription.getOwner());
-            resource.setProperty(EventBrokerConstants.EB_RES_TOPIC_NAME, subscription.getTopicName());
-            resource.setProperty(EventBrokerConstants.EB_RES_CREATED_TIME, System.currentTimeMillis() + "");
-            resource.setProperty(EventBrokerConstants.EB_RES_MODE, JavaUtil.getSubscriptionMode(subscription.getTopicName()));
+            resource.setProperty(EventBrokerConstants.EB_RES_TOPIC_NAME, subscription
+                    .getTopicName());
+            resource.setProperty(EventBrokerConstants.EB_RES_CREATED_TIME,
+                                 System.currentTimeMillis() + "");
+            resource.setProperty(EventBrokerConstants.EB_RES_MODE, JavaUtil
+                    .getSubscriptionMode(subscription
+                                                 .getTopicName()));
 
             //set the other properties of the subscription.
             Map<String, String> properties = subscription.getProperties();
@@ -151,7 +173,7 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
     }
 
     /**
-     * calculates the resource stored path using subscription id and the topic name
+     * Calculates the resource stored path using subscription id and the topic name.
      *
      * @param subscriptionID the subscription ID
      * @param topicName      topic name
@@ -171,10 +193,12 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
         // child topics as well. but we consider the topic here as the topic name just before any
         // special character.
         // eg. if topic name is myTopic/*/* then topic name is myTopic
-        if (topicName.indexOf('*') > -1){
-            topicName = topicName.substring(0, topicName.indexOf('*'));
-        } else if (topicName.indexOf('#') > -1){
-            topicName = topicName.substring(0, topicName.indexOf('#'));
+        if (topicName.indexOf(STAR_WILDCARD) > -1) {
+            topicName = topicName.substring(0, topicName.indexOf(STAR_WILDCARD));
+        } else {
+            if (topicName.indexOf(HASH_WILDCARD) > -1) {
+                topicName = topicName.substring(0, topicName.indexOf(HASH_WILDCARD));
+            }
         }
 
         resourcePath = resourcePath + topicName;
@@ -189,7 +213,8 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
     }
 
     /**
-     * Calculates the JMS subscription stored path for a WSSubscription using subscription id and the topic name
+     * Calculates the JMS subscription stored path for a WSSubscription using subscription id and
+     * the topic name.
      *
      * @param subscriptionID the subscription ID
      * @param topicName      the topic name
@@ -209,10 +234,10 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
         // child topics as well. but we consider the topic here as the topic name just before any
         // special character.
         // eg. if topic name is myTopic/*/* then topic name is myTopic
-        if (topicName.indexOf('*') > -1) {
-            topicName = topicName.substring(0, topicName.indexOf('*'));
-        } else if (topicName.indexOf('#') > -1) {
-            topicName = topicName.substring(0, topicName.indexOf('#'));
+        if (topicName.indexOf(STAR_WILDCARD) > -1) {
+            topicName = topicName.substring(0, topicName.indexOf(STAR_WILDCARD));
+        } else if (topicName.indexOf(HASH_WILDCARD) > -1) {
+            topicName = topicName.substring(0, topicName.indexOf(HASH_WILDCARD));
         }
 
         resourcePath = resourcePath + topicName;
@@ -235,7 +260,8 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
 
         try {
             UserRegistry userRegistry =
-                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
+                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance()
+                                                                             .getTenantId());
             if (userRegistry.resourceExists(this.indexStoragePath)) {
                 Resource topicIndexResource = userRegistry.get(this.indexStoragePath);
                 Properties savedSubscriptions = topicIndexResource.getProperties();
@@ -246,11 +272,12 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
                 String topicName;
                 for (Enumeration e = savedSubscriptions.propertyNames(); e.hasMoreElements(); ) {
                     subscriptionID = (String) e.nextElement();
-                    // when the registry is remotely mount to another registry. then registry automatically added
-                    // some properties stays with registry we need to skip them.
+                    // when the registry is remotely mount to another registry. then registry
+                    // automatically added some properties stays with registry we need to skip them.
                     if (!subscriptionID.startsWith("registry")) {
                         topicName = topicIndexResource.getProperty(subscriptionID);
-                        subscriptionResource = userRegistry.get(getResourcePath(subscriptionID, topicName));
+                        subscriptionResource =
+                                userRegistry.get(getResourcePath(subscriptionID, topicName));
                         subscription = JavaUtil.getSubscription(subscriptionResource);
                         subscription.setId(subscriptionID);
                         subscription.setTopicName(topicName);
@@ -274,7 +301,8 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
 
         try {
             UserRegistry userRegistry =
-                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
+                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance()
+                                                                             .getTenantId());
             Resource topicIndexResource = userRegistry.get(this.indexStoragePath);
             String subscriptionPath = getResourcePath(id, topicIndexResource.getProperty(id));
             if (subscriptionPath != null && userRegistry.resourceExists(subscriptionPath)) {
@@ -298,7 +326,8 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
 
         try {
             UserRegistry userRegistry =
-                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
+                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance()
+                                                                             .getTenantId());
             Resource topicIndexResource = userRegistry.get(this.indexStoragePath);
             String topicName = topicIndexResource.getProperty(subscription.getId());
             String subscriptionPath = getResourcePath(subscription.getId(), topicName);
@@ -306,8 +335,9 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
                 Resource subscriptionResource = userRegistry.get(subscriptionPath);
                 // Set the expires property only if it has been set again.
                 if (subscription.getExpires() != null) {
-                    subscriptionResource.setProperty(EventBrokerConstants.EB_RES_EXPIRS,
-                                                     ConverterUtil.convertToString(subscription.getExpires()));
+                    subscriptionResource.setProperty(
+                            EventBrokerConstants.EB_RES_EXPIRS,
+                            ConverterUtil.convertToString(subscription.getExpires()));
                 }
                 // There might be updated subscription properties. Set them too.
                 Subscription currentSubscription = JavaUtil.getSubscription(subscriptionResource);
@@ -339,7 +369,8 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
     public void unSubscribe(String subscriptionID) throws EventBrokerException {
         try {
             UserRegistry userRegistry =
-                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
+                    this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance()
+                                                                             .getTenantId());
             String fullPath = this.indexStoragePath;
             if (userRegistry.resourceExists(fullPath)) {
                 Resource topicIndexResource = userRegistry.get(fullPath);
