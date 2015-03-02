@@ -47,7 +47,7 @@ public class CarbonEventBrokerFactory implements EventBrokerFactory {
         // setting the topic manager
         OMElement topicManagerElement =
                 config.getFirstChildWithName(new QName(EventBrokerConstants.EB_CONF_NAMESPACE,
-                        EventBrokerConstants.EB_CONF_ELE_TOPIC_MANAGER));
+                                                       EventBrokerConstants.EB_CONF_ELE_TOPIC_MANAGER));
         TopicManagerFactory topicManagerFactory =
                 (TopicManagerFactory) JavaUtil.getObject(topicManagerElement);
         TopicManager topicManager = topicManagerFactory.getTopicManager(topicManagerElement);
@@ -56,7 +56,7 @@ public class CarbonEventBrokerFactory implements EventBrokerFactory {
         // setting the subscription manager
         OMElement subscriptionManager =
                 config.getFirstChildWithName(new QName(EventBrokerConstants.EB_CONF_NAMESPACE,
-                        EventBrokerConstants.EB_CONF_ELE_SUBSCRIPTION_MANAGER));
+                                                       EventBrokerConstants.EB_CONF_ELE_SUBSCRIPTION_MANAGER));
         SubscriptionManagerFactory subscriptionManagerFactory =
                 (SubscriptionManagerFactory) JavaUtil.getObject(subscriptionManager);
         carbonEventBroker.setSubscriptionManager(
@@ -65,15 +65,15 @@ public class CarbonEventBrokerFactory implements EventBrokerFactory {
         // setting the delivery manager
         OMElement delivaryManager =
                 config.getFirstChildWithName(new QName(EventBrokerConstants.EB_CONF_NAMESPACE,
-                        EventBrokerConstants.EB_CONF_ELE_DELIVERY_MANAGER));
+                                                       EventBrokerConstants.EB_CONF_ELE_DELIVERY_MANAGER));
         DeliveryManagerFactory delivaryManagerfactory =
-                       (DeliveryManagerFactory) JavaUtil.getObject(delivaryManager);
-        carbonEventBroker.setDelivaryManager(
+                (DeliveryManagerFactory) JavaUtil.getObject(delivaryManager);
+        carbonEventBroker.setDeliveryManager(
                 delivaryManagerfactory.getDeliveryManger(delivaryManager));
 
         // getting the event publisher properties and setting the executor
         OMElement eventPublisher = config.getFirstChildWithName(new QName(EventBrokerConstants.EB_CONF_NAMESPACE,
-                        EventBrokerConstants.EB_CONF_ELE_EVENT_PUBLISHER));
+                                                                          EventBrokerConstants.EB_CONF_ELE_EVENT_PUBLISHER));
         int minSpareThreads = Integer.parseInt(JavaUtil.getValue(eventPublisher, EB_MIN_SPARE_THREADS));
         int maxThreads = Integer.parseInt(JavaUtil.getValue(eventPublisher, EB_MAX_THREADS));
         int maxQueuedRequests =
@@ -84,7 +84,7 @@ public class CarbonEventBrokerFactory implements EventBrokerFactory {
         BlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(maxQueuedRequests);
 
         ExecutorService executor = new ThreadPoolExecutor(minSpareThreads, maxThreads,
-                keepAliveTime, TimeUnit.MILLISECONDS, queue);
+                                                          keepAliveTime, TimeUnit.MILLISECONDS, queue);
         carbonEventBroker.setExecutor(executor);
 
         carbonEventBroker.init();

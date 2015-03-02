@@ -69,9 +69,9 @@
                 brokerClient.subscribe(topic, eventSink, time, null);
                 message = "Subscribed to " + eventSink + " using " + topic + " Successfully";
             } catch (BrokerClientException e) {
-                message = "Error:" + e.getErrorMessage();
+                message = e.getErrorMessage();
             } catch (ParseException e) {
-                message = "Error:Expiration date/time(" + expirationDateTime + ") is invalid.";
+                message = "Expiration date/time(" + expirationDateTime + ") is invalid.";
             }
 
 %>
