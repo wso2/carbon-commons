@@ -27,7 +27,7 @@
 			<order>15</order>
 			<style-class>manage</style-class>                 
             <icon>../ndatasource/images/data-sources-icon.gif</icon>
-            <require-permission>/permission/admin/configure/ndatasources</require-permission>
+            <require-permission>/permission/admin/configure/datasources</require-permission>
         </menu>
 	</menus>
 </component>

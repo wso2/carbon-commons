@@ -19,6 +19,11 @@
 			<artifactId>org.wso2.carbon.ndatasource.ui.feature</artifactId>
 			<type>zip</type>
 		</dependency>
+                <dependency>
+			<groupId>org.wso2.carbon.commons</groupId>
+			<artifactId>org.wso2.carbon.ndatasource.datasources.feature</artifactId>
+			<type>zip</type>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -42,6 +47,7 @@
 							</importFeatures>
 							<includedFeatures>
 								<includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.ui.feature:${carbon.commons.version}</includedFeatureDef>
+                                                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.datasources.feature:${carbon.commons.version}</includedFeatureDef>
 							</includedFeatures>
 						</configuration>
 					</execution>

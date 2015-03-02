@@ -1427,6 +1427,11 @@
                 <version>${hadoop.version}</version>
             </dependency>
             <dependency>
+            	<groupId>org.apache.tomcat.wso2</groupId>
+            	<artifactId>jdbc-pool</artifactId>
+            	<version>${jdbc-pool.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.hadoop.wso2</groupId>
                 <artifactId>hadoop-core</artifactId>
                 <version>${hadoop.orbit.version}</version>
@@ -1584,6 +1589,17 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.ndatasource.ui.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.ndatasource.datasources</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.ndatasource.datasources.feature</artifactId>
                 <version>${carbon.commons.version}</version>
                 <type>zip</type>
             </dependency>
@@ -2031,6 +2047,7 @@
         <google.guava.wso2.version>12.0.0.wso2v1</google.guava.wso2.version>
         <google.guava.version>13.0.1</google.guava.version>
         <hadoop.version>0.20.203.1-wso2v2</hadoop.version>
+        <jdbc-pool.version>7.0.34.wso2v2</jdbc-pool.version>
         <hadoop.orbit.version>0.20.203.1.wso2v2</hadoop.orbit.version>
         <atomikos.version>3.8.0.wso2v1</atomikos.version>
         <jboss-transaction-api_1.1_spec.version>1.0.0.Final</jboss-transaction-api_1.1_spec.version>
