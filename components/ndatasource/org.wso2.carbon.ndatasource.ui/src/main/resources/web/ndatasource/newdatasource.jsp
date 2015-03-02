@@ -1177,6 +1177,7 @@ function displayPasswordField() {
             		var driver = document.getElementById('driver').value;
             		var url = document.getElementById('url').value;
             		var username = document.getElementById('username').value;
+                    username = encodeURIComponent(username);
             	} else {
             		var dsclassname = document.getElementById('dsclassname').value;
             		var dsproviderProperties = document.getElementById('dsproviderProperties').value;
@@ -1191,10 +1192,12 @@ function displayPasswordField() {
     		var editMode = document.getElementById("editMode").value;
 			if (editMode == null || editMode == "false") {
 				password = document.getElementById('password').value;
+                password = encodeURIComponent(password);
 				url = url + '&password='+password;
 			} else {
 				var changePassword = "false";
 				password = document.getElementById('newPassword').value;
+                password = encodeURIComponent(password);
 				if (document.getElementById('changePassword') != null) {
 					changePassword = document.getElementById('changePassword').checked;
 				}
