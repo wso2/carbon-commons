@@ -15,6 +15,7 @@
 * limitations under the License.
 */
 -->
+<%@page import="org.wso2.carbon.ndatasource.common.DataSourceException"%>
 <%@ page import="org.apache.axis2.context.ConfigurationContext" %>
 <%@ page import="org.wso2.carbon.CarbonConstants" %>
 <%@ page import="org.wso2.carbon.identity.user.store.configuration.stub.dto.PropertyDTO" %>
@@ -80,13 +81,19 @@
                     userStoreDTO.setProperties(propertyList.toArray(new PropertyDTO[propertyList.size()]));
 
                     if(domain != null && domain != "") {
-        	            if(previousDomain != null && previousDomain != "" && previousDomain != domain) {
-        	            	// update with domain name change
-        	            	userStoreConfigAdminServiceClient.updateUserStoreWithDomainName(previousDomain, userStoreDTO);
+        	            if(previousDomain != null && previousDomain != "") {
+        	                    // This is an update
+        	                    if(previousDomain != domain) {
+        	                            // update userstore with domain name change
+        	                            userStoreConfigAdminServiceClient.updateUserStoreWithDomainName(previousDomain, userStoreDTO);
+        	                    } else {
+        	                            // update userstore with same domain name
+        	                            userStoreConfigAdminServiceClient.editUserStore(userStoreDTO);
+        	                    }
         	            }
         	            else {
-        	            	// update without domain name change or a add
-        	            	userStoreConfigAdminServiceClient.addUserStore(userStoreDTO);
+        	                    // This is an add
+        	                    userStoreConfigAdminServiceClient.addUserStore(userStoreDTO);
         	            }
 
         	            // Session need to be update according to new user store info 
@@ -103,6 +110,10 @@
                         forwardTo = "index.jsp?region=region1&item=userstores_mgt_menu";
                     }
 
+            }catch(DataSourceException dse){
+            	String message = dse.getMessage();
+                CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.ERROR, request);
+                forwardTo = "index.jsp?region=region1&item=userstores_mgt_menu";
             } catch (Exception e) {
                 String message = resourceBundle.getString("error.update");
                 CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.ERROR, request);
