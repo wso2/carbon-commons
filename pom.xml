@@ -1238,9 +1238,9 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>org.apache.tomcat.wso2</groupId>
+                <groupId>org.wso2.tomcat</groupId>
                 <artifactId>tomcat-servlet-api</artifactId>
-                <version>7.0.52.wso2v1</version>
+                <version>${orbit.version.tomcat.servlet.api}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.batik.wso2</groupId>
@@ -1879,7 +1879,7 @@
         <!-- Stratos Version -->
         <stratos.version>2.2.0</stratos.version>
 
-        <version.tomcat>7.0.52</version.tomcat>
+        <version.tomcat>7.0.59</version.tomcat>
         <orbit.version.tomcat.servlet.api>${version.tomcat}.wso2v1</orbit.version.tomcat.servlet.api>
 
         <!-- Axiom Version -->
