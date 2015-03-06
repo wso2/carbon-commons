@@ -427,7 +427,7 @@ public class RegistryTopicManager implements TopicManager {
      * @return true if topic name is valid, false otherwise.
      */
     private boolean validateTopicName(String topicName) {
-        return Pattern.matches("[[a-zA-Z]+[^(\\x00-\\x80)]+[0-9_\\-/#*.?&\\s()]+]+", topicName);
+        return Pattern.matches("[[a-zA-Z]+[^(\\x00-\\x80)]+[0-9_\\-/#*:.?&\\s()]+]+", topicName);
     }
 
     /**
