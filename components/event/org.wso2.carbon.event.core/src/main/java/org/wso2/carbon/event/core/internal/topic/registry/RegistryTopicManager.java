@@ -153,10 +153,9 @@ public class RegistryTopicManager implements TopicManager {
 
                 // Grant this user (owner) rights to update permission on newly created topic
                 UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(
-                        CarbonContext.getThreadLocalCarbonContext().getTenantId());
+                                        CarbonContext.getThreadLocalCarbonContext().getTenantId());
 
-                authorizePermissionsToLoggedInUser(loggedInUser, topicName, resourcePath,
-                                                   userRealm);
+                authorizePermissionsToLoggedInUser(loggedInUser, topicName, resourcePath, userRealm);
             }
         } catch (RegistryException e) {
             throw new EventBrokerException("Cannot access the config registry", e);
@@ -173,7 +172,7 @@ public class RegistryTopicManager implements TopicManager {
      * @param topic topic name
      * @return a topic name
      */
-    private String removeResourcePath(String topic) {
+    private String getResourcePath(String topic) {
         String resourcePath = this.topicStoragePath;
         if (topic.contains(resourcePath)) {
             topic = topic.substring(topic.indexOf(resourcePath) + resourcePath.length());
@@ -375,7 +374,7 @@ public class RegistryTopicManager implements TopicManager {
                 for (String subscriptionPath : collection.getChildren()) {
                     Resource subscriptionResource = userRegistry.get(subscriptionPath);
                     Subscription subscription = JavaUtil.getSubscription(subscriptionResource);
-                    subscription.setTopicName(removeResourcePath(resourcePath));
+                    subscription.setTopicName(getResourcePath(resourcePath));
 
                     if (subscriptionPath.endsWith("/")) {
                         subscriptionPath = subscriptionsPath.substring(0, subscriptionPath.lastIndexOf("/"));
@@ -514,8 +513,8 @@ public class RegistryTopicManager implements TopicManager {
      */
     private static void authorizePermissionsToLoggedInUser(String username, String destinationName,
                                                            String destinationId,
-                                                           UserRealm userRealm) throws
-                                                                                UserStoreException {
+                                                           UserRealm userRealm)
+            throws UserStoreException, EventBrokerException {
 
         //For registry we use a modified queue name
         String newDestinationName = destinationName.replace("@", AT_REPLACE_CHAR);
@@ -543,8 +542,8 @@ public class RegistryTopicManager implements TopicManager {
                     roleName, destinationId, EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
 
         } else {
-            log.warn("Unable to provide permissions to the user, " +
-                     " " + username + ", to subscribe and publish to " + newDestinationName);
+            throw new EventBrokerException("Unable to provide permissions to the user, " + username
+                                           + ", to subscribe and publish to " + newDestinationName);
         }
     }
 
