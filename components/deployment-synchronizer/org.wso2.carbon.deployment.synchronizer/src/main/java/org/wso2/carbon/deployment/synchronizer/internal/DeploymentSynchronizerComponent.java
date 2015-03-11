@@ -52,29 +52,33 @@ public class DeploymentSynchronizerComponent {
 
     protected void activate(ComponentContext context) {
 
-        // Initialize the repository manager so that it can be later used to
-        // start a synchronizer (eg: via the UI)
-        ServerConfiguration serverConfig = ServerConfiguration.getInstance();
-        DeploymentSynchronizationManager.getInstance().init(serverConfig);
-
         try {
-            initDeploymentSynchronizerForSuperTenant();
-        } catch (DeploymentSynchronizerException e) {
-            log.error("Error while initializing a deployment synchronizer for the super tenant " +
-                      "Carbon repository", e);
+            // Initialize the repository manager so that it can be later used to
+            // start a synchronizer (eg: via the UI)
+            ServerConfiguration serverConfig = ServerConfiguration.getInstance();
+            DeploymentSynchronizationManager.getInstance().init(serverConfig);
+
+            try {
+                initDeploymentSynchronizerForSuperTenant();
+            } catch (DeploymentSynchronizerException e) {
+                log.error("Error while initializing a deployment synchronizer for the super tenant " +
+                          "Carbon repository", e);
+            }
+
+            // Register an observer so we can track tenant ConfigurationContext creation and
+            // do the synchronization operations as necessary
+            BundleContext bundleContext = context.getBundleContext();
+            observerRegistration = bundleContext.registerService(Axis2ConfigurationContextObserver.class.getName(),
+                                                                 new DeploymentSyncAxis2ConfigurationContextObserver(), null);
+
+            // register the OSGi service
+            bundleContext.registerService(new String[]{DeploymentSynchronizerService.class.getName(),
+                                                       org.wso2.carbon.core.deployment.DeploymentSynchronizer.class.getName()},
+                                          new DeploymentSynchronizerServiceImpl(), null);
+            log.debug("Deployment synchronizer component activated");
+        } catch (Throwable e) {
+            log.info("Error activating Deployment Synchronizer component. " + e.getMessage(), e);
         }
-
-        // Register an observer so we can track tenant ConfigurationContext creation and
-        // do the synchronization operations as necessary
-        BundleContext bundleContext = context.getBundleContext();
-        observerRegistration = bundleContext.registerService(Axis2ConfigurationContextObserver.class.getName(),
-                                                             new DeploymentSyncAxis2ConfigurationContextObserver(), null);
-
-        // register the OSGi service
-        bundleContext.registerService(new String[]{DeploymentSynchronizerService.class.getName(),
-                                                  org.wso2.carbon.core.deployment.DeploymentSynchronizer.class.getName()},
-                                      new DeploymentSynchronizerServiceImpl(), null);
-        log.debug("Deployment synchronizer component activated");
     }
 
     private void initDeploymentSynchronizerForSuperTenant() throws DeploymentSynchronizerException {
