@@ -167,7 +167,7 @@ public class CarbonEventBroker implements EventBroker {
      * {@inheritDoc}
      */
     @Override
-    public void unSubscribe(String id) throws EventBrokerException {
+    public void unsubscribe(String id) throws EventBrokerException {
         this.subscriptionManager.unSubscribe(id);
         this.deliveryManager.unSubscribe(id);
     }
