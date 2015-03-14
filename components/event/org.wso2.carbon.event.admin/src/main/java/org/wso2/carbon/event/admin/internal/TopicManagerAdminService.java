@@ -44,7 +44,7 @@ public class TopicManagerAdminService {
      *
      * @param topic Topic name
      * @return An array of TopicRolePermission
-     * @throws EventAdminException
+     * @throws EventAdminException Thrown when topic manager cannot be accessed.
      */
     @SuppressWarnings("UnusedDeclaration")
     public TopicRolePermission[] getTopicRolePermissions(String topic) throws EventAdminException {
@@ -52,8 +52,9 @@ public class TopicManagerAdminService {
         try {
             return eventBroker.getTopicManager().getTopicRolePermission(topic);
         } catch (EventBrokerException e) {
-            log.error("Error in accessing topic manager", e);
-            throw new EventAdminException("Error in accessing topic manager", e);
+            String errorMessage = "Error in accessing topic manager";
+            log.error(errorMessage, e);
+            throw new EventAdminException(errorMessage, e);
         }
     }
 
@@ -61,7 +62,7 @@ public class TopicManagerAdminService {
      * Adds a new topic
      *
      * @param topic New topic name
-     * @throws EventAdminException
+     * @throws EventAdminException Thrown when accessing registry or when providing permissions.
      */
     public void addTopic(String topic) throws EventAdminException {
         EventBroker eventBroker = EventAdminHolder.getInstance().getEventBroker();
@@ -72,8 +73,9 @@ public class TopicManagerAdminService {
                 throw new EventAdminException("Topic with name : " + topic + " already exists!");
             }
         } catch (EventBrokerException e) {
-            log.error("Error in adding a topic", e);
-            throw new EventAdminException("Error in adding a topic", e);
+            String errorMessage = "Error in adding a topic";
+            log.error(errorMessage, e);
+            throw new EventAdminException(errorMessage, e);
         }
     }
 
@@ -83,7 +85,7 @@ public class TopicManagerAdminService {
      *
      * @param topic                Topic name
      * @param topicRolePermissions New roles with permissions
-     * @throws EventAdminException
+     * @throws EventAdminException Thrown when updating topic permissions.
      */
     @SuppressWarnings("UnusedDeclaration")
     public void updatePermission(String topic, TopicRolePermission[] topicRolePermissions)
@@ -92,8 +94,9 @@ public class TopicManagerAdminService {
         try {
             eventBroker.getTopicManager().updatePermissions(topic, topicRolePermissions);
         } catch (EventBrokerException e) {
-            log.error("Error in updating permissions for topic", e);
-            throw new EventAdminException("Error in updating permissions for topic", e);
+            String errorMessage = "Error in updating permissions for topic";
+            log.error(errorMessage, e);
+            throw new EventAdminException(errorMessage, e);
         }
     }
 
@@ -105,7 +108,7 @@ public class TopicManagerAdminService {
      * @param startingIndex        Starting index of which the results should be returned
      * @param maxSubscriptionCount The amount of results to be returned
      * @return An array of Subscriptions
-     * @throws EventAdminException
+     * @throws EventAdminException Thrown when accessing topic manager.
      */
     @SuppressWarnings("UnusedDeclaration")
     public Subscription[] getAllWSSubscriptionsForTopic(String topic, int startingIndex,
@@ -137,8 +140,9 @@ public class TopicManagerAdminService {
             }
             return subscriptionsDTO;
         } catch (EventBrokerException e) {
-            log.error("Error in accessing topic manager", e);
-            throw new EventAdminException("Error in accessing topic manager", e);
+            String errorMessage = "Error in accessing topic manager";
+            log.error(errorMessage, e);
+            throw new EventAdminException(errorMessage, e);
         }
     }
 
@@ -148,7 +152,7 @@ public class TopicManagerAdminService {
      *
      * @param topic Topic name
      * @return An array of subscriptions
-     * @throws EventAdminException
+     * @throws EventAdminException Thrown when accessing topic manager.
      */
     @SuppressWarnings("UnusedDeclaration")
     public Subscription[] getWsSubscriptionsForTopic(String topic) throws EventAdminException {
@@ -156,8 +160,9 @@ public class TopicManagerAdminService {
         try {
             return adaptSubscriptions(eventBroker.getTopicManager().getSubscriptions(topic, true));
         } catch (EventBrokerException e) {
-            log.error("Error in accessing topic manager", e);
-            throw new EventAdminException("Error in accessing topic manager", e);
+            String errorMessage = "Error in accessing topic manager";
+            log.error(errorMessage, e);
+            throw new EventAdminException(errorMessage, e);
         }
     }
 
@@ -167,7 +172,7 @@ public class TopicManagerAdminService {
      *
      * @param topic Topic name
      * @return Number of subscriptions
-     * @throws EventAdminException
+     * @throws EventAdminException Thrown when accessing topic manager.
      */
     @SuppressWarnings("UnusedDeclaration")
     public int getAllWSSubscriptionCountForTopic(String topic) throws EventAdminException {
@@ -175,8 +180,9 @@ public class TopicManagerAdminService {
         try {
             return eventBroker.getTopicManager().getSubscriptions(topic, true).length;
         } catch (EventBrokerException e) {
-            log.error("Error in accessing topic manager", e);
-            throw new EventAdminException("Error in accessing topic manager", e);
+            String errorMessage = "Error in accessing topic manager";
+            log.error(errorMessage, e);
+            throw new EventAdminException(errorMessage, e);
         }
     }
 
@@ -186,7 +192,7 @@ public class TopicManagerAdminService {
      *
      * @param topic Topic name
      * @return An array of subscriptions
-     * @throws EventAdminException
+     * @throws EventAdminException Thrown when getting JMS subscriptions details from registry.
      */
     @SuppressWarnings("UnusedDeclaration")
     public Subscription[] getJMSSubscriptionsForTopic(String topic)
@@ -195,8 +201,9 @@ public class TopicManagerAdminService {
         try {
             return adaptSubscriptions(eventBroker.getTopicManager().getJMSSubscriptions(topic));
         } catch (EventBrokerException e) {
-            log.error("Cannot get the jms subscriptions", e);
-            throw new EventAdminException("Cannot get the jms subscriptions", e);
+            String errorMessage = "Cannot get the jms subscriptions";
+            log.error(errorMessage, e);
+            throw new EventAdminException(errorMessage, e);
         }
     }
 
@@ -204,15 +211,16 @@ public class TopicManagerAdminService {
      * Gets user roles through topic manager
      *
      * @return A string array of roles
-     * @throws EventAdminException
+     * @throws EventAdminException Thrown when topic manager is unable to get user roles.
      */
     public String[] getUserRoles() throws EventAdminException {
         EventBroker eventBroker = EventAdminHolder.getInstance().getEventBroker();
         try {
             return eventBroker.getTopicManager().getBackendRoles();
         } catch (EventBrokerException e) {
-            log.error("Error in getting user roles from topic manager", e);
-            throw new EventAdminException("Error in getting user roles from topic manager", e);
+            String errorMessage = "Error in getting user roles from topic manager";
+            log.error(errorMessage, e);
+            throw new EventAdminException(errorMessage, e);
         }
     }
 
@@ -230,8 +238,9 @@ public class TopicManagerAdminService {
         try {
             return eventBroker.getTopicManager().removeTopic(topic);
         } catch (EventBrokerException e) {
-            log.error("Error in removing a topic", e);
-            throw new EventAdminException("Error in removing a topic", e);
+            String errorMessage = "Error in removing a topic";
+            log.error(errorMessage, e);
+            throw new EventAdminException(errorMessage, e);
         }
     }
 
