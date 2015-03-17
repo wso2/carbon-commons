@@ -34,12 +34,16 @@ import org.wso2.carbon.deployment.synchronizer.util.ServiceReferenceHolder;
 import org.wso2.carbon.utils.Axis2ConfigurationContextObserver;
 import org.wso2.carbon.utils.ConfigurationContextService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+import org.wso2.carbon.registry.core.service.RegistryService;
 
 /**
  * @scr.component name="org.wso2.carbon.deployment.synchronizer.XXX" immediate="true"
  * @scr.reference name="configuration.context.service"
  * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="1..1"
  * policy="dynamic" bind="setConfigurationContextService" unbind="unsetConfigurationContextService"
+ * @scr.reference name="registry.service"
+ * interface="org.wso2.carbon.registry.core.service.RegistryService" cardinality="1..1"
+ * policy="dynamic" bind="setRegistryService" unbind="unsetRegistryService"
  * @scr.reference name="repository.reference.service"
  * interface="org.wso2.carbon.deployment.synchronizer.ArtifactRepository" cardinality="0..n"
  * policy="dynamic" bind="addArtifactRepository" unbind="removeArtifactRepository"
@@ -127,6 +131,20 @@ public class DeploymentSynchronizerComponent {
     protected void removeArtifactRepository(ArtifactRepository artifactRepository){
         RepositoryReferenceHolder repositoryReferenceHolder = RepositoryReferenceHolder.getInstance();
         repositoryReferenceHolder.removeRepository(artifactRepository);
+    }
+
+    protected void setRegistryService(RegistryService service) {
+        if (log.isDebugEnabled()) {
+            log.debug("Deployment synchronizer component bound to the registry service");
+        }
+        ServiceReferenceHolder.setRegistryService(service);
+    }
+
+    protected void unsetRegistryService(RegistryService service) {
+        if (log.isDebugEnabled()) {
+            log.debug("Deployment synchronizer component unbound from the registry service");
+        }
+        ServiceReferenceHolder.setRegistryService(null);
     }
 
 }
