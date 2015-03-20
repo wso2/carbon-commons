@@ -1879,16 +1879,16 @@
         <orbit.version.tomcat.servlet.api>${version.tomcat}.wso2v1</orbit.version.tomcat.servlet.api>
 
         <!-- Axiom Version -->
-        <axiom.wso2.version>1.2.11.wso2v6-SNAPSHOT</axiom.wso2.version>
-        <axiom.version>1.2.11-wso2v6-SNAPSHOT</axiom.version>
+        <axiom.wso2.version>1.2.11.wso2v6</axiom.wso2.version>
+        <axiom.version>1.2.11-wso2v6</axiom.version>
         <axiom.osgi.version.range>[1.2.11.wso2v6, 1.3.0)</axiom.osgi.version.range>
-        <orbit.version.axiom>1.2.11.wso2v6-SNAPSHOT</orbit.version.axiom>
+        <orbit.version.axiom>1.2.11.wso2v6</orbit.version.axiom>
 
         <!-- Axis2 Version -->
-        <axis2.wso2.version>1.6.1-wso2v12-SNAPSHOT</axis2.wso2.version>
-        <axis2.version>1.6.1-wso2v12-SNAPSHOT</axis2.version>
+        <axis2.wso2.version>1.6.1-wso2v12</axis2.wso2.version>
+        <axis2.version>1.6.1-wso2v12</axis2.version>
         <axis2.osgi.version.range>[1.6.1.wso2v12, 1.7.0)</axis2.osgi.version.range>
-        <orbit.version.axis2>1.6.1.wso2v12-SNAPSHOT</orbit.version.axis2>
+        <orbit.version.axis2>1.6.1.wso2v12</orbit.version.axis2>
         <axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
         <neethi.osgi.version>2.0.4.wso2v4</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
