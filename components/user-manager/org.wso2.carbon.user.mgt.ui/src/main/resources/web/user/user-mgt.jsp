@@ -32,7 +32,7 @@
 <%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.UserRealmInfo" %>
 <%@ page import="java.text.MessageFormat" %>
 <%@ page import="java.net.URLEncoder" %>
-<%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.ClaimValue" %>
+<%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.ClaimValue"%>
 <script type="text/javascript" src="../userstore/extensions/js/vui.js"></script>
 <script type="text/javascript" src="../admin/js/main.js"></script>
 
@@ -46,7 +46,7 @@
     boolean showFilterMessage = false;
     boolean multipleUserStores = false;
     String forwardTo = "user-mgt.jsp";
-
+               
     FlaggedName[] datas = null;
     FlaggedName exceededDomains = null;
     String[] claimUris = null;
@@ -59,7 +59,7 @@
     Map<Integer, PaginatedNamesBean>  flaggedNameMap = null;
 
     String BUNDLE = "org.wso2.carbon.userstore.ui.i18n.Resources";
-    ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE, request.getLocale());
+    ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE, request.getLocale());    
 
     // remove session data
     session.removeAttribute("userBean");
@@ -141,7 +141,7 @@
     } catch (NumberFormatException ignored) {
         // page number format exception
     }
-
+    
     flaggedNameMap  = (Map<Integer, PaginatedNamesBean>) session.getAttribute(UserAdminUIConstants.USER_LIST_CACHE);
     if(flaggedNameMap != null){
         PaginatedNamesBean bean = flaggedNameMap.get(pageNumber);
@@ -214,7 +214,7 @@
                     session.setAttribute(UserAdminUIConstants.USER_LIST_CACHE, flaggedNameMap);
                 }
             }
-
+            
         } catch (Exception e) {
             String message =  MessageFormat.format(resourceBundle.getString("error.while.user.filtered"),
                     e.getMessage());
@@ -305,7 +305,7 @@
                         <td>
                             <input type="text" name="<%=UserAdminUIConstants.USER_LIST_FILTER%>"
                                    value="<%=filter%>"/>
-
+                      
                             <input class="button" type="submit"
                                    value="<fmt:message key="user.search"/>"/>
                         </td>
@@ -393,11 +393,11 @@
                         <a href="change-passwd.jsp?isUserChange=true&returnPath=user-mgt.jsp" class="icon-link"
                            style="background-image:url(../admin/images/edit.gif);"><fmt:message
                                 key="change.password"/></a>
-
-                        <%
+                                
+                        <% 
                             	}else{
                         %>
-
+                        
                         <a href="change-passwd.jsp?username=<%=java.net.URLEncoder.encode(userName,"UTF-8")%>&disPlayName=<%=java.net.URLEncoder.encode(disPlayName,"UTF-8")%>" class="icon-link"
                            style="background-image:url(../admin/images/edit.gif);"><fmt:message
                                 key="change.password"/></a>
