@@ -625,6 +625,23 @@ public class UserRealmProxy {
         }
     }
 
+    /**
+     * Add the primary domain to the user name if username does not contain a domain
+     * @param userName Logged in username
+     * @return Primary domain added username
+     */
+    private final String addPrimaryDomainIfNotExists(String userName) {
+
+        if ((userName.indexOf(UserCoreConstants.DOMAIN_SEPARATOR)) < 0) {
+            StringBuilder builder = new StringBuilder();
+            builder.append(UserCoreConstants.PRIMARY_DEFAULT_DOMAIN_NAME).append(CarbonConstants.DOMAIN_SEPARATOR)
+                    .append(userName);
+            userName = builder.toString();
+        }
+
+        return userName;
+    }
+
     public void addUser(String userName, String password, String[] roles, ClaimValue[] claims,
             String profileName) throws UserAdminException {
         try {
@@ -637,7 +654,8 @@ public class UserRealmProxy {
 
             // check whether login-in user has privilege to add user with admin privileges
             if (roles != null && roles.length > 0) {
-                String loggedInUserName = getLoggedInUser();
+                String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
+                String adminUser = addPrimaryDomainIfNotExists(realmConfig.getAdminUserName());
                 Arrays.sort(roles);
                 boolean isRoleHasAdminPermission = false;
                 for(String role : roles){
@@ -654,7 +672,7 @@ public class UserRealmProxy {
                 }
 
                 if (isRoleHasAdminPermission &&
-                                !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)) {
+                        !adminUser.equalsIgnoreCase(loggedInUserName)) {
                     log.warn("An attempt to assign user " + userName + " " +
                             "to Admin permission role by user : " + loggedInUserName);
                     throw new UserStoreException("You have not privilege to assign user to Admin permission role");
@@ -687,8 +705,10 @@ public class UserRealmProxy {
                 throw new UserStoreException("An attempt to change password with out providing old password");
             }
             RealmConfiguration realmConfig = realm.getRealmConfiguration();
+            loggedInUserName = addPrimaryDomainIfNotExists(loggedInUserName);
+            String adminUser = addPrimaryDomainIfNotExists(realmConfig.getAdminUserName());
             if(realmConfig.getAdminUserName().equalsIgnoreCase(userName) &&
-                                    !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                    !adminUser.equalsIgnoreCase(loggedInUserName)){
                 log.warn("An attempt to change password of Admin user by user : " + loggedInUserName);
                 throw new UserStoreException("You have not privilege to change password of Admin user");
             }
@@ -705,7 +725,7 @@ public class UserRealmProxy {
                 }
 
                 if(isUserHadAdminPermission &&
-                        !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                        !adminUser.equalsIgnoreCase(loggedInUserName)){
                     log.warn("An attempt to change password of user has admin permission by user : " +
                                                                                     loggedInUserName);
                     throw new UserStoreException("You have not privilege to change password of user " +
@@ -724,10 +744,11 @@ public class UserRealmProxy {
 
     public void deleteUser(String userName, Registry registry) throws UserAdminException {
         try {
-            String loggedInUserName = getLoggedInUser();
+            String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
             RealmConfiguration realmConfig = realm.getRealmConfiguration();
+            String adminUser = addPrimaryDomainIfNotExists(realmConfig.getAdminUserName());
             if(realmConfig.getAdminUserName().equalsIgnoreCase(userName) &&
-                            !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                    !adminUser.equalsIgnoreCase(loggedInUserName)){
                 log.warn("An attempt to delete Admin user by user : " + loggedInUserName);
                 throw new UserStoreException("You have not privilege to delete Admin user");
             }
@@ -745,7 +766,7 @@ public class UserRealmProxy {
                 }
 
                 if(isUserHadAdminPermission &&
-                    !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                        !adminUser.equalsIgnoreCase(loggedInUserName)){
                     log.warn("An attempt to delete user user has Admin permission by user : " +
                                                                                     loggedInUserName);
                     throw new UserStoreException("You have not privilege to delete user has Admin permission");
@@ -774,9 +795,10 @@ public class UserRealmProxy {
 	                    boolean isSharedRole)            throws UserAdminException {
         try {
 
-            String loggedInUserName = getLoggedInUser();
+            String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
+            String adminUserName = addPrimaryDomainIfNotExists(realm.getRealmConfiguration().getAdminUserName());
             if(permissions != null &&
-                    !realm.getRealmConfiguration().getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                    !adminUserName.equalsIgnoreCase(loggedInUserName)){
                 Arrays.sort(permissions);
                 if(Arrays.binarySearch(permissions, "/permission/admin") > -1 ||
                         Arrays.binarySearch(permissions, "/permission/admin/") > -1 ||
@@ -827,9 +849,10 @@ public class UserRealmProxy {
             throws UserAdminException {
         try {
 
-            String loggedInUserName = getLoggedInUser();
+            String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
+            String adminUser = addPrimaryDomainIfNotExists(realm.getRealmConfiguration().getAdminUserName());
             if(permissions != null &&
-                    !realm.getRealmConfiguration().getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                    !adminUser.equalsIgnoreCase(loggedInUserName)){
                 Arrays.sort(permissions);
                 if(Arrays.binarySearch(permissions, "/permission/admin") > -1 ||
                         Arrays.binarySearch(permissions, "/permission/admin/") > -1 ||
@@ -864,8 +887,9 @@ public class UserRealmProxy {
     public void updateRoleName(String roleName, String newRoleName)
             throws UserAdminException {
         try {
-            
-            String loggedInUserName = getLoggedInUser();
+
+            String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
+            String adminUser = addPrimaryDomainIfNotExists(realm.getRealmConfiguration().getAdminUserName());
             boolean isRoleHasAdminPermission;
             
             String roleWithoutDN = roleName.split(UserCoreConstants.TENANT_DOMAIN_COMBINER)[0];
@@ -879,7 +903,7 @@ public class UserRealmProxy {
             } 
             
             if(isRoleHasAdminPermission &&
-                    !realm.getRealmConfiguration().getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                    !adminUser.equalsIgnoreCase(loggedInUserName)){
                 log.warn("An attempt to rename role with admin permission by user " + loggedInUserName);
                 throw new UserStoreException("You have not privilege to rename a role with Admin permission");
             }
@@ -898,7 +922,8 @@ public class UserRealmProxy {
     public void deleteRole(String roleName) throws UserAdminException {
         try {
 
-            String loggedInUserName = getLoggedInUser();
+            String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
+            String adminUser = addPrimaryDomainIfNotExists(realm.getRealmConfiguration().getAdminUserName());
             boolean isRoleHasAdminPermission;
 
             // check whether this role had admin permission
@@ -910,7 +935,7 @@ public class UserRealmProxy {
             }
 
             if(isRoleHasAdminPermission &&
-                    !realm.getRealmConfiguration().getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                    !adminUser.equalsIgnoreCase(loggedInUserName)){
                 log.warn("An attempt to delete role with admin permission by user " + loggedInUserName);
                 throw new UserStoreException("You have not privilege to delete a role with Admin permission");                
             }
@@ -1456,8 +1481,9 @@ public class UserRealmProxy {
                 }
             }
 
-            String loggedInUserName = getLoggedInUser();
+            String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
             RealmConfiguration realmConfig = realm.getRealmConfiguration();
+            String adminUser = addPrimaryDomainIfNotExists(realmConfig.getAdminUserName());
 
             boolean isRoleHasAdminPermission = realm.getAuthorizationManager().
                     isRoleAuthorized(roleName, "/permission/", UserMgtConstants.EXECUTE_ACTION);
@@ -1467,7 +1493,7 @@ public class UserRealmProxy {
             }
 
             if ((realmConfig.getAdminRoleName().equalsIgnoreCase(roleName) || isRoleHasAdminPermission) &&
-                                !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)) {
+                    !adminUser.equalsIgnoreCase(loggedInUserName)) {
                 log.warn("An attempt to add or remove users from Admin role by user : "
                                                                                 + loggedInUserName);
                 throw new UserStoreException("Can not add or remove user from Admin permission role");
@@ -1486,7 +1512,7 @@ public class UserRealmProxy {
                 Arrays.sort(delUsersArray);
                 if (Arrays.binarySearch(delUsersArray, loggedInUserName) > -1
                         && Arrays.binarySearch(users, loggedInUserName) > -1
-                        && !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)) {
+                        && !adminUser.equalsIgnoreCase(loggedInUserName)) {
                     log.warn("An attempt to remove from role : " + roleName + " by user :" + loggedInUserName);
                     throw new UserStoreException("Can not remove yourself from role : " + roleName);
                 }
@@ -1516,8 +1542,9 @@ public class UserRealmProxy {
             }
 
             if(roleList != null){
-                String loggedInUserName = getLoggedInUser();
+                String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
                 RealmConfiguration realmConfig = realm.getRealmConfiguration();
+                String adminUser = addPrimaryDomainIfNotExists(realmConfig.getAdminUserName());
                 Arrays.sort(roleList);
                 String[] roles = realm.getUserStoreManager().getRoleListOfUser(userName);
                 if(roles != null){
@@ -1557,14 +1584,14 @@ public class UserRealmProxy {
                 if(roles == null || Arrays.binarySearch(roles, realmConfig.getAdminRoleName()) < 0){
                     if ((Arrays.binarySearch(roleList, realmConfig.getAdminRoleName()) > -1 ||
                             (!isUserHasAdminPermission && adminPermissionRole != null)) &&
-                                !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                            !adminUser.equalsIgnoreCase(loggedInUserName)){
                         log.warn("An attempt to add users to Admin permission role by user : " +
                                                                                 loggedInUserName);
                         throw new UserStoreException("Can not add users to Admin permission role");
                     }
                 } else {
                     if (Arrays.binarySearch(roleList, realmConfig.getAdminRoleName()) < 0 &&
-                            !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)) {
+                            !adminUser.equalsIgnoreCase(loggedInUserName)) {
                         log.warn("An attempt to remove users from Admin role by user : " +
                                                                                     loggedInUserName);
                         throw new UserStoreException("Can not remove users from Admin role");
@@ -1616,7 +1643,7 @@ public class UserRealmProxy {
 
         try {
 
-            String loggedInUserName = getLoggedInUser();
+            String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
 
             if (CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME.equalsIgnoreCase(roleName)) {
                 log.error("Security Alert! Carbon anonymous role is being manipulated by user " + loggedInUserName);
@@ -1636,9 +1663,10 @@ public class UserRealmProxy {
             }
 
             RealmConfiguration realmConfig = realm.getRealmConfiguration();
+            String adminUser = addPrimaryDomainIfNotExists(realmConfig.getAdminUserName());
             if ((realmConfig.getAdminRoleName().equalsIgnoreCase(roleName) ||
                     isRoleHasAdminPermission) &&
-                                    !realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)) {
+                    !adminUser.equalsIgnoreCase(loggedInUserName)) {
                 log.warn("An attempt to add or remove users from Admin role by user : "
                                                                                 + loggedInUserName);
                 throw new UserStoreException("You have not privilege to add or remove user " +
@@ -1713,7 +1741,7 @@ public class UserRealmProxy {
     public void updateRolesOfUser(String userName, String[] newRoles, String[] deletedRoles) throws UserAdminException {
         try {
 
-            String loggedInUserName = getLoggedInUser();
+            String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
 
             if (CarbonConstants.REGISTRY_ANONNYMOUS_USERNAME.equalsIgnoreCase(userName)) {
                 log.error("Security Alert! Carbon anonymous user is being manipulated by user "
@@ -1738,8 +1766,8 @@ public class UserRealmProxy {
             }
 
             RealmConfiguration realmConfig = realm.getRealmConfiguration();
-
-            if(!realmConfig.getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+            String adminUser = addPrimaryDomainIfNotExists(realmConfig.getAdminUserName());
+            if(!adminUser.equalsIgnoreCase(loggedInUserName)){
 
                 boolean isUserHadAdminPermission;
 
@@ -1948,9 +1976,10 @@ public class UserRealmProxy {
                 throw new UserAdminException(msg);
             }
 
-            String loggedInUserName = getLoggedInUser();
+            String loggedInUserName = addPrimaryDomainIfNotExists(getLoggedInUser());
+            String adminUser = addPrimaryDomainIfNotExists(realm.getRealmConfiguration().getAdminUserName());
             if(rawResources != null &&
-                    !realm.getRealmConfiguration().getAdminUserName().equalsIgnoreCase(loggedInUserName)){
+                    !adminUser.equalsIgnoreCase(loggedInUserName)){
                 Arrays.sort(rawResources);
                 if(Arrays.binarySearch(rawResources, "/permission/admin") > -1 ||
                         Arrays.binarySearch(rawResources, "/permission/protected")  > -1 ||
