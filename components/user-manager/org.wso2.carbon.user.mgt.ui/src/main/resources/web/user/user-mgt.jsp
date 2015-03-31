@@ -301,20 +301,6 @@
                 %>
 
                     <tr>
-                <%
-                    if(CarbonUIUtil.isContextRegistered(config, "/identity-mgt/") && !multipleUserStores){
-                %>
-                        <td class="leftCol-big" style="padding-right: 0 !important;"><fmt:message key="list.users.claim"/></td>
-                        <td>
-                            <input type="text" name="<%=UserAdminUIConstants.USER_LIST_FILTER%>"
-                                   value="<%=filter%>"/>
-                       
-                            <input class="button" type="submit"
-                                   value="<fmt:message key="user.search"/>"/>
-                        </td>
-                <%
-                    } else {
-                %>
                         <td class="leftCol-big" style="padding-right: 0 !important;"><fmt:message key="list.users"/></td>
                         <td>
                             <input type="text" name="<%=UserAdminUIConstants.USER_LIST_FILTER%>"
@@ -323,13 +309,7 @@
                             <input class="button" type="submit"
                                    value="<fmt:message key="user.search"/>"/>
                         </td>
-                <%
-                    }
-                %>
                     </tr>
-                <%
-                    if(CarbonUIUtil.isContextRegistered(config, "/identity-mgt/") && !multipleUserStores){
-                %>
                     <tr>
                         <td><fmt:message key="claim.uri"/></td>
                         <td><select id="claimUri" name="claimUri">
@@ -353,10 +333,7 @@
                         </select>
                         </td>
                     </tr>
-                <%
-                    }
-                %>
-				</tbody>
+                    </tbody>
                 </table>
             </form>
             <p>&nbsp;</p>
