@@ -124,32 +124,30 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
                     this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance()
                                                                              .getTenantId());
             String resourcePath =
-                    getResourcePath(subscription.getId(), subscription.getTopicName());
+                                getResourcePath(subscription.getId(), subscription.getTopicName());
 
             Resource resource = userRegistry.newResource();
             resource.setProperty(EventBrokerConstants.EB_RES_SUBSCRIPTION_URL, subscription
-                    .getEventSinkURL());
+                                                                                .getEventSinkURL());
             resource.setProperty(EventBrokerConstants.EB_RES_EVENT_DISPATCHER_NAME, subscription
-                    .getEventDispatcherName());
+                                                                        .getEventDispatcherName());
 
             if (subscription.getExpires() != null) {
                 resource.setProperty(EventBrokerConstants.EB_RES_EXPIRS, ConverterUtil
-                        .convertToString(subscription
-                                                 .getExpires()));
+                                                        .convertToString(subscription.getExpires()));
             }
             resource.setProperty(EventBrokerConstants.EB_RES_OWNER, subscription.getOwner());
             resource.setProperty(EventBrokerConstants.EB_RES_TOPIC_NAME, subscription
-                    .getTopicName());
+                                                                                .getTopicName());
             resource.setProperty(EventBrokerConstants.EB_RES_CREATED_TIME,
-                                 System.currentTimeMillis() + "");
+                                                                System.currentTimeMillis() + "");
             resource.setProperty(EventBrokerConstants.EB_RES_MODE, JavaUtil
-                    .getSubscriptionMode(subscription
-                                                 .getTopicName()));
+                                                .getSubscriptionMode(subscription.getTopicName()));
 
             //set the other properties of the subscription.
             Map<String, String> properties = subscription.getProperties();
-            for (String key : properties.keySet()) {
-                resource.setProperty(key, properties.get(key));
+            for (Map.Entry<String, String> property : properties.entrySet()) {
+                resource.setProperty(property.getKey(), property.getValue());
             }
 
             userRegistry.put(resourcePath, resource);
@@ -169,7 +167,6 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
         } catch (RegistryException e) {
             throw new EventBrokerException("Cannot save to registry ", e);
         }
-
     }
 
     /**
@@ -270,8 +267,9 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
                 Subscription subscription;
                 String subscriptionID;
                 String topicName;
-                for (Enumeration e = savedSubscriptions.propertyNames(); e.hasMoreElements(); ) {
-                    subscriptionID = (String) e.nextElement();
+                for (Enumeration propertyNames = savedSubscriptions.propertyNames();
+                                                propertyNames.hasMoreElements(); ) {
+                    subscriptionID = (String) propertyNames.nextElement();
                     // when the registry is remotely mount to another registry. then registry
                     // automatically added some properties stays with registry we need to skip them.
                     if (!subscriptionID.startsWith("registry")) {
@@ -302,7 +300,7 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
         try {
             UserRegistry userRegistry =
                     this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance()
-                                                                             .getTenantId());
+                                                                                    .getTenantId());
             Resource topicIndexResource = userRegistry.get(this.indexStoragePath);
             String subscriptionPath = getResourcePath(id, topicIndexResource.getProperty(id));
             if (subscriptionPath != null && userRegistry.resourceExists(subscriptionPath)) {

@@ -149,10 +149,10 @@ public class CarbonEventBroker implements EventBroker {
         Subscription existingSubscription = null;
         Calendar calendar = Calendar.getInstance();
         for (Subscription subscription : subscriptions) {
-            if (subscription.getEventSinkURL() != null) {
+            if (null != subscription.getEventSinkURL()) {
                 if (subscription.getEventSinkURL()
                         .equalsIgnoreCase(newSubscription.getEventSinkURL())) {
-                    if ((subscription.getExpires() == null) ||
+                    if ((null == subscription.getExpires()) ||
                         (calendar.before(subscription.getExpires()))) {
                         existingSubscription = subscription;
                         break;

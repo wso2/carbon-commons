@@ -85,7 +85,7 @@ public interface EventBroker {
      * Publish an event to the given topic asynchronously. i.e it starts a new thread to send the
      * message.
      *
-     * @param message   - message to publish. this contains the OMElement of the message and any
+     * @param message   message to publish. this contains the OMElement of the message and any
      *                  properties.
      * @param topicName topic name
      */
@@ -95,10 +95,10 @@ public interface EventBroker {
      * Publish an event to the given topic asynchronously. i.e it starts a new thread to send the
      * message.
      *
-     * @param message      - message to publish. this contains the OMElement of the message and any
+     * @param message      message to publish. this contains the OMElement of the message and any
      *                     properties.
      * @param topicName    topic name
-     * @param deliveryMode - persist or not
+     * @param deliveryMode persist or not
      */
     public void publish(Message message, String topicName, int deliveryMode)
             throws EventBrokerException;
@@ -117,10 +117,10 @@ public interface EventBroker {
      * Publish an event to the given topic synchronously. i.e it uses the same thread to send the
      * message.
      *
-     * @param message      - message to publish. this contains the OMElement of the message and any
+     * @param message      message to publish. this contains the OMElement of the message and any
      *                     properties.
      * @param topicName    topic name
-     * @param deliveryMode - persist or not
+     * @param deliveryMode persist or not
      */
     public void publishRobust(Message message, String topicName, int deliveryMode)
             throws EventBrokerException;
