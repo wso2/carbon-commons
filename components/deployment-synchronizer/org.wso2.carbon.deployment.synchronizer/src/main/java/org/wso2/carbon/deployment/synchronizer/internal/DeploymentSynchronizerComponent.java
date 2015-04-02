@@ -44,9 +44,6 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
  * @scr.reference name="repository.reference.service"
  * interface="org.wso2.carbon.deployment.synchronizer.ArtifactRepository" cardinality="0..n"
  * policy="dynamic" bind="addArtifactRepository" unbind="removeArtifactRepository"
- * @scr.reference name="registry.service" immediate="true"
- * interface="org.wso2.carbon.registry.core.service.RegistryService" cardinality="1..1"
- * policy="dynamic" bind="setRegistryService" unbind="unsetRegistryService"
  */
 
 public class DeploymentSynchronizerComponent {
