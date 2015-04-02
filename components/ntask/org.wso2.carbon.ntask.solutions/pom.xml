@@ -57,7 +57,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.carbon.ntask.solutions.*
+                            org.wso2.carbon.ntask.solutions.*; version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package />
                         <DynamicImport-Package>*</DynamicImport-Package>
