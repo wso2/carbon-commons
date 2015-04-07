@@ -25,21 +25,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.core.AbstractAdmin;
-import org.wso2.carbon.identity.user.store.configuration.beans.RandomPassword;
-import org.wso2.carbon.identity.user.store.configuration.beans.RandomPasswordContainer;
-import org.wso2.carbon.identity.user.store.configuration.cache.RandomPasswordContainerCache;
 import org.wso2.carbon.identity.user.store.configuration.dto.PropertyDTO;
 import org.wso2.carbon.identity.user.store.configuration.dto.UserStoreDTO;
-import org.wso2.carbon.identity.user.store.configuration.utils.IdentityUserStoreMgtException;
-import org.wso2.carbon.identity.user.store.configuration.utils.SecondaryUserStoreConfigurationUtil;
-import org.wso2.carbon.identity.user.store.configuration.utils.UserStoreConfigurationConstant;
-import org.wso2.carbon.ndatasource.common.DataSourceException;
-import org.wso2.carbon.ndatasource.core.DataSourceManager;
-import org.wso2.carbon.ndatasource.core.services.WSDataSourceMetaInfo;
-import org.wso2.carbon.ndatasource.core.services.WSDataSourceMetaInfo.WSDataSourceDefinition;
-import org.wso2.carbon.ndatasource.rdbms.RDBMSConfiguration;
 import org.wso2.carbon.user.api.Properties;
-import org.wso2.carbon.user.api.Property;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.UserCoreConstants;
@@ -47,16 +35,10 @@ import org.wso2.carbon.user.core.UserStoreConfigConstants;
 import org.wso2.carbon.user.core.common.AbstractUserStoreManager;
 import org.wso2.carbon.user.core.config.XMLProcessorUtils;
 import org.wso2.carbon.user.core.jdbc.JDBCRealmConstants;
-import org.wso2.carbon.user.core.tenant.TenantCache;
-import org.wso2.carbon.user.core.tenant.TenantIdKey;
 import org.wso2.carbon.user.core.tracker.UserStoreManagerRegistry;
-import org.wso2.carbon.user.core.util.UserCoreUtil;
 import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -66,13 +48,11 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 public class UserStoreConfigAdminService extends AbstractAdmin {
     public static final Log log = LogFactory.getLog(UserStoreConfigAdminService.class);
@@ -90,23 +70,24 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
      */
     public UserStoreDTO[] getSecondaryRealmConfigurations() throws UserStoreException {
         ArrayList<UserStoreDTO> domains = new ArrayList<UserStoreDTO>();
+
         RealmConfiguration secondaryRealmConfiguration = CarbonContext.getThreadLocalCarbonContext().getUserRealm().
                 getRealmConfiguration().getSecondaryRealmConfig();
+
         //not editing primary store
         if (secondaryRealmConfiguration == null) {
             return null;
         } else {
 
             do {
-                Map<String, String> userStoreProperties = secondaryRealmConfiguration.getUserStoreProperties();
+            	Map<String, String> userStoreProperties = secondaryRealmConfiguration.getUserStoreProperties();
                 UserStoreDTO userStoreDTO = new UserStoreDTO();
-
-                String uuid = userStoreProperties.get(UserStoreConfigurationConstant.UNIQUE_ID_CONSTANT);
-                if (uuid == null) {
-                    uuid = UUID.randomUUID().toString();
+                if (userStoreProperties.containsKey(UserStoreConfigConstants.connectionPassword)) {
+                    userStoreProperties.put(UserStoreConfigConstants.connectionPassword, "");
                 }
-
-                String randomPhrase = UserStoreConfigurationConstant.RANDOM_PHRASE_PREFIX + uuid;
+                if (userStoreProperties.containsKey(JDBCRealmConstants.PASSWORD)) {
+                    userStoreProperties.put(JDBCRealmConstants.PASSWORD, "");
+                }
                 String className = secondaryRealmConfiguration.getUserStoreClass();
                 userStoreDTO.setClassName(secondaryRealmConfiguration.getUserStoreClass());
                 userStoreDTO.setDescription(secondaryRealmConfiguration.getUserStoreProperty(DESCRIPTION));
@@ -115,35 +96,7 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
                     userStoreDTO.setDisabled(Boolean.valueOf(userStoreProperties.get(DISABLED)));
                 }
                 userStoreProperties.put("Class", className);
-                userStoreProperties.put(UserStoreConfigurationConstant.UNIQUE_ID_CONSTANT, uuid);
-                RandomPassword[] randomPasswords = getRandomPasswordProperties(className, randomPhrase,
-                        secondaryRealmConfiguration);
-                if (randomPasswords != null) {
-                    updatePasswordContainer(randomPasswords, uuid);
-                }
-
-                String originalPassword = null;
-                if (userStoreProperties.containsKey(UserStoreConfigConstants.connectionPassword)) {
-                    originalPassword = userStoreProperties.get(UserStoreConfigConstants.connectionPassword);
-                    userStoreProperties.put(UserStoreConfigConstants.connectionPassword, randomPhrase);
-                }
-                if (userStoreProperties.containsKey(JDBCRealmConstants.PASSWORD)) {
-                    originalPassword = userStoreProperties.get(JDBCRealmConstants.PASSWORD);
-                    userStoreProperties.put(JDBCRealmConstants.PASSWORD, randomPhrase);
-                }
                 userStoreDTO.setProperties(convertMapToArray(userStoreProperties));
-
-                //Now revert back to original password
-                if (userStoreProperties.containsKey(UserStoreConfigConstants.connectionPassword)) {
-                    if (originalPassword != null) {
-                        userStoreProperties.put(UserStoreConfigConstants.connectionPassword, originalPassword);
-                    }
-                }
-                if (userStoreProperties.containsKey(JDBCRealmConstants.PASSWORD)) {
-                    if (originalPassword != null) {
-                        userStoreProperties.put(JDBCRealmConstants.PASSWORD, originalPassword);
-                    }
-                }
 
                 domains.add(userStoreDTO);
                 secondaryRealmConfiguration = secondaryRealmConfiguration.getSecondaryRealmConfig();
@@ -168,7 +121,9 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
             key = (String) entry.getKey();
             value = (String) entry.getValue();
             PropertyDTO propertyDTO = new PropertyDTO(key, value);
-            propertiesList.add(propertyDTO);
+
+                propertiesList.add(propertyDTO);
+
         }
         return propertiesList.toArray(new PropertyDTO[propertiesList.size()]);
     }
@@ -190,30 +145,30 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
      * @return : list of default properties(mandatory+optional)
      */
     public Properties getUserStoreManagerProperties(String className) throws UserStoreException {
-        return (Properties) UserStoreManagerRegistry.getUserStoreProperties(className);
+        return UserStoreManagerRegistry.getUserStoreProperties(className);
     }
 
     /**
      * Save the sent configuration to xml file
      *
      * @param userStoreDTO: Represent the configuration of user store
-     * @throws DataSourceException
      * @throws TransformerException
      * @throws ParserConfigurationException
      */
-    public void addUserStore(UserStoreDTO userStoreDTO) throws UserStoreException, DataSourceException {
+    public void addUserStore(UserStoreDTO userStoreDTO) throws UserStoreException {
         String domainName = userStoreDTO.getDomainId();
-        xmlProcessorUtils.isValidDomain(domainName, true);
-
+        xmlProcessorUtils.isValidDomain(domainName,true);
+        
         File userStoreConfigFile = createConfigurationFile(domainName);
         // This is a redundant check
         if (userStoreConfigFile.exists()) {
-            String msg = "Cannot add user store " + domainName + ". User store already exists.";
-            throw new UserStoreException(msg);
+        	String msg = "Cannot add user store "+domainName+". User store already exists.";
+        	log.error(msg);
+        	throw new UserStoreException(msg);
         }
-        writeUserMgtXMLFile(userStoreConfigFile, userStoreDTO, false);
-        if (log.isDebugEnabled()) {
-            log.debug("New user store successfully written to the file" + userStoreConfigFile.getAbsolutePath());
+        writeUserMgtXMLFile(userStoreConfigFile,userStoreDTO);
+        if(log.isDebugEnabled()) {
+        	log.debug("New user store successfully written to the file" + userStoreConfigFile.getAbsolutePath());
         }
     }
 
@@ -222,21 +177,20 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
      * Edit currently existing user store
      *
      * @param userStoreDTO: Represent the configuration of user store
-     * @throws DataSourceException
      * @throws TransformerException
      * @throws ParserConfigurationException
      */
-    public void editUserStore(UserStoreDTO userStoreDTO) throws UserStoreException, DataSourceException {
+    public void editUserStore(UserStoreDTO userStoreDTO) throws UserStoreException {
         String domainName = userStoreDTO.getDomainId();
         if (xmlProcessorUtils.isValidDomain(domainName, false)) {
-
             File userStoreConfigFile = createConfigurationFile(domainName);
             if (!userStoreConfigFile.exists()) {
                 String msg = "Cannot edit user store " + domainName + ". User store cannot be edited.";
+                log.error(msg);
                 throw new UserStoreException(msg);
             }
 
-            writeUserMgtXMLFile(userStoreConfigFile, userStoreDTO, true);
+            writeUserMgtXMLFile(userStoreConfigFile, userStoreDTO);
             if (log.isDebugEnabled()) {
                 log.debug("Edited user store successfully written to the file" + userStoreConfigFile.getAbsolutePath());
             }
@@ -250,13 +204,13 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
      *
      * @param userStoreDTO:      Represent the configuration of new user store
      * @param previousDomainName
-     * @throws DataSourceException
      * @throws TransformerException
      * @throws ParserConfigurationException
      */
-    public void editUserStoreWithDomainName(String previousDomainName, UserStoreDTO userStoreDTO) throws UserStoreException, DataSourceException {
+    public void editUserStoreWithDomainName(String previousDomainName, UserStoreDTO userStoreDTO) throws UserStoreException {
         boolean isDebugEnabled = log.isDebugEnabled();
         String domainName = userStoreDTO.getDomainId();
+
         if (isDebugEnabled) {
             log.debug("Changing user store " + previousDomainName + " to " + domainName);
         }
@@ -274,7 +228,6 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
             if (!userStore.exists()) {
                 if (new File(deploymentDirectory).mkdir()) {
                     //folder 'userstores' created
-                    log.info("folder 'userstores' created for  super tenant " + fileName);
                 } else {
                     log.error("Error at creating 'userstores' directory to store configurations for super tenant");
                 }
@@ -288,7 +241,6 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
             if (!userStore.exists()) {
                 if (new File(tenantFilePath).mkdir()) {
                     //folder 'userstores' created
-                    log.info("folder 'userstores' created for tenant " + tenantId);
                 } else {
                     log.error("Error at creating 'userstores' directory to store configurations for tenant:" + tenantId);
                 }
@@ -299,11 +251,13 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
 
         if (!previousUserStoreConfigFile.exists()) {
             String msg = "Cannot update user store domain name. Previous domain name " + previousDomainName + " does not exists.";
+            log.error(msg);
             throw new UserStoreException(msg);
         }
 
         if (userStoreConfigFile.exists()) {
             String msg = "Cannot update user store domain name. An user store already exists with new domain " + domainName + ".";
+            log.error(msg);
             throw new UserStoreException(msg);
         }
 
@@ -315,7 +269,7 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
         }
 
         previousUserStoreConfigFile.delete();
-        writeUserMgtXMLFile(userStoreConfigFile, userStoreDTO, true);
+        writeUserMgtXMLFile(userStoreConfigFile,userStoreDTO);
     }
 
     /**
@@ -357,12 +311,9 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
 
             userStoreManager.deletePersistedDomain(domainName);
             if (isDebugEnabled) {
-                log.debug("Removed persisted domain name: " + domainName + " of tenant:" + tenantId + " from " +
-                        "UM_DOMAIN.");
+                log.debug("Removed persisted domain name: " + domainName
+                        + " of tenant:" + tenantId + " from UM_DOMAIN.");
             }
-            //clear cache to make the modification effective
-            UserCoreUtil.getRealmService().clearCachedUserRealm(tenantId);
-            TenantCache.getInstance().clearCacheEntry(new TenantIdKey(tenantId));
 
             // Delete file
             deleteFile(file, domainName.replace(".", "_").concat(".xml"));
@@ -376,51 +327,10 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
      * @param doc:         Document
      * @param parent       : Parent element of the properties to be added
      */
-    private void addProperties(String userStoreClass, PropertyDTO[] propertyDTOs, Document doc, Element parent,
-                               boolean editSecondaryUserStore) throws UserStoreException {
-
-        RandomPasswordContainer randomPasswordContainer = null;
-        if (editSecondaryUserStore) {
-            String uniqueID = getUniqueIDFromUserDTO(propertyDTOs);
-            randomPasswordContainer = getAndRemoveRandomPasswordContainer(uniqueID);
-            if (randomPasswordContainer == null) {
-                String errorMsg = "randomPasswordContainer is null for uniqueID therefore " +
-                        "proceeding without encryption=" + uniqueID;
-                log.error(errorMsg);//need this error log to further identify the reason for throwing this exception
-                throw new UserStoreException("Longer delay causes the edit operation be to " +
-                        "abandoned");
-            }
-        }
-        //First check for mandatory field with #encrypt
-        Property[] mandatoryProperties = getMandatoryProperties(userStoreClass);
+    private void addProperties(PropertyDTO[] propertyDTOs, Document doc, Element parent) {
         for (PropertyDTO propertyDTO : propertyDTOs) {
-            String propertyDTOName = propertyDTO.getName();
-            if (UserStoreConfigurationConstant.UNIQUE_ID_CONSTANT.equalsIgnoreCase(propertyDTOName)) {
-                continue;
-            }
-
-            String propertyDTOValue = propertyDTO.getValue();
-            if (propertyDTOValue != null) {
-                boolean encrypted = false;
-                if (isPropertyToBeEncrypted(mandatoryProperties, propertyDTOName)) {
-                    if (randomPasswordContainer != null) {
-                        RandomPassword randomPassword = getRandomPassword(randomPasswordContainer, propertyDTOName);
-                        if (randomPassword != null) {
-                            if (propertyDTOValue.equalsIgnoreCase(randomPassword.getRandomPhrase())) {
-                                propertyDTOValue = randomPassword.getPassword();
-                            }
-                        }
-                    }
-
-                    try {
-                        propertyDTOValue = SecondaryUserStoreConfigurationUtil.encryptPlainText(propertyDTOValue);
-                        encrypted = true;
-                    } catch (IdentityUserStoreMgtException e) {
-                        log.error("addProperties failed to encrypt", e);
-                        //its ok to continue from here
-                    }
-                }
-                addProperty(propertyDTOName, propertyDTOValue, doc, parent, encrypted);
+            if (propertyDTO.getValue() != null) {
+                addProperty(propertyDTO.getName(), propertyDTO.getValue(), doc, parent);
             }
         }
     }
@@ -433,16 +343,10 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
      * @param doc:    Document
      * @param parent: Parent element of the property to be added as a child
      */
-    private void addProperty(String name, String value, Document doc, Element parent, boolean encrypted) {
+    private void addProperty(String name, String value, Document doc, Element parent) {
         Element property = doc.createElement("Property");
-        Attr attr;
-        if (encrypted) {
-            attr = doc.createAttribute("encrypted");
-            attr.setValue("true");
-            property.setAttributeNode(attr);
-        }
 
-        attr = doc.createAttribute("name");
+        Attr attr = doc.createAttribute("name");
         attr.setValue(name);
         property.setAttributeNode(attr);
 
@@ -459,7 +363,7 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
         });
         for (File file1 : deleteCandidates) {
             if (file1.delete()) {
-                log.info("File " + file.getName() + " deleted successfully");
+                //file deleted successfully
             } else {
                 log.error("error at deleting file:" + file.getName());
             }
@@ -509,42 +413,6 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
         }
     }
 
-    public boolean testRDBMSConnection(String domainName, String driverName, String connectionURL, String username,
-                                       String connectionPassword) throws DataSourceException {
-
-        WSDataSourceMetaInfo wSDataSourceMetaInfo = new WSDataSourceMetaInfo();
-
-        RDBMSConfiguration rdbmsConfiguration = new RDBMSConfiguration();
-        rdbmsConfiguration.setUrl(connectionURL);
-        rdbmsConfiguration.setUsername(username);
-        rdbmsConfiguration.setPassword(connectionPassword);
-        rdbmsConfiguration.setDriverClassName(driverName);
-
-        WSDataSourceDefinition wSDataSourceDefinition = new WSDataSourceDefinition();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        JAXBContext context;
-        try {
-            context = JAXBContext.newInstance(RDBMSConfiguration.class);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.marshal(rdbmsConfiguration, out);
-
-        } catch (JAXBException e) {
-            log.error("Error in marshelling User Store Configuration info", e);
-        }
-        wSDataSourceDefinition.setDsXMLConfiguration(out.toString());
-        wSDataSourceDefinition.setType("RDBMS");
-
-        wSDataSourceMetaInfo.setName(domainName);
-        wSDataSourceMetaInfo.setDefinition(wSDataSourceDefinition);
-        try {
-            return DataSourceManager.getInstance().getDataSourceRepository().testDataSourceConnection(wSDataSourceMetaInfo.
-                    extractDataSourceMetaInfo());
-        } catch (DataSourceException e) {
-            String errMsg = "Data source error occurred";
-            throw new DataSourceException(errMsg, e);
-        }
-    }
-
     private boolean isAuthorized() throws UserStoreException {
         String loggeduser = CarbonContext.getThreadLocalCarbonContext().getUsername();
         String admin = CarbonContext.getThreadLocalCarbonContext().getUserRealm().getRealmConfiguration().getAdminUserName();
@@ -556,9 +424,9 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
         return false;
     }
 
-    private File createConfigurationFile(String domainName) {
+    private File createConfigurationFile(String domainName){
         String fileName = domainName.replace(".", "_");
-        File userStoreConfigFile;
+        File userStoreConfigFile=null;
         int tenantId = CarbonContext.getThreadLocalCarbonContext().getTenantId();
 
         if (tenantId == MultitenantConstants.SUPER_TENANT_ID) {
@@ -566,7 +434,6 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
             if (!userStore.exists()) {
                 if (new File(deploymentDirectory).mkdir()) {
                     //folder 'userstores' created
-                    log.info("folder 'userstores' created to store configurations for super tenant");
                 } else {
                     log.error("Error at creating 'userstores' directory to store configurations for super tenant");
                 }
@@ -579,7 +446,6 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
             if (!userStore.exists()) {
                 if (new File(tenantFilePath).mkdir()) {
                     //folder 'userstores' created
-                    log.info("folder 'userstores' created to store configurations for tenant = " + tenantId);
                 } else {
                     log.error("Error at creating 'userstores' directory to store configurations for tenant:" + tenantId);
                 }
@@ -590,8 +456,7 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
     }
 
 
-    private void writeUserMgtXMLFile(File userStoreConfigFile, UserStoreDTO userStoreDTO,
-                                     boolean editSecondaryUserStore) throws UserStoreException {
+    private void writeUserMgtXMLFile(File userStoreConfigFile,UserStoreDTO userStoreDTO) throws UserStoreException{
         StreamResult result = new StreamResult(userStoreConfigFile);
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 
@@ -607,10 +472,9 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
             attrClass.setValue(userStoreDTO.getClassName());
             userStoreElement.setAttributeNode(attrClass);
 
-            addProperties(userStoreDTO.getClassName(), userStoreDTO.getProperties(), doc, userStoreElement,
-                    editSecondaryUserStore);
-            addProperty(UserStoreConfigConstants.DOMAIN_NAME, userStoreDTO.getDomainId(), doc, userStoreElement, false);
-            addProperty(DESCRIPTION, userStoreDTO.getDescription(), doc, userStoreElement, false);
+            addProperties(userStoreDTO.getProperties(), doc, userStoreElement);
+            addProperty(UserStoreConfigConstants.DOMAIN_NAME, userStoreDTO.getDomainId(), doc, userStoreElement);
+            addProperty(DESCRIPTION, userStoreDTO.getDescription(), doc, userStoreElement);
             DOMSource source = new DOMSource(doc);
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -620,143 +484,8 @@ public class UserStoreConfigAdminService extends AbstractAdmin {
             transformer.setOutputProperty(OutputKeys.METHOD, "xml");
             transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "6");
             transformer.transform(source, result);
-        } catch (ParserConfigurationException e) {
-            String errMsg = " Error occured due to serious parser configuration exception of " + userStoreConfigFile;
-            throw new UserStoreException(errMsg, e);
-        } catch (TransformerException e) {
-            String errMsg = " Error occured during the transformation process of " + userStoreConfigFile;
-            throw new UserStoreException(errMsg, e);
+        } catch (Exception ex) {
+            throw new UserStoreException(ex);
         }
-    }
-
-    /**
-     * Obtains the mandatory properties for a given userStoreClass
-     *
-     * @param userStoreClass userStoreClass name
-     * @return Property[] of Mandatory Properties
-     */
-    private Property[] getMandatoryProperties(String userStoreClass) {
-        return UserStoreManagerRegistry.getUserStoreProperties(userStoreClass).getMandatoryProperties();
-    }
-
-    /**
-     * Check whether the given property should be encrypted or not.
-     *
-     * @param mandatoryProperties mandatory property array
-     * @param propertyName        property name
-     * @return returns true if the property should be encrypted
-     */
-    private boolean isPropertyToBeEncrypted(Property[] mandatoryProperties,
-                                            String propertyName) {
-        for (Property property : mandatoryProperties) {
-            if (propertyName.equalsIgnoreCase(property.getName())) {
-                return property.getDescription().contains(UserStoreConfigurationConstant.ENCRYPT_TEXT);
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Generate the RandomPassword[] from secondaryRealmConfiguration for given userStoreClass
-     *
-     * @param userStoreClass              Extract the mandatory properties of this class
-     * @param randomPhrase                The randomly generated keyword which will be stored in
-     *                                    RandomPassword object
-     * @param secondaryRealmConfiguration RealmConfiguration object consists the properties
-     * @return RandomPassword[] array for each property
-     */
-    private RandomPassword[] getRandomPasswordProperties(String userStoreClass,
-                                                         String randomPhrase, RealmConfiguration secondaryRealmConfiguration) {
-        //First check for mandatory field with #encrypt
-        Property[] mandatoryProperties = getMandatoryProperties(userStoreClass);
-        ArrayList<RandomPassword> randomPasswordArrayList = new ArrayList<RandomPassword>();
-        for (Property property : mandatoryProperties) {
-            String propertyName = property.getName();
-            if (property.getDescription().contains(UserStoreConfigurationConstant.ENCRYPT_TEXT)) {
-                RandomPassword randomPassword = new RandomPassword();
-                randomPassword.setPropertyName(propertyName);
-                randomPassword.setPassword(secondaryRealmConfiguration.getUserStoreProperty(propertyName));
-                randomPassword.setRandomPhrase(randomPhrase);
-                randomPasswordArrayList.add(randomPassword);
-            }
-        }
-        return randomPasswordArrayList.toArray(new RandomPassword[randomPasswordArrayList.size()]);
-    }
-
-    /**
-     * Create and update the RandomPasswordContainer with given unique ID and randomPasswords array
-     *
-     * @param randomPasswords array contains the elements to be encrypted with thier random
-     *                        password phrase, password and unique id
-     * @param uuid            Unique id of the RandomPasswordContainer
-     */
-    private void updatePasswordContainer(RandomPassword[] randomPasswords, String uuid) {
-
-        if (randomPasswords != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("updatePasswordContainer reached for number of random password properties length = " +
-                        randomPasswords.length);
-            }
-            RandomPasswordContainer randomPasswordContainer = new RandomPasswordContainer();
-            randomPasswordContainer.setRandomPasswords(randomPasswords);
-            randomPasswordContainer.setUniqueID(uuid);
-
-            RandomPasswordContainerCache.getInstance().getRandomPasswordContainerCache().put(uuid,
-                    randomPasswordContainer);
-        }
-    }
-
-    /**
-     * Get the RandomPasswordContainer object from the cache for given unique id
-     *
-     * @param uniqueID Get and Remove the unique id for that particualr cache
-     * @return RandomPasswordContainer of particular unique ID
-     */
-    private RandomPasswordContainer getAndRemoveRandomPasswordContainer(String uniqueID) {
-        return RandomPasswordContainerCache.getInstance().getRandomPasswordContainerCache().getAndRemove(uniqueID);
-    }
-
-    /**
-     * Obtain the UniqueID ID constant value from the propertyDTO object which was set well
-     * before sending the edit request.
-     *
-     * @param propertyDTOs PropertyDTO[] object passed from JSP page
-     * @return unique id string value
-     */
-    private String getUniqueIDFromUserDTO(PropertyDTO[] propertyDTOs) {
-
-        int length = propertyDTOs.length;
-        for (int i = length - 1; i >= 0; i--) {
-            PropertyDTO propertyDTO = propertyDTOs[i];
-            if (propertyDTO != null && propertyDTO.getName() != null && propertyDTO.getName()
-                    .equalsIgnoreCase(UserStoreConfigurationConstant.UNIQUE_ID_CONSTANT)) {
-                return propertyDTO.getValue();
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Finds the RandomPassword object for a given propertyName in the RandomPasswordContainer
-     * ( Which is unique per uniqueID )
-     *
-     * @param randomPasswordContainer RandomPasswordContainer object of an unique id
-     * @param propertyName            RandomPassword object to be obtained for that property
-     * @return Returns the RandomPassword object from the
-     */
-    private RandomPassword getRandomPassword(RandomPasswordContainer randomPasswordContainer,
-                                             String propertyName) {
-
-        RandomPassword[] randomPasswords = randomPasswordContainer.getRandomPasswords();
-
-        if (randomPasswords != null) {
-            for (RandomPassword randomPassword : randomPasswords) {
-                if (randomPassword.getPropertyName().equalsIgnoreCase(propertyName)) {
-                    return randomPassword;
-                }
-            }
-        }
-        return null;
     }
 }

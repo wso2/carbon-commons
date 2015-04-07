@@ -20,7 +20,6 @@ package org.wso2.carbon.identity.user.store.configuration.internal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
-import org.wso2.carbon.base.api.ServerConfigurationService;
 import org.wso2.carbon.user.api.RealmConfiguration;
 import org.wso2.carbon.user.core.service.RealmService;
 
@@ -30,46 +29,13 @@ import org.wso2.carbon.user.core.service.RealmService;
  * interface="org.wso2.carbon.user.core.service.RealmService"
  * cardinality="1..1" policy="dynamic" bind="setRealmService"
  * unbind="unsetRealmService"
- * @scr.reference name="server.configuration.service"
- * interface="org.wso2.carbon.base.api.ServerConfigurationService" cardinality="1..1"
- * policy="dynamic"  bind="setServerConfigurationService"
- * unbind="unsetServerConfigurationService"
  */
 public class UserStoreConfigComponent {
     private static Log log = LogFactory.getLog(UserStoreConfigComponent.class);
     private static RealmService realmService = null;
     private static RealmConfiguration realmConfiguration = null;
-    private static ServerConfigurationService serverConfigurationService = null;
 
     public UserStoreConfigComponent() {
-    }
-
-    public static RealmService getRealmService() {
-        return realmService;
-    }
-
-    protected void setRealmService(RealmService realmService) {
-        UserStoreConfigComponent.realmService = realmService;
-        if (log.isDebugEnabled()) {
-            log.debug("Set the Realm Service");
-        }
-    }
-
-    public static RealmConfiguration getRealmConfiguration() {
-        realmConfiguration = UserStoreConfigComponent.getRealmService().getBootstrapRealmConfiguration();
-        return realmConfiguration;
-    }
-
-    public static ServerConfigurationService getServerConfigurationService() {
-        return UserStoreConfigComponent.serverConfigurationService;
-    }
-
-    protected void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
-        if (log.isDebugEnabled()) {
-            log.debug("Set the ServerConfiguration Service");
-        }
-        UserStoreConfigComponent.serverConfigurationService = serverConfigurationService;
-
     }
 
     /**
@@ -78,40 +44,52 @@ public class UserStoreConfigComponent {
     protected void activate(ComponentContext ctxt) {
 
         if (log.isDebugEnabled()) {
-            log.debug("Identity User Store bundle is activated.");
+            log.info("Identity User Store bundle is activated.");
         }
         try {
         } catch (Throwable e) {
             log.error("Failed to load user store org.wso2.carbon.identity.user.store.configuration details.", e);
         }
         if (log.isDebugEnabled()) {
-            log.debug("Identity User Store-Config bundle is activated.");
+            log.info("Identity User Store-Config bundle is activated.");
 
         }
     }
+
 
     /**
      * @param ctxt
      */
     protected void deactivate(ComponentContext ctxt) {
         if (log.isDebugEnabled()) {
-            log.debug("Identity User Store-Config bundle is deactivated");
+            log.info("Identity User Store-Config bundle is deactivated");
+        }
+    }
+
+    protected void setRealmService(RealmService realmService) {
+        UserStoreConfigComponent.realmService = realmService;
+        if (log.isDebugEnabled()) {
+            log.info("Set the Realm Service");
         }
     }
 
     protected void unsetRealmService(RealmService realmService) {
         UserStoreConfigComponent.realmService = null;
         if (log.isDebugEnabled()) {
-            log.debug("Unset the Realm Service");
+            log.info("Unset the Realm Service");
         }
     }
 
-    protected void unsetServerConfigurationService(ServerConfigurationService serverConfigurationService) {
-        if (log.isDebugEnabled()) {
-            log.debug("Unset the ServerConfiguration Service");
-        }
-        UserStoreConfigComponent.serverConfigurationService = null;
+    public static RealmService getRealmService() {
+        return realmService;
     }
+
+
+    public static RealmConfiguration getRealmConfiguration() {
+        realmConfiguration = UserStoreConfigComponent.getRealmService().getBootstrapRealmConfiguration();
+        return realmConfiguration;
+    }
+
 
 }
 

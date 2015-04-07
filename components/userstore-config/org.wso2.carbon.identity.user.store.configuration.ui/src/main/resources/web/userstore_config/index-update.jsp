@@ -54,10 +54,6 @@
         CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.INFO, request);
         forwardTo = "index.jsp?";
 
-    } catch(DataSourceException dse){
-  		String message = dse.getMessage();
-  		CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.ERROR, request);
-        forwardTo = "index.jsp?";
     } catch (ParserConfigurationException pce) {
         String message = resourceBundle.getString("error.creating.userstore");
         CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.ERROR, request);

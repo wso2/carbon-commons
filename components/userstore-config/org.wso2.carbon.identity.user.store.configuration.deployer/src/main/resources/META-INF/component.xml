@@ -22,10 +22,10 @@
             <extension>xml</extension>
             <class>org.wso2.carbon.identity.user.store.configuration.deployer.UserStoreConfigurationDeployer</class>
         </deployer>
-        <deployer>
-            <directory>userstores</directory>
-            <extension>enc</extension>
-            <class>org.wso2.carbon.identity.user.store.configuration.deployer.UserStoreConfigurationDeployer</class>
-        </deployer>
+        <!--<deployer>-->
+            <!--<directory>tenants</directory>-->
+            <!--<extension>xml</extension>-->
+            <!--<class>org.wso2.carbon.identity.user.store.configuration.deployer.UserStoreConfigurationDeployer</class>-->
+        <!--</deployer>-->
     </deployers>
 </component>
