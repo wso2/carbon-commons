@@ -80,7 +80,7 @@
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.ntask.internal,
-                            org.wso2.carbon.ntask.core.*,
+                            org.wso2.carbon.ntask.core.*; version="${carbon.commons.exp.package.version}",
                         </Export-Package>
 			<Carbon-Component>UIBundle</Carbon-Component>
                     </instructions>
