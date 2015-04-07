@@ -36,6 +36,10 @@ import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
+/**
+ * This class represents an {@link XADataSource} implementation which uses a local transaction
+ * for its operations. 
+ */
 public class LocalXADataSource implements XADataSource {
 
     private PrintWriter out;
@@ -48,13 +52,11 @@ public class LocalXADataSource implements XADataSource {
 
     private String driverClassName;
 
-    private String vValidationQuery;
+    private String validationQuery;
 
     private ThreadLocal<Connection> tlConn = new ThreadLocal<Connection>();
 
     private ConnectionPool connectionPool;
-
-    private PoolProperties props = new PoolProperties();
 
     @Override
     public PrintWriter getLogWriter() throws SQLException {
@@ -78,18 +80,18 @@ public class LocalXADataSource implements XADataSource {
 
     @Override
     public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return null;
+        throw new SQLFeatureNotSupportedException();
     }
 
     private Connection createConnection() throws SQLException {
-        if (connectionPool == null) {
+        if (this.connectionPool == null) {
             synchronized (LocalXADataSource.class) {
-                if (connectionPool == null) {
+                if (this.connectionPool == null) {
                     this.createConnectionPool();
                 }
             }
         }
-        Connection conn = connectionPool.getConnection();
+        Connection conn = this.connectionPool.getConnection();
         conn.setAutoCommit(false);
         return conn;
     }
@@ -142,31 +144,36 @@ public class LocalXADataSource implements XADataSource {
         }
     }
 
-    private void createConnectionPool() throws SQLException{
+    private void createConnectionPool() throws SQLException {
+    	PoolProperties props = new PoolProperties();
         props.setUrl(this.getUrl());
         props.setUsername(this.getUsername());
         props.setPassword(this.getPassword());
         props.setDriverClassName(this.getDriverClassName());
-        props.setValidationQuery(this.getvValidationQuery());
-        connectionPool = new ConnectionPool(props);
+        props.setValidationQuery(this.getValidationQuery());
+        this.connectionPool = new ConnectionPool(props);
     }
 
     public void initConn() throws SQLException {
-        Connection conn = tlConn.get();
+        Connection conn = this.tlConn.get();
         if (conn == null || conn.isClosed()) {
             conn = createConnection();
-            tlConn.set(conn);
+            this.tlConn.set(conn);
         }
     }
 
-    public String getvValidationQuery() {
-        return vValidationQuery;
+    public String getValidationQuery() {
+        return validationQuery;
     }
 
-    public void setValidationQuery(String vValidationQuery) {
-        this.vValidationQuery = vValidationQuery;
+    public void setValidationQuery(String validationQuery) {
+        this.validationQuery = validationQuery;
     }
 
+    /**
+     * This class represents an {@link XAConnection} implementation which is backed by
+     * a normal JDBC {@link Connection}.
+     */
     public class LocalXAConnection implements XAConnection {
 
         private List<ConnectionEventListener> ceListeners = new ArrayList<ConnectionEventListener>();
@@ -185,13 +192,13 @@ public class LocalXADataSource implements XADataSource {
 
         @Override
         public void addConnectionEventListener(ConnectionEventListener listener) {
-            ceListeners.add(listener);
+            this.ceListeners.add(listener);
         }
 
         @Override
         public void removeConnectionEventListener(
                 ConnectionEventListener listener) {
-            ceListeners.remove(listener);
+        	this.ceListeners.remove(listener);
         }
 
         @Override
@@ -211,6 +218,10 @@ public class LocalXADataSource implements XADataSource {
 
     }
 
+    /**
+     * This class represents an {@link XAResource} implementation based on
+     * the local transaction model.
+     */
     public class LocalXAResource implements XAResource {
 
         @Override
@@ -230,10 +241,12 @@ public class LocalXADataSource implements XADataSource {
 
         @Override
         public void end(Xid xid, int flags) throws XAException {
+        	//ignore
         }
 
         @Override
         public void forget(Xid xid) throws XAException {
+        	//ignore
         }
 
         @Override
@@ -294,6 +307,9 @@ public class LocalXADataSource implements XADataSource {
 
     }
 
+    /**
+     * Local {@link Connection} implementation.
+     */
     public class LocalConnection implements Connection {
 
         @Override
@@ -618,27 +634,32 @@ public class LocalXADataSource implements XADataSource {
 
         @Override
         public void setSchema(String schema) throws SQLException {
-
+        	initConn();
+            tlConn.get().setSchema(schema);
         }
 
         @Override
         public String getSchema() throws SQLException {
-            return null;
+        	initConn();
+            return tlConn.get().getSchema();
         }
 
         @Override
         public void abort(Executor executor) throws SQLException {
-
+        	initConn();
+            tlConn.get().abort(executor);
         }
 
         @Override
         public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-
+        	initConn();
+            tlConn.get().setNetworkTimeout(executor, milliseconds);
         }
 
         @Override
         public int getNetworkTimeout() throws SQLException {
-            return 0;
+        	initConn();
+            return tlConn.get().getNetworkTimeout();
         }
 
     }
