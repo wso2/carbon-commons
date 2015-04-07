@@ -16,25 +16,14 @@
 package org.wso2.carbon.ndatasource.datasources;
 
 import java.io.PrintWriter;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
-import java.sql.SQLClientInfoException;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.SQLXML;
-import java.sql.Savepoint;
-import java.sql.Statement;
-import java.sql.Struct;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
+import java.util.logging.Logger;
+
 import org.apache.tomcat.jdbc.pool.ConnectionPool;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
@@ -85,6 +74,11 @@ public class LocalXADataSource implements XADataSource {
     @Override
     public int getLoginTimeout() throws SQLException {
         return 0;
+    }
+
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return null;
     }
 
     private Connection createConnection() throws SQLException {
@@ -620,6 +614,31 @@ public class LocalXADataSource implements XADataSource {
                 throws SQLException {
             initConn();
             return tlConn.get().createStruct(typeName, attributes);
+        }
+
+        @Override
+        public void setSchema(String schema) throws SQLException {
+
+        }
+
+        @Override
+        public String getSchema() throws SQLException {
+            return null;
+        }
+
+        @Override
+        public void abort(Executor executor) throws SQLException {
+
+        }
+
+        @Override
+        public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+
+        }
+
+        @Override
+        public int getNetworkTimeout() throws SQLException {
+            return 0;
         }
 
     }
