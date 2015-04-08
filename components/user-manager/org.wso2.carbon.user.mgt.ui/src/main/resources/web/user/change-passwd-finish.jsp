@@ -23,6 +23,7 @@
 <%@page import="org.wso2.carbon.user.mgt.ui.UserAdminClient"%>
 <%@ page import="org.wso2.carbon.utils.ServerConstants" %>
 <%@ page import="java.text.MessageFormat" %>
+<%@ page import="org.wso2.carbon.user.mgt.ui.Util" %>
 <%
 	String forwardTo = null;
     String username = CharacterEncoder.getSafeText(request.getParameter("username"));
@@ -46,7 +47,7 @@
             forwardTo = returnPath;        
             session.removeAttribute(ServerConstants.PASSWORD_EXPIRATION);
         } else {
-            client.changePassword(username, newPassword);
+            client.changePassword(Util.decodeHTMLCharacters(username), newPassword);
             forwardTo = "user-mgt.jsp?ordinal=1";
         }
 

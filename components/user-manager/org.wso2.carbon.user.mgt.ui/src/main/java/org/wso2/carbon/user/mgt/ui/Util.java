@@ -24,7 +24,9 @@ import org.wso2.carbon.utils.DataPaginator;
 
 import javax.activation.DataHandler;
 import javax.mail.util.ByteArrayDataSource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Util {
 	
@@ -129,4 +131,10 @@ public class Util {
             }
         }
     }
+
+    public static String decodeHTMLCharacters(String encodedStr) {
+        return encodedStr.replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">")
+                .replaceAll("&quot;", "\"").replaceAll("&apos;", "'");
+    }
+
 }
