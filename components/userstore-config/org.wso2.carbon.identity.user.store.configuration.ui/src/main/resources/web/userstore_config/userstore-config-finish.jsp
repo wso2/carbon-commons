@@ -15,7 +15,7 @@
 * limitations under the License.
 */
 -->
-<%@page import="org.wso2.carbon.ndatasource.common.DataSourceException"%>
+<%@ page import="org.wso2.carbon.ndatasource.common.DataSourceException"%>
 <%@ page import="org.apache.axis2.context.ConfigurationContext" %>
 <%@ page import="org.wso2.carbon.CarbonConstants" %>
 <%@ page import="org.wso2.carbon.identity.user.store.configuration.stub.dto.PropertyDTO" %>
@@ -88,7 +88,7 @@
         	                            userStoreConfigAdminServiceClient.updateUserStoreWithDomainName(previousDomain, userStoreDTO);
         	                    } else {
         	                            // update userstore with same domain name
-        	                            userStoreConfigAdminServiceClient.editUserStore(userStoreDTO);
+        	                            userStoreConfigAdminServiceClient.updateUserStore(userStoreDTO);
         	                    }
         	            }
         	            else {
