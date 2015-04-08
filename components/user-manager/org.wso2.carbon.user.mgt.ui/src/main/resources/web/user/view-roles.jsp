@@ -130,7 +130,7 @@
                     (ConfigurationContext) config.getServletContext().getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
             UserAdminClient client = new UserAdminClient(cookie, backendServerURL, configContext);
             if (filter.length() > 0 && userName != null) {
-                FlaggedName[] data = client.getRolesOfUser(userName, filter, 0);
+                FlaggedName[] data = client.getRolesOfUser(Util.decodeHTMLCharacters(userName), filter, 0);
                 List<FlaggedName> dataList = new ArrayList<FlaggedName>(Arrays.asList(data));
                 exceededDomains = dataList.remove(dataList.size() - 1);
                 session.setAttribute(UserAdminUIConstants.USER_LIST_ASSIGNED_ROLE_CACHE_EXCEEDED, exceededDomains);

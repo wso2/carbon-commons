@@ -21,6 +21,7 @@
 <%@page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%@ page import="org.wso2.carbon.user.mgt.ui.UserAdminClient" %>
 <%@ page import="java.net.URLEncoder" %>
+<%@ page import="org.wso2.carbon.user.mgt.ui.Util" %>
 <%
 	String BUNDLE = "org.wso2.carbon.userstore.ui.i18n.Resources";
     ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE, request.getLocale());
@@ -34,7 +35,7 @@
         ConfigurationContext configContext =
                 (ConfigurationContext) config.getServletContext().getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
         UserAdminClient client = new UserAdminClient(cookie, backendServerURL, configContext);
-        client.deleteUser(username);
+        client.deleteUser(Util.decodeHTMLCharacters(username));
         session.removeAttribute(UserAdminUIConstants.USER_LIST_CACHE);
         session.removeAttribute(UserAdminUIConstants.USER_LIST_CACHE_EXCEEDED);        
         forwardTo = "user-mgt.jsp?ordinal=1";
