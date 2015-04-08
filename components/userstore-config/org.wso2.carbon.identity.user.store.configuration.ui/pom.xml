@@ -39,11 +39,11 @@
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.identity.user.store.configuration</artifactId>
+            <artifactId>org.wso2.carbon.user.mgt.ui</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon</groupId>
-            <artifactId>org.wso2.carbon.ui</artifactId>
+	<dependency>
+             <groupId>org.wso2.carbon</groupId>
+             <artifactId>org.wso2.carbon.ndatasource.common</artifactId>
         </dependency>
     </dependencies>
 

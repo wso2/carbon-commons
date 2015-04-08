@@ -21,9 +21,11 @@ import org.apache.axis2.AxisFault;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.client.ServiceClient;
 import org.apache.axis2.context.ConfigurationContext;
+import org.wso2.carbon.identity.user.store.configuration.stub.UserStoreConfigAdminServiceDataSourceException;
 import org.wso2.carbon.identity.user.store.configuration.stub.UserStoreConfigAdminServiceStub;
 import org.wso2.carbon.identity.user.store.configuration.stub.api.Properties;
 import org.wso2.carbon.identity.user.store.configuration.stub.dto.UserStoreDTO;
+import org.wso2.carbon.ndatasource.common.DataSourceException;
 
 public class UserStoreConfigAdminServiceClient {
     private UserStoreConfigAdminServiceStub stub;
@@ -85,8 +87,18 @@ public class UserStoreConfigAdminServiceClient {
      * @param userStoreDTO : representation of new user store to be persisted
      * @throws Exception
      */
-    public void addUserStore(UserStoreDTO userStoreDTO) throws Exception {
-        stub.addUserStore(userStoreDTO);
+    public void addUserStore(UserStoreDTO userStoreDTO) throws DataSourceException, Exception {
+
+        try {
+            stub.addUserStore(userStoreDTO);
+        } catch (UserStoreConfigAdminServiceDataSourceException e) {
+            if (e.getFaultMessage().getDataSourceException().isErrorMessageSpecified()) {
+                throw new DataSourceException(e.getFaultMessage().getDataSourceException().getErrorMessage(), e);
+            }
+            throw new DataSourceException(e.getMessage(), e);
+        } catch (AxisFault e) {
+            throw new DataSourceException(e.getMessage(), e);
+        }
     }
 
     /**
@@ -129,7 +141,16 @@ public class UserStoreConfigAdminServiceClient {
      */
     public void updateUserStoreWithDomainName(String previousDomain, UserStoreDTO userStoreDTO) throws Exception {
         if (previousDomain != null && !"".equals(previousDomain) && !previousDomain.equalsIgnoreCase(userStoreDTO.getDomainId())) {
-            stub.editUserStoreWithDomainName(previousDomain, userStoreDTO);
+            try {
+                stub.editUserStoreWithDomainName(previousDomain, userStoreDTO);
+            } catch (UserStoreConfigAdminServiceDataSourceException e) {
+                if (e.getFaultMessage().getDataSourceException().isErrorMessageSpecified()) {
+                    throw new DataSourceException(e.getFaultMessage().getDataSourceException().getErrorMessage(), e);
+                }
+                throw new DataSourceException(e.getMessage(), e);
+            } catch (AxisFault e) {
+                throw new DataSourceException(e.getMessage(), e);
+            }
         } else {
             this.updateUserStore(userStoreDTO);
         }
@@ -141,7 +162,28 @@ public class UserStoreConfigAdminServiceClient {
      * @param userStoreDTO New properties of the user store
      * @throws Exception
      */
-    public void updateUserStore(UserStoreDTO userStoreDTO) throws Exception {
-        stub.editUserStore(userStoreDTO);
+    public void updateUserStore(UserStoreDTO userStoreDTO) throws DataSourceException, Exception {
+
+        try {
+            stub.editUserStore(userStoreDTO);
+        } catch (UserStoreConfigAdminServiceDataSourceException e) {
+            if (e.getFaultMessage().getDataSourceException().isErrorMessageSpecified()) {
+                throw new DataSourceException(e.getFaultMessage().getDataSourceException().getErrorMessage(), e);
+            }
+            throw new DataSourceException(e.getMessage(), e);
+        } catch (AxisFault e) {
+            throw new DataSourceException(e.getMessage(), e);
+        }
+    }
+
+    public boolean testRDBMSConnection(String domainName, String driverName, String connectionURL, String username, String connectionPassword) throws Exception {
+        try {
+            return stub.testRDBMSConnection(domainName, driverName, connectionURL, username, connectionPassword);
+        } catch (UserStoreConfigAdminServiceDataSourceException e) {
+            if (e.getFaultMessage().getDataSourceException().isErrorMessageSpecified()) {
+                throw new DataSourceException(e.getFaultMessage().getDataSourceException().getErrorMessage(), e);
+            }
+            throw new DataSourceException(e.getMessage(), e);
+        }
     }
 }
