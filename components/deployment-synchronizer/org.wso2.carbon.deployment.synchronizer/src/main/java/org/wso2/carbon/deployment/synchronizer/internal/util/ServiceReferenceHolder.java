@@ -16,7 +16,7 @@
 * under the License.
 */
 
-package org.wso2.carbon.deployment.synchronizer.util;
+package org.wso2.carbon.deployment.synchronizer.internal.util;
 
 import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.utils.ConfigurationContextService;
