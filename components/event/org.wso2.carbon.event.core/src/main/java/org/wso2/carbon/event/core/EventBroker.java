@@ -48,12 +48,12 @@ public interface EventBroker {
     public String subscribe(Subscription subscription) throws EventBrokerException;
 
     /**
-     * UnSubscribe a subscription
+     * Unsubscribes a subscription
      *
      * @param id subscription ID
      * @throws EventBrokerException
      */
-    public void unSubscribe(String id) throws EventBrokerException;
+    public void unsubscribe(String id) throws EventBrokerException;
 
     /**
      * Get subscription from subscription ID
