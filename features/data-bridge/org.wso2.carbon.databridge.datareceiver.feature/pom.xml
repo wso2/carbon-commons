@@ -63,7 +63,7 @@
                         </goals>
                         <configuration>
                             <id>org.wso2.carbon.databridge.datareceiver</id>
-			    <propertiesFile>../../../etc/feature.properties</propertiesFile>
+			    <propertiesFile>../../etc/feature.properties</propertiesFile>
                             <includedFeatures>
                                 <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.core.server.feature:${carbon.commons.version}</includedFeatureDef>
                                 <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.commons.server.feature:${carbon.commons.version}</includedFeatureDef>
