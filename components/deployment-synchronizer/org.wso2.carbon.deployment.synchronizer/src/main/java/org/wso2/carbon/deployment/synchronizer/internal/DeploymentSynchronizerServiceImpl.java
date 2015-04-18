@@ -18,17 +18,16 @@
 
 package org.wso2.carbon.deployment.synchronizer.internal;
 
-import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizationManager;
-import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizer;
 import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
-import org.wso2.carbon.deployment.synchronizer.repository.CarbonRepositoryUtils;
+import org.wso2.carbon.deployment.synchronizer.internal.repository.CarbonRepositoryUtils;
+import org.wso2.carbon.deployment.synchronizer.internal.util.DeploymentSynchronizerConfiguration;
 import org.wso2.carbon.deployment.synchronizer.services.DeploymentSynchronizerService;
-import org.wso2.carbon.deployment.synchronizer.util.DeploymentSynchronizerConfiguration;
 import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.deployment.GhostDeployerUtils;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
-public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizerService, org.wso2.carbon.core.deployment.DeploymentSynchronizer {
+public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizerService,
+                                                          org.wso2.carbon.core.deployment.DeploymentSynchronizer {
 
     private DeploymentSynchronizationManager syncManager = DeploymentSynchronizationManager.getInstance();
 

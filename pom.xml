@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.wso2.carbon.commons</groupId>
     <artifactId>carbon-commons</artifactId>
     <packaging>pom</packaging>
-    <version>4.4.1-SNAPSHOT</version>
+    <version>4.2.4-SNAPSHOT</version>
     <name>WSO2 Carbon - Platform Aggregator Pom</name>
     <url>http://wso2.org</url>
 
@@ -16,85 +17,13 @@
 
     <modules>
         <!-- Service Stubs -->
-        <module>service-stubs/org.wso2.carbon.adc.repositoryinformation.service.stub</module>
-        <module>service-stubs/org.wso2.carbon.application.mgt.stub</module>
         <module>service-stubs/org.wso2.carbon.deployment.synchronizer.stub</module>
-        <module>service-stubs/org.wso2.carbon.discovery.stub</module>
-        <module>service-stubs/org.wso2.carbon.identity.oauth.stub</module>
-        <module>service-stubs/org.wso2.carbon.identity.entitlement.stub</module>
-        <module>service-stubs/org.wso2.carbon.throttling.agent.stub</module>
-        <module>service-stubs/org.wso2.carbon.email.verification.stub</module>
-        <module>service-stubs/org.wso2.carbon.tenant.common.stub</module>
-        <module>service-stubs/cluster-mgt</module>
-        <module>service-stubs/logging</module>
-        <module>service-stubs/remote-tasks</module>
-        <module>service-stubs/reporting</module>
-        <module>service-stubs/url-mapper</module>
-        <module>service-stubs/userstore-config</module>
-        <module>service-stubs/user-manager</module>
-        <module>service-stubs/remote-usermgt</module>
-        <module>service-stubs/event</module>
-        <module>service-stubs/ndatasource</module>
-        <module>service-stubs/soap-tracer</module>
-        <module>service-stubs/wsdl-tools</module>
-        <module>service-stubs/system-statistics</module>
-        <module>service-stubs/message-flows</module>
 
         <!-- Components -->
-        <module>components/user-manager</module>
-	<module>components/tenant-mgt-common</module>
-        <module>components/authentication</module>
         <module>components/deployment-synchronizer</module>
-        <module>components/application-mgt</module>
-        <module>components/ws-discovery</module>
-        <module>components/data-bridge</module>
-        <module>components/ganalytics</module>
-        <module>components/caching-invalidator</module>
-        <module>components/cluster-mgt</module>
-        <module>components/url-mapper</module>
-        <module>components/transaction-manager</module>
-        <module>components/hostobjects</module>
-        <module>components/ntask</module>
-        <module>components/reporting</module>
-        <module>components/doc-request-processor</module>
-        <module>components/tryit</module>
-        <module>components/wsdl2form</module>
-        <module>components/logging</module>
-        <module>components/userstore-config</module>
-        <module>components/remote-usermgt</module>
-        <module>components/event</module>
-        <module>components/ndatasource</module>
-        <module>components/ws-discovery-core</module>
-        <module>components/soap-tracer</module>
-        <module>components/wsdl-tools</module>
-        <module>components/system-statistics</module>
-        <module>components/message-flows</module>
-        <module>components/email-verification</module>
-	
 
         <!-- Features -->
-        <module>features/application-mgt</module>
         <module>features/deployment-synchronizer</module>
-        <module>features/ws-discovery</module>
-        <module>features/data-bridge</module>
-        <module>features/caching-invalidator</module>
-        <module>features/cluster-mgt</module>
-        <module>features/hostobjects</module>
-        <module>features/logging-mgt</module>
-        <module>features/ntask</module>
-        <module>features/reporting</module>
-        <module>features/transaction-manager</module>
-        <module>features/tryit</module>
-        <module>features/url-mapper</module>
-        <module>features/user-manager</module>
-        <module>features/remote-usermgt</module>
-        <module>features/event</module>
-        <module>features/ndatasource</module>
-        <module>features/ws-discovery-core</module>
-        <module>features/wsdl-tools</module>
-        <module>features/system-statistics</module>
-        <module>features/soap-tracer</module>
-        <module>features/message-flows</module>
     </modules>
 
     <scm>
@@ -112,7 +41,7 @@
                 <artifactId>axis2</artifactId>
                 <version>${orbit.version.axis2}</version>
             </dependency>
-	    <dependency>
+            <dependency>
                 <groupId>org.apache.axis2.transport</groupId>
                 <artifactId>axis2-transport-mail</artifactId>
                 <version>${orbit.version.axis2.transports}</version>
@@ -163,35 +92,35 @@
                 <artifactId>org.wso2.carbon.user.mgt</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
-             <dependency>
+            <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.identity.authentication</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
-	            <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.reporting.server.feature</artifactId>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.reporting.server.feature</artifactId>
                 <version>${carbon.commons.version}</version>
-            <type>zip</type>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.reporting.template.server.feature</artifactId>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.reporting.template.server.feature</artifactId>
                 <version>${carbon.commons.version}</version>
-            <type>zip</type>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.reporting.ui.feature</artifactId>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.reporting.ui.feature</artifactId>
                 <version>${carbon.commons.version}</version>
-            <type>zip</type>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.reporting.template.ui.feature</artifactId>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.reporting.template.ui.feature</artifactId>
                 <version>${carbon.commons.version}</version>
-            <type>zip</type>
-        </dependency>
+                <type>zip</type>
+            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.user.mgt.common</artifactId>
@@ -281,15 +210,15 @@
                 <artifactId>org.wso2.carbon.datasource</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
-	    <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.email.verification.stub</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
-	    <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.email.verification</artifactId>
-                <version>${carbon.commons.version}</version>
+                <version>${email.verification.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
@@ -639,9 +568,9 @@
                 <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
+                <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.adc.repositoryinformation.service.stub</artifactId>
-                <version>${carbon.commons.version}</version>
+                <version>${adc.repositoryinformation.service.stub.version}</version>
             </dependency>
 
             <dependency>
@@ -1125,7 +1054,7 @@
                 <artifactId>org.wso2.carbon.databridge.commons.thrift</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
- 	    <dependency>
+            <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.databridge.commons.binary</artifactId>
                 <version>${carbon.commons.version}</version>
@@ -1146,9 +1075,9 @@
                 <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
-            	<groupId>com.googlecode.disruptor.wso2</groupId>
-            	<artifactId>disruptor</artifactId>
-            	<version>${orbit.version.distruptor}</version>
+                <groupId>com.googlecode.disruptor.wso2</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${orbit.version.distruptor}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
@@ -1427,9 +1356,9 @@
                 <version>${hadoop.version}</version>
             </dependency>
             <dependency>
-            	<groupId>org.apache.tomcat.wso2</groupId>
-            	<artifactId>jdbc-pool</artifactId>
-            	<version>${jdbc-pool.version}</version>
+                <groupId>org.apache.tomcat.wso2</groupId>
+                <artifactId>jdbc-pool</artifactId>
+                <version>${jdbc-pool.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.hadoop.wso2</groupId>
@@ -1672,6 +1601,11 @@
                 <artifactId>org.wso2.carbon.caching.invalidator</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon</groupId>
+                <artifactId>org.wso2.carbon.registry.eventing</artifactId>
+                <version>4.2.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1834,50 +1768,22 @@
                 </property>
             </activation>
             <modules>
-                <module>components/user-manager</module>
-                <module>components/tenant-mgt-common</module>
-                <module>components/authentication</module>
                 <module>components/deployment-synchronizer</module>
-                <module>components/application-mgt</module>
-                <module>components/ws-discovery</module>
-                <module>components/data-bridge</module>
-                <module>components/ganalytics</module>
-                <module>components/caching-invalidator</module>
-                <module>components/cluster-mgt</module>
-                <module>components/url-mapper</module>
-                <module>components/transaction-manager</module>
-                <module>components/hostobjects</module>
-                <module>components/ntask</module>
-                <module>components/reporting</module>
-                <module>components/doc-request-processor</module>
-                <module>components/tryit</module>
-                <module>components/wsdl2form</module>
-                <module>components/logging</module>
-                <module>components/userstore-config</module>
-                <module>components/remote-usermgt</module>
-                <module>components/event</module>
-                <module>components/ndatasource</module>
-                <module>components/ws-discovery-core</module>
-                <module>components/soap-tracer</module>
-                <module>components/wsdl-tools</module>
-                <module>components/system-statistics</module>
-                <module>components/message-flows</module>
-                <module>components/email-verification</module>
             </modules>
         </profile>
     </profiles>
 
     <properties>
         <!-- Carbon kernel version -->
-        <carbon.kernel.version>4.4.0</carbon.kernel.version>
-        <carbon.kernel.imp.pkg.version>[4.4.0, 4.5.0)
+        <carbon.kernel.version>4.2.0</carbon.kernel.version>
+        <carbon.kernel.imp.pkg.version>[4.2.0, 4.3.0)
         </carbon.kernel.imp.pkg.version>
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
 
 
-        <carbon.commons.version>4.4.1-SNAPSHOT</carbon.commons.version>
+        <carbon.commons.version>4.2.4-SNAPSHOT</carbon.commons.version>
         <carbon.commons.exp.package.version>${carbon.commons.version}</carbon.commons.exp.package.version>
-        <carbon.commons.imp.package.version>[4.4.0, 4.5.0)</carbon.commons.imp.package.version>
+        <carbon.commons.imp.package.version>[4.2.0, 4.3.0)</carbon.commons.imp.package.version>
 
         <version.jettison>1.3.4</version.jettison>
 
@@ -1914,7 +1820,7 @@
         <axis2.wso2.version.aar.plugin>1.6.2</axis2.wso2.version.aar.plugin>
         <neethi.osgi.version>2.0.4.wso2v4</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
-        <orbit.version.axis2.transports>1.1.0-wso2v10</orbit.version.axis2.transports>
+        <orbit.version.axis2.transports>1.1.0-w333310</orbit.version.axis2.transports>
 
 
         <!-- Xerces Version -->
@@ -2070,6 +1976,10 @@
         <perf4j.version>0.9.12.wso2v1</perf4j.version>
         <highscale.version>1.0.wso2v1</highscale.version>
         <orbit.version.distruptor>2.10.4-wso2v2</orbit.version.distruptor>
+
+        <event.core.feature.version>4.2.0</event.core.feature.version>
+        <email.verification.version>4.2.1</email.verification.version>
+        <adc.repositoryinformation.service.stub.version>4.2.0</adc.repositoryinformation.service.stub.version>
     </properties>
 
     <repositories>

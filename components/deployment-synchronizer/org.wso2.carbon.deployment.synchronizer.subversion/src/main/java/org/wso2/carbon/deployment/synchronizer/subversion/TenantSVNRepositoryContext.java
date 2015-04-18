@@ -21,7 +21,7 @@ package org.wso2.carbon.deployment.synchronizer.subversion;
 import org.tigris.subversion.svnclientadapter.ISVNClientAdapter;
 import org.tigris.subversion.svnclientadapter.SVNUrl;
 import org.wso2.carbon.deployment.synchronizer.TenantRepositoryContext;
-import org.wso2.carbon.deployment.synchronizer.util.DeploymentSynchronizerConfiguration;
+import org.wso2.carbon.deployment.synchronizer.internal.util.DeploymentSynchronizerConfiguration;
 
 /**
  * Stores SVN related details of a given tenant. One per each tenant
