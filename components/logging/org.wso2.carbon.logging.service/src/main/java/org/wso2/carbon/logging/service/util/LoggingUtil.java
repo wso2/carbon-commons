@@ -35,7 +35,6 @@ import org.wso2.carbon.core.util.SystemFilter;
 import org.wso2.carbon.utils.logging.CircularBuffer;
 import org.wso2.carbon.logging.service.LogViewerException;
 import org.wso2.carbon.logging.service.appender.CarbonMemoryAppender;
-import org.wso2.carbon.logging.service.appender.LogEventAppender;
 import org.wso2.carbon.logging.service.config.ServiceConfigManager;
 import org.wso2.carbon.logging.service.config.SyslogConfigManager;
 import org.wso2.carbon.logging.service.config.SyslogConfiguration;
@@ -44,7 +43,6 @@ import org.wso2.carbon.logging.service.internal.DataHolder;
 import org.wso2.carbon.logging.service.internal.LoggingServiceComponent;
 import org.wso2.carbon.logging.service.registry.RegistryManager;
 import org.wso2.carbon.registry.core.Collection;
-import org.wso2.carbon.registry.core.RegistryConstants;
 import org.wso2.carbon.registry.core.Resource;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.user.api.UserStoreException;
@@ -140,16 +138,6 @@ public class LoggingUtil {
             return false;
         }
         return true;
-    }
-
-    public static boolean isLogEventReciverConfigured() {
-        Logger rootLogger = Logger.getRootLogger();
-        LogEventAppender logger = (LogEventAppender) rootLogger.getAppender("LOGEVENT");
-        if (logger != null) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     public static boolean isFileAppenderConfiguredForST() {

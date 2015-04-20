@@ -18,32 +18,13 @@ package org.wso2.carbon.logging.service.internal;
 import org.apache.axis2.context.ConfigurationContext;
 import org.wso2.carbon.registry.core.Registry;
 import org.wso2.carbon.user.core.service.RealmService;
-import org.wso2.carbon.databridge.agent.thrift.AgentHolder;
-import org.wso2.carbon.databridge.agent.thrift.Agent;
 
 public class DataHolder {
     private static DataHolder dataHolder = new DataHolder();
     private RealmService realmService;
     private Registry registry;
     private ConfigurationContext contextService;
-	private Agent agent;
-	private boolean isAgentInitialized;
 
-	public Agent getAgent() {
-		if (!isAgentInitialized && agent == null) {
-			synchronized (this) {
-				if (!isAgentInitialized && agent == null) {
-					agent = AgentHolder.getOrCreateAgent();
-					isAgentInitialized = true;
-				}
-			}
-		}
-		return agent;
-	}
-
-	public void setAgent(Agent agent) {
-		this.agent = agent;
-	}
     private DataHolder() {
     }
 

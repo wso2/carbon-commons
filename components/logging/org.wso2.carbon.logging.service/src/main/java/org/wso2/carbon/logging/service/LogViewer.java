@@ -21,7 +21,6 @@ import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.base.MultitenantConstants;
 import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.logging.service.appender.LogEventAppender;
 import org.wso2.carbon.logging.service.config.LoggingConfigManager;
 import org.wso2.carbon.logging.service.config.ServiceConfigManager;
 import org.wso2.carbon.logging.service.data.LogEvent;
@@ -227,12 +226,6 @@ public class LogViewer {
             throws LogViewerException {
         List<String> appNameList = logProvider.getApplicationNames(tenantDomain, serverKey);
         return appNameList.toArray(new String[appNameList.size()]);
-    }
-
-    public boolean isLogEventReciverConfigured() {
-        Logger rootLogger = Logger.getRootLogger();
-        LogEventAppender logger = (LogEventAppender) rootLogger.getAppender("LOGEVENT");
-        return logger != null;
     }
 
     public boolean isFileAppenderConfiguredForST() {
