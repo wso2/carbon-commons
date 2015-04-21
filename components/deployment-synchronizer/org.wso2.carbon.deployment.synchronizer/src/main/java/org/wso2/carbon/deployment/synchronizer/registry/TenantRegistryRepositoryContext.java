@@ -16,10 +16,10 @@
 * under the License.
 */
 
-package org.wso2.carbon.deployment.synchronizer;
+package org.wso2.carbon.deployment.synchronizer.registry;
 
-public class DeploymentSynchronizerConstants {
+import org.wso2.carbon.deployment.synchronizer.TenantRepositoryContext;
 
-    // Configuration parameters for carbon.xml
-    public static final String DEPLOYMENT_SYNCHRONIZER = "DeploymentSynchronizer";
+public class TenantRegistryRepositoryContext extends TenantRepositoryContext {
+
 }

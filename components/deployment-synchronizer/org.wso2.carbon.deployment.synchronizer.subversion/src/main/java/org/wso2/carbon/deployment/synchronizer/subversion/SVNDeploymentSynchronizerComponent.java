@@ -26,15 +26,9 @@ import org.tigris.subversion.svnclientadapter.commandline.CmdLineClientAdapterFa
 import org.tigris.subversion.svnclientadapter.javahl.JhlClientAdapterFactory;
 import org.tigris.subversion.svnclientadapter.svnkit.SvnKitClientAdapterFactory;
 import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
-import org.wso2.carbon.deployment.synchronizer.subversion.util.SVNDataHolder;
-import org.wso2.carbon.tomcat.api.CarbonTomcatService;
 
 /**
  * @scr.component name="org.wso2.carbon.deployment.synchronizer.subversion" immediate="true"
- * @scr.reference name="carbon.tomcat.service"
- * interface="org.wso2.carbon.tomcat.api.CarbonTomcatService"
- * cardinality="0..1" policy="dynamic" bind="setCarbonTomcatService"
- * unbind="unsetCarbonTomcatService"
  */
 public class SVNDeploymentSynchronizerComponent {
 
@@ -52,7 +46,7 @@ public class SVNDeploymentSynchronizerComponent {
             log.debug("SVN Kit client adapter initialized");
         } catch (Throwable t) {
             log.debug("Unable to initialize the SVN Kit client adapter - Required jars " +
-                    "may be missing");
+                    "may be missing", t);
         }
 
         try {
@@ -61,7 +55,7 @@ public class SVNDeploymentSynchronizerComponent {
             log.debug("Java HL client adapter initialized");
         } catch (Throwable t) {
             log.debug("Unable to initialize the Java HL client adapter - Required jars " +
-                    " or the native libraries may be missing");
+                    " or the native libraries may be missing", t);
         }
 
         try {
@@ -70,7 +64,7 @@ public class SVNDeploymentSynchronizerComponent {
             log.debug("Command line client adapter initialized");
         } catch (Throwable t) {
             log.debug("Unable to initialize the command line client adapter - SVN command " +
-                    "line tools may be missing");
+                    "line tools may be missing", t);
         }
         
         if(allClientsFailed){
@@ -97,11 +91,4 @@ public class SVNDeploymentSynchronizerComponent {
         log.debug("SVN based deployment synchronizer component deactivated");
     }
 
-    protected void setCarbonTomcatService(CarbonTomcatService carbonTomcatService) {
-        SVNDataHolder.getInstance().setCarbonTomcatService(carbonTomcatService);
-    }
-
-    protected void unsetCarbonTomcatService(CarbonTomcatService carbonTomcatService) {
-        SVNDataHolder.getInstance().setCarbonTomcatService(null);
-    }
 }

@@ -38,5 +38,23 @@
         <parameter name="AuthorizationAction" locked="true">/permission/admin/configure/deployment_sync</parameter>
         <parameter name="adminService" locked="true">true</parameter>
     </service>
+    <service name="AutoCheckoutService" scope="transportsession">
+        <schema schemaNamespace="http://org.apache.synapse/xsd"
+                elementFormDefaultQualified="true"/>
+        <transports>
+            <transport>http</transport>
+            <transport>https</transport>
+        </transports>
+        <description>
+            This utility service receives update events from the registry and triggers auto checkout
+            activities in the deployment synchronizer.
+        </description>
+        <operation name="notifyUpdate">
+            <actionMapping>http://ws.apache.org/ws/2007/05/eventing-extended/Publish</actionMapping>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-only"
+                             class="org.apache.axis2.receivers.RawXMLINOnlyMessageReceiver"/>
+        </operation>
+        <parameter name="ServiceClass">org.wso2.carbon.deployment.synchronizer.services.AutoCheckoutService</parameter>
+    </service>
     <parameter name="hiddenService" locked="true">true</parameter>
 </serviceGroup>
