@@ -71,6 +71,14 @@
                 CARBON.showWarningDialog("Users file cannot be empty.");
                 return false;
             }
+            var emptyPswd="";
+
+            emptyPswd = validateEmpty("password");
+
+            if (emptyPswd.length>0){
+                CARBON.showWarningDialog("Password field cannot be empty.");
+                return false;
+            }
 
             var e = document.getElementById("domain");
             var passwordRegEx = "<%=userStoreInfo.getPasswordRegEx()%>";
