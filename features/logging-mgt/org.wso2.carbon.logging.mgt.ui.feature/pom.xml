@@ -20,14 +20,14 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>logging-mgt-features</artifactId>
-        <version>4.4.1-SNAPSHOT</version>
+        <version>4.4.1</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.logging.mgt.ui.feature</artifactId>
     <packaging>pom</packaging>
-    <version>4.4.1-SNAPSHOT</version>
+    <version>4.4.1</version>
     <name>WSO2 Carbon - Logging Management UI Feature</name>
     <url>http://wso2.org</url>
     <description>This feature contains the bundles required for Front-end Logging Management functionality</description>

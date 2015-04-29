@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>event-feature</artifactId>
-        <version>4.4.1-SNAPSHOT</version>
+        <version>4.4.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -28,7 +28,7 @@
     <artifactId>org.wso2.carbon.event.server.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Event Server Feature</name>
-    <version>4.4.1-SNAPSHOT</version>
+    <version>4.4.1</version>
     <url>http://wso2.org</url>
     <description>This feature contains the bundles required for Back-end Event functionality
     </description>
