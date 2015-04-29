@@ -380,8 +380,14 @@ public class RegistrySubscriptionManager implements SubscriptionManager {
                 // if the registry is read only there can be situations where the the subscriptions
                 // is not saved to registry and hence the topic name
                 if (topicName != null) {
-                    userRegistry.delete(getResourcePath(subscriptionID, topicName));
-                    userRegistry.delete(getJMSSubResourcePath(subscriptionID, topicName));
+                    String resourcePath =  getResourcePath(subscriptionID, topicName);
+                    if (userRegistry.resourceExists(resourcePath)) {
+                        userRegistry.delete(resourcePath);
+                    }
+                    String jMSResourcePath =  getJMSSubResourcePath(subscriptionID, topicName);
+                    if (userRegistry.resourceExists(jMSResourcePath)) {
+                        userRegistry.delete(jMSResourcePath);
+                    }
                 }
 
                 topicIndexResource.removeProperty(subscriptionID);

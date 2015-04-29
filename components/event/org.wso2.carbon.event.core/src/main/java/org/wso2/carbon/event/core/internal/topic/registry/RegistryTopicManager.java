@@ -150,18 +150,13 @@ public class RegistryTopicManager implements TopicManager {
             if (!userRegistry.resourceExists(resourcePath)) {
                 Collection collection = userRegistry.newCollection();
                 userRegistry.put(resourcePath, collection);
-                // Grant this user (owner) rights to update permission on newly
-                // created topic. Ideally, loggedInUser
-                // cannot be null but sometimes components like rule mediator
-                // creates queues for internal use. So at
-                // that time username can be null.
-                if (loggedInUser != null) {
-                    UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService()
-                            .getTenantUserRealm(CarbonContext.getThreadLocalCarbonContext().getTenantId());
 
-                    userRealm.getAuthorizationManager().authorizeUser(loggedInUser, resourcePath,
-                            EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
-                }
+                // Grant this user (owner) rights to update permission on newly created topic
+                UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(
+                        CarbonContext.getThreadLocalCarbonContext().getTenantId());
+
+                authorizePermissionsToLoggedInUser(loggedInUser, topicName, resourcePath,
+                                                   userRealm);
             }
         } catch (RegistryException e) {
             throw new EventBrokerException("Cannot access the config registry", e);
