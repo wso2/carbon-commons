@@ -16,9 +16,10 @@
 * under the License.
 */
 
-package org.wso2.carbon.deployment.synchronizer.util;
+package org.wso2.carbon.deployment.synchronizer.internal.util;
 
 import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
+import org.wso2.carbon.deployment.synchronizer.util.RepositoryConfigParameter;
 
 import java.util.HashMap;
 import java.util.List;

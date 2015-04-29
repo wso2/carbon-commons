@@ -16,25 +16,14 @@
 package org.wso2.carbon.ndatasource.datasources;
 
 import java.io.PrintWriter;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.CallableStatement;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.NClob;
-import java.sql.PreparedStatement;
-import java.sql.SQLClientInfoException;
-import java.sql.SQLException;
-import java.sql.SQLWarning;
-import java.sql.SQLXML;
-import java.sql.Savepoint;
-import java.sql.Statement;
-import java.sql.Struct;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Executor;
+import java.util.logging.Logger;
+
 import org.apache.tomcat.jdbc.pool.ConnectionPool;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
@@ -47,6 +36,10 @@ import javax.transaction.xa.XAException;
 import javax.transaction.xa.XAResource;
 import javax.transaction.xa.Xid;
 
+/**
+ * This class represents an {@link XADataSource} implementation which uses a local transaction
+ * for its operations. 
+ */
 public class LocalXADataSource implements XADataSource {
 
     private PrintWriter out;
@@ -59,13 +52,11 @@ public class LocalXADataSource implements XADataSource {
 
     private String driverClassName;
 
-    private String vValidationQuery;
+    private String validationQuery;
 
     private ThreadLocal<Connection> tlConn = new ThreadLocal<Connection>();
 
     private ConnectionPool connectionPool;
-
-    private PoolProperties props = new PoolProperties();
 
     @Override
     public PrintWriter getLogWriter() throws SQLException {
@@ -87,15 +78,20 @@ public class LocalXADataSource implements XADataSource {
         return 0;
     }
 
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        throw new SQLFeatureNotSupportedException();
+    }
+
     private Connection createConnection() throws SQLException {
-        if (connectionPool == null) {
+        if (this.connectionPool == null) {
             synchronized (LocalXADataSource.class) {
-                if (connectionPool == null) {
+                if (this.connectionPool == null) {
                     this.createConnectionPool();
                 }
             }
         }
-        Connection conn = connectionPool.getConnection();
+        Connection conn = this.connectionPool.getConnection();
         conn.setAutoCommit(false);
         return conn;
     }
@@ -148,31 +144,36 @@ public class LocalXADataSource implements XADataSource {
         }
     }
 
-    private void createConnectionPool() throws SQLException{
+    private void createConnectionPool() throws SQLException {
+    	PoolProperties props = new PoolProperties();
         props.setUrl(this.getUrl());
         props.setUsername(this.getUsername());
         props.setPassword(this.getPassword());
         props.setDriverClassName(this.getDriverClassName());
-        props.setValidationQuery(this.getvValidationQuery());
-        connectionPool = new ConnectionPool(props);
+        props.setValidationQuery(this.getValidationQuery());
+        this.connectionPool = new ConnectionPool(props);
     }
 
     public void initConn() throws SQLException {
-        Connection conn = tlConn.get();
+        Connection conn = this.tlConn.get();
         if (conn == null || conn.isClosed()) {
             conn = createConnection();
-            tlConn.set(conn);
+            this.tlConn.set(conn);
         }
     }
 
-    public String getvValidationQuery() {
-        return vValidationQuery;
+    public String getValidationQuery() {
+        return validationQuery;
     }
 
-    public void setValidationQuery(String vValidationQuery) {
-        this.vValidationQuery = vValidationQuery;
+    public void setValidationQuery(String validationQuery) {
+        this.validationQuery = validationQuery;
     }
 
+    /**
+     * This class represents an {@link XAConnection} implementation which is backed by
+     * a normal JDBC {@link Connection}.
+     */
     public class LocalXAConnection implements XAConnection {
 
         private List<ConnectionEventListener> ceListeners = new ArrayList<ConnectionEventListener>();
@@ -191,13 +192,13 @@ public class LocalXADataSource implements XADataSource {
 
         @Override
         public void addConnectionEventListener(ConnectionEventListener listener) {
-            ceListeners.add(listener);
+            this.ceListeners.add(listener);
         }
 
         @Override
         public void removeConnectionEventListener(
                 ConnectionEventListener listener) {
-            ceListeners.remove(listener);
+        	this.ceListeners.remove(listener);
         }
 
         @Override
@@ -217,6 +218,10 @@ public class LocalXADataSource implements XADataSource {
 
     }
 
+    /**
+     * This class represents an {@link XAResource} implementation based on
+     * the local transaction model.
+     */
     public class LocalXAResource implements XAResource {
 
         @Override
@@ -236,10 +241,12 @@ public class LocalXADataSource implements XADataSource {
 
         @Override
         public void end(Xid xid, int flags) throws XAException {
+        	//ignore
         }
 
         @Override
         public void forget(Xid xid) throws XAException {
+        	//ignore
         }
 
         @Override
@@ -300,6 +307,9 @@ public class LocalXADataSource implements XADataSource {
 
     }
 
+    /**
+     * Local {@link Connection} implementation.
+     */
     public class LocalConnection implements Connection {
 
         @Override
@@ -620,6 +630,36 @@ public class LocalXADataSource implements XADataSource {
                 throws SQLException {
             initConn();
             return tlConn.get().createStruct(typeName, attributes);
+        }
+
+        @Override
+        public void setSchema(String schema) throws SQLException {
+        	initConn();
+            tlConn.get().setSchema(schema);
+        }
+
+        @Override
+        public String getSchema() throws SQLException {
+        	initConn();
+            return tlConn.get().getSchema();
+        }
+
+        @Override
+        public void abort(Executor executor) throws SQLException {
+        	initConn();
+            tlConn.get().abort(executor);
+        }
+
+        @Override
+        public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
+        	initConn();
+            tlConn.get().setNetworkTimeout(executor, milliseconds);
+        }
+
+        @Override
+        public int getNetworkTimeout() throws SQLException {
+        	initConn();
+            return tlConn.get().getNetworkTimeout();
         }
 
     }
