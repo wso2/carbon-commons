@@ -21,13 +21,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>reporting-stubs</artifactId>
-        <version>4.4.1</version>
+        <version>4.4.2-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.reporting.template.stub</artifactId>
-    <version>4.4.1</version>
+    <version>4.4.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Reporting Template Stub</name>
     <url>http://wso2.org</url>
