@@ -36,6 +36,7 @@ public class UserStoreUIUtils extends AbstractAdmin {
     public static Properties mergePropertyValues(Properties properties, Map<String, String> tempProperties) {
         Property[] mandatories = properties.getMandatoryProperties();
         Property[] optionals = properties.getOptionalProperties();
+        Property[] advancedProperties = properties.getAdvancedProperties();
 
         if (mandatories[0] != null) {
             for (int i = 0; i < mandatories.length; i++) {
@@ -54,8 +55,19 @@ public class UserStoreUIUtils extends AbstractAdmin {
                 }
             }
         }
+
+        if (advancedProperties[0] != null) {
+            for (int i = 0; i < advancedProperties.length; i++) {
+                Property property = advancedProperties[i];
+                if (tempProperties.get(property.getName()) != null) {
+                    advancedProperties[i].setValue(tempProperties.get(property.getName()));
+                }
+            }
+        }
+
         properties.setMandatoryProperties(mandatories);
         properties.setOptionalProperties(optionals);
+        properties.setAdvancedProperties(advancedProperties);
         return properties;
     }
 
