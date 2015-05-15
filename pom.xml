@@ -95,6 +95,7 @@
         <module>features/system-statistics</module>
         <module>features/soap-tracer</module>
         <module>features/message-flows</module>
+        <module>features/tenant-mgt-common</module>
     </modules>
 
     <scm>
