@@ -1930,8 +1930,8 @@
 
         <slf4j.wso2.version>1.5.10.wso2v1</slf4j.wso2.version>
 
-        <libthrift.wso2.version>0.8.0.wso2v1</libthrift.wso2.version>
-        <libthrift.wso2.imp.pkg.version.range>[0.8.0.wso2v1,0.9.0]</libthrift.wso2.imp.pkg.version.range>
+        <libthrift.wso2.version>0.7.0.wso2v2</libthrift.wso2.version>
+        <libthrift.wso2.imp.pkg.version.range>[0.7.0.wso2v2,0.8.0]</libthrift.wso2.imp.pkg.version.range>
 
         <!-- JSON Version -->
         <orbit.version.json>2.0.0.wso2v1</orbit.version.json>
