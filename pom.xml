@@ -982,13 +982,13 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.tenant.common.server.feature</artifactId>
+                <artifactId>org.wso2.carbon.tenant.mgt.common.server.feature</artifactId>
                 <version>${carbon.commons.version}</version>
                 <type>zip</type>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.tenant.common.ui.feature</artifactId>
+                <artifactId>org.wso2.carbon.tenant.mgt.common.ui.feature</artifactId>
                 <version>${carbon.commons.version}</version>
                 <type>zip</type>
             </dependency>
