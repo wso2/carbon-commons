@@ -58,7 +58,7 @@
                             org.wso2.carbon.databridge.commons.thrift.*
                         </Export-Package>
                         <Import-Package>
-                            org.osgi.framework;
+                            org.osgi.framework,
                             org.slf4j; version="${slf4j.imp.pkg.version.range}",
                             org.apache.thrift.*; version="${libthrift.wso2.imp.pkg.version.range}"
                         </Import-Package>
