@@ -130,7 +130,7 @@
                     (ConfigurationContext) config.getServletContext().getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
             UserAdminClient client = new UserAdminClient(cookie, backendServerURL, configContext);
             if (filter.length() > 0 && userName != null) {
-                FlaggedName[] data = client.getRolesOfUser(userName, filter, 0);
+                FlaggedName[] data = client.getRolesOfUser(Util.decodeHTMLCharacters(userName), filter, 0);
                 List<FlaggedName> dataList = new ArrayList<FlaggedName>(Arrays.asList(data));
                 exceededDomains = dataList.remove(dataList.size() - 1);
                 session.setAttribute(UserAdminUIConstants.USER_LIST_ASSIGNED_ROLE_CACHE_EXCEEDED, exceededDomains);
@@ -164,7 +164,7 @@
             }
         } catch (Exception e) {
             String message = MessageFormat.format(resourceBundle.getString("error.while.loading.roles.of"),
-                    CharacterEncoder.getSafeText(userName), e.getMessage());
+                    Util.decodeHTMLCharacters(userName), e.getMessage());
 %>
 <script type="text/javascript">
     jQuery(document).ready(function () {
@@ -218,7 +218,7 @@
     function doPaginate(page, pageNumberParameterName, pageNumber){
         var form = document.createElement("form");
         form.setAttribute("method", "POST");
-        form.setAttribute("action", page + "?" + pageNumberParameterName + "=" + pageNumber + "&username=" + '<%=userName%>');
+        form.setAttribute("action", page + "?" + pageNumberParameterName + "=" + pageNumber + "&username=" + '<%=URLEncoder.encode(userName,"UTF-8")%>');
         var selectedRolesStr = "";
         $("input:checkbox:checked").each(function(index){
             if(!$(this).is(":disabled")){
@@ -254,7 +254,7 @@
     function doSelectAllRetrieved() {
         var form = document.createElement("form");
         form.setAttribute("method", "POST");
-        form.setAttribute("action", "view-roles.jsp?pageNumber=" + <%=pageNumber%> + "&username=" + '<%=userName%>');
+        form.setAttribute("action", "view-roles.jsp?pageNumber=" + <%=pageNumber%> + "&username=" + '<%=URLEncoder.encode(userName,"UTF-8")%>');
         var selectedRolesElem = document.createElement("input");
         selectedRolesElem.setAttribute("type", "hidden");
         selectedRolesElem.setAttribute("name", "selectedRoles");
@@ -268,7 +268,7 @@
     function doUnSelectAllRetrieved() {
         var form = document.createElement("form");
         form.setAttribute("method", "POST");
-        form.setAttribute("action", "view-roles.jsp?pageNumber=" + <%=pageNumber%> + "&username=" + '<%=userName%>');
+        form.setAttribute("action", "view-roles.jsp?pageNumber=" + <%=pageNumber%> + "&username=" + '<%=URLEncoder.encode(userName,"UTF-8")%>');
         var unselectedRolesElem = document.createElement("input");
         unselectedRolesElem.setAttribute("type", "hidden");
         unselectedRolesElem.setAttribute("name", "unselectedRoles");
@@ -293,7 +293,7 @@
 
     </script>
     <div id="workArea">
-        <form name="filterForm" method="post" action="view-roles.jsp?username=<%=userName%>" >
+        <form name="filterForm" method="post" action="view-roles.jsp?username=<%=URLEncoder.encode(userName,"UTF-8")%>" >
             <table class="normal">
                 <tr>
                     <td><fmt:message key="list.roles"/></td>
@@ -315,7 +315,7 @@
                           numberOfPages="<%=numberOfPages%>"
                           noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                           page="view-roles.jsp" pageNumberParameterName="pageNumber"
-                          parameters="<%="username="+userName%>"/>
+                          parameters="<%="username="+URLEncoder.encode(userName,"UTF-8")%>"/>
         <form method="post" action="edit-user-roles-finish.jsp?viewRoles=true" onsubmit="return doValidation();"
               name="edit_users" id="edit_users">
             <input type="hidden" id="username" name="username" value="<%=userName%>"/>
@@ -414,7 +414,7 @@
                                   numberOfPages="<%=numberOfPages%>"
                                   noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                                   page="view-roles.jsp" pageNumberParameterName="pageNumber"
-                                  parameters="<%="username="+userName%>"/>
+                                  parameters="<%="username="+URLEncoder.encode(userName,"UTF-8")%>"/>
             <%
                 if (roles != null && roles.length > 0 && exceededDomains != null) {
                     if(exceededDomains.getItemName() != null || exceededDomains.getItemDisplayName() != null){
