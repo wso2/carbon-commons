@@ -23,6 +23,8 @@
 <%@page import="org.wso2.carbon.user.mgt.ui.UserAdminClient"%>
 <%@ page import="org.wso2.carbon.utils.ServerConstants" %>
 <%@ page import="java.text.MessageFormat" %>
+<%@ page import="org.wso2.carbon.user.mgt.ui.Util" %>
+<%@ page import="java.net.URLEncoder" %>
 <%
 	String forwardTo = null;
     String username = CharacterEncoder.getSafeText(request.getParameter("username"));
@@ -46,23 +48,23 @@
             forwardTo = returnPath;        
             session.removeAttribute(ServerConstants.PASSWORD_EXPIRATION);
         } else {
-            client.changePassword(username, newPassword);
+            client.changePassword(Util.decodeHTMLCharacters(username), newPassword);
             forwardTo = "user-mgt.jsp?ordinal=1";
         }
 
         String message = MessageFormat.format(resourceBundle.getString("password.change.successful"),
-                new Object[]{username});
+                new Object[]{Util.decodeHTMLCharacters(username)});
         CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.INFO, request);
         
         
     } catch (Exception e) {
         String message = MessageFormat.format(resourceBundle.getString("password.change.error"),
-                username, e.getMessage());
+                Util.decodeHTMLCharacters(username), e.getMessage());
         CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.ERROR, request);
         if(isUserChange != null) {
             forwardTo = "change-passwd.jsp?ordinal=2&returnPath="+returnPath+"&isUserChange=true";    
         } else {
-            forwardTo = "change-passwd.jsp?username="+username+"&ordinal=2";
+            forwardTo = "change-passwd.jsp?username="+URLEncoder.encode(username,"UTF-8")+"&ordinal=2";
         }
     }
 %>

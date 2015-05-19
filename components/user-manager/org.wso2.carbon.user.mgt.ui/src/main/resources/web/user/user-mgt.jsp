@@ -248,7 +248,7 @@
         function deleteUser(user) {
             function doDelete() {
                 var userName = user;
-                location.href = 'delete-finish.jsp?username=' + encodeURIComponent(userName);
+                location.href = 'delete-finish.jsp?username=' + userName;
             }
 
             CARBON.showConfirmationDialog("<fmt:message key="confirm.delete.user"/> \'" + user + "\'?", doDelete, null);
@@ -378,17 +378,17 @@
                     <td>
 
                         <%
-                            if(userRealmInfo.getAdminUser().equals(userName) &&
+                            if(userRealmInfo.getAdminUser().equals(Util.decodeHTMLCharacters(userName)) &&
                                     !userRealmInfo.getAdminUser().equals(currentUser)){
                                 continue;
                             }
                         %>
                         <%
-                            if (!Util.getUserStoreInfoForUser(userName, userRealmInfo).getPasswordsExternallyManaged() &&      // TODO
+                            if (!Util.getUserStoreInfoForUser(Util.decodeHTMLCharacters(userName), userRealmInfo).getPasswordsExternallyManaged() &&      // TODO
                                 CarbonUIUtil.isUserAuthorized(request,
                                          "/permission/admin/configure/security/usermgt/passwords") &&
                                     users[i].getEditable()) { //if passwords are managed externally do not allow to change passwords.
-                            	if(userName.equals(currentUser)){
+                            	if(Util.decodeHTMLCharacters(userName).equals(currentUser)){
                         %>
                         <a href="change-passwd.jsp?isUserChange=true&returnPath=user-mgt.jsp" class="icon-link"
                            style="background-image:url(../admin/images/edit.gif);"><fmt:message
@@ -410,7 +410,7 @@
                             if(CarbonUIUtil.isUserAuthorized(request, "/permission/admin/configure/security")){
                         %>
                         <a href="edit-user-roles.jsp?username=<%=
-                        java.net.URLEncoder.encode(userName,"UTF-8")%>&disPlayName=<%=disPlayName%>" class="icon-link"
+                        java.net.URLEncoder.encode(userName,"UTF-8")%>&disPlayName=<%=java.net.URLEncoder.encode(disPlayName,"UTF-8")%>" class="icon-link"
                            style="background-image:url(../admin/images/edit.gif);"><fmt:message
                                 key="edit.roles"/></a>
                         <%
@@ -430,11 +430,11 @@
 
                         <%
                             if (CarbonUIUtil.isUserAuthorized(request,
-                                "/permission/admin/configure/security/usermgt/users") && !userName.equals(currentUser)
-                                && !userName.equals(userRealmInfo.getAdminUser()) &&
+                                "/permission/admin/configure/security/usermgt/users") && !Util.decodeHTMLCharacters(userName).equals(currentUser)
+                                && !Util.decodeHTMLCharacters(userName).equals(userRealmInfo.getAdminUser()) &&
                                     users[i].getEditable()) {
                         %>
-                        <a href="#" onclick="deleteUser('<%=userName%>')" class="icon-link"
+                        <a href="#" onclick="deleteUser('<%=java.net.URLEncoder.encode(userName,"UTF-8")%>')" class="icon-link"
                            style="background-image:url(images/delete.gif);"><fmt:message
                                 key="delete"/></a>
                         <%
