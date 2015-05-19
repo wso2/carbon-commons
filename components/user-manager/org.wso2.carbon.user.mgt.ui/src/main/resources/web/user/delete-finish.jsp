@@ -41,7 +41,7 @@
         forwardTo = "user-mgt.jsp?ordinal=1";
     } catch (Exception e) {
         String message = MessageFormat.format(resourceBundle.getString("user.cannot.delete"),
-                new Object[]{username, e.getMessage()});
+                new Object[]{Util.decodeHTMLCharacters(username), e.getMessage()});
         CarbonUIMessage.sendCarbonUIMessage(message, CarbonUIMessage.ERROR, request);
         forwardTo = "user-mgt.jsp?ordinal=1";
     }
