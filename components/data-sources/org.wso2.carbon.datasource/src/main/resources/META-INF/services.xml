@@ -25,7 +25,7 @@
             <transport>https</transport>
         </transports>
         <description>
-            This service will give info on Data Sources.
+            This service will give info on Datasources.
         </description>
         <messageReceivers>
             <messageReceiver mep="http://www.w3.org/ns/wsdl/robust-in-only"

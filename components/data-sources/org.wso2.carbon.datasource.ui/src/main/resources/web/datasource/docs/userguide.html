@@ -19,37 +19,37 @@
 <html>
 <head>
   <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type"/>
-  <title>Data Sources - User Guide</title>
+  <title>Datasources - User Guide</title>
   <link href="../../admin/css/documentation.css" rel="stylesheet" type="text/css" media="all"/>
 </head>
 
 <body>
-<h1>Data Sources</h1>
+<h1>Datasources</h1>
 
 <p><span style="color: black;">Use this configuration panel to configure data
 sources, and connection pools.</span></p>
 <ol>
   <li>In the navigator, under Manage, click <span
-    style="font-weight: bold;">Data Sources. </span> The <span
-    style="font-weight: bold; font-style: italic;">Data Sources</span> page
+    style="font-weight: bold;">Datasources. </span> The <span
+    style="font-weight: bold; font-style: italic;">Datasources</span> page
     appears.
-    <img src="images/datasources.jpg" alt="Add New Data Sources"/>
-    <p>Figure 1. Add New Data Source</p>
+    <img src="images/datasources.jpg" alt="Add New Datasources"/>
+    <p>Figure 1. Add New Datasource</p>
   </li>
   <li>Click <span style="font-weight: bold;">AddDataSource</span>. The <span
-    style="font-weight: bold; font-style: italic;">New Data Source</span> page
+    style="font-weight: bold; font-style: italic;">New Datasource</span> page
     appears.
   </li>
-  <li>Add your data source configuration details. Depending on the selection of
-    your data source repository (InMemory, JNDI ) different configuration
+  <li>Add your datasource configuration details. Depending on the selection of
+    your datasource repository (InMemory, JNDI ) different configuration
     parameters will be available. </li>
-  <li>Click <span style="font-weight: bold;">Add</span>. Your data source will
+  <li>Click <span style="font-weight: bold;">Add</span>. Your datasource will
     be added.</li>
 </ol>
-<p><img src="images/datasources1.jpg" alt="Data Source configuration panel InMemory"/></p>
-    <p>Figure 2. Adding Data Source with InMemory configuration</p>
-<p><img src="images/datasources2.jpg" alt="Data Source configuration panel JNDI"/></p>
-    <p>Figure 3. Data Source configuration with JNDI </p>
+<p><img src="images/datasources1.jpg" alt="Datasource configuration panel InMemory"/></p>
+    <p>Figure 2. Adding Datasource with InMemory configuration</p>
+<p><img src="images/datasources2.jpg" alt="Datasource configuration panel JNDI"/></p>
+    <p>Figure 3. Datasource configuration with JNDI </p>
 
 <h2><strong>Field Descriptions</strong></h2>
 
@@ -63,7 +63,7 @@ cellpadding="2" cellspacing="2">
   <tbody>
     <tr>
       <td colspan="2" rowspan="1"><a name="PageWindow_name"
-        id="PageWindow_name1"/><strong>New Data Source</strong></td>
+        id="PageWindow_name1"/><strong>New Datasource</strong></td>
     </tr>
     <tr>
       <td style="width: 127px;"><strong>Field Name</strong></td>
@@ -71,11 +71,11 @@ cellpadding="2" cellspacing="2">
     </tr>
     <tr>
       <td style="width: 127px;">Name</td>
-      <td>Name of the data source (This value should be unique.)</td>
+      <td>Name of the datasource (This value should be unique.)</td>
     </tr>
     <tr>
-      <td style="width: 127px;">Data Source Name</td>
-      <td>A name to identify the data source, if a value is not specified, </td>
+      <td style="width: 127px;">Datasource Name</td>
+      <td>A name to identify the datasource, if a value is not specified, </td>
     </tr>
     <tr>
       <td style="width: 127px;">Driver</td>
@@ -97,18 +97,18 @@ cellpadding="2" cellspacing="2">
         a connection</td>
     </tr>
     <tr>
-      <td style="width: 127px; height: 44px;">Data Source Pool
+      <td style="width: 127px; height: 44px;">Datasource Pool
       Implementation</td>
-      <td style="height: 44px;">The type of the data source pool
+      <td style="height: 44px;">The type of the datasource pool
       implementation</td>
     </tr>
     <tr>
       <td style="width: 127px;">Pool type</td>
       <td>This can be either: BasicDataSource or PerUserPoolDataSource.
-        <strong>BasicDataSource - </strong>This data source is an
+        <strong>BasicDataSource - </strong>This datasource is an
         implementation of <span style="font-family:sans-serif">javax.sql.DataSource</span> that is
         configured via Java Bean properties. <strong>PerUserPoolDataSource :-
-        </strong>This data source uses individual pools per user. Some
+        </strong>This datasource uses individual pools per user. Some
         properties can be set specifically for a given user, if the deployment
         environment can support initialization of mapped properties. For
         example, a pool of admin or write-access Connections can be guaranteed
@@ -117,7 +117,7 @@ cellpadding="2" cellspacing="2">
     </tr>
     <tr>
       <td style="width: 127px;">Repository type</td>
-      <td>The type of the data source repository. </td>
+      <td>The type of the datasource repository. </td>
     </tr>
     <tr>
       <td style="width: 127px;">IC Factory</td>

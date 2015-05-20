@@ -199,7 +199,7 @@
         client = new ReportTemplateClient(configContext, serverURL, cookie);
         datasources = client.getDatasourceNames();
         if (datasources == null || datasources.length == 0) {
-            errorString = "No data source found! Please add a data source!";
+            errorString = "No datasource found! Please add a datasource!";
 %>
 <script type="text/javascript">
     CARBON.showErrorDialog('<%=errorString%>', function() {
