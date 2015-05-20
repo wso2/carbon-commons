@@ -19,14 +19,14 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>url-mapper-parent</artifactId>
-        <version>4.4.2-SNAPSHOT</version>
+        <version>4.4.2</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.url.mapper.clustermessage</artifactId>
     <packaging>bundle</packaging>
-    <version>4.4.2-SNAPSHOT</version>
+    <version>4.4.2</version>
     <name>WSO2 Carbon - url mapper cluster message</name>
 
     <build>
