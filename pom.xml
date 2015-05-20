@@ -1239,9 +1239,9 @@
                 <version>4.3.3.wso2v1</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.httpcomponents.wso2</groupId>
+                <groupId>org.wso2.orbit.org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
-                <version>4.2.5.wso2v1</version>
+                <version>${orbit.version.httpcomponents.httpclient}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -2095,6 +2095,7 @@
         <perf4j.version>0.9.12.wso2v1</perf4j.version>
         <highscale.version>1.0.wso2v1</highscale.version>
         <orbit.version.distruptor>2.10.4-wso2v2</orbit.version.distruptor>
+        <orbit.version.httpcomponents.httpclient>4.3.1.wso2v2</orbit.version.httpcomponents.httpclient>
     </properties>
 
     <repositories>
