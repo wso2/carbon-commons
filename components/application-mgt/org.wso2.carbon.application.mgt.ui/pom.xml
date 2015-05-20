@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>application-mgt</artifactId>
-        <version>4.4.2</version>
+        <version>4.4.2-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -27,7 +27,7 @@
     <artifactId>org.wso2.carbon.application.mgt.ui</artifactId>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Application Management UI</name>
-    <version>4.4.2</version>
+    <version>4.4.2-SNAPSHOT</version>
     <description>org.wso2.carbon.application.mgt.ui represent the UI aspects of
         org.wso2.carbon.application.mgt bundle
     </description>
