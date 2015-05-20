@@ -26,7 +26,7 @@
             <artifactId>commons-pool</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents.wso2</groupId>
+            <groupId>org.wso2.orbit.org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
         <dependency>
@@ -90,7 +90,7 @@
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.agent:${carbon.commons.version}
                                 </bundleDef>
                                 <bundleDef>commons-pool.wso2:commons-pool</bundleDef>
-                                <bundleDef>org.apache.httpcomponents.wso2:httpclient</bundleDef>
+                                <bundleDef>org.wso2.orbit.org.apache.httpcomponents:httpclient</bundleDef>
                                 <bundleDef>org.apache.httpcomponents.wso2:httpcore</bundleDef>
                                 <bundleDef>com.googlecode.disruptor.wso2:disruptor</bundleDef>
                             </bundles>
