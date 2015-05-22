@@ -21,13 +21,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>wsdl-tool-stubs</artifactId>
-        <version>4.4.3-SNAPSHOT</version>
+        <version>4.4.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.wsdl2code.stub</artifactId>
-    <version>4.4.3-SNAPSHOT</version>
+    <version>4.4.3</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - WSDL2CODE Services Stub</name>
     <url>http://wso2.org</url>

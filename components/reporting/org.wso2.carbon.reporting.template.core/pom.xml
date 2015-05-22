@@ -3,14 +3,14 @@
     <parent>
         <artifactId>reporting</artifactId>
         <groupId>org.wso2.carbon.commons</groupId>
-        <version>4.4.3-SNAPSHOT</version>
+        <version>4.4.3</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.reporting.template.core</artifactId>
     <packaging>bundle</packaging>
-    <version>4.4.3-SNAPSHOT</version>
+    <version>4.4.3</version>
     <name>WSO2 Carbon Component - Reporting Template - BE</name>
     <description>org.wso2.carbon.reporting.template.core provides the back-end functionalities of creating the templates</description>
     <url>http://wso2.org</url>
