@@ -38,7 +38,7 @@ public class XACMLRequetBuilder {
         OMFactory factory = OMAbstractFactory.getOMFactory();
 
         OMElement requestXML = factory.createOMElement("Request", null);
-        requestXML.addAttribute("xlmns", "urn:oasis:names:tc:xacml:3.0:core:schema:wd-17", null);
+        requestXML.addAttribute("xmlns", "urn:oasis:names:tc:xacml:3.0:core:schema:wd-17", null);
         requestXML.addAttribute("CombinedDecision", "false", null);
         requestXML.addAttribute("ReturnPolicyIdList", "false", null);
 
