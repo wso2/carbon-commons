@@ -40,7 +40,6 @@ import org.wso2.carbon.registry.api.RegistryException;
 import org.wso2.carbon.registry.api.Resource;
 import org.wso2.carbon.registry.core.Collection;
 import org.wso2.carbon.registry.core.RegistryConstants;
-import org.wso2.carbon.registry.core.utils.RegistryUtils;
 import org.wso2.carbon.user.api.Claim;
 import org.wso2.carbon.user.api.ClaimMapping;
 import org.wso2.carbon.user.api.RealmConfiguration;
@@ -73,7 +72,7 @@ public class UserRealmProxy {
     private static final String APPLICATIONS_PATH = RegistryConstants.PATH_SEPARATOR
             + CarbonConstants.UI_PERMISSION_NAME + RegistryConstants.PATH_SEPARATOR
             + "applications";
-
+    private static final String DISAPLAY_NAME_CLAIM = "http://wso2.org/claims/displayName";
     private UserRealm realm = null;
 
     public UserRealmProxy(UserRealm userRealm) {
@@ -102,22 +101,57 @@ public class UserRealmProxy {
                 usersWithClaim = realm.getUserStoreManager().getUserList(claimValue.getClaimURI(),
                                                                     claimValue.getValue(), null);
             }
-            FlaggedName[] allUsers = listAllUsers(filter, maxLimit);
+            FlaggedName[] flaggedNames = new FlaggedName[usersWithClaim.length+1];
+            int i = 0;
 
             if(usersWithClaim != null){
                 Arrays.sort(usersWithClaim);
-                for(FlaggedName name : allUsers){
-                    if(Arrays.binarySearch(usersWithClaim, name.getItemName()) > -1){
-                        users.add(name);
+                for(String user : usersWithClaim){
+                    flaggedNames[i] = new FlaggedName();
+                    flaggedNames[i].setItemName(user);
+                    //retrieving the displayName
+                    String displayName = realm.getUserStoreManager().getUserClaimValue(user,DISAPLAY_NAME_CLAIM,null);
+                    int index = user.indexOf(UserCoreConstants.DOMAIN_SEPARATOR);
+                    if(index > 0){
+                        if(displayName != null){
+                            if (index > 0) {
+                                flaggedNames[i].setItemDisplayName(user.substring(0, index + 1) + displayName);
+                            } else {
+                                flaggedNames[i].setItemDisplayName(displayName);
+                            }
+                        }
+                    } else {
+                        flaggedNames[i].setItemDisplayName(user);
                     }
+
+                    int index1 = flaggedNames[i].getItemName() != null ? flaggedNames[i].getItemName().
+                            indexOf(CarbonConstants.DOMAIN_SEPARATOR) : -1;
+                    boolean domainProvided = index1 > 0;
+                    String domain = domainProvided ? flaggedNames[i].getItemName().substring(0, index1) : null;
+                    if (domain != null && !UserCoreConstants.INTERNAL_DOMAIN.equalsIgnoreCase(domain)) {
+                        UserStoreManager secondaryUM = realm.getUserStoreManager().getSecondaryUserStoreManager(domain);
+                        if (secondaryUM != null && secondaryUM.isReadOnly()) {
+                            flaggedNames[i].setEditable(false);
+                        } else {
+                            flaggedNames[i].setEditable(true);
+                        }
+                    } else {
+                        if (realm.getUserStoreManager().isReadOnly()) {
+                            flaggedNames[i].setEditable(false);
+                        } else {
+                            flaggedNames[i].setEditable(true);
+                        }
+                    }
+                    i++;
                 }
-                if (allUsers.length > 0) {
-                    users.add(allUsers[allUsers.length - 1]);
+                if (usersWithClaim.length > 0) {//tail flagged name is added to handle pagination
+                    FlaggedName flaggedName = new FlaggedName();
+                    flaggedName.setItemName("false");
+                    flaggedName.setDomainName("");
+                    flaggedNames[flaggedNames.length-1] = flaggedName;
                 }
-                return users.toArray(new FlaggedName[users.size()]);
-            } else {
-                return allUsers;
             }
+            return flaggedNames;
         } catch (UserStoreException e) {
             log.error(e.getMessage(), e);
             throw new UserAdminException(e.getMessage(), e);
