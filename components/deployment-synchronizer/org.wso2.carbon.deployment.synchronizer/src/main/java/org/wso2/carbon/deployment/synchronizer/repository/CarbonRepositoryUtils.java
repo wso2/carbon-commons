@@ -23,15 +23,11 @@ import org.apache.axis2.util.JavaUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.base.ServerConfiguration;
-import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
-import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
-import org.wso2.carbon.deployment.synchronizer.internal.DeploymentSynchronizationManager;
-import org.wso2.carbon.deployment.synchronizer.internal.DeploymentSynchronizer;
-import org.wso2.carbon.deployment.synchronizer.internal.DeploymentSynchronizerConstants;
+import org.wso2.carbon.deployment.synchronizer.*;
 import org.wso2.carbon.deployment.synchronizer.util.DeploymentSynchronizerConfiguration;
 import org.wso2.carbon.deployment.synchronizer.util.RepositoryConfigParameter;
-import org.wso2.carbon.deployment.synchronizer.util.RepositoryReferenceHolder;
-import org.wso2.carbon.deployment.synchronizer.util.ServiceReferenceHolder;
+import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryReferenceHolder;
+import org.wso2.carbon.deployment.synchronizer.internal.util.ServiceReferenceHolder;
 import org.wso2.carbon.registry.core.Resource;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.registry.core.session.UserRegistry;
@@ -79,10 +75,8 @@ public class CarbonRepositoryUtils {
             if (log.isDebugEnabled()) {
                 log.debug("Registered file path:" + filePath + " for tenant: " + tenantId);
             }
-
             return synchronizer;
         }
-
         return null;
     }
 
@@ -189,7 +183,7 @@ public class CarbonRepositoryUtils {
 
             return config;
         }else{
-            return null;
+            return config;
         }
     }
 

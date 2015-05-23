@@ -19,13 +19,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>ntask</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.4.3-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.ntask.solutions</artifactId>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.4.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Task Solutions</name>
     <url>http://wso2.org</url>
@@ -48,15 +48,6 @@
                 <artifactId>maven-scr-plugin</artifactId>
             </plugin>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <version>1.4.0</version>
@@ -66,7 +57,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.carbon.ntask.solutions.*
+                            org.wso2.carbon.ntask.solutions.*; version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package />
                         <DynamicImport-Package>*</DynamicImport-Package>

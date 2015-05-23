@@ -71,9 +71,9 @@
                         </Export-Package>
                         <Import-Package>
                             !javax.xml.namespace,
-                            org.wso2.carbon.transport.mgt.stub.*; version="${carbon.platform.package.export.version}",
+                            org.wso2.carbon.transport.mgt.stub.*; version="${carbon.commons.exp.package.version}",
                             org.wso2.carbon.transport.mgt.stub.client.*;
-                            version="${carbon.platform.package.export.version}"
+                            version="${carbon.commons.exp.package.version}"
                             *; resolution:=optional
                         </Import-Package>
                         <Carbon-Component>UIBundle</Carbon-Component>

@@ -31,7 +31,6 @@ import org.wso2.carbon.databridge.core.exception.DataBridgeException;
 import org.wso2.carbon.databridge.receiver.thrift.ThriftDataReceiver;
 import org.wso2.carbon.databridge.receiver.thrift.ThriftDataReceiverFactory;
 import org.wso2.carbon.databridge.receiver.thrift.conf.ThriftDataReceiverConfiguration;
-import org.wso2.carbon.databridge.receiver.thrift.internal.utils.ThriftDataReceiverBuilder;
 import org.wso2.carbon.databridge.receiver.thrift.service.ThriftEventTransmissionServiceImpl;
 import org.wso2.carbon.databridge.receiver.thrift.service.ThriftEventTransmissionServlet;
 import org.wso2.carbon.databridge.receiver.thrift.service.ThriftSecureEventTransmissionServiceImpl;
@@ -83,12 +82,10 @@ public class ThriftDataReceiverDS {
         }
 
         try {
-            int portOffset = ThriftDataReceiverBuilder.readPortOffset();
-            ThriftDataReceiverConfiguration thriftDataReceiverConfiguration = new ThriftDataReceiverConfiguration(CommonThriftConstants.DEFAULT_RECEIVER_PORT + CommonThriftConstants.SECURE_EVENT_RECEIVER_PORT_OFFSET + portOffset, CommonThriftConstants.DEFAULT_RECEIVER_PORT + portOffset);
-            ThriftDataReceiverBuilder.populateConfigurations(portOffset, thriftDataReceiverConfiguration, dataBridgeReceiverService.getInitialConfig());
+            ThriftDataReceiverConfiguration thriftDataReceiverConfiguration = new
+                    ThriftDataReceiverConfiguration(dataBridgeReceiverService.getInitialConfig());
 
             if (dataReceiver == null) {
-
                 dataReceiver = new ThriftDataReceiverFactory().createAgentServer(thriftDataReceiverConfiguration, dataBridgeReceiverService);
                 String serverUrl = CarbonUtils.getServerURL(serverConfiguration, configurationContext.getServerConfigContext());
                 String hostName = thriftDataReceiverConfiguration.getReceiverHostName();
@@ -111,18 +108,18 @@ public class ThriftDataReceiverDS {
                 TCompactProtocol.Factory outProtFactory = new TCompactProtocol.Factory();
 
                 httpServiceInstance.registerServlet("/thriftReceiver",
-                                                    new ThriftEventTransmissionServlet(processor, inProtFactory,
-                                                                                       outProtFactory),
-                                                    new Hashtable(),
-                                                    httpServiceInstance.createDefaultHttpContext());
+                        new ThriftEventTransmissionServlet(processor, inProtFactory,
+                                outProtFactory),
+                        new Hashtable(),
+                        httpServiceInstance.createDefaultHttpContext());
 
                 ThriftSecureEventTransmissionService.Processor<ThriftSecureEventTransmissionServiceImpl> authProcessor = new ThriftSecureEventTransmissionService.Processor<ThriftSecureEventTransmissionServiceImpl>(
                         new ThriftSecureEventTransmissionServiceImpl(dataBridgeReceiverService));
                 httpServiceInstance.registerServlet("/securedThriftReceiver",
-                                                    new ThriftSecureEventTransmissionServlet(authProcessor, inProtFactory,
-                                                                                             outProtFactory),
-                                                    new Hashtable(),
-                                                    httpServiceInstance.createDefaultHttpContext());
+                        new ThriftSecureEventTransmissionServlet(authProcessor, inProtFactory,
+                                outProtFactory),
+                        new Hashtable(),
+                        httpServiceInstance.createDefaultHttpContext());
 
             }
         } catch (DataBridgeException e) {

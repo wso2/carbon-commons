@@ -52,7 +52,7 @@ public class SVNDeploymentSynchronizerComponent {
             log.debug("SVN Kit client adapter initialized");
         } catch (Throwable t) {
             log.debug("Unable to initialize the SVN Kit client adapter - Required jars " +
-                    "may be missing", t);
+                    "may be missing");
         }
 
         try {
@@ -61,7 +61,7 @@ public class SVNDeploymentSynchronizerComponent {
             log.debug("Java HL client adapter initialized");
         } catch (Throwable t) {
             log.debug("Unable to initialize the Java HL client adapter - Required jars " +
-                    " or the native libraries may be missing", t);
+                    " or the native libraries may be missing");
         }
 
         try {
@@ -70,7 +70,7 @@ public class SVNDeploymentSynchronizerComponent {
             log.debug("Command line client adapter initialized");
         } catch (Throwable t) {
             log.debug("Unable to initialize the command line client adapter - SVN command " +
-                    "line tools may be missing", t);
+                    "line tools may be missing");
         }
         
         if(allClientsFailed){

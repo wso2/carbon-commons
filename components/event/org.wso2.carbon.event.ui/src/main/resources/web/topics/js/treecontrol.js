@@ -1,22 +1,26 @@
-var cal1;
+// Calendar handlers
+var expirationTimeCalendar;
 YAHOO.util.Event.onDOMReady(function() {
-    cal1 = new YAHOO.widget.Calendar("cal1", "cal1Container", { title:"Choose a date:", close:true });
-    cal1.render();
-    cal1.selectEvent.subscribe(calSelectHandler, cal1, true)
+    expirationTimeCalendar = new YAHOO.widget.Calendar("cal1", "cal1Container", { title:"Choose a date:", close:true });
+    expirationTimeCalendar.render();
+    expirationTimeCalendar.selectEvent.subscribe(calSelectHandler, expirationTimeCalendar, true)
 });
-function showCalendar() {
-    cal1.show();
-}
-function calSelectHandler(type, args, obj) {
-    var selected = args[0];
-    //var selDate = this.toDate(selected[0]);
-    var selDate = args[0][0][0] + "/" + args[0][0][1] + "/" + args[0][0][2];
+
+function calSelectHandler(type, date, obj) {
+    var selDate = date[0][0][0] + "/" + date[0][0][1] + "/" + date[0][0][2];
     var activeTime = document.getElementById("expirationTime");
     clearTextIn(activeTime);
     activeTime.value = selDate;
-    cal1.hide();
+    expirationTimeCalendar.hide();
 }
 
+// Shows the calender pop up. Used when adding a subscription.
+function showCalendar() {
+    expirationTimeCalendar.show();
+}
+
+//// Watermark for a text box
+// Clears text in a text box
 var textValue = "";
 function clearTextIn(obj) {
     if (YAHOO.util.Dom.hasClass(obj, 'initE')) {
@@ -26,6 +30,8 @@ function clearTextIn(obj) {
         obj.value = "";
     }
 }
+
+// Adds texts in a text box
 function fillTextIn(obj) {
     if (obj.value == "") {
         obj.value = textValue;
@@ -36,7 +42,7 @@ function fillTextIn(obj) {
     }
 }
 
-
+// Collapsing a tree
 function treeColapse(icon) {
     var parentNode = icon.parentNode;
     var allChildren = parentNode.childNodes;
@@ -80,6 +86,7 @@ function treeColapse(icon) {
     }
 }
 
+// Deleting a topic
 function deleteTopic(topic) {
     var callback =
     {
@@ -108,6 +115,7 @@ function deleteTopic(topic) {
 
 }
 
+// Shows the topic details page
 function showManageTopicWindow(topicPath) {
     var callback =
     {
@@ -125,6 +133,7 @@ function showManageTopicWindow(topicPath) {
     var request = YAHOO.util.Connect.asyncRequest('POST', "load_topic_details_from_bEnd_ajaxprocessor.jsp", callback, "topicPath=" + topicPath + "&type=input");
 }
 
+// Add topic page
 function showAddTopicWindow(topicPath) {
     var callback =
     {
@@ -141,45 +150,13 @@ function showAddTopicWindow(topicPath) {
     };
     var request = YAHOO.util.Connect.asyncRequest('POST', "access_topic_roles_ajaxprocessor.jsp", callback, "topicPath=" + topicPath + "&type=input");
 }
-function showSubscribeWindow() {
-    var callback =
-    {
-        success:function(o) {
-            if (o.responseText !== undefined) {
-                location.href = "../topics/topic_manage.jsp";
-            }
-        },
-        failure:function(o) {
-            if (o.responseText !== undefined) {
-                alert("Error " + o.status + "\n Following is the message from the server.\n" + o.responseText);
-            }
-        }
-    };
-    var request = YAHOO.util.Connect.asyncRequest('POST', "load_topic_details_from_bEnd_ajaxprocessor.jsp", callback, "topicPath=" + topicPath + "&type=input");
 
-}
-function showTopicDetailsWindow() {
-    var callback =
-    {
-        success:function(o) {
-            if (o.responseText !== undefined) {
-                location.href = "../topics/topic_manage.jsp";
-            }
-        },
-        failure:function(o) {
-            if (o.responseText !== undefined) {
-                alert("Error " + o.status + "\n Following is the message from the server.\n" + o.responseText);
-            }
-        }
-    };
-    var request = YAHOO.util.Connect.asyncRequest('POST', "load_topic_details_from_bEnd_ajaxprocessor.jsp", callback, "topicPath=" + topicPath + "&type=input");
-
-}
-
+// Hides a tree node item
 function hideTreeItem(state, opts, item) {
     item.style.display = "none";
 }
 
+// Adding a topic. Backend handler
 function addTopicToBackEnd(topic) {
     var callback =
     {
@@ -190,7 +167,6 @@ function addTopicToBackEnd(topic) {
                     CARBON.showErrorDialog("" + o.responseText, function() {
                     });
                 }
-
                 else {
                     addPermissions();
 //                    updatePermissions();
@@ -207,13 +183,14 @@ function addTopicToBackEnd(topic) {
     var request = YAHOO.util.Connect.asyncRequest('POST', "add_topic_to_backend_ajaxprocessor.jsp", callback, "topic=" + topic + "&type=input");
 }
 
+// Adding a topic. Invoked by jsp.
 function addTopic() {
     var topic = document.getElementById("topic");
 
     var error = "";
     topic.value = topic.value.replace(/^\s+|\s+$/g, "");
     if (topic.value == "") {
-        error = "Topic can not be empty.\n";
+        error = "Topic name cannot be empty.\n";
     }
 
     if (error != "") {
@@ -224,9 +201,10 @@ function addTopic() {
 
 }
 
+// Adds topic from topic detail/manage page
 function addTopicFromManage() {
     var existingTopic = document.getElementById("existingTopic");
-    var topic = document.getElementById("newTopic");
+    var topic = document.getElementById("topic");
     var completeTopic = "";
     if (existingTopic.value == "/") {
         completeTopic = existingTopic.value + topic.value;
@@ -236,7 +214,7 @@ function addTopicFromManage() {
     var error = "";
 
     if (topic.value == "") {
-        error = "Topic can not be empty.\n";
+        error = "Topic name cannot be empty.\n";
     }
     if (error != "") {
         CARBON.showErrorDialog(error);
@@ -245,6 +223,7 @@ function addTopicFromManage() {
     addTopicToBackEnd(completeTopic)
 }
 
+// Shows add subtopic
 function showAddSubTopic() {
 
     var addSubTopicTable = document.getElementById("AddSubTopic");
@@ -254,6 +233,8 @@ function showAddSubTopic() {
         addSubTopicTable.style.display = "none";
     }
 }
+
+// Shows add subscription
 function showAddSubscription() {
     var addPropertyTable = document.getElementById("userAdd");
     if (addPropertyTable.style.display == "none") {
@@ -263,7 +244,7 @@ function showAddSubscription() {
     }
 }
 
-
+// UnSubscribing to a topic
 function unsubscribe(subscriptionId, topic) {
     var callback =
     {
@@ -291,6 +272,8 @@ function unsubscribe(subscriptionId, topic) {
     var request = YAHOO.util.Connect.asyncRequest('POST', "unsubscribe_from_topic_ajaxprocessor.jsp", callback, "topic=" + topic + "&subscriptionId=" + subscriptionId);
 
 }
+
+// Adds permissions to a topic when a topic is created
 function addPermissions() {
     var permissionTable = document.getElementById("permissionsTable");
     var rowCount = permissionTable.rows.length;
@@ -310,12 +293,12 @@ function addPermissions() {
     {
         success:function(o) {
             if (o.responseText !== undefined) {
-                message = "Topic added successfully";
                 if (o.responseText.indexOf("Error") > -1) {
                     CARBON.showErrorDialog("" + o.responseText, function() {
                         location.href = "../topics/topics.jsp"
                     });
                 } else {
+                    var message = "Topic added successfully";
                     CARBON.showInfoDialog("" + message, function() {
                         location.href = "../topics/topics.jsp"
                     });
@@ -331,7 +314,7 @@ function addPermissions() {
     var request = YAHOO.util.Connect.asyncRequest('POST', "update_role_permissions_ajaxprocessor.jsp", callback, "permissions=" + parameters + "&type=input");
 }
 
-
+// Updates permissions of a topic
 function updatePermissions() {
     var permissionTable = document.getElementById("permissionsTable");
     var rowCount = permissionTable.rows.length;
@@ -351,12 +334,12 @@ function updatePermissions() {
     {
         success:function(o) {
             if (o.responseText !== undefined) {
-                message = "Updated permissions successfully";
                 if (o.responseText.indexOf("Error") > -1) {
                     CARBON.showErrorDialog("" + o.responseText, function() {
                         location.href = "../topics/topic_manage.jsp"
                     });
                 } else {
+                    var message = "Updated permissions successfully";
                     CARBON.showInfoDialog("" + message, function() {
                         location.href = "../topics/topic_manage.jsp"
                     });
@@ -373,6 +356,7 @@ function updatePermissions() {
     var request = YAHOO.util.Connect.asyncRequest('POST', "update_role_permissions_ajaxprocessor.jsp", callback, "permissions=" + parameters + "&type=input");
 }
 
+// Validates topic message publishing
 function validateInvoking() {
     var topic = document.getElementById('topic').value;
     if (topic == '') {
@@ -390,6 +374,7 @@ function validateInvoking() {
     return true;
 }
 
+// Publishes message of a topic
 function invokeService() {
     if (validateInvoking()) {
         var topic = document.getElementById('topic').value;

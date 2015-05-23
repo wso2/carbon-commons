@@ -15,14 +15,12 @@
  ~ limitations under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>soap-tracer</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.4.3-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -44,11 +42,11 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.carbon.tracer.ui.*;version="${carbon.platform.package.export.version}"
+                            org.wso2.carbon.tracer.ui.*;version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package>
                             !org.wso2.carbon.tracer.ui.*,
-                            org.wso2.carbon.tracer.stub.*;version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.tracer.stub.*;version="${carbon.commons.imp.package.version}",
                             org.wso2.carbon.ui.*,
                             org.apache.commons.lang.*,
                             *;resolution:=optional

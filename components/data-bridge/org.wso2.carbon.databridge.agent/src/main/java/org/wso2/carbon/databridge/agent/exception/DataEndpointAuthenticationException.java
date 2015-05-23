@@ -17,6 +17,10 @@
 */
 package org.wso2.carbon.databridge.agent.exception;
 
+/**
+ * Exception to be thrown when connecting the Data Endpoint.
+ */
+
 public class DataEndpointAuthenticationException extends Exception {
     private String errorMessage;
 

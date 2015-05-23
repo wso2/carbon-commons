@@ -139,9 +139,9 @@
     String parameters = "serviceTypeFilter=" + "&serviceGroupSearchString=";
 
 %>
-<script type="text/javascript" src="../carbon/admin/js/breadcrumbs.js"></script>
-<script type="text/javascript" src="../carbon/admin/js/cookies.js"></script>
-<script type="text/javascript" src="../carbon/admin/js/main.js"></script>
+<script type="text/javascript" src="../admin/js/breadcrumbs.js"></script>
+<script type="text/javascript" src="../admin/js/cookies.js"></script>
+<script type="text/javascript" src="../admin/js/main.js"></script>
 <fmt:bundle basename="org.wso2.carbon.event.ui.i18n.Resources">
 <carbon:breadcrumb
         label="topic.details"

@@ -8,9 +8,10 @@
 <%
     ConfigurationContext configContext = (ConfigurationContext) config.getServletContext()
             .getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
-//Server URL which is defined in the server.xml
+
+    //Server URL which is defined in the server.xml
     String serverURL = CarbonUIUtil.getServerURL(config.getServletContext(),
-                                                 session) + "TopicManagerAdminService.TopicManagerAdminServiceHttpsSoap12Endpoint";
+            session) + "TopicManagerAdminService.TopicManagerAdminServiceHttpsSoap12Endpoint";
     TopicManagerAdminServiceStub stub = new TopicManagerAdminServiceStub(configContext, serverURL);
 
     String cookie = (String) session.getAttribute(org.wso2.carbon.utils.ServerConstants.ADMIN_SERVICE_COOKIE);
@@ -24,13 +25,11 @@
     try {
         String topic = request.getParameter("topic");
         stub.addTopic(topic);
-
         session.removeAttribute("topic");
-        TopicRolePermission[] topicRolePermissions = stub.getTopicRolePermissions(topic);
-        session.setAttribute("topicRolePermission", topicRolePermissions);
         session.setAttribute("topic", topic);
     } catch (Exception e) {
         message = "Error: " + e.getMessage();
+
 %>
 <%=message%>
 <%

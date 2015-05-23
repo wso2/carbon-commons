@@ -15,7 +15,6 @@
  */
 
 package org.wso2.carbon.logging.service.internal;
-import org.wso2.carbon.databridge.agent.thrift.Agent;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
@@ -46,10 +45,6 @@ import java.io.File;
  * interface="org.wso2.carbon.utils.ConfigurationContextService"
  * cardinality="1..1" policy="dynamic"  bind="setConfigurationContextService"
  * unbind="unsetConfigurationContextService"
- * @scr.reference name="agentservice.component"
- * interface="org.wso2.carbon.databridge.agent.thrift.Agent"
- * cardinality="1..1" policy="dynamic"  bind="setAgent"
- * unbind="unsetAgent"
  */
 public class LoggingServiceComponent {
     private static Log log = LogFactory.getLog(LoggingServiceComponent.class);
@@ -95,14 +90,6 @@ public class LoggingServiceComponent {
 
     protected void deactivate(ComponentContext ctxt) {
 
-    }
-    
-    protected void setAgent(Agent agent){
-        DataHolder.getInstance().setAgent(agent);
-    }
-
-    protected void unsetAgent(Agent agent){
-        DataHolder.getInstance().setAgent(null);
     }
 
     protected void setRegistryService(RegistryService registryService) {

@@ -36,7 +36,12 @@ import org.wso2.carbon.databridge.core.exception.StreamDefinitionStoreException;
 import org.wso2.carbon.databridge.core.internal.EventDispatcher;
 import org.wso2.carbon.databridge.core.internal.authentication.AuthenticationHandler;
 import org.wso2.carbon.databridge.core.internal.authentication.Authenticator;
+import org.wso2.carbon.databridge.core.internal.utils.DataBridgeCoreBuilder;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,8 +56,8 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
     private EventDispatcher eventDispatcher;
     private Authenticator authenticator;
     private AuthenticationHandler authenticatorHandler;
-    private OMElement initialConfig;
     private List<StreamAddRemoveListener> streamAddRemoveListenerList = new ArrayList<StreamAddRemoveListener>();
+    private DataBridgeConfiguration dataBridgeConfiguration;
 
     public DataBridge(AuthenticationHandler authenticationHandler,
                       AbstractStreamDefinitionStore streamDefinitionStore,
@@ -64,12 +69,20 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
     }
 
     public DataBridge(AuthenticationHandler authenticationHandler,
-                      AbstractStreamDefinitionStore streamDefinitionStore) {
-        DataBridgeConfiguration dataBridgeConfiguration = new DataBridgeConfiguration();
+                      AbstractStreamDefinitionStore streamDefinitionStore,
+                      String dataBridgeConfigPath) {
+       try {
+        File file = new File(dataBridgeConfigPath);
+        JAXBContext jaxbContext = JAXBContext.newInstance(DataBridgeConfiguration.class);
+        Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+        DataBridgeConfiguration dataBridgeConfiguration = (DataBridgeConfiguration) jaxbUnmarshaller.unmarshal(file);
         this.eventDispatcher = new EventDispatcher(streamDefinitionStore, dataBridgeConfiguration, authenticationHandler);
         this.streamDefinitionStore = streamDefinitionStore;
         authenticatorHandler = authenticationHandler;
         authenticator = new Authenticator(authenticationHandler, dataBridgeConfiguration);
+       } catch (JAXBException e) {
+           log.error("Error while loading the data bridge configuration file : "+ dataBridgeConfigPath, e);
+       }
     }
 
     public String defineStream(String sessionId, String streamDefinition)
@@ -225,12 +238,12 @@ public class DataBridge implements DataBridgeSubscriberService, DataBridgeReceiv
         }
     }
 
-    public OMElement getInitialConfig() {
-        return initialConfig;
+    public DataBridgeConfiguration getInitialConfig() {
+        return this.dataBridgeConfiguration;
     }
 
-    public void setInitialConfig(OMElement initialConfig) {
-        this.initialConfig = initialConfig;
+    public void setInitialConfig(DataBridgeConfiguration initialConfig) {
+        this.dataBridgeConfiguration = initialConfig;
     }
 
     /**

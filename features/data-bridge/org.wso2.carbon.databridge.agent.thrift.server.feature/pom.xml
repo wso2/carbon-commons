@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>data-bridge-feature</artifactId>
-    	<version>4.3.0-SNAPSHOT</version>
+    	<version>4.4.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.4.3-SNAPSHOT</version>
     <artifactId>org.wso2.carbon.databridge.agent.thrift.server.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Data Bridge - Thrift Agent Server Feature</name>
@@ -22,14 +20,13 @@
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-pool.wso2</groupId>
             <artifactId>commons-pool</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents.wso2</groupId>
+            <groupId>org.wso2.orbit.org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
         <dependency>
@@ -40,16 +37,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<!-- inherited version -->
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-            </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
@@ -96,19 +83,19 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.databridge.agent.thrift:${project.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.agent.thrift:${carbon.commons.version}
                                 </bundleDef>
                                 <bundleDef>commons-pool.wso2:commons-pool:1.5.6.wso2v1</bundleDef>
-                                <bundleDef>org.apache.httpcomponents.wso2:httpclient</bundleDef>
+                                <bundleDef>org.wso2.orbit.org.apache.httpcomponents:httpclient</bundleDef>
                                 <bundleDef>org.apache.httpcomponents.wso2:httpcore</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.databridge.commons.server:${project.version}
+                                    org.wso2.carbon.databridge.commons.server:${carbon.commons.version}
                                 </importFeatureDef>
                                 <importFeatureDef>
-                                    org.wso2.carbon.databridge.commons.thrift.server:${project.version}
+                                    org.wso2.carbon.databridge.commons.thrift.server:${carbon.commons.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

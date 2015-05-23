@@ -17,7 +17,12 @@
 */
 package org.wso2.carbon.databridge.agent.exception;
 
-public class EventQueueFullException extends Exception{
+/**
+ * Exception to be thrown when the event is tried to insert into the queue
+ * which doesn't have adequate capacity to hold.
+ */
+
+public class EventQueueFullException extends Exception {
     private String errorMessage;
 
     public EventQueueFullException(String message) {

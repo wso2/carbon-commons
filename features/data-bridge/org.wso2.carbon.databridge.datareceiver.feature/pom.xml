@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>data-bridge-feature</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.4.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
 	</parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.databridge.datareceiver.feature</artifactId>
     <packaging>pom</packaging>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.4.3-SNAPSHOT</version>
     <name>WSO2 Carbon - Data Bridge - Data Receiver Aggregate Feature</name>
     <url>http://wso2.org</url>
 
@@ -21,25 +19,31 @@
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.core.server.feature</artifactId>
-            <version>${project.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.commons.server.feature</artifactId>
-            <version>${project.version}</version>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.commons.thrift.server.feature</artifactId>
-            <version>${project.version}</version>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.commons</groupId>
+            <artifactId>org.wso2.carbon.databridge.commons.binary.server.feature</artifactId>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.databridge.receiver.thrift.server.feature</artifactId>
-            <version>${project.version}</version>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.carbon.commons</groupId>
+            <artifactId>org.wso2.carbon.databridge.receiver.binary.server.feature</artifactId>
             <type>zip</type>
         </dependency>
     </dependencies>
@@ -60,15 +64,14 @@
                         <configuration>
                             <id>org.wso2.carbon.databridge.datareceiver</id>
 			    <propertiesFile>../../../etc/feature.properties</propertiesFile>
-							
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.databridge.core.server.feature:${project.version}</includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.databridge.commons.server.feature:${project.version}</includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.databridge.commons.thrift.server.feature:${project.version}</includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon:org.wso2.carbon.databridge.receiver.thrift.server.feature:${project.version}</includedFeatureDef>
-                               
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.core.server.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.commons.server.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.commons.thrift.server.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.commons.binary.server.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.receiver.thrift.server.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.receiver.binary.server.feature:${carbon.commons.version}</includedFeatureDef>
                             </includedFeatures>
- 				
 			    <importFeatures>
 				<importFeatureDef>org.wso2.carbon.core:${carbon.kernel.version}</importFeatureDef>
 			   </importFeatures>

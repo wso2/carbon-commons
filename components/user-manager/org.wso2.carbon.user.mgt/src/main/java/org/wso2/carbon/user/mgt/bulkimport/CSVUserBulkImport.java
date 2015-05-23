@@ -19,11 +19,14 @@ package org.wso2.carbon.user.mgt.bulkimport;
 import au.com.bytecode.opencsv.CSVReader;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.user.core.UserStoreException;
 import org.wso2.carbon.user.core.UserStoreManager;
 import org.wso2.carbon.user.mgt.common.UserAdminException;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CSVUserBulkImport {
 
@@ -51,8 +54,17 @@ public class CSVUserBulkImport {
                 if(userName != null && userName.trim().length() > 0){
                     try{
                         if (!userStore.isExistingUser(userName)) {
-                            userStore.addUser(userName, password, null, null, null, true);
-                            success = true;
+                            if (line.length == 1) {
+                                userStore.addUser(userName, password, null, null, null, true);
+                                success = true;
+                            } else {
+                                boolean status = AddUserWithClaims(userName, password, line, userStore);
+                                if (status) {
+                                    success = true;
+                                } else {
+                                    fail = true;
+                                }
+                            }
                         } else {
                             isDuplicate = true;
                         }
@@ -88,4 +100,32 @@ public class CSVUserBulkImport {
         }
     }
 
+    private boolean AddUserWithClaims(String username, String password, String[] line, UserStoreManager userStore)
+            throws UserStoreException {
+        String roleString = null;
+        String[] roles = null;
+        Map<String, String> claims = new HashMap<String, String>();
+        for (int i = 1; i < line.length; i++) {
+            if (line[i] != null && !line[i].isEmpty()) {
+                String[] claimStrings = line[i].split("=");
+                if (claimStrings.length != 2) {
+                    return false;
+                } else {
+                    if (claimStrings[0].contains("role")) {
+                        roleString = claimStrings[1];
+                    } else {
+                        claims.put(claimStrings[0], claimStrings[1]);
+                    }
+                }
+
+            }
+        }
+
+        if (roleString != null && !roleString.isEmpty()) {
+            roles = roleString.split(":");
+        }
+
+        userStore.addUser(username, password, roles, claims, null, true);
+        return true;
+    }
 }

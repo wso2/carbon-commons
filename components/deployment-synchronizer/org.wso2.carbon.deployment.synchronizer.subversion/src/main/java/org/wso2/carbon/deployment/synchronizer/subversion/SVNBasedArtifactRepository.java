@@ -251,7 +251,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
         }
     }
 
-    private void svnAddFiles(int tenantId, File root) throws SVNClientException {
+    private void svnAddFiles(int tenantId, File root, ISVNStatus[] checkStatus) throws SVNClientException {
         if (log.isDebugEnabled()) {
             log.debug("SVN adding files in " + root);
         }
@@ -263,12 +263,10 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
 
         ISVNClientAdapter svnClient = repoContext.getSvnClient();
 
-        ISVNStatus[] status = svnClient.getStatus(root, true, false);
-        
         // This is required to filter exploded web apps and unpack directories of .WAR files.
-        List<String>  dirListToAddSVN= processUnversionedWebappActions(status);
+        List<String> dirListToAddSVN = processUnversionedWebappActions(checkStatus);
         
-        for (ISVNStatus s : status) {
+        for (ISVNStatus s : checkStatus) {
             if (s.getTextStatus().toInt() == UNVERSIONED) {
                 File file = s.getFile();
                 String fileName = file.getName();
@@ -322,7 +320,8 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                     });
 
                     for (File child : children) {
-                        svnAddFiles(tenantId, child);
+                        ISVNStatus[] statusChild = svnClient.getStatus(child, true, false);
+                        svnAddFiles(tenantId, child, statusChild);
                     }
                 }
             }
@@ -344,23 +343,33 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
         File root = new File(filePath);
         try {
             svnClient.cleanup(root);
-            svnAddFiles(tenantId, root);
-            cleanupDeletedFiles(tenantId, root);
-            ISVNStatus[] status = svnClient.getStatus(root, true, false);
-            if (status != null && status.length > 0 && !isAllUnversioned(status)) {
-                File[] files = new File[] { root };
-                svnClient.commit(files, "Commit initiated by deployment synchronizer", true);
+            // need to check svn status before executing other operations on commit logic otherwise unnecessary
+            // getStatus() will get called
+            ISVNStatus[] checkStatus = svnClient.getStatus(root, true, false);
+            if (checkStatus != null && checkStatus.length > 0) {
+                svnAddFiles(tenantId, root, checkStatus);
+                cleanupDeletedFiles(tenantId, root, checkStatus);
 
-                //Always do a svn update if you do a commit. This is just to update the working copy's
-                //revision number to the latest. This fixes out-of-date working copy issues.
-                if (log.isDebugEnabled()) {
-                    log.debug("Updating the working copy after the commit.");
+                ISVNStatus[] status = svnClient.getStatus(root, true, false);
+                if (status != null && status.length > 0 && !isAllUnversioned(status)) {
+                    File[] files = new File[]{root};
+                    svnClient.commit(files, "Commit initiated by deployment synchronizer", true);
+
+                    //Always do a svn update if you do a commit. This is just to update the working copy's
+                    //revision number to the latest. This fixes out-of-date working copy issues.
+                    if (log.isDebugEnabled()) {
+                        log.debug("Updating the working copy after the commit.");
+                    }
+                    checkout(tenantId, filePath);
+
+                    return true;
+                } else {
+                    log.debug("No changes in the local working copy");
                 }
-                checkout(tenantId, filePath);
-
-                return true;
             } else {
-                log.debug("No changes in the local working copy");
+                if (log.isDebugEnabled()) {
+                    log.debug("No changes in the local working copy to  commit " + filePath);
+                }
             }
         } catch (SVNClientException e) {
             String message = e.getMessage();
@@ -410,8 +419,9 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
 
         File root = new File(filePath);
         try {
-            if (conf.isAutoCommit()) {
-                cleanupDeletedFiles(tenantId, root);
+            ISVNStatus[] svnStatus = svnClient.getStatus(root, true, false);
+            if (conf.isAutoCommit() && svnStatus != null) {
+                cleanupDeletedFiles(tenantId, root, svnStatus);
             }
             ISVNStatus status = svnClient.getSingleStatus(root);
             if (CarbonUtils.isWorkerNode()) {
@@ -541,31 +551,28 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
      * @param root Root directory of the local working copy
      * @throws SVNClientException If an error occurs in the SVN client
      */
-    private void cleanupDeletedFiles(int tenantId, File root) throws SVNClientException {
-        TenantSVNRepositoryContext repoContext= tenantSVNRepositories.get(tenantId);
-        if (repoContext == null ) {
+    private void cleanupDeletedFiles(int tenantId, File root, ISVNStatus[] status) throws SVNClientException {
+        TenantSVNRepositoryContext repoContext = tenantSVNRepositories.get(tenantId);
+        if (repoContext == null) {
             log.warn("TenantSVNRepositoryContext not initialized for " + tenantId);
             return;
         }
 
         ISVNClientAdapter svnClient = repoContext.getSvnClient();
+        List<File> deletableFiles = new ArrayList<File>();
+        for (ISVNStatus s : status) {
+            int statusCode = s.getTextStatus().toInt();
+            if (statusCode == MISSING) {
+                if (log.isDebugEnabled()) {
+                    log.debug("Scheduling the file: " + s.getPath() + " for SVN delete");
 
-        ISVNStatus[] status = svnClient.getStatus(root, true, false);
-        if (status != null) {
-            List<File> deletableFiles = new ArrayList<File>();
-            for (ISVNStatus s : status) {
-                int statusCode = s.getTextStatus().toInt();
-                if (statusCode == MISSING) {
-                    if (log.isDebugEnabled()) {
-                        log.debug("Scheduling the file: " + s.getPath() + " for SVN delete");
-                    }
-                    deletableFiles.add(s.getFile());
                 }
+                deletableFiles.add(s.getFile());
             }
-
-            if (deletableFiles.size() > 0) {
-                svnClient.remove(deletableFiles.toArray(new File[deletableFiles.size()]), true);
-            }
+        }
+        
+        if (deletableFiles.size() > 0) {
+            svnClient.remove(deletableFiles.toArray(new File[deletableFiles.size()]), true);
         }
     }
 
@@ -602,8 +609,9 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
 
         File root = new File(filePath);
         try {
-            if (conf.isAutoCommit()) {
-                cleanupDeletedFiles(tenantId, root);
+            ISVNStatus[] svnStatus = svnClient.getStatus(root, true, false);
+            if (conf.isAutoCommit() && svnStatus != null) {
+                cleanupDeletedFiles(tenantId, root, svnStatus);
             }
             ISVNStatus status = svnClient.getSingleStatus(root);
             if (status != null && status.getTextStatus().toInt() == UNVERSIONED) {

@@ -19,7 +19,7 @@
 
     <ManagementPermissions>
         <ManagementPermission>
-            <DisplayName>Configure Data Sources</DisplayName>
+            <DisplayName>Configure Datasources</DisplayName>
             <ResourceId>/permission/admin/configure/datasources</ResourceId>
         </ManagementPermission>
     </ManagementPermissions>

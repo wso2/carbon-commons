@@ -32,6 +32,7 @@
 <%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.UserRealmInfo" %>
 <%@ page import="java.text.MessageFormat" %>
 <%@ page import="java.net.URLEncoder" %>
+<%@ page import="org.wso2.carbon.user.mgt.stub.types.carbon.ClaimValue"%>
 <script type="text/javascript" src="../userstore/extensions/js/vui.js"></script>
 <script type="text/javascript" src="../admin/js/main.js"></script>
 
@@ -81,6 +82,10 @@
     java.lang.String errorAttribute = (java.lang.String) session.getAttribute(UserAdminUIConstants.DO_USER_LIST);
 
     String claimUri = request.getParameter("claimUri");
+    if (claimUri == null || claimUri.length() == 0) {
+        claimUri = (java.lang.String) session.getAttribute(UserAdminUIConstants.USER_CLAIM_FILTER);
+    }
+    session.setAttribute(UserAdminUIConstants.USER_CLAIM_FILTER,claimUri);
     exceededDomains = (FlaggedName) session.getAttribute(UserAdminUIConstants.USER_LIST_CACHE_EXCEEDED);
 
     //  search filter
@@ -109,11 +114,14 @@
         }
         newFilter = true;
     }
-
+    String userDomainSelector;
     String modifiedFilter = filter.trim();
     if(!UserAdminUIConstants.ALL_DOMAINS.equalsIgnoreCase(selectedDomain)){
         modifiedFilter = selectedDomain + UserAdminUIConstants.DOMAIN_SEPARATOR + filter;
         modifiedFilter = modifiedFilter.trim();
+        userDomainSelector = selectedDomain + UserAdminUIConstants.DOMAIN_SEPARATOR + "*";
+    } else {
+        userDomainSelector = "*";
     }
 
     session.setAttribute(UserAdminUIConstants.USER_LIST_FILTER, filter.trim());
@@ -171,7 +179,14 @@
             }
 
             if (filter.length() > 0) {
-                datas = client.listAllUsers(modifiedFilter, -1);
+                if (claimUri != null && !"select".equalsIgnoreCase(claimUri)) {
+                    ClaimValue claimValue = new ClaimValue();
+                    claimValue.setClaimURI(claimUri);
+                    claimValue.setValue(filter);
+                    datas = client.listUserByClaim(claimValue, userDomainSelector, -1);
+                } else {
+                    datas = client.listAllUsers(modifiedFilter, -1);
+                }
                 List<FlaggedName> dataList = new ArrayList<FlaggedName>(Arrays.asList(datas));
                 exceededDomains = dataList.remove(dataList.size() - 1);
                 session.setAttribute(UserAdminUIConstants.USER_LIST_CACHE_EXCEEDED, exceededDomains);
@@ -233,7 +248,7 @@
         function deleteUser(user) {
             function doDelete() {
                 var userName = user;
-                location.href = 'delete-finish.jsp?username=' + encodeURIComponent(userName);
+                location.href = 'delete-finish.jsp?username=' + userName;
             }
 
             CARBON.showConfirmationDialog("<fmt:message key="confirm.delete.user"/> \'" + user + "\'?", doDelete, null);
@@ -286,20 +301,6 @@
                 %>
 
                     <tr>
-                <%
-                    if(CarbonUIUtil.isContextRegistered(config, "/identity-mgt/") && !multipleUserStores){
-                %>
-                        <td class="leftCol-big" style="padding-right: 0 !important;"><fmt:message key="list.users.claim"/></td>
-                        <td>
-                            <input type="text" name="<%=UserAdminUIConstants.USER_LIST_FILTER%>"
-                                   value="<%=filter%>"/>
-                       
-                            <input class="button" type="submit"
-                                   value="<fmt:message key="user.search"/>"/>
-                        </td>
-                <%
-                    } else {
-                %>
                         <td class="leftCol-big" style="padding-right: 0 !important;"><fmt:message key="list.users"/></td>
                         <td>
                             <input type="text" name="<%=UserAdminUIConstants.USER_LIST_FILTER%>"
@@ -308,13 +309,7 @@
                             <input class="button" type="submit"
                                    value="<fmt:message key="user.search"/>"/>
                         </td>
-                <%
-                    }
-                %>
                     </tr>
-                <%--<%
-                    if(CarbonUIUtil.isContextRegistered(config, "/identity-mgt/") && !multipleUserStores){
-                %>
                     <tr>
                         <td><fmt:message key="claim.uri"/></td>
                         <td><select id="claimUri" name="claimUri">
@@ -338,10 +333,7 @@
                         </select>
                         </td>
                     </tr>
-                <%
-                    }
-                %>--%>
-				</tbody>
+                    </tbody>
                 </table>
             </form>
             <p>&nbsp;</p>
@@ -386,17 +378,17 @@
                     <td>
 
                         <%
-                            if(userRealmInfo.getAdminUser().equals(userName) &&
+                            if(userRealmInfo.getAdminUser().equals(Util.decodeHTMLCharacters(userName)) &&
                                     !userRealmInfo.getAdminUser().equals(currentUser)){
                                 continue;
                             }
                         %>
                         <%
-                            if (!Util.getUserStoreInfoForUser(userName, userRealmInfo).getPasswordsExternallyManaged() &&      // TODO
+                            if (!Util.getUserStoreInfoForUser(Util.decodeHTMLCharacters(userName), userRealmInfo).getPasswordsExternallyManaged() &&      // TODO
                                 CarbonUIUtil.isUserAuthorized(request,
                                          "/permission/admin/configure/security/usermgt/passwords") &&
                                     users[i].getEditable()) { //if passwords are managed externally do not allow to change passwords.
-                            	if(userName.equals(currentUser)){
+                            	if(Util.decodeHTMLCharacters(userName).equals(currentUser)){
                         %>
                         <a href="change-passwd.jsp?isUserChange=true&returnPath=user-mgt.jsp" class="icon-link"
                            style="background-image:url(../admin/images/edit.gif);"><fmt:message
@@ -418,7 +410,7 @@
                             if(CarbonUIUtil.isUserAuthorized(request, "/permission/admin/configure/security")){
                         %>
                         <a href="edit-user-roles.jsp?username=<%=
-                        java.net.URLEncoder.encode(userName,"UTF-8")%>&disPlayName=<%=disPlayName%>" class="icon-link"
+                        java.net.URLEncoder.encode(userName,"UTF-8")%>&disPlayName=<%=java.net.URLEncoder.encode(disPlayName,"UTF-8")%>" class="icon-link"
                            style="background-image:url(../admin/images/edit.gif);"><fmt:message
                                 key="edit.roles"/></a>
                         <%
@@ -438,11 +430,11 @@
 
                         <%
                             if (CarbonUIUtil.isUserAuthorized(request,
-                                "/permission/admin/configure/security/usermgt/users") && !userName.equals(currentUser)
-                                && !userName.equals(userRealmInfo.getAdminUser()) &&
+                                "/permission/admin/configure/security/usermgt/users") && !Util.decodeHTMLCharacters(userName).equals(currentUser)
+                                && !Util.decodeHTMLCharacters(userName).equals(userRealmInfo.getAdminUser()) &&
                                     users[i].getEditable()) {
                         %>
-                        <a href="#" onclick="deleteUser('<%=userName%>')" class="icon-link"
+                        <a href="#" onclick="deleteUser('<%=java.net.URLEncoder.encode(userName,"UTF-8")%>')" class="icon-link"
                            style="background-image:url(images/delete.gif);"><fmt:message
                                 key="delete"/></a>
                         <%

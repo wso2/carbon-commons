@@ -37,13 +37,11 @@
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.datasource.server.feature</artifactId>
-            <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
         <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.datasource.ui.feature</artifactId>
-            <version>${project.version}</version>
             <type>zip</type>
 	    </dependency>
     </dependencies>

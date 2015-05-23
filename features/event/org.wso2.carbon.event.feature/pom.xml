@@ -15,14 +15,12 @@
  ~ specific language governing permissions and limitations
  ~ under the License.
  -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>event-feature</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.4.3-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -30,7 +28,7 @@
     <artifactId>org.wso2.carbon.event.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Event Feature</name>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.4.3-SNAPSHOT</version>
     <url>http://wso2.org</url>
     <description> Event service feature</description>
 
@@ -73,9 +71,9 @@
                                 <importFeatureDef>org.wso2.carbon.registry.core:${carbon.kernel.version}</importFeatureDef>
                             </importFeatures>
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.server.feature:${project.version}</includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.common.feature:${project.version}</includedFeatureDef>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.ui.feature:${project.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.server.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.common.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.ui.feature:${carbon.commons.version}</includedFeatureDef>
                             </includedFeatures>
                         </configuration>
                     </execution>

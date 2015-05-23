@@ -3,7 +3,7 @@
   <parent>
     <artifactId>carbon-commons</artifactId>
     <groupId>org.wso2.carbon.commons</groupId>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.4.3-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   
@@ -13,6 +13,7 @@
   <name>WSO2 Carbon - New Datasource Feature Aggregator Module</name>
   
   <modules>
+	<module>org.wso2.carbon.ndatasource.datasources.feature</module>
         <module>org.wso2.carbon.ndatasource.feature</module>
         <module>org.wso2.carbon.ndatasource.ui.feature</module>
     </modules>
@@ -26,6 +27,10 @@
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.ndatasource.ui</artifactId>
             </dependency>
-	    </dependencies>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.ndatasource.datasources</artifactId>
+            </dependency>
+	</dependencies>
 
 </project>

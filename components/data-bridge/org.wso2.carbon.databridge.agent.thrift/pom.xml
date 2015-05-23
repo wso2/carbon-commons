@@ -14,19 +14,17 @@
  ~ See the License for the specific language governing permissions and
  ~ limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>data-bridge</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.4.3-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.databridge.agent.thrift</artifactId>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.4.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - Data Bridge Thrift Agent</name>
     <description>
@@ -62,7 +60,7 @@
             <artifactId>commons-pool</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.httpcomponents.wso2</groupId>
+            <groupId>org.wso2.orbit.org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
         </dependency>
     </dependencies>
@@ -84,15 +82,32 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-
-                        <Private-Package>org.wso2.carbon.databridge.agent.thrift.internal.*
+                        <Private-Package>
+                            org.wso2.carbon.databridge.agent.thrift.internal.*
                         </Private-Package>
                         <Export-Package>
                             !org.wso2.carbon.databridge.agent.thrift.internal,
                             org.wso2.carbon.databridge.agent.thrift.*
                         </Export-Package>
-                        <Import-Package>org.osgi.framework, *;resolution:=optional</Import-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
+                        <Import-Package>
+                            javax.net.ssl,
+                            javax.xml.bind,
+                            javax.xml.bind.annotation,
+                            org.osgi.framework,
+                            org.osgi.service.component,
+                            com.google.gson,
+                            org.apache.http.impl.client,
+                            org.apache.http.conn.ssl,
+                            org.apache.http.conn.scheme,
+                            org.apache.http.conn,
+                            org.apache.http.client,
+                            org.apache.commons.pool.impl,
+                            org.apache.commons.pool,
+                            org.apache.commons.logging,
+                            org.apache.thrift.*; version="${libthrift.wso2.imp.pkg.version.range}",
+                            org.wso2.carbon.databridge.commons.*,
+                            org.wso2.carbon.databridge.commons.thrift.*,
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>

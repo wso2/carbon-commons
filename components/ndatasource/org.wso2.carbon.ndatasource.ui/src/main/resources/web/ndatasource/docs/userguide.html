@@ -19,34 +19,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
     <link href="../../admin/css/documentation.css" rel="stylesheet" type="text/css" media="all" />
-    <title>Carbon Data Sources - User Guide</title></head>
+    <title>Carbon Datasources - User Guide</title></head>
 <body>
 
-<h1>Carbon Data Sources</h1>
+<h1>Carbon Datasources</h1>
 <h2>Content</h2><div class="toc"><ul><li><a href="#Introducti">Introduction</a></li>
-    <li><a href="#createDS">Create Carbon DataSource</a></li>
-    <li><a href="#exposeJndi">Expose as a JNDI Data source</a></li>
-    <li><a href="#dsConfigParams">Defining Data Source Configuration Parameters</a></li>
+    <li><a href="#createDS">Create Carbon Datasource</a></li>
+    <li><a href="#exposeJndi">Expose as a JNDI Datasource</a></li>
+    <li><a href="#dsConfigParams">Defining Datasource Configuration Parameters</a></li>
     </ul>
 </div><h2 id="Introducti">Introduction</h2>
-	<p>Carbon Data Source feature in Data Services Server can be used to create data sources which can be used inside data services
-	directly through the name of the Carbon Data Source. The datasources created using Carbon Data Source feature will be persisted, 
+	<p>Carbon Datasource feature in Data Services Server can be used to create datasources which can be used inside data services
+	directly through the name of the Carbon Datasource. The datasources created using Carbon Datasource feature will be persisted, 
 	and can be used when ever required.</p>
 
 	<h2 id="createDS">Create Carbon DataSource</h2>
 	
-	<p>To create the carbon data source click on the Data Sources menu item under the
+	<p>To create the carbon datasource click on the Datasources menu item under the
             configuration.
         </p>
 
         <br/>
         <img alt="DS" src="images/create_datasource.png"/>
-        <p>Figure 1: Create Carbon Data Source menu</p>
+        <p>Figure 1: Create Carbon Datasource menu</p>
         <br/>
 
-        <p>Click on 'Add Data Source' link in Data Sources page which will direct you to a page
+        <p>Click on 'Add Datasource' link in Datasources page which will direct you to a page
             where you
-            can enter the details for the data source. 
+            can enter the details for the datasource. 
         </p>
 
 	<p>
@@ -57,78 +57,78 @@
 
         <br/>
         <img alt="DS" src="images/carbon_datasource_default.png"/>
-        <p>Figure 2: Creating the Carbon Data Source</p>
+        <p>Figure 2: Creating the Carbon Datasource</p>
         <br/>
 
 	<p>
-	If you need to add a data source supported by an External Datasource Provider class such 
+	If you need to add a datasource supported by an External Datasource Provider class such 
 	as com.mysql.jdbc.jdbc2.optional.MysqlXADataSource, select 'external' as the Data 
 	Source Provider. Then enter the name and value of connection properties by 
-	clicking 'Add Property'. Given below is an example data source  of External 
+	clicking 'Add Property'. Given below is an example datasource  of External 
 	Datasource Provider
 	with eneterd values. 
 	</p>
 
 	<br/>
 	<img alt="DS" src="images/carbon_datasource_external.png"/>
-        <p>Figure 3: Creating the Carbon Data Source of External Data Source Provider</p>
+        <p>Figure 3: Creating the Carbon Datasource of External Datasource Provider</p>
         
 
 	<p>
 	After entering the details you can test the connection by click on 'Test Connection' 
-	button on bottom of the page. Then click 'Add' to save the data source. 
+	button on bottom of the page. Then click 'Add' to save the datasource. 
 	</p>
 
 	<br/>
 
-        <p>Once you have created the carbon data source, you can use it inside the data service.
-            Select the 'Carbon Data Source' as the type of the data source in Add data source page
+        <p>Once you have created the carbon datasource, you can use it inside the data service.
+            Select the 'Carbon Datasource' as the type of the datasource in Add datasource page
             in the
-            data services wizard. Select the carbon data source name which you have created from the
+            data services wizard. Select the carbon datasource name which you have created from the
             drop down list.
         </p>
 
         <br/>
         <img alt="DS" src="images/add_carbon_ds.png"/>
-        <p>Figure 4: Creating the data source for Carbon Data Source</p>
+        <p>Figure 4: Creating the datasource for Carbon Datasource</p>
         <br/>
       
       
-      <h2 id="exposeJndi">Expose as a JNDI Data source</h2>
-        <p>The adding data source can be exposed as a JNDI Data Source as well. Expand
-	'Expose as a JNDI data source' and enter the required values. If the 
-	data source will be using Data Source Factory, click on the checkbox 
-	'Use Data Source Factory' and define the JNDI properties. Given below is an 
+      <h2 id="exposeJndi">Expose as a JNDI Datasource</h2>
+        <p>The adding datasource can be exposed as a JNDI Datasource as well. Expand
+	'Expose as a JNDI datasource' and enter the required values. If the 
+	datasource will be using Datasource Factory, click on the checkbox 
+	'Use Datasource Factory' and define the JNDI properties. Given below is an 
 	example JNDI configuration. 
         </p>
         <br/>
         <img alt="DS" src="images/carbon_datasource_jndi.png"/>
-        <p>Figure 5: Expose as a JNDI Data source</p>
+        <p>Figure 5: Expose as a JNDI Datasource</p>
         <br/>
-        <p>When creating the data service select the data source type as 'JNDI' and enter the values
-            to be used to connect to the previously created JNDI enabled data source.
+        <p>When creating the data service select the datasource type as 'JNDI' and enter the values
+            to be used to connect to the previously created JNDI enabled datasource.
         </p>
         <br/>
         <img alt="DS" src="images/jndi_dataservice.png"/>
-        <p>Figure 6: Creating the data source for JNDI</p>
+        <p>Figure 6: Creating the datasource for JNDI</p>
         <br/>
         
-		<h2 id="dsConfigParams">Defining Data Source Configuration Parameters</h2>
+		<h2 id="dsConfigParams">Defining Datasource Configuration Parameters</h2>
 	<p>
-	By expanding the 'Data Source Configuration Parameters' you can set the jdbc-pool 
-	properties for the data source.
+	By expanding the 'Datasource Configuration Parameters' you can set the jdbc-pool 
+	properties for the datasource.
 	</p>
 	<br/>
         <img alt="DS" src="images/ds_expand_config_params.png"/>
-        <p>Figure 7: Expanding Data Source Configuration Parameters</p>
+        <p>Figure 7: Expanding Datasource Configuration Parameters</p>
         <br/>
 
 	<p>
-	Data Source Configuration Parameters with default values is showing below. 
+	Datasource Configuration Parameters with default values is showing below. 
 	</p>
 	<br/>
         <img alt="DS" src="images/ds_config_params.png"/>
-        <p>Figure 8: Data Source Configuration Parameters</p>
+        <p>Figure 8: Datasource Configuration Parameters</p>
         <br/>
 		
 <div class="clear">

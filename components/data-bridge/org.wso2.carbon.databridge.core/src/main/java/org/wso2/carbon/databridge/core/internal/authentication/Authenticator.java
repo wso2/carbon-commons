@@ -21,7 +21,6 @@ package org.wso2.carbon.databridge.core.internal.authentication;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.commons.Credentials;
 import org.wso2.carbon.databridge.commons.exception.AuthenticationException;
 import org.wso2.carbon.databridge.core.Utils.AgentSession;
@@ -29,7 +28,6 @@ import org.wso2.carbon.databridge.core.conf.DataBridgeConfiguration;
 import org.wso2.carbon.databridge.core.internal.authentication.session.SessionBean;
 import org.wso2.carbon.databridge.core.internal.authentication.session.SessionCache;
 import org.wso2.carbon.user.api.UserStoreException;
-import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.util.UUID;
 
@@ -46,7 +44,7 @@ public final class Authenticator {
     public Authenticator(AuthenticationHandler authenticationHandler,
                          DataBridgeConfiguration dataBridgeConfiguration) {
         this.authenticationHandler = authenticationHandler;
-        sessionCache = new SessionCache(dataBridgeConfiguration.getClientTimeOut() / 1000);
+        sessionCache = new SessionCache(dataBridgeConfiguration.getClientTimeoutMin());
     }
 
     public String authenticate(String userName, String password) throws AuthenticationException {
@@ -68,12 +66,9 @@ public final class Authenticator {
         }
 
         boolean isSuccessful = false;
-        // catching org.wso2.carbon.identity.authentication.AuthenticationException runtime exception
-        // thrown for an invalid username.
-        // rethrow org.wso2.carbon.databridge.commons.exception.AuthenticationException
         try {
         	isSuccessful = authenticationHandler.authenticate(userName, password);
-		} catch (org.wso2.carbon.identity.authentication.AuthenticationException e) {
+		} catch (Exception e) {
 			throw new AuthenticationException(e);
 		}
 

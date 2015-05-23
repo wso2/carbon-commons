@@ -87,6 +87,7 @@
         <parameter name="AuthorizationAction" locked="false">/permission/admin/manage/event</parameter>
         <transports>
             <transport>http</transport>
+            <transport>https</transport>
         </transports>
         <description>
             To Publish to Broker Service

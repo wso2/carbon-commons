@@ -15,21 +15,19 @@
  ~ limitations under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>logging-mgt-features</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.4.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.logging.mgt.server.feature</artifactId>
     <packaging>pom</packaging>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.4.3-SNAPSHOT</version>
     <name>WSO2 Carbon - Logging Management Core Feature</name>
     <url>http://wso2.org</url>
     <description>This feature contains the core bundles required for Back-end Logging Management
@@ -78,11 +76,6 @@
         <dependency>
             <groupId>org.antlr.wso2</groupId>
             <artifactId>antlr-runtime</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.carbon.commons</groupId>
-            <artifactId>org.wso2.carbon.databridge.datapublisher.feature</artifactId>
-            <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.hectorclient.wso2</groupId>
@@ -163,9 +156,6 @@
                                 <bundleDef>commons-configuration.wso2:commons-configuration</bundleDef>
                             </bundles>
                             <importFeatures>
-                                <importFeatureDef>
-                                    org.wso2.carbon.databridge.datapublisher:${carbon.platform.version}
-                                </importFeatureDef>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}
                                 </importFeatureDef>
                             </importFeatures>

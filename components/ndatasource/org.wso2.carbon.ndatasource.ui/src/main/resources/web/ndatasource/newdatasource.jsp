@@ -121,7 +121,7 @@
 			RDBMSDSXMLConfiguration rdbmsCon = (RDBMSDSXMLConfiguration)NDataSourceHelper.unMarshal(type, configuration);
 			dataSourceclassName = rdbmsCon.getDataSourceClassName();
 			if (dataSourceclassName != null && !("".equals(dataSourceclassName))) {
-				dsProvider = "External Data Source";
+				dsProvider = "External Datasource";
 				dsproviderPropertiesEditMode = "true";
 				List <DataSourceProperty> dataSourceProperties = rdbmsCon.getDataSourceProps();
 				Iterator<DataSourceProperty> iterator = dataSourceProperties.iterator();
@@ -192,7 +192,7 @@
 		}
 	}
 	
-	//Data Source Provider is changed 
+	//Data Source Provider is changed
 	if (request.getParameter("dsProvider") != null) {
 		dsProvider = request.getParameter("dsProvider");
 	}
@@ -553,10 +553,10 @@ function displayPasswordField() {
                     <% } else { %>
                     <option value="default">default</option>
                     <% } %>
-                    <% if(dsProvider.equals("External Data Source")) { %>
-                   	<option value="External Data Source" selected="selected">External Data Source</option>
+                    <% if(dsProvider.equals("External Datasource")) { %>
+                   	<option value="External Datasource" selected="selected">External Datasource</option>
                    	<% } else { %>
-                   	<option value="External Data Source">External Data Source</option>
+                   	<option value="External Datasource">External Datasource</option>
                    	<% } %>
          </select>
          <input type="hidden" id="dsProviderType" name="dsProviderType" value="<%=dsProvider %>" />
@@ -604,7 +604,7 @@ function displayPasswordField() {
 </tr>
 	
 
-<% } else if ("External Data Source".equals(dsProvider)){ %>
+<% } else if ("External Datasource".equals(dsProvider)){ %>
 <tr>
     <td><fmt:message key="datasource.className"/><span class='required'>*</span></td>
     <td align="left">
@@ -664,7 +664,7 @@ function displayPasswordField() {
 </tr>
 <tr>
 	<td><label for="useDataSourceFactory"><fmt:message  key="jndi.use.data.source.factory"/></label></td>
-	<td><% if ("External Data Source".equals(dsProvider)) { %>
+	<td><% if ("External Datasource".equals(dsProvider)) { %>
 	<input type="checkbox" id="useDataSourceFactory" name="useDataSourceFactory" disabled="disabled"/>
 	<%} else if (isUseDataSourceFactory) {%>
 		<input type="checkbox" id="useDataSourceFactory" name="useDataSourceFactory" checked/>
@@ -1177,6 +1177,7 @@ function displayPasswordField() {
             		var driver = document.getElementById('driver').value;
             		var url = document.getElementById('url').value;
             		var username = document.getElementById('username').value;
+                    username = encodeURIComponent(username);
             	} else {
             		var dsclassname = document.getElementById('dsclassname').value;
             		var dsproviderProperties = document.getElementById('dsproviderProperties').value;
@@ -1191,10 +1192,12 @@ function displayPasswordField() {
     		var editMode = document.getElementById("editMode").value;
 			if (editMode == null || editMode == "false") {
 				password = document.getElementById('password').value;
+                password = encodeURIComponent(password);
 				url = url + '&password='+password;
 			} else {
 				var changePassword = "false";
 				password = document.getElementById('newPassword').value;
+                password = encodeURIComponent(password);
 				if (document.getElementById('changePassword') != null) {
 					changePassword = document.getElementById('changePassword').checked;
 				}

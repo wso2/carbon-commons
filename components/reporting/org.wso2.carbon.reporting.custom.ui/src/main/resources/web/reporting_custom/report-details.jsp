@@ -26,7 +26,7 @@
         FormParameters[] formParameters = new FormParameters[0];
         String name = request.getParameter("reportName");
         String[] dataSources = new String[0];
-        String error1 = "Failed to get data sources";
+        String error1 = "Failed to get datasources";
 
         try {
             dataSources = dbReportingServiceClient.getCarbonDataSourceNames();
@@ -120,7 +120,7 @@
                     %>
                     <tr class="tableEvenRow">
                         <td class="leftCol-small">
-                            <label>Data Source</label>
+                            <label>Datasource</label>
                         </td>
                         <td>
                             <label>

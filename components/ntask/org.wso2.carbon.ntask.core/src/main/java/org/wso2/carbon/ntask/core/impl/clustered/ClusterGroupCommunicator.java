@@ -40,7 +40,7 @@ import java.util.concurrent.Future;
  */
 public class ClusterGroupCommunicator implements MembershipListener {
 
-    private static final String NTASK_P2P_COMM_EXECUTOR = "__NTASK_P2P_COMM_EXECUTOR__";
+    public static final String NTASK_P2P_COMM_EXECUTOR = "__NTASK_P2P_COMM_EXECUTOR__";
 
     private static final String TASK_SERVER_STARTUP_COUNTER = "__TASK_SERVER_STARTUP_COUNTER__";
 

@@ -15,14 +15,12 @@
  ~ limitations under the License.
 -->
         
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>carbon-commons</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.4.3-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -38,12 +36,6 @@
         <module>org.wso2.carbon.event.ui.feature</module>
         <module>org.wso2.carbon.event.common.feature</module>
     </modules>
-
-    <properties>
-        <wso2carbon.version.event>${project.version}</wso2carbon.version.event>
-        <wso2carbon.version.qpid>${project.version}</wso2carbon.version.qpid>
-        <wso2carbon.version.rulecep>${project.version}</wso2carbon.version.rulecep>
-    </properties>
 
 </project>
 

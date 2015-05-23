@@ -19,7 +19,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>cluster-mgt</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.4.3-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -73,12 +73,12 @@
                         <Import-Package>
                             !org.wso2.carbon.cluster.mgt.admin.ui.i18n,
                             !org.wso2.carbon.cluster.mgt.admin.ui.*,
-                            org.wso2.carbon.cluster.mgt.admin.stub.*;version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.cluster.mgt.admin.stub.*;version="${carbon.commons.imp.package.version}",
                             javax.servlet.http;version="${imp.pkg.version.javax.servlet}",
                             *;resolution:=optional
                         </Import-Package>
                         <Export-Package>
-                            org.wso2.carbon.cluster.mgt.admin.ui.*;version="${carbon.platform.package.export.version}"
+                            org.wso2.carbon.cluster.mgt.admin.ui.*;version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Carbon-Component>UIBundle</Carbon-Component>
                         <DynamicImport-Package>*</DynamicImport-Package>

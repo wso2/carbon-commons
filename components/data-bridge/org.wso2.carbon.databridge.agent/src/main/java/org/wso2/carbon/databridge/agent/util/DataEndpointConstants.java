@@ -17,61 +17,22 @@
 */
 package org.wso2.carbon.databridge.agent.util;
 
-import org.wso2.carbon.utils.CarbonUtils;
-
 import java.io.File;
 
+/**
+ * Class to define the constants that are used.
+ */
 public class DataEndpointConstants {
+
     private DataEndpointConstants() {
     }
 
-    public static final String DATA_AGENT_CONF_FILE_NAME = "ha-data-agent-conf.xml";
-    public static final String DATA_AGENT_CONF_FILE_PATH = CarbonUtils.getCarbonConfigDirPath() + File.separator
+    public static final String DATA_AGENT_CONF_FILE_NAME = "data-agent-conf.xml";
+    public static final String DATA_AGENT_CONF_FILE_PATH = File.separator
             + "data-bridge" + File.separator + DATA_AGENT_CONF_FILE_NAME;
-    public static final String DATA_AGENT_ENDPOINT_NAME = "Name";
-    public static final String DATA_AGENT_ENDPOINT_CLASS = "DataEndpointClass";
-    public static final String DATA_AGENT_TRUST_STORE_LOCATION = "TrustSore";
-    public static final String DATA_AGENT_TRUST_STORE_PASSWORD = "TrustSorePassword";
-    public static final String DATA_AGENT_QUEUE_SIZE = "QueueSize";
-    public static final String DATA_AGENT_BATCH_SIZE = "BatchSize";
-    public static final String DATA_AGENT_CLIENT_POOL_FACTORY_CLASS = "ClientPoolFactoryClass";
-    public static final String DATA_AGENT_SECURE_CLIENT_POOL_FACTORY_CLASS = "SecureClientPoolFactoryClass";
-
-    public static final int DEFAULT_DATA_AGENT_QUEUE_SIZE = 100000;
     public static final int DEFAULT_DATA_AGENT_BATCH_SIZE = 100;
-
     public static final String LB_URL_GROUP_SEPARATOR = ",";
     public static final String FAILOVER_URL_GROUP_SEPARATOR = "|";
-
-    public static final int DEFAULT_DATA_AGENT_MAX_TRANSPORT_POOL_SIZE = 250;
-    public static final String DATA_AGENT_MAX_TRANSPORT_POOL_SIZE = "maxTransportPoolSize";
-
-    public static final int DEFAULT_DATA_AGENT_MAX_IDLE_CONNECTIONS = 250;
-    public static final String DATA_AGENT_MAX_IDLE_CONNECTIONS = "maxIdleConnections";
-
-    public static final int DEFAULT_DATA_AGENT_EVICTION_TIME_PERIOD = 5500;
-    public static final String DATA_AGENT_EVICTION_TIME_PERIOD = "evictionTimePeriod";
-
-    public static final int DEFAULT_DATA_AGENT_MIN_IDLE_TIME_IN_POOL = 5500;
-    public static final String DATA_AGENT_MIN_IDLE_TIME_IN_POOL = "minIdleTimeInPool";
-
-    public static final int DEFAULT_DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE = 5500;
-    public static final String DATA_AGENT_SECURE_MAX_TRANSPORT_POOL_SIZE = "secureMaxTransportPoolSize";
-
-    public static final int DEFAULT_DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS = 250;
-    public static final String DATA_AGENT_SECURE_MAX_IDLE_CONNECTIONS = "secureMaxIdleConnections";
-
-    public static final int DEFAULT_DATA_AGENT_SECURE_EVICTION_TIME_PERIOD = 5500;
-    public static final String DATA_AGENT_SECURE_EVICTION_TIME_PERIOD = "secureEvictionTimePeriod";
-
-    public static final int DEFAULT_DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL = 5500;
-    public static final String DATA_AGENT_SECURE_MIN_IDLE_TIME_IN_POOL = "secureMinIdleTimeInPool";
-
-    public static final int DEFAULT_DATA_AGENT_RECONNECTION_INTERVAL = 30;
-    public static final String DATA_AGENT_RECONNECTION_INTERVAL = "ReconnectionInterval";
-
     public static final int DEFAULT_AUTH_PORT_OFFSET = 100;
-
     public static final String SEPARATOR = "##";
-
 }

@@ -47,14 +47,13 @@ public abstract class AbstractQuartzTaskManager implements TaskManager {
 
     private Scheduler scheduler;
 
-    private static final String TASK_TRIGGER_LISTENER_NAME = "TASK_TRIGGER_LISTENER";
-
-    @SuppressWarnings({"unchecked"})
     public AbstractQuartzTaskManager(TaskRepository taskRepository) throws TaskException {
         this.taskRepository = taskRepository;
         this.scheduler = TasksDSComponent.getScheduler();
         try {
-            this.getScheduler().getListenerManager().addTriggerListener(new TaskTriggerListener(TASK_TRIGGER_LISTENER_NAME)) ;
+            Matcher<TriggerKey> tenantTaskTypeGroupMatcher = GroupMatcher.groupEquals(this.getTenantTaskGroup());
+            this.getScheduler().getListenerManager().addTriggerListener(
+                    new TaskTriggerListener(this.getTenantTaskGroup()), tenantTaskTypeGroupMatcher) ;
         } catch (SchedulerException e) {
             throw new TaskException("Error in initiating task trigger listener", Code.UNKNOWN, e);
         }

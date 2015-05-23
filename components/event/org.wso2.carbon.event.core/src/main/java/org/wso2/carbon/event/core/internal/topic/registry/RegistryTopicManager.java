@@ -16,6 +16,9 @@
 
 package org.wso2.carbon.event.core.internal.topic.registry;
 
+import org.apache.axis2.databinding.utils.ConverterUtil;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.event.core.exception.EventBrokerException;
@@ -33,7 +36,9 @@ import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.registry.core.session.UserRegistry;
 import org.wso2.carbon.user.api.UserRealm;
 import org.wso2.carbon.user.api.UserStoreException;
-import org.apache.axis2.databinding.utils.ConverterUtil;
+import org.wso2.carbon.user.api.UserStoreManager;
+import org.wso2.carbon.user.core.util.UserCoreUtil;
+import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -41,17 +46,30 @@ import java.util.List;
 import java.util.Queue;
 import java.util.regex.Pattern;
 
+/**
+ * This class is utilized to perform actions related to topics.
+ */
 public class RegistryTopicManager implements TopicManager {
-
+    private static Log log = LogFactory.getLog(RegistryTopicManager.class);
+    private static final String AT_REPLACE_CHAR = "_";
+    private static final String TOPIC_ROLE_PREFIX = "T_";
     private String topicStoragePath;
     private RegistryService registryService;
 
-
+    /**
+     * Initializes Registry Topic Manager
+     *
+     * @param topicStoragePath the topic registry path
+     */
     public RegistryTopicManager(String topicStoragePath) {
         this.topicStoragePath = topicStoragePath;
         this.registryService = EventBrokerHolder.getInstance().getRegistryService();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TopicNode getTopicTree() throws EventBrokerException {
         try {
             UserRegistry userRegistry =
@@ -69,6 +87,14 @@ public class RegistryTopicManager implements TopicManager {
         }
     }
 
+    /**
+     * Building the topic tree
+     *
+     * @param topicNode    node of the topic
+     * @param resource     the resource that holds child topics
+     * @param userRegistry user registry
+     * @throws EventBrokerException
+     */
     private void buildTopicTree(TopicNode topicNode, Collection resource, UserRegistry userRegistry)
             throws EventBrokerException {
         try {
@@ -100,6 +126,10 @@ public class RegistryTopicManager implements TopicManager {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addTopic(String topicName) throws EventBrokerException {
         if (!validateTopicName(topicName)) {
             throw new EventBrokerException("Topic name " + topicName + " is not a valid topic name. " +
@@ -123,13 +153,13 @@ public class RegistryTopicManager implements TopicManager {
 
                 // Grant this user (owner) rights to update permission on newly created topic
                 UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(
-                                                                     CarbonContext.getThreadLocalCarbonContext().getTenantId());
+                        CarbonContext.getThreadLocalCarbonContext().getTenantId());
 
-                userRealm.getAuthorizationManager().authorizeUser(
-                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
+                authorizePermissionsToLoggedInUser(loggedInUser, topicName, resourcePath,
+                                                   userRealm);
             }
         } catch (RegistryException e) {
-            throw new EventBrokerException("Can not access the config registry", e);
+            throw new EventBrokerException("Cannot access the config registry", e);
         } catch (UserStoreException e) {
             throw new EventBrokerException("Error while granting user " + loggedInUser +
                                            ", permission " + EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION +
@@ -137,20 +167,27 @@ public class RegistryTopicManager implements TopicManager {
         }
     }
 
+    /**
+     * Gets a topic name without the resource path
+     *
+     * @param topic topic name
+     * @return a topic name
+     */
     private String removeResourcePath(String topic) {
         String resourcePath = this.topicStoragePath;
-        if (topic.indexOf(resourcePath) > -1) {
+        if (topic.contains(resourcePath)) {
             topic = topic.substring(topic.indexOf(resourcePath) + resourcePath.length());
         }
         return topic;
     }
 
-
-
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TopicRolePermission[] getTopicRolePermission(String topicName)
             throws EventBrokerException {
-        String topicResoucePath = JavaUtil.getResourcePath(topicName, this.topicStoragePath);
+        String topicResourcePath = JavaUtil.getResourcePath(topicName, this.topicStoragePath);
         List<TopicRolePermission> topicRolePermissions = new ArrayList<TopicRolePermission>();
         UserRealm userRealm = CarbonContext.getThreadLocalCarbonContext().getUserRealm();
         String adminRole =
@@ -166,20 +203,24 @@ public class RegistryTopicManager implements TopicManager {
                     topicRolePermission.setRoleName(role);
                     topicRolePermission.setAllowedToSubscribe(
                             userRealm.getAuthorizationManager().isRoleAuthorized(
-                                    role, topicResoucePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE));
+                                    role, topicResourcePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE));
                     topicRolePermission.setAllowedToPublish(
                             userRealm.getAuthorizationManager().isRoleAuthorized(
-                                    role, topicResoucePath, EventBrokerConstants.EB_PERMISSION_PUBLISH));
+                                    role, topicResourcePath, EventBrokerConstants.EB_PERMISSION_PUBLISH));
                     topicRolePermissions.add(topicRolePermission);
                 }
             }
             return topicRolePermissions.toArray(
                     new TopicRolePermission[topicRolePermissions.size()]);
         } catch (UserStoreException e) {
-            throw new EventBrokerException("Can not access the Userstore manager ", e);
+            throw new EventBrokerException("Cannot access the UserStore manager ", e);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void updatePermissions(String topicName, TopicRolePermission[] topicRolePermissions)
             throws EventBrokerException {
         String topicResourcePath = JavaUtil.getResourcePath(topicName, this.topicStoragePath);
@@ -191,7 +232,7 @@ public class RegistryTopicManager implements TopicManager {
                     loggedInUser, topicResourcePath,
                     EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION)) {
                 if (!JavaUtil.isAdmin(loggedInUser)) {
-                    throw new EventBrokerException(" User " + loggedInUser + " can not change" +
+                    throw new EventBrokerException(" User " + loggedInUser + " cannot change" +
                                                    " the permissions of " + topicName);
                 }
             }
@@ -226,19 +267,32 @@ public class RegistryTopicManager implements TopicManager {
                 }
             }
         } catch (UserStoreException e) {
-            throw new EventBrokerException("Can not access the user store manager", e);
+            throw new EventBrokerException("Cannot access the user store manager", e);
         }
     }
 
+    /**
+     * Gets the topic storage path
+     *
+     * @return the topic storage path
+     */
     public String getTopicStoragePath() {
         return topicStoragePath;
     }
 
+    /**
+     * The topic storage path
+     *
+     * @param topicStoragePath path for topic storage
+     */
     public void setTopicStoragePath(String topicStoragePath) {
         this.topicStoragePath = topicStoragePath;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Subscription[] getSubscriptions(String topicName,
                                            boolean withChildren) throws EventBrokerException {
 
@@ -255,6 +309,10 @@ public class RegistryTopicManager implements TopicManager {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Subscription[] getJMSSubscriptions(String topicName) throws EventBrokerException {
         try {
             Subscription[] subscriptionsArray = new Subscription[0];
@@ -288,10 +346,19 @@ public class RegistryTopicManager implements TopicManager {
 
             return subscriptionsArray;
         } catch (RegistryException e) {
-            throw new EventBrokerException("Can not read the registry resouces ", e);
+            throw new EventBrokerException("Cannot read the registry resources ", e);
         }
     }
 
+    /**
+     * Adds a subscriptions to a list using the resource path provided
+     *
+     * @param resourcePath  the topic nam
+     * @param subscriptions a list of subscriptions for the topic
+     * @param pathsQueue    the topic folder
+     * @param withChildren  to add subscriptions to children. i.e subtopics
+     * @throws EventBrokerException
+     */
     private void addSubscriptions(String resourcePath,
                                   List<Subscription> subscriptions,
                                   Queue<String> pathsQueue,
@@ -303,7 +370,6 @@ public class RegistryTopicManager implements TopicManager {
             String subscriptionsPath = getSubscriptionsPath(resourcePath);
 
             //first if there are subscriptions for this topic add them. else go to the other folders.
-
             if (userRegistry.resourceExists(subscriptionsPath)) {
                 Collection collection = (Collection) userRegistry.get(subscriptionsPath);
                 for (String subscriptionPath : collection.getChildren()) {
@@ -321,41 +387,53 @@ public class RegistryTopicManager implements TopicManager {
 
             // add child subscriptions
             if (withChildren) {
-                Collection childResouces = (Collection) userRegistry.get(resourcePath);
-                for (String childResoucePath : childResouces.getChildren()) {
-                    if ((childResoucePath.indexOf(EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME) < 0) &&
-                        (childResoucePath.indexOf(EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME) < 0)) {
+                Collection childResources = (Collection) userRegistry.get(resourcePath);
+                for (String childResourcePath : childResources.getChildren()) {
+                    if ((!EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME
+                            .contains(childResourcePath)) &&
+                        (!EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME
+                                .contains(childResourcePath))) {
                         // i.e. this folder is a topic folder
-                        pathsQueue.add(childResoucePath);
+                        pathsQueue.add(childResourcePath);
                     }
                 }
             }
 
         } catch (RegistryException e) {
-            throw new EventBrokerException("Can not access the registry", e);
+            throw new EventBrokerException("Cannot access the registry", e);
         }
-    }
-
-    private String getSubscriptionsPath(String topicName) {
-
-        if (!topicName.endsWith("/")) {
-            topicName += "/";
-        }
-
-        topicName += EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME;
-        return topicName;
-    }
-
-    private boolean validateTopicName(String topicName) {
-        return Pattern.matches("[[a-zA-Z]+[^(\\x00-\\x80)]+[0-9_\\-/#*.?&\\s()]+]+",topicName);
     }
 
     /**
-     * Get array of backend roles excluding admin and wso2.anonymous.role roles
+     * Gets the subscription path for a topic
      *
-     * @return array of roles
-     * @throws EventBrokerException if fails to get roles
+     * @param topicName topic name
+     * @return the subscription path as string
      */
+    private String getSubscriptionsPath(String topicName) {
+
+        if (!topicName.endsWith("/")) {
+            topicName = topicName + "/";
+        }
+
+        topicName = topicName + EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME;
+        return topicName;
+    }
+
+    /**
+     * Validates a topic name. Checks for invalid characters
+     *
+     * @param topicName topic name
+     * @return true if topic name is valid, false otherwise.
+     */
+    private boolean validateTopicName(String topicName) {
+        return Pattern.matches("[[a-zA-Z]+[^(\\x00-\\x80)]+[0-9_\\-/#*:.?&\\s()]+]+", topicName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String[] getBackendRoles() throws EventBrokerException {
         UserRealm userRealm = CarbonContext.getThreadLocalCarbonContext().getUserRealm();
         try {
@@ -380,16 +458,22 @@ public class RegistryTopicManager implements TopicManager {
             }
 
         } catch (UserStoreException e) {
-            throw new EventBrokerException("Unable to getRoles from user store", e);
+            throw new EventBrokerException("Unable to get Roles from user store", e);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean removeTopic(String topicName) throws EventBrokerException {
 
         try {
             UserRegistry userRegistry =
                     this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
             String resourcePath = JavaUtil.getResourcePath(topicName, this.topicStoragePath);
+
+            removeRoleCreateForLoggedInUser(topicName);
 
             if (userRegistry.resourceExists(resourcePath)) {
                 userRegistry.delete(resourcePath);
@@ -398,19 +482,96 @@ public class RegistryTopicManager implements TopicManager {
                 return false;
             }
         } catch (RegistryException e) {
-            throw new EventBrokerException("Can not access the config registry");
+            throw new EventBrokerException("Cannot access the config registry", e);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isTopicExists(String topicName) throws EventBrokerException {
-          try {
+        try {
             UserRegistry userRegistry =
                     this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
             String resourcePath = JavaUtil.getResourcePath(topicName, this.topicStoragePath);
             return userRegistry.resourceExists(resourcePath);
         } catch (RegistryException e) {
-            throw new EventBrokerException("Can not access the config registry");
+            throw new EventBrokerException("Cannot access the config registry");
+        }
+    }
+
+    /**
+     * Create a new role which has the same name as the destinationName and assign the logged in
+     * user to the newly created role. Then, authorize the newly created role to subscribe and
+     * publish to the destination.
+     *
+     * @param username        name of the logged in user
+     * @param destinationName destination name. Either topic or queue name
+     * @param destinationId   ID given to the destination
+     * @param userRealm       the  user store
+     * @throws UserStoreException
+     */
+    private static void authorizePermissionsToLoggedInUser(String username, String destinationName,
+                                                           String destinationId,
+                                                           UserRealm userRealm) throws
+                                                                                UserStoreException {
+
+        //For registry we use a modified queue name
+        String newDestinationName = destinationName.replace("@", AT_REPLACE_CHAR);
+
+        // creating the internal role name
+        String roleName = UserCoreUtil.addInternalDomainName(TOPIC_ROLE_PREFIX +
+                                                             newDestinationName.replace("/", "-"));
+
+        // the interface to store user data
+        UserStoreManager userStoreManager = CarbonContext.getThreadLocalCarbonContext().getUserRealm().getUserStoreManager();
+
+        if (!userStoreManager.isExistingRole(roleName)) {
+            String[] user = {MultitenantUtils.getTenantAwareUsername(username)};
+
+            // adds the internal role to user store
+            userStoreManager.addRole(roleName, user, null);
+            // gives subscribe permissions to the internal role in the user store
+            userRealm.getAuthorizationManager().authorizeRole(
+                    roleName, destinationId, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
+            // gives publish permissions to the internal role in the user store
+            userRealm.getAuthorizationManager().authorizeRole(
+                    roleName, destinationId, EventBrokerConstants.EB_PERMISSION_PUBLISH);
+            // gives change permissions to the internal role in the user store
+            userRealm.getAuthorizationManager().authorizeRole(
+                    roleName, destinationId, EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
+
+        } else {
+            log.warn("Unable to provide permissions to the user, " +
+                     " " + username + ", to subscribe and publish to " + newDestinationName);
+        }
+    }
+
+    /**
+     * Every queue/topic has a role with the same name as the queue/topic name. This role is used
+     * to store the permissions for the user who created the queue/topic.This role should be
+     * deleted when the queue/topic is deleted.
+     *
+     * @param destinationName name of the queue or topic
+     * @throws EventBrokerException
+     */
+    private static void removeRoleCreateForLoggedInUser(String destinationName)
+            throws EventBrokerException {
+        //For registry we use a modified queue name
+        String newDestinationName = destinationName.replace("@", AT_REPLACE_CHAR);
+
+        String roleName = UserCoreUtil.addInternalDomainName(TOPIC_ROLE_PREFIX +
+                                                             newDestinationName.replace("/", "-"));
+
+        try {
+            UserStoreManager userStoreManager = CarbonContext.getThreadLocalCarbonContext().getUserRealm().getUserStoreManager();
+
+            if (userStoreManager.isExistingRole(roleName)) {
+                userStoreManager.deleteRole(roleName);
+            }
+        } catch (UserStoreException e) {
+            throw new EventBrokerException("Error while deleting " + newDestinationName, e);
         }
     }
 }

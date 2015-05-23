@@ -17,11 +17,10 @@ package org.wso2.carbon.logging.service;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.DailyRollingFileAppender;
+import org.apache.log4j.FileAppender;
 import org.apache.log4j.Logger;
 import org.wso2.carbon.base.MultitenantConstants;
 import org.wso2.carbon.context.CarbonContext;
-import org.wso2.carbon.logging.service.appender.LogEventAppender;
 import org.wso2.carbon.logging.service.config.LoggingConfigManager;
 import org.wso2.carbon.logging.service.config.ServiceConfigManager;
 import org.wso2.carbon.logging.service.data.LogEvent;
@@ -229,16 +228,9 @@ public class LogViewer {
         return appNameList.toArray(new String[appNameList.size()]);
     }
 
-    public boolean isLogEventReciverConfigured() {
-        Logger rootLogger = Logger.getRootLogger();
-        LogEventAppender logger = (LogEventAppender) rootLogger.getAppender("LOGEVENT");
-        return logger != null;
-    }
-
     public boolean isFileAppenderConfiguredForST() {
         Logger rootLogger = Logger.getRootLogger();
-        DailyRollingFileAppender logger = (DailyRollingFileAppender) rootLogger
-                .getAppender("CARBON_LOGFILE");
+        FileAppender logger = (FileAppender) rootLogger.getAppender("CARBON_LOGFILE");
         return logger != null
                && CarbonContext.getThreadLocalCarbonContext()
                                .getTenantId() == MultitenantConstants.SUPER_TENANT_ID;

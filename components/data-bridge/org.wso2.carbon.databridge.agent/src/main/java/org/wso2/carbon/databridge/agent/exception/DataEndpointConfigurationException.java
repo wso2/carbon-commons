@@ -17,6 +17,10 @@
 */
 package org.wso2.carbon.databridge.agent.exception;
 
+/**
+ * Exception to be thrown When parsing the Data Endpoint configurations when initializing data publisher.
+ */
+
 public class DataEndpointConfigurationException extends Exception {
     private String errorMessage;
 

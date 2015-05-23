@@ -17,7 +17,7 @@
 */
 package org.wso2.carbon.identity.user.store.configuration.deployer.exception;
 
-public class UserStoreConfigurationDeployerException extends Exception{
+public class UserStoreConfigurationDeployerException extends Exception {
 
     public UserStoreConfigurationDeployerException() {
         super();

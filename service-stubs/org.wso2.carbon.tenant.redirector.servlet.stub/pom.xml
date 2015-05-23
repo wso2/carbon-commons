@@ -72,7 +72,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
                             org.wso2.carbon.redirector.servlet.stub.*;
-                            version="${carbon.platform.package.export.version}"
+                            version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package>
                             !org.wso2.carbon.redirector.servlet.stub.*,

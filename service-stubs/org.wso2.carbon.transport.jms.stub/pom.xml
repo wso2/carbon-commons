@@ -95,11 +95,11 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
                             org.wso2.carbon.transport.jms.stub.*;
-                            version="${carbon.platform.package.export.version}",
+                            version="${carbon.commons.exp.package.version}",
                             org.wso2.carbon.transport.jms.stub.types.carbon.*;
-                            version="${carbon.platform.package.export.version}",
+                            version="${carbon.commons.exp.package.version}",
                             org.wso2.carbon.transport.jms.stub.types.axis2.*;
-                            version="${carbon.platform.package.export.version}"
+                            version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package>
                             !org.wso2.carbon.transport.jms.stub.*

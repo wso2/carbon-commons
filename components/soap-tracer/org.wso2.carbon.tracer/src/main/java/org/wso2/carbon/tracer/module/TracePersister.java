@@ -59,7 +59,7 @@ public interface TracePersister {
      * @param operationName
      * @param messageSequence
      * @param msgContext
-     *ß @return
+     * @return
      */
     public String[] getMessages(String serviceId,
                                 String operationName,

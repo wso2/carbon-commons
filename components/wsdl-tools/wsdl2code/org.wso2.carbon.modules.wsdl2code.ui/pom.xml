@@ -19,13 +19,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>wsdl2code</artifactId>
-        <version>4.3.0-SNAPSHOT</version>
+        <version>4.4.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.wsdl2code.ui</artifactId>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.4.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - WSDL2Code UI</name>
     <description>This is the UI module of the project.</description>
@@ -75,11 +75,11 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Export-Package>
-                            org.wso2.carbon.wsdl2code.ui.*;version="${carbon.platform.package.export.version}"
+                            org.wso2.carbon.wsdl2code.ui.*;version="${carbon.commons.exp.package.version}"
                         </Export-Package>
                         <Import-Package>
                             !org.wso2.carbon.wsdl2code.ui.*,
-                            org.wso2.carbon.wsdl2code.stub.*;version="${carbon.platform.package.import.version.range}",
+                            org.wso2.carbon.wsdl2code.stub.*;version="${carbon.commons.imp.package.version}",
                             javax.servlet.*;version="${imp.pkg.version.javax.servlet}",
                             *;resolution:=optional
                         </Import-Package>

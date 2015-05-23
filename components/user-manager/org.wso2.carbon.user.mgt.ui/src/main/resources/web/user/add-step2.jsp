@@ -1,4 +1,3 @@
-
 <%@page import="org.wso2.carbon.user.mgt.stub.types.carbon.FlaggedName"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://wso2.org/projects/carbon/taglibs/carbontags.jar" prefix="carbon" %>
@@ -9,6 +8,7 @@
 <%@page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%@page import="org.wso2.carbon.user.mgt.ui.UserAdminClient"%>
 <%@page import="org.wso2.carbon.utils.ServerConstants"%>
+<%@ page import="java.net.URLEncoder" %>
 
 
 <%@page import="org.wso2.carbon.ui.util.CharacterEncoder"%>
@@ -100,7 +100,7 @@
                     (ConfigurationContext) config.getServletContext().getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
             UserAdminClient client = new UserAdminClient(cookie, backendServerURL, configContext);
             if (filter.length() > 0) {
-                FlaggedName[] data = client.getRolesOfUser(userName, filter, -1);
+                FlaggedName[] data = client.getRolesOfUser(Util.decodeHTMLCharacters(userName), filter, -1);
                 dataList = new ArrayList<FlaggedName>(Arrays.asList(data));
                 exceededDomains = dataList.remove(dataList.size() - 1);
                 session.setAttribute(UserAdminUIConstants.USER_LIST_ADD_USER_ROLE_CACHE_EXCEEDED, exceededDomains);
@@ -169,7 +169,7 @@
         function doPaginate(page, pageNumberParameterName, pageNumber){
             var form = document.createElement("form");
             form.setAttribute("method", "POST");
-            form.setAttribute("action", page + "?" + pageNumberParameterName + "=" + pageNumber + "&username=" + '<%=userName%>');
+            form.setAttribute("action", page + "?" + pageNumberParameterName + "=" + pageNumber + "&username=" + '<%=URLEncoder.encode(userName,"UTF-8")%>');
             var selectedRolesStr = "";
             $("input:checkbox:checked").each(function(index){
                 if(!$(this).is(":disabled")){
@@ -219,7 +219,7 @@
         <div id="workArea">
             <h3><fmt:message key="step.2.user"/></h3>
             
-            <form name="filterForm" method="post" action="add-step2.jsp?username=<%=userName%>">
+            <form name="filterForm" method="post" action="add-step2.jsp?username=<%=URLEncoder.encode(userName,"UTF-8")%>">
                 <table class="normal" style="width:100%">
                     <tr>
                         <td style="white-space:nowrap" class="leftCol-med"><fmt:message key="list.roles"/></td>
@@ -239,7 +239,7 @@
                               numberOfPages="<%=numberOfPages%>"
                               noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                               page="add-step2.jsp" pageNumberParameterName="pageNumber"
-                                parameters="<%="username="+userName%>"/>
+                              parameters="<%="username="+URLEncoder.encode(userName,"UTF-8")%>"/>
             
             <form method="post" action="add-finish.jsp" onsubmit="return doValidation();" name="edit_users" id="edit_users">
                 <table class="styledLeft">
@@ -321,7 +321,7 @@
                                       numberOfPages="<%=numberOfPages%>"
                                       noOfPageLinksToDisplay="<%=noOfPageLinksToDisplay%>"
                                       page="add-step2.jsp" pageNumberParameterName="pageNumber"
-                                      parameters="<%="username="+userName%>"/>
+                                      parameters="<%="username="+URLEncoder.encode(userName,"UTF-8")%>"/>
                     <%
                         if (roles != null) {
                             if(roles.length > 0){
@@ -388,7 +388,7 @@
         function doSelectAllRetrieved() {
             var form = document.createElement("form");
             form.setAttribute("method", "POST");
-            form.setAttribute("action", "add-step2.jsp?pageNumber=" + <%=pageNumber%> + "&username=" + '<%=userName%>');
+            form.setAttribute("action", "add-step2.jsp?pageNumber=" + <%=pageNumber%> + "&username=" + '<%=URLEncoder.encode(userName,"UTF-8")%>');
             var selectedRolesElem = document.createElement("input");
             selectedRolesElem.setAttribute("type", "hidden");
             selectedRolesElem.setAttribute("name", "selectedRoles");
@@ -402,7 +402,7 @@
         function doUnSelectAllRetrieved() {
             var form = document.createElement("form");
             form.setAttribute("method", "POST");
-            form.setAttribute("action", "add-step2.jsp?pageNumber=" + <%=pageNumber%> + "&username=" + '<%=userName%>');
+            form.setAttribute("action", "add-step2.jsp?pageNumber=" + <%=pageNumber%> + "&username=" + '<%=URLEncoder.encode(userName,"UTF-8")%>');
             var unselectedRolesElem = document.createElement("input");
             unselectedRolesElem.setAttribute("type", "hidden");
             unselectedRolesElem.setAttribute("name", "unselectedRoles");
@@ -413,4 +413,3 @@
         }
 
     </script>
-
