@@ -155,8 +155,8 @@ public class RegistryTopicManager implements TopicManager {
                 UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(
                         CarbonContext.getThreadLocalCarbonContext().getTenantId());
 
-                authorizePermissionsToLoggedInUser(loggedInUser, topicName, resourcePath,
-                                                   userRealm);
+                userRealm.getAuthorizationManager().authorizeUser(
+                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
             }
         } catch (RegistryException e) {
             throw new EventBrokerException("Cannot access the config registry", e);
@@ -266,6 +266,10 @@ public class RegistryTopicManager implements TopicManager {
                     }
                 }
             }
+            //Internal role create by topic name and grant subscribe and publish permission to it
+            //By this way we restricted permission to user who create topic and allow subscribe and publish
+            //Admin has to give permission to other roles to subscribe and publish if necessary
+            authorizePermissionsToLoggedInUser(loggedInUser, topicName, topicResourcePath, userRealm);
         } catch (UserStoreException e) {
             throw new EventBrokerException("Cannot access the user store manager", e);
         }
