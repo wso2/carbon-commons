@@ -78,7 +78,9 @@
      // retrieve session attributes
     String currentUser = (String) session.getAttribute("logged-user");
     UserRealmInfo userRealmInfo = (UserRealmInfo) session.getAttribute(UserAdminUIConstants.USER_STORE_INFO);
-    multipleUserStores = userRealmInfo.getMultipleUserStore();
+    if (userRealmInfo != null) {
+        multipleUserStores = userRealmInfo.getMultipleUserStore();
+    }
     java.lang.String errorAttribute = (java.lang.String) session.getAttribute(UserAdminUIConstants.DO_USER_LIST);
 
     String claimUri = request.getParameter("claimUri");

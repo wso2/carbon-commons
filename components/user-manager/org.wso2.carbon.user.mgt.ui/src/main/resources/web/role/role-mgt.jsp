@@ -106,7 +106,9 @@
 
     String currentUser = (String) session.getAttribute("logged-user");
     userRealmInfo = (UserRealmInfo)session.getAttribute(UserAdminUIConstants.USER_STORE_INFO);
-    multipleUserStores = userRealmInfo.getMultipleUserStore();
+    if (userRealmInfo != null) {
+        multipleUserStores = userRealmInfo.getMultipleUserStore();
+    }
     String errorAttribute = (String) session.getAttribute(UserAdminUIConstants.DO_ROLE_LIST);
     exceededDomains = (FlaggedName) session.getAttribute(UserAdminUIConstants.ROLE_LIST_CACHE_EXCEEDED);
 
