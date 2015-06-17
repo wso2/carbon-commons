@@ -25,6 +25,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
+import org.wso2.carbon.deployment.synchronizer.DeployementSynchronizerTenantMgtListner;
 import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizationManager;
 import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
 import org.wso2.carbon.deployment.synchronizer.repository.CarbonRepositoryUtils;
@@ -32,6 +33,7 @@ import org.wso2.carbon.deployment.synchronizer.services.DeploymentSynchronizerSe
 import org.wso2.carbon.deployment.synchronizer.internal.util.RepositoryReferenceHolder;
 import org.wso2.carbon.deployment.synchronizer.internal.util.ServiceReferenceHolder;
 import org.wso2.carbon.registry.core.service.RegistryService;
+import org.wso2.carbon.stratos.common.listeners.TenantMgtListener;
 import org.wso2.carbon.utils.Axis2ConfigurationContextObserver;
 import org.wso2.carbon.utils.ConfigurationContextService;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
@@ -80,6 +82,11 @@ public class DeploymentSynchronizerComponent {
             bundleContext.registerService(new String[]{DeploymentSynchronizerService.class.getName(),
                                                        org.wso2.carbon.core.deployment.DeploymentSynchronizer.class.getName()},
                                           new DeploymentSynchronizerServiceImpl(), null);
+
+            // register DeployementSynchronizerTenantMgtListner then can do the tenant related deployment synchronize actions
+            bundleContext.registerService(TenantMgtListener.class.getName(), new DeployementSynchronizerTenantMgtListner(),
+                    null);
+
             log.debug("Deployment synchronizer component activated");
         } catch (Throwable e) {
             log.info("Error activating Deployment Synchronizer component. " + e.getMessage(), e);

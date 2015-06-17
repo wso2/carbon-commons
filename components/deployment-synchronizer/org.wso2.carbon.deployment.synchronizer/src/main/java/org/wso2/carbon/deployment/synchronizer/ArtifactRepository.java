@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.deployment.synchronizer;
 
+import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.wso2.carbon.deployment.synchronizer.util.RepositoryConfigParameter;
 
 import java.util.List;
@@ -112,4 +113,12 @@ public interface ArtifactRepository {
      * @param tenantId tenant Id
      */
     public void cleanupTenantContext(int tenantId);
+
+    /**
+     * When deleting the tenant it should need to delete its repository as well
+     * This method will delete the given tenant's repository
+     *
+     * @param tenantId tenant Id of deleting tenant
+     */
+    public void delete(int tenantId)throws SVNClientException;
 }

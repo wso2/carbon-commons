@@ -758,6 +758,22 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
     }
 
     @Override
+    public void delete(int tenantId) throws SVNClientException {
+        TenantSVNRepositoryContext repoContext = tenantSVNRepositories.get(tenantId);
+        if (repoContext == null) {
+            log.warn("TenantSVNRepositoryContext not initialized for " + tenantId);
+            return;
+        }
+
+        ISVNClientAdapter svnClient = repoContext.getSvnClient();
+        SVNUrl svnUrl = repoContext.getSvnUrl();
+
+        SVNUrl[] tenantFolder = { svnUrl };
+        svnClient.remove(tenantFolder, "Tenant " + tenantId + " deleted from the repository");
+        this.cleanupTenantContext(tenantId);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
