@@ -182,7 +182,7 @@
                 if (claimUri != null && !"select".equalsIgnoreCase(claimUri)) {
                     ClaimValue claimValue = new ClaimValue();
                     claimValue.setClaimURI(claimUri);
-                    claimValue.setValue(filter);
+                    claimValue.setValue(modifiedFilter);
                     datas = client.listUserByClaim(claimValue, userDomainSelector, -1);
                 } else {
                     datas = client.listAllUsers(modifiedFilter, -1);
