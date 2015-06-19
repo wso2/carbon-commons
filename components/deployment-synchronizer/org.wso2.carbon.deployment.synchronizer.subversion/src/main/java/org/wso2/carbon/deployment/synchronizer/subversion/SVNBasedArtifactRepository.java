@@ -47,6 +47,7 @@ import org.wso2.carbon.deployment.synchronizer.subversion.util.SVNDataHolder;
 import org.wso2.carbon.tomcat.api.CarbonTomcatService;
 import org.wso2.carbon.utils.CarbonUtils;
 
+import javax.naming.OperationNotSupportedException;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -282,29 +283,29 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                 		 }
                     svnClient.addFile(file);
                     
-                    //If this is  a .war file then we need to add svn:ignore for unpack directory.
-                    if (isWARWebApp(filePath)) {
-                        String simpleName = getSimpleFileName(filePath);
-                        String ignorePattern = simpleName.replace(".war", "");
-                        String webAppsDir = getWebAppsDirPath(filePath);
-                        svnClient.addToIgnoredPatterns
-                                    (new File(webAppsDir), ignorePattern);
-                        if (log.isDebugEnabled()) {
-                             log.debug(" SVN Ignore : " + webAppsDir + " - " + ignorePattern);
-                                  }
-                         }
+//                    //If this is  a .war file then we need to add svn:ignore for unpack directory.
+//                    if (isWARWebApp(filePath)) {
+//                        String simpleName = getSimpleFileName(filePath);
+//                        String ignorePattern = simpleName.replace(".war", "");
+//                        String updateDir = getWebAppsDirPath(filePath);
+//                        svnClient.addToIgnoredPatterns
+//                                    (new File(webAppsDir), ignorePattern);
+//                        if (log.isDebugEnabled()) {
+//                             log.debug(" SVN Ignore : " + webAppsDir + " - " + ignorePattern);
+//                                  }
+//                         }
                     
                 } else {
                 	// For web apps we need to perform extra filtering here before adding to SVN.
-                	if (isWebApp(filePath)) {
-                	     String simpleName = getSimpleFileName(filePath);
-                	     if (!dirListToAddSVN.contains(simpleName)) {
-                	        if (log.isDebugEnabled()) {
-                	           log.debug(" Ignoring directory : " + filePath);
-                	            }
-                	        continue;
-                	          }
-                	   }
+//                	if (isWebApp(filePath)) {
+//                	     String simpleName = getSimpleFileName(filePath);
+//                	     if (!dirListToAddSVN.contains(simpleName)) {
+//                	        if (log.isDebugEnabled()) {
+//                	           log.debug(" Ignoring directory : " + filePath);
+//                	            }
+//                	        continue;
+//                	          }
+//                	   }
                 	
                     // Do not svn add directories with the recursive option.
                     // That will add child directories and files that we don't want to add.
@@ -352,6 +353,21 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
 
                 ISVNStatus[] status = svnClient.getStatus(root, true, false);
                 if (status != null && status.length > 0 && !isAllUnversioned(status)) {
+
+
+                    boolean var12 = true;
+
+                    for (ISVNStatus statu : status) {
+                        if (statu.getTextStatus() != SVNStatusKind.IGNORED) {
+                            var12 = false;
+                        }
+                    }
+
+                    if (var12) {
+                        return false;
+                    }
+
+
                     File[] files = new File[]{root};
                     svnClient.commit(files, "Commit initiated by deployment synchronizer", true);
 
@@ -676,82 +692,87 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
         return false;
     }
 
-    public boolean update(int tenantId, String rootPath, String filePath, int depth) throws DeploymentSynchronizerException {
-        log.info("SVN updating " + filePath);
-
-        TenantSVNRepositoryContext repoContext = tenantSVNRepositories.get(tenantId);
-        if (repoContext == null) {
-            log.warn("TenantSVNRepositoryContext not initialized for " + tenantId);
-            return false;
-        }
-        SVNUrl svnUrl = repoContext.getSvnUrl();
-        ISVNClientAdapter svnClient = repoContext.getSvnClient();
-        boolean ignoreExternals = repoContext.isIgnoreExternals();
-        boolean forceUpdate = repoContext.isForceUpdate();
-
-        File root = new File(rootPath);
-        boolean setDepth = false;
-        if (depth == Depth.infinity) {
-            setDepth = true;
-        }
-        long lastRevisionNumber = -1;
-        long newRevisionNumber = -1;
-        try {
-            svnClient.cleanup(root);
-
-            if (CarbonUtils.isWorkerNode()) {
-                if (log.isDebugEnabled()) {
-                    log.debug("reverting " + root);
-                }
-                svnClient.revert(root, true);
-            }
-
-            int tries = 0;
-            do {
-                try {
-                    tries++;
-                    lastRevisionNumber = svnClient.getSingleStatus(root).
-                            getLastChangedRevision().getNumber();
-                    if (svnClient instanceof CmdLineClientAdapter) {
-                        // CmdLineClientAdapter does not support all the options
-                        newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
-                        if (log.isDebugEnabled()) {
-                            log.debug("files were updated to revision number: " + newRevisionNumber +
-                                    " using CmdLineClientAdapter");
-                        }
-                    } else {
-
-                        newRevisionNumber = svnClient.update(root, filePath, SVNRevision.HEAD,
-                                depth, setDepth,
-                                ignoreExternals, forceUpdate);
-                        if (log.isDebugEnabled()) {
-                            log.debug("files were updated to revision number: " + newRevisionNumber +
-                                    " using SVN Kit");
-                        }
-                    }
-                    break;
-                } catch (SVNClientException e) {
-                    if (tries < 10 &&
-                            (e.getMessage().contains("an unversioned file of the same name already exists") ||
-                                    e.getMessage().contains("an unversioned directory of the same name already exists"))) {
-                        log.info("Unversioned file problem. Retrying " + tries);
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException ignored) {
-                        }
-                        cleanupUnversionedFiles(tenantId, svnUrl, root);
-                    } else {
-                        throw e;
-                    }
-                }
-            } while (tries < 10); // try to recover & retry
-            return newRevisionNumber > lastRevisionNumber;
-        } catch (SVNClientException e) {
-            handleException("Error while checking out or updating artifacts from the " +
-                    "SVN repository", e);
-        }
-        return false;
+    @Override
+    public boolean update(int tenantId, String rootPath, String filePathToUpdate, int depth) throws DeploymentSynchronizerException {
+        throw new UnsupportedOperationException();
     }
+
+//    public boolean update(int tenantId, String rootPath, String filePath, int depth) throws DeploymentSynchronizerException {
+//        log.info("SVN updating " + filePath);
+//
+//        TenantSVNRepositoryContext repoContext = tenantSVNRepositories.get(tenantId);
+//        if (repoContext == null) {
+//            log.warn("TenantSVNRepositoryContext not initialized for " + tenantId);
+//            return false;
+//        }
+//        SVNUrl svnUrl = repoContext.getSvnUrl();
+//        ISVNClientAdapter svnClient = repoContext.getSvnClient();
+//        boolean ignoreExternals = repoContext.isIgnoreExternals();
+//        boolean forceUpdate = repoContext.isForceUpdate();
+//
+//        File root = new File(rootPath);
+//        boolean setDepth = false;
+//        if (depth == Depth.infinity) {
+//            setDepth = true;
+//        }
+//        long lastRevisionNumber = -1;
+//        long newRevisionNumber = -1;
+//        try {
+//            svnClient.cleanup(root);
+//
+//            if (CarbonUtils.isWorkerNode()) {
+//                if (log.isDebugEnabled()) {
+//                    log.debug("reverting " + root);
+//                }
+//                svnClient.revert(root, true);
+//            }
+//
+//            int tries = 0;
+//            do {
+//                try {
+//                    tries++;
+//                    lastRevisionNumber = svnClient.getSingleStatus(root).
+//                            getLastChangedRevision().getNumber();
+//                    if (svnClient instanceof CmdLineClientAdapter) {
+//                        // CmdLineClientAdapter does not support all the options
+//                        newRevisionNumber = svnClient.update(root, SVNRevision.HEAD, RECURSIVE);
+//                        if (log.isDebugEnabled()) {
+//                            log.debug("files were updated to revision number: " + newRevisionNumber +
+//                                    " using CmdLineClientAdapter");
+//                        }
+//                    } else {
+//
+//                        newRevisionNumber = svnClient.update(root, filePath, SVNRevision.HEAD,
+//                                depth, setDepth,
+//                                ignoreExternals, forceUpdate);
+//                        if (log.isDebugEnabled()) {
+//                            log.debug("files were updated to revision number: " + newRevisionNumber +
+//                                    " using SVN Kit");
+//                        }
+//                    }
+//                    break;
+//                } catch (SVNClientException e) {
+//                    if (tries < 10 &&
+//                            (e.getMessage().contains("an unversioned file of the same name already exists") ||
+//                                    e.getMessage().contains("an unversioned directory of the same name already exists"))) {
+//                        log.info("Unversioned file problem. Retrying " + tries);
+//                        try {
+//                            Thread.sleep(5000);
+//                        } catch (InterruptedException ignored) {
+//                        }
+//                        cleanupUnversionedFiles(tenantId, svnUrl, root);
+//                    } else {
+//                        throw e;
+//                    }
+//                }
+//            } while (tries < 10); // try to recover & retry
+//            return newRevisionNumber > lastRevisionNumber;
+//        } catch (SVNClientException e) {
+//            handleException("Error while checking out or updating artifacts from the " +
+//                    "SVN repository", e);
+//        }
+//        return false;
+//    }
 
     public void cleanupTenantContext(int tenantId) {
         tenantSVNRepositories.remove(tenantId);
