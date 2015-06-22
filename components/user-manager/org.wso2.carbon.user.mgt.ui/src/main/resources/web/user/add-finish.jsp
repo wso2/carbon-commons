@@ -60,7 +60,7 @@
         String[] userRoles = userBean.getUserRoles();
         userBean.removeUserRoles();
 
-        client.addUser(Util.decodeHTMLCharacters(username), userPassword, userBean.getUserRoles(), claims, null);
+        client.addUser(Util.decodeHTMLCharacters(username), userPassword, userRoles, claims, null);
 
         session.removeAttribute(UserAdminUIConstants.USER_LIST_CACHE);
         session.removeAttribute(UserAdminUIConstants.USER_LIST_CACHE_EXCEEDED);
