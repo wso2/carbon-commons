@@ -48,6 +48,11 @@ public class UserBean {
     public String[] getUserRoles() {
         return Arrays.copyOf(userRoles, userRoles.length);
     }
+
+    public void removeUserRoles(){
+        this.userRoles = new String[0];
+    }
+
     public void setUserRoles(String[] userRoles) {
         this.userRoles = Arrays.copyOf(userRoles, userRoles.length);
     }

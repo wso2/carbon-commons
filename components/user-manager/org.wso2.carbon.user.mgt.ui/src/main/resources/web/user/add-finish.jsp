@@ -56,6 +56,10 @@
             userPassword = null;
         }
         userBean.addUserRoles((Map<String,Boolean>)session.getAttribute("checkedRolesMap"));
+
+        String[] userRoles = userBean.getUserRoles();
+        userBean.removeUserRoles();
+
         client.addUser(Util.decodeHTMLCharacters(username), userPassword, userBean.getUserRoles(), claims, null);
 
         session.removeAttribute(UserAdminUIConstants.USER_LIST_CACHE);
