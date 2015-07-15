@@ -18,6 +18,8 @@
 
 package org.wso2.carbon.deployment.synchronizer.internal;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizationManager;
 import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizer;
 import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
@@ -28,7 +30,10 @@ import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.deployment.GhostDeployerUtils;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
-public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizerService, org.wso2.carbon.core.deployment.DeploymentSynchronizer {
+public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizerService,
+                                                          org.wso2.carbon.core.deployment.DeploymentSynchronizer {
+
+    private static final Log log = LogFactory.getLog(DeploymentSynchronizerServiceImpl.class);
 
     private DeploymentSynchronizationManager syncManager = DeploymentSynchronizationManager.getInstance();
 
@@ -72,6 +77,9 @@ public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizer
                         CarbonRepositoryUtils.newCarbonRepositorySynchronizer(tenantId);
 
                 if(synchronizer == null){
+                    if (log.isDebugEnabled()) {
+                        log.debug("Repository Deployment Synchronizer creation failed for tenant - " + tenantId);
+                    }
                     return false;
                 }
 
@@ -108,6 +116,9 @@ public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizer
                         CarbonRepositoryUtils.newCarbonRepositorySynchronizer(tenantId);
 
                 if(synchronizer == null){
+                    if (log.isDebugEnabled()) {
+                        log.debug("Repository Deployment Synchronizer creation failed for tenant - " + tenantId);
+                    }
                     return false;
                 }
                 synchronizer.doInitialSyncUp();
@@ -151,8 +162,9 @@ public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizer
 
         DeploymentSynchronizer synchronizer = syncManager.getSynchronizer(filePath);
         if (synchronizer == null) {
-            throw new DeploymentSynchronizerException("A repository synchronizer has not been " +
-                                                      "engaged for the file path: " + filePath);
+            log.warn("A repository synchronizer has not been " +
+                    "engaged for the file path: " + filePath);
+            return null;
         }
         return synchronizer;
     }
