@@ -34,9 +34,7 @@
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Carbon-Component>UIBundle</Carbon-Component>
                         <Export-Package>
-                            org.wso2.carbon.ndatasource.ui,
-                            org.wso2.carbon.ndatasource.ui.config,
-                            org.wso2.carbon.ndatasource.ui.i18n,
+                            org.wso2.carbon.ndatasource.ui.*,
                             !org.wso2.carbon.ndatasource.ui.stub.*,
                         </Export-Package>
                         <Import-Package>
