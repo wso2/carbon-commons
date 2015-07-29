@@ -111,7 +111,6 @@
                                 <bundleDef>commons-beanutils.wso2:commons-beanutils</bundleDef>
                                 <bundleDef>commons-digester.wso2:commons-digester</bundleDef>
                                 <bundleDef>jcommon.wso2:jcommon</bundleDef>
-                                <bundleDef>jasper-jdt.wso2:jasper-jdt</bundleDef>
                                 <bundleDef>jfree.wso2:jfreechart</bundleDef>
                             </bundles>
                             <importFeatures>
