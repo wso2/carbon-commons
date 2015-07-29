@@ -37,6 +37,7 @@
                             org.wso2.carbon.ndatasource.ui,
                             org.wso2.carbon.ndatasource.ui.config,
                             org.wso2.carbon.ndatasource.ui.i18n,
+                            !org.wso2.carbon.ndatasource.ui.stub.*,
                         </Export-Package>
                         <Import-Package>
                             org.apache.axis2.*; version="${axis2.osgi.version.range}",
