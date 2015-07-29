@@ -35,6 +35,7 @@
                         <Carbon-Component>UIBundle</Carbon-Component>
                         <Export-Package>
                             org.wso2.carbon.ndatasource.ui.*,
+                            !org.wso2.carbon.ndatasource.ui.stub.*,
                         </Export-Package>
                         <Import-Package>
                             org.apache.axis2.*; version="${axis2.osgi.version.range}",
