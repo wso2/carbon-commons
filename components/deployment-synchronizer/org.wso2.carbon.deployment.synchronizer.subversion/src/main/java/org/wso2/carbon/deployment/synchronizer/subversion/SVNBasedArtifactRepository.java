@@ -457,8 +457,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         log.debug("Checked out using CmdLineClientAdapter");
                     }
                 } else {
-                    svnClient.checkout(svnUrl, root, SVNRevision.HEAD,
-                            Depth.infinity, ignoreExternals, forceUpdate);
+                    svnClient.checkout(svnUrl, root, SVNRevision.HEAD, Depth.infinity, ignoreExternals, true);
                     if (log.isDebugEnabled()) {
                         log.debug("Checked out using SVN Kit");
                     }
