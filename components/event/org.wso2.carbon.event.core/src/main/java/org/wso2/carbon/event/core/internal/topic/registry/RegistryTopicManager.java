@@ -157,6 +157,10 @@ public class RegistryTopicManager implements TopicManager {
 
                 userRealm.getAuthorizationManager().authorizeUser(
                         loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
+                userRealm.getAuthorizationManager().authorizeUser(
+                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
+                userRealm.getAuthorizationManager().authorizeUser(
+                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
             }
         } catch (RegistryException e) {
             throw new EventBrokerException("Cannot access the config registry", e);
