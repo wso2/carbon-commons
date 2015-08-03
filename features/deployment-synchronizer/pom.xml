@@ -60,7 +60,7 @@
                 <artifactId>org.wso2.carbon.deployment.synchronizer.subversion</artifactId>
             </dependency>
 	    <dependency>
-                <groupId>org.tigris</groupId>
+                <groupId>org.wso2.orbit.org.tigris</groupId>
                 <artifactId>svn-client-adapter</artifactId>
             </dependency>
         </dependencies>
