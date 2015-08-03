@@ -67,8 +67,7 @@
         <dependency>
             <groupId>org.wso2.orbit.org.tigris</groupId>
             <artifactId>svn-client-adapter</artifactId>
-	    <version>1.10.9.wso2v1</version>
-        </dependency>
+	    </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.utils</artifactId>
