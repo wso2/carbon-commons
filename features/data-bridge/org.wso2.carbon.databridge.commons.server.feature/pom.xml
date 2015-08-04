@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
@@ -32,22 +33,22 @@
         </dependency>
     </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.wso2.maven</groupId>
-				<artifactId>carbon-p2-plugin</artifactId>
-				<version>${carbon.p2.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>p2-feature-generation</id>
-						<phase>package</phase>
-						<goals>
-							<goal>p2-feature-gen</goal>
-						</goals>
-						<configuration>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.wso2.maven</groupId>
+                <artifactId>carbon-p2-plugin</artifactId>
+                <version>${carbon.p2.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>p2-feature-generation</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>p2-feature-gen</goal>
+                        </goals>
+                        <configuration>
                             <id>org.wso2.carbon.databridge.commons.server</id>
-							<propertiesFile>../../../etc/feature.properties</propertiesFile>
+                            <propertiesFile>../../../etc/feature.properties</propertiesFile>
                             <adviceFile>
                                 <properties>
                                     <propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
@@ -55,13 +56,15 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.databridge.commons:${carbon.commons.version}</bundleDef>
+                                <bundleDef>
+                                    org.wso2.carbon.commons:org.wso2.carbon.databridge.commons:${carbon.commons.version}
+                                </bundleDef>
                                 <bundleDef>org.json.wso2:json</bundleDef>
-                                <bundleDef>com.google.code.gson:gson</bundleDef>
                             </bundles>
 
-							<importFeatures>
-							    <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>
+                            <importFeatures>
+                                <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}
+                                </importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>
@@ -69,5 +72,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>
