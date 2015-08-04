@@ -113,6 +113,12 @@ public class LoggingServiceComponent {
      */
     private void initLoggingConfiguration() throws Exception {
 
+        // If it is a worker node, just read the configuration from the registry
+        if (CarbonUtils.isWorkerNode()) {
+            LoggingUtil.loadCustomConfiguration();
+            return;
+        }
+
         //checking whether log4j.properies file is changed.
         File confFolder = new File(CarbonUtils.getCarbonConfigDirPath());
         String loggingPropFilePath = confFolder.getAbsolutePath() + File.separator +
