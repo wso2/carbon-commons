@@ -104,7 +104,6 @@ public class DeploymentSynchronizer {
         }
 
         log.info("Starting a synchronizer on file system at: " + filePath);
-
         try {
             doInitialSyncUp();
             if (autoCheckout) {
@@ -289,20 +288,21 @@ public class DeploymentSynchronizer {
     }
 
     public void doInitialSyncUp() throws DeploymentSynchronizerException {
-        log.info("Doing initial sync up...");
+        log.info("Started initial artifact synchronization for tenant: " + tenantId);
         if (autoCommit) {
             if (lastCheckoutTime == -1L) {
-                log.info("Checking out...");
+                log.info("Checking out artifacts...");
                 checkout();
             }
-            log.info("Committing...");
+            log.info("Committing artifacts...");
             commit();
         }
 
         if (autoCheckout && lastCheckoutTime == -1L) {
-            log.info("Checking out...");
+            log.info("Checking out artifacts...");
             checkout();
         }
+        log.info("Completed initial artifact synchronization for tenant: " + tenantId);
     }
 
     public boolean syncGhostMetaArtifacts() throws DeploymentSynchronizerException {

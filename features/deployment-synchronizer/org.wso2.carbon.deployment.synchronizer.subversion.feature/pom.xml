@@ -40,7 +40,7 @@
             <artifactId>org.wso2.carbon.deployment.synchronizer.subversion</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.tigris</groupId>
+            <groupId>org.wso2.orbit.org.tigris</groupId>
             <artifactId>svn-client-adapter</artifactId>
         </dependency>
     </dependencies>
@@ -70,7 +70,7 @@
                             <bundles>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.deployment.synchronizer.subversion
                                 </bundleDef>
-                                <bundleDef>org.tigris:svn-client-adapter</bundleDef>
+                                <bundleDef>org.wso2.orbit.org.tigris:svn-client-adapter</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.deployment.synchronizer.server</importFeatureDef>

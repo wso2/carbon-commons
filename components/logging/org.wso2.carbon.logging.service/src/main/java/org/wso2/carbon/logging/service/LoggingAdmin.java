@@ -16,6 +16,8 @@
 
 package org.wso2.carbon.logging.service;
 
+import org.apache.axis2.clustering.ClusteringAgent;
+import org.apache.axis2.clustering.ClusteringFault;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Appender;
@@ -33,7 +35,9 @@ import org.wso2.carbon.logging.service.data.AppenderData;
 import org.wso2.carbon.logging.service.data.LogData;
 import org.wso2.carbon.logging.service.data.LoggerData;
 import org.wso2.carbon.logging.service.data.SyslogData;
+import org.wso2.carbon.logging.service.internal.DataHolder;
 import org.wso2.carbon.logging.service.registry.RegistryManager;
+import org.wso2.carbon.logging.service.sync.LoggingConfigSyncRequest;
 import org.wso2.carbon.logging.service.util.LoggingConstants;
 import org.wso2.carbon.logging.service.util.LoggingUtil;
 import org.wso2.carbon.registry.core.Collection;
@@ -305,6 +309,10 @@ public class LoggingAdmin {
                 }
             }
 
+            if (persist) {
+                sendLoggingConfigSyncClusterMessage();
+            }
+
             if ((appender.getLayout() != null) &&
                     (appender.getLayout() instanceof PatternLayout)) {
                 ((PatternLayout) appender.getLayout()).setConversionPattern(appenderPattern);
@@ -366,6 +374,8 @@ public class LoggingAdmin {
                     logLevel);
             registryManager.updateConfigurationProperty(LoggingConstants.SYSTEM_LOG_PATTERN,
                     logPattern);
+
+            sendLoggingConfigSyncClusterMessage();
         }
         // update root logger details
         Logger rootLogger = Logger.getRootLogger();
@@ -436,6 +446,8 @@ public class LoggingAdmin {
         if (logger != null) {
             if (persist) {
                 registryManager.updateLogger(loggerName, loggerLevel, additivity);
+
+                sendLoggingConfigSyncClusterMessage();
             }
 
             logger.setLevel(Level.toLevel(loggerLevel));
@@ -554,4 +566,17 @@ public class LoggingAdmin {
         }
         return returnValue;
     }
+
+    private void sendLoggingConfigSyncClusterMessage() {
+        ClusteringAgent clusteringAgent =
+                DataHolder.getInstance().getServerConfigContext().getAxisConfiguration().getClusteringAgent();
+        if (clusteringAgent != null) {
+            try {
+                clusteringAgent.sendMessage(new LoggingConfigSyncRequest(), true);
+            } catch (ClusteringFault clusteringFault) {
+                log.error("Logging configuration synchronization cluster message failed.", clusteringFault);
+            }
+        }
+    }
+
 }

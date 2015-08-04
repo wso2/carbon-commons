@@ -47,7 +47,7 @@
                 <artifactId>org.wso2.carbon.ui</artifactId>
             </dependency>
 	    <dependency>
-                <groupId>org.tigris</groupId>
+                <groupId>org.wso2.orbit.org.tigris</groupId>
                 <artifactId>svn-client-adapter</artifactId>
             </dependency>
         </dependencies>

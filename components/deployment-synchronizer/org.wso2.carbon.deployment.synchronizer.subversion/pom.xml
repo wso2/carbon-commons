@@ -65,9 +65,9 @@
             <artifactId>org.wso2.carbon.deployment.synchronizer</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.tigris</groupId>
+            <groupId>org.wso2.orbit.org.tigris</groupId>
             <artifactId>svn-client-adapter</artifactId>
-        </dependency>
+	    </dependency>
         <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.utils</artifactId>
