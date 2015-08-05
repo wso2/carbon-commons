@@ -23,23 +23,11 @@ import java.util.Map;
 public interface Task {
 
     /**
-     * This method is called initially to set the task properties.
-     * 
-     * @param properties
-     *            The task properties
-     */
-    public void setProperties(Map<String, String> properties);
-
-    /**
-     * This method is called once after properties are set in the task, and
-     * right before the task is executed.
-     */
-    public void init();
-
-    /**
      * This method will be called when the task is started, the task logic
      * should go here.
+     *
+     * @param properties task properties
      */
-    public void execute();
+    public void execute(Map<String, String> properties);
 
 }
