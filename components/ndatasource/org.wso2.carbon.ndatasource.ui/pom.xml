@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>ndatasource</artifactId>
-        <version>4.4.4-SNAPSHOT</version>
+        <version>4.4.5-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -34,8 +34,9 @@
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Carbon-Component>UIBundle</Carbon-Component>
                         <Export-Package>
-                            org.wso2.carbon.ndatasource.ui.*,
-                            !org.wso2.carbon.ndatasource.ui.stub.*,
+                            org.wso2.carbon.ndatasource.ui,
+                            org.wso2.carbon.ndatasource.ui.config,
+                            org.wso2.carbon.ndatasource.ui.i18n,
                         </Export-Package>
                         <Import-Package>
                             org.apache.axis2.*; version="${axis2.osgi.version.range}",

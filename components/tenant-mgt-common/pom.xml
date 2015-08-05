@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>carbon-commons</artifactId>
-        <version>4.4.4-SNAPSHOT</version>
+        <version>4.4.5-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>tenant-mgt-commons</artifactId>
-    <version>4.4.4-SNAPSHOT</version>
+    <version>4.4.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Tenant Mgt Common APIs Module</name>
     <url>http://wso2.org</url>
