@@ -76,7 +76,6 @@
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.event.ui</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.event.stub</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.event.client.stub</bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.um.ws.api.stub</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.ui:${carbon.kernel.version}</importFeatureDef>
