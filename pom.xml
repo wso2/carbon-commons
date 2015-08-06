@@ -30,9 +30,6 @@
         <module>service-stubs/remote-tasks</module>
         <module>service-stubs/reporting</module>
         <module>service-stubs/url-mapper</module>
-        <module>service-stubs/userstore-config</module>
-        <module>service-stubs/user-manager</module>
-        <module>service-stubs/remote-usermgt</module>
         <module>service-stubs/event</module>
         <module>service-stubs/ndatasource</module>
         <module>service-stubs/soap-tracer</module>
@@ -41,7 +38,6 @@
         <module>service-stubs/message-flows</module>
 
         <!-- Components -->
-        <module>components/user-manager</module>
 	<module>components/tenant-mgt-common</module>
         <module>components/authentication</module>
         <module>components/deployment-synchronizer</module>
@@ -60,8 +56,6 @@
         <module>components/tryit</module>
         <module>components/wsdl2form</module>
         <module>components/logging</module>
-        <module>components/userstore-config</module>
-        <module>components/remote-usermgt</module>
         <module>components/event</module>
         <module>components/ndatasource</module>
         <module>components/ws-discovery-core</module>
@@ -86,8 +80,6 @@
         <module>features/transaction-manager</module>
         <module>features/tryit</module>
         <module>features/url-mapper</module>
-        <module>features/user-manager</module>
-        <module>features/remote-usermgt</module>
         <module>features/event</module>
         <module>features/ndatasource</module>
         <module>features/ws-discovery-core</module>
@@ -159,11 +151,6 @@
                 <artifactId>org.wso2.carbon.user.core</artifactId>
                 <version>${carbon.kernel.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.user.mgt</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
              <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.identity.authentication</artifactId>
@@ -193,16 +180,6 @@
                 <version>${carbon.commons.version}</version>
             <type>zip</type>
         </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.user.mgt.common</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.user.mgt.ui</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.ui</artifactId>
@@ -464,42 +441,9 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.um.ws.api.stub</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.um.ws.api</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.url.mapper.clustermessage</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
-
-
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.identity.user.store.configuration.stub</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.identity.user.store.configuration</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.identity.user.store.configuration.ui</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.identity.user.store.configuration.deployer</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-
 
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
@@ -728,18 +672,6 @@
             <!-- Feature related dependencies -->
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.user.mgt.server.feature</artifactId>
-                <version>${carbon.commons.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.user.mgt.ui.feature</artifactId>
-                <version>${carbon.commons.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.url.mapper</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
@@ -874,23 +806,6 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.reporting.template.core</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.um.ws.service.server.feature</artifactId>
-                <type>zip</type>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.um.ws.service.client.feature</artifactId>
-                <type>zip</type>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.um.ws.service</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
@@ -1625,11 +1540,6 @@
                 <artifactId>org.wso2.carbon.ndatasource.datasources.feature</artifactId>
                 <version>${carbon.commons.version}</version>
                 <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.user.mgt.stub</artifactId>
-                <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
                 <groupId>rhino.wso2</groupId>
