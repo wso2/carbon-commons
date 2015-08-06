@@ -138,4 +138,7 @@ public class StratosConstants {
     public static final String EMAIL_CONFIG= "email";
     public static final String MULTITENANCY_CONFIG_FOLDER = "multitenancy";
 
+    //display name
+    public static final String DISPLAY_NAME = "name";
+
 }

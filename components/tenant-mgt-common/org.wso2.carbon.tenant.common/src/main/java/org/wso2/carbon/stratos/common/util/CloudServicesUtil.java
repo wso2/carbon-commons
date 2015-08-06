@@ -15,7 +15,6 @@ import org.wso2.carbon.registry.core.RegistryConstants;
 import org.wso2.carbon.registry.core.Resource;
 import org.wso2.carbon.registry.core.session.UserRegistry;
 import org.wso2.carbon.user.core.UserStoreException;
-import org.wso2.carbon.user.mgt.UserMgtConstants;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 public class CloudServicesUtil {
@@ -122,7 +121,7 @@ public class CloudServicesUtil {
             if (active) {
                 if (!configRegistry.resourceExists(path)) {
                     Collection collection = configRegistry.newCollection();
-                    collection.setProperty(UserMgtConstants.DISPLAY_NAME, name);
+                    collection.setProperty(StratosConstants.DISPLAY_NAME, name);
                     configRegistry.put(path, collection);
                 }
             } else {
