@@ -1666,13 +1666,11 @@
                 </property>
             </activation>
             <modules>
-                <module>components/user-manager</module>
                 <module>components/tenant-mgt-common</module>
                 <module>components/authentication</module>
                 <module>components/deployment-synchronizer</module>
                 <module>components/application-mgt</module>
                 <module>components/ws-discovery</module>
-                <module>components/data-bridge</module>
                 <module>components/ganalytics</module>
                 <module>components/caching-invalidator</module>
                 <module>components/cluster-mgt</module>
@@ -1685,8 +1683,6 @@
                 <module>components/tryit</module>
                 <module>components/wsdl2form</module>
                 <module>components/logging</module>
-                <module>components/userstore-config</module>
-                <module>components/remote-usermgt</module>
                 <module>components/event</module>
                 <module>components/ndatasource</module>
                 <module>components/ws-discovery-core</module>
@@ -1708,7 +1704,7 @@
 
         <carbon.commons.version>4.5.0-SNAPSHOT</carbon.commons.version>
         <carbon.commons.exp.package.version>${carbon.commons.version}</carbon.commons.exp.package.version>
-        <carbon.commons.imp.package.version>[4.5.0-SNAPSHOT, 4.6.0)</carbon.commons.imp.package.version>
+        <carbon.commons.imp.package.version>[4.5.0, 4.6.0)</carbon.commons.imp.package.version>
 
         <version.jettison>1.3.4</version.jettison>
 
