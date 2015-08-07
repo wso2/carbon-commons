@@ -18,28 +18,25 @@ package org.wso2.carbon.ntask.core;
 import java.util.Map;
 
 /**
- * Task interface to be implemented by all tasks.
+ * This represents an abstract class implementation of a Task.
+ * 
+ * @see Task
  */
-public interface Task {
+public abstract class AbstractTask implements Task {
 
-    /**
-     * This method is called initially to set the task properties.
-     * 
-     * @param properties
-     *            The task properties
-     */
-    public void setProperties(Map<String, String> properties);
+    private Map<String, String> properties;
 
-    /**
-     * This method is called once after properties are set in the task, and
-     * right before the task is executed.
-     */
-    public void init();
+    @Override
+    public void setProperties(Map<String, String> properties) {
+        this.properties = properties;
+    }
 
-    /**
-     * This method will be called when the task is started, the task logic
-     * should go here.
-     */
-    public void execute();
+    @Override
+    public void init() {
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
+    }
 
 }

@@ -368,11 +368,13 @@ public class RemoteTaskManager implements TaskManager {
                 try {
                     addRunningTask(runningTaskId);
                     Task task = (Task) Class.forName(taskInfo.getTaskClass()).newInstance();
+                    task.setProperties(taskInfo.getProperties());
                     try {
                         PrivilegedCarbonContext.startTenantFlow();
                         PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(
                                 getTenantId(), true);
-                        task.execute(taskInfo.getProperties());
+                        task.init();
+                        task.execute();
                     } finally {
                         PrivilegedCarbonContext.endTenantFlow();
                     }
