@@ -18,19 +18,19 @@
  */
 package org.wso2.carbon.ntask.solutions.webservice;
 
+import java.util.Map;
+
 import org.apache.axiom.om.OMElement;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.ServiceClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.ntask.core.Task;
-
-import java.util.Map;
+import org.wso2.carbon.ntask.core.AbstractTask;
 
 /**
  * This represents a task implementation for a web service invocation.
  */
-public class WebServiceCallTask implements Task {
+public class WebServiceCallTask extends AbstractTask {
 	
 	private static final Log log = LogFactory.getLog(WebServiceCallTask.class);
 
@@ -57,11 +57,33 @@ public class WebServiceCallTask implements Task {
 	private int taskCount;
 	
 	private ServicePayloadHandler servicePayloadHandler;
-
+	
 	public WebServiceCallTask() {
+	}
+	
+	@Override
+	public void init() {
 		try {
-			this.serviceClient = new ServiceClient();
-			this.serviceClient.getOptions().setCallTransportCleanup(true);
+		    this.serviceClient = new ServiceClient();
+		    this.serviceClient.getOptions().setCallTransportCleanup(true);
+		    Map<String, String> props = this.getProperties();
+		    String action = props.get(SERVICE_ACTION);
+		    if (action != null) {
+		    	this.getServiceClient().getOptions().setAction(action);
+		    }
+		    String epr = props.get(SERVICE_TARGET_EPR);
+			if (epr != null) {
+				this.getServiceClient().setTargetEPR(new EndpointReference(epr));
+			}
+		    String servicePayloadHandlerClass = props.get(SERVICE_PAYLOAD_HANDLER_CLASS);
+		    if (servicePayloadHandlerClass != null) {
+		    	this.servicePayloadHandler = (ServicePayloadHandler) Class.forName(
+		    			servicePayloadHandlerClass).newInstance();
+		    }
+		    this.serviceMEP = props.get(SERVICE_MEP);
+		    if (this.getServiceMEP() == null) {
+		    	this.serviceMEP = SERVICE_MEP_IN_ONLY;
+		    }
 		} catch (Exception e) {
 			throw new RuntimeException("Error while initializing the web service call task", e);
 		}
@@ -102,25 +124,8 @@ public class WebServiceCallTask implements Task {
 	}
 	
 	@Override
-	public void execute(Map<String, String> properties) {
+	public void execute() {
 		try {
-			String action = properties.get(SERVICE_ACTION);
-			if (action != null) {
-				this.getServiceClient().getOptions().setAction(action);
-			}
-			String epr = properties.get(SERVICE_TARGET_EPR);
-			if (epr != null) {
-				this.getServiceClient().setTargetEPR(new EndpointReference(epr));
-			}
-			String servicePayloadHandlerClass = properties.get(SERVICE_PAYLOAD_HANDLER_CLASS);
-			if (servicePayloadHandlerClass != null) {
-				this.servicePayloadHandler =
-						(ServicePayloadHandler) Class.forName(servicePayloadHandlerClass).newInstance();
-			}
-			this.serviceMEP = properties.get(SERVICE_MEP);
-			if (this.getServiceMEP() == null) {
-				this.serviceMEP = SERVICE_MEP_IN_ONLY;
-			}
 			OMElement payload = this.extractInputPayload();
 			if (SERVICE_MEP_IN_OUT.equals(this.getServiceMEP())) {
 				OMElement data = this.getServiceClient().sendReceive(payload);
