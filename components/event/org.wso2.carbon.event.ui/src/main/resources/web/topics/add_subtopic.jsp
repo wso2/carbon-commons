@@ -305,7 +305,7 @@
                         <div class="paginatorWrapper">
                             <carbon:paginator pageNumber="<%=pageNumber%>" numberOfPages="<%=numberOfPages%>"
                                               page="add_subtopic.jsp" pageNumberParameterName="pageNumber"
-                                              resourceBundle="org.wso2.carbon.andes.ui.i18n.Resources"
+                                              resourceBundle="org.wso2.carbon.event.ui.i18n.Resources"
                                               prevKey="prev" nextKey="next"
                                               parameters="<%=concatenatedParams%>"/>
                         </div>
