@@ -69,6 +69,11 @@ function isDSValid(namemsg, invalidnamemsg, drivermsg, urlmsg, customdsmsg) {
         CARBON.showWarningDialog(namemsg);
         return false;
     }
+
+    if (/\s/g.test(name)) {
+        CARBON.showWarningDialog(invalidnamemsg);
+        return false;
+    }
     
     var dsType = document.getElementById('dsType').value;
     var customDsType = document.getElementById('customDsType').value;
