@@ -62,7 +62,7 @@
             <order>25</order>
             <style-class>home</style-class>
             <icon>../eventing/images/topics.gif</icon>
-            <require-permission>/permission/admin/login</require-permission>
+            <require-permission>/permission/admin/manage/topic</require-permission>
         </menu>
         <menu>
             <id>topics_tree_menu</id>
@@ -74,6 +74,7 @@
             <order>41</order>
             <style-class>home</style-class>
             <icon>../eventing/images/list.gif</icon>
+            <require-permission>/permission/admin/manage/topic</require-permission>
         </menu>
          <menu>
             <id>topics_add_menu</id>
@@ -85,6 +86,7 @@
             <order>45</order>
             <style-class>home</style-class>
             <icon>../eventing/images/add.gif</icon>
+             <require-permission>/permission/admin/manage/topic/addTopic</require-permission>
         </menu>
     </menus>
 </component>
