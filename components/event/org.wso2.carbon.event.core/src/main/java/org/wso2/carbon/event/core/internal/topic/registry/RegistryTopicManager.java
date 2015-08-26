@@ -41,6 +41,8 @@ import org.wso2.carbon.user.core.util.UserCoreUtil;
 import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -444,30 +446,34 @@ public class RegistryTopicManager implements TopicManager {
     @Override
     public String[] getBackendRoles() throws EventBrokerException {
         UserRealm userRealm = CarbonContext.getThreadLocalCarbonContext().getUserRealm();
+        String[] cleanedRoles = new String[0];
         try {
             String adminRole =
                     EventBrokerHolder.getInstance().getRealmService().
                             getBootstrapRealmConfiguration().getAdminRoleName();
             String[] allRoles = userRealm.getUserStoreManager().getRoleNames();
-            // check if more roles available than admin role and anonymous role
+            // check if there is only admin role exists.
             if (allRoles != null && allRoles.length > 1) {
-                String[] rolesExceptAdminRole = new String[allRoles.length - 1];
-                int index = 0;
-                for (String role : allRoles) {
-                    if (!(role.equals(adminRole) ||
-                          CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME.equals(role))) {
-                        rolesExceptAdminRole[index] = role;
-                        index++;
+                // check if more roles available than admin role and anonymous role
+                List<String> allRolesArrayList = new ArrayList<>();
+                Collections.addAll(allRolesArrayList, allRoles);
+
+                Iterator<String> it = allRolesArrayList.iterator();
+                while (it.hasNext()) {
+                    String nextRole = it.next();
+                    if (nextRole.equals(adminRole) || nextRole.equals(CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME)) {
+                        it.remove();
                     }
                 }
-                return rolesExceptAdminRole;
-            } else {
-                return new String[0];
+
+                cleanedRoles = allRolesArrayList.toArray(new String[allRolesArrayList.size()]);
             }
 
         } catch (UserStoreException e) {
             throw new EventBrokerException("Unable to get Roles from user store", e);
         }
+
+        return cleanedRoles;
     }
 
     /**
