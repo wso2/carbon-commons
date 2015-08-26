@@ -467,8 +467,8 @@ public class RegistryTopicManager implements TopicManager {
 
                 Iterator<String> it = allRolesArrayList.iterator();
                 while (it.hasNext()) {
-                    String nextRoles = it.next();
-                    if (nextRoles.equals(adminRole) || CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME.equals(nextRoles)) {
+                    String nextRole = it.next();
+                    if (nextRole.equals(adminRole) || nextRole.equals(CarbonConstants.REGISTRY_ANONNYMOUS_ROLE_NAME)) {
                         it.remove();
                     }
                 }
