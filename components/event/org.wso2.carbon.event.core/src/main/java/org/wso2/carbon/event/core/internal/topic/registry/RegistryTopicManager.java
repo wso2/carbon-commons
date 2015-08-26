@@ -77,8 +77,7 @@ public class RegistryTopicManager implements TopicManager {
             UserRegistry userRegistry =
                     this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
             if (!userRegistry.resourceExists(topicStoragePath)) {
-                userRegistry.put(topicStoragePath,
-                                 userRegistry.newCollection());
+                userRegistry.put(topicStoragePath, userRegistry.newCollection());
             }
             Resource root = userRegistry.get(this.topicStoragePath);
             TopicNode rootTopic = new TopicNode("/", "/");
@@ -395,16 +394,19 @@ public class RegistryTopicManager implements TopicManager {
                 }
             }
 
-            // add child subscriptions
+            // add child subscriptions only for resource collections
             if (withChildren) {
-                Collection childResources = (Collection) userRegistry.get(resourcePath);
-                for (String childResourcePath : childResources.getChildren()) {
-                    if ((!EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME
-                            .contains(childResourcePath)) &&
-                        (!EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME
-                                .contains(childResourcePath))) {
-                        // i.e. this folder is a topic folder
-                        pathsQueue.add(childResourcePath);
+                Resource resource = userRegistry.get(resourcePath);
+                if (resource instanceof Collection) {
+                    Collection childResources = (Collection) resource;
+                    for (String childResourcePath : childResources.getChildren()) {
+                        if ((!EventBrokerConstants.EB_CONF_WS_SUBSCRIPTION_COLLECTION_NAME
+                                .contains(childResourcePath)) &&
+                            (!EventBrokerConstants.EB_CONF_JMS_SUBSCRIPTION_COLLECTION_NAME
+                                    .contains(childResourcePath))) {
+                            // i.e. this folder is a topic folder
+                            pathsQueue.add(childResourcePath);
+                        }
                     }
                 }
             }
