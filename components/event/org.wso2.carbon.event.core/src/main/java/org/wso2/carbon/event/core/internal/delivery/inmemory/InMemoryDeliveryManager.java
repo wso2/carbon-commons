@@ -56,7 +56,6 @@ public class InMemoryDeliveryManager implements DeliveryManager {
                     EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm
                                                (CarbonContext.getThreadLocalCarbonContext().getTenantId());
             String userName = subscription.getOwner();
-            String loggedInUser = CarbonContext.getThreadLocalCarbonContext().getUsername();
             // trim the domain part if it is there.
             if (userName.lastIndexOf("@") != -1){
                 userName = userName.substring(0, userName.lastIndexOf("@"));
