@@ -262,6 +262,10 @@ public class LoggingAdmin {
             if (isFileAppender) {
                 //TODO add syslogPattern to  appenderPattern
                 appenderPattern = addSyslogPattern(appenderPattern);
+                
+                // we persist the log file path user enters rather than calculating the absolute path
+                String logFilePathToPersist = logFileName;
+
                 // Check if the file is valid
                 logFileName = logFileName.replace('\\', '/');
                 File logFile = new File(logFileName);
@@ -295,7 +299,7 @@ public class LoggingAdmin {
                 }
                 if (persist) {
                     registryManager.updateAppender(appender, appenderName, appenderPattern, threshold,
-                            logFileName, null, null, true, false);
+                            logFilePathToPersist, null, null, true, false);
                 }
             } else if (isSysLogAppender) {
                 if (persist) {

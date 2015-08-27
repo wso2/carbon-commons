@@ -48,6 +48,7 @@ import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.tenant.TenantManager;
 import org.wso2.carbon.utils.CarbonUtils;
 import org.wso2.carbon.utils.Pageable;
+import org.wso2.carbon.utils.ServerConstants;
 import org.wso2.carbon.utils.logging.CircularBuffer;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
@@ -58,6 +59,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -279,8 +282,14 @@ public class LoggingUtil {
                     }
                     if (appender instanceof FileAppender) {
                         FileAppender fileAppender = ((FileAppender) appender);
-                        fileAppender.setFile(appenderResource
-                                .getProperty(LoggingConstants.AppenderProperties.LOG_FILE_NAME));
+
+                        // resolves the log file path, if not absolute path, calculate with CARBON_HOME as the base
+                        Path logFilePath = Paths.get(appenderResource.getProperty(
+                                LoggingConstants.AppenderProperties.LOG_FILE_NAME));
+                        if (!logFilePath.isAbsolute()) {
+                            logFilePath = Paths.get(System.getProperty(ServerConstants.CARBON_HOME)).resolve(logFilePath);
+                        }
+                        fileAppender.setFile(logFilePath.normalize().toString());
                         fileAppender.activateOptions();
                     }
 
