@@ -3,6 +3,7 @@
 <%@ page import="org.wso2.carbon.event.client.broker.BrokerClient" %>
 <%@ page import="org.wso2.carbon.event.ui.UIUtils" %>
 <%@ page import="java.io.ByteArrayInputStream" %>
+<%@ page import="org.wso2.carbon.event.client.broker.BrokerClientException" %>
 
 <%
 
@@ -11,17 +12,9 @@
     String textMsg = request.getParameter("xmlMessage");
     session.setAttribute("errorTopic", topic);
     session.setAttribute("xmlMessage", textMsg);
-    OMElement message;
     String messageToBePrinted = null;
-    StAXOMBuilder builder = null;
     try {
-        builder = new StAXOMBuilder(new ByteArrayInputStream(textMsg.getBytes()));
-        message = builder.getDocumentElement();
-        if (message != null) {
-            brokerClient.publish(topic, message);
-        } else {
-            messageToBePrinted = "Error: Failed to get document element from message " + textMsg;
-        }
+        brokerClient.publish(topic, textMsg);
     } catch (Exception e) {
         messageToBePrinted = "Error: while publishing the message " + e.getMessage();
     }

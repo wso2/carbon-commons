@@ -3,6 +3,7 @@ package org.wso2.carbon.event.client.broker;
 import org.apache.axiom.om.OMAbstractFactory;
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.OMFactory;
+import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
@@ -21,6 +22,8 @@ import org.wso2.carbon.event.client.stub.generated.authentication.Authentication
 import org.wso2.carbon.event.common.Constants;
 
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamException;
+import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
@@ -162,6 +165,37 @@ public class BrokerClient {
         //serviceClient.getOptions().setTo(new EndpointReference(brokerUrl));
         serviceClient.getOptions().setAction("urn:publish");
         serviceClient.sendRobust(element);
+    }
+
+    /**
+     * Publishes a message to a topic. The message should be XML structured.
+     *
+     * @param topic The name of the topic which the message should be published.
+     * @param messageContent The message content.
+     * @throws BrokerClientException
+     */
+    public void publish(String topic, String messageContent) throws BrokerClientException {
+        try {
+            StAXOMBuilder builder = new StAXOMBuilder(new ByteArrayInputStream(messageContent.getBytes()));
+            OMElement message = builder.getDocumentElement();
+
+            EventBrokerServiceStub service = new EventBrokerServiceStub(configurationContext, brokerUrl + "/publish/"
+                                                                                              + topic);
+            configureCookie(service._getServiceClient());
+            ServiceClient serviceClient = service._getServiceClient();
+
+            OMElement header = fac.createOMElement(new QName(TOPIC_HEADER_NS, TOPIC_HEADER_NAME));
+            header.setText(topic);
+            serviceClient.addHeader(header);
+            serviceClient.getOptions().setTo(new EndpointReference(brokerUrl + "/publish"));
+            serviceClient.getOptions().setAction("urn:publish");
+            serviceClient.sendRobust(message);
+        } catch (XMLStreamException e) {
+            throw new BrokerClientException("Unable to convert message to OMElement. Make sure the message is an XML " +
+                                            "message. :" + e.getMessage(), e);
+        } catch (AxisFault e) {
+            throw new BrokerClientException("Error while publishing message  : " + e.getMessage(), e);
+        }
     }
     
     public void unsubscribe(String subscriptionID) throws RemoteException{
