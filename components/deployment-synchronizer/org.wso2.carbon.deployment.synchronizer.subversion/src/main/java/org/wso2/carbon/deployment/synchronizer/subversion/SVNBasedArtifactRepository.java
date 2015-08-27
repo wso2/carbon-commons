@@ -435,12 +435,17 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
 
         File root = new File(filePath);
         try {
+            //remove svn locks if any
+            svnClient.cleanup(root);
+
             ISVNStatus[] svnStatus = svnClient.getStatus(root, true, false);
             if (conf.isAutoCommit() && svnStatus != null) {
                 cleanupDeletedFiles(tenantId, root, svnStatus);
             }
             ISVNStatus status = svnClient.getSingleStatus(root);
+
             if (CarbonUtils.isWorkerNode()) {
+                //we need to remove local changes in worker nodes, if any
                 if (log.isDebugEnabled()) {
                     log.debug("reverting " + root);
                 }
@@ -448,7 +453,10 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                     svnClient.revert(root, true);
                 }
             }
+
             if (status != null && status.getTextStatus().toInt() == UNVERSIONED) {
+                //The repo is not versioned yet. So, we need to do a svn checkout.
+
                 cleanupUnversionedFiles(tenantId, svnUrl, root);
                 if (svnClient instanceof CmdLineClientAdapter) {
                     // CmdLineClientAdapter does not support all the options
@@ -464,9 +472,11 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                 }
                 return true;
             } else {
+                //The repo is versioned, so we need to do a svn update.
+
                 long lastRevisionNumber = -1;
                 long newRevisionNumber = -1;
-                svnClient.cleanup(root);
+
                 int tries = 0;
                 do {
                     try {
@@ -505,6 +515,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
                         }
                     }
                 } while (tries < 10); // try to recover & retry
+
                 return newRevisionNumber > lastRevisionNumber;
             }
         } catch (SVNClientException e) {
