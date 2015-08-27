@@ -607,6 +607,12 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
         return parameters;
     }
 
+    /**
+     * This method is deprecated. Refer {@link ArtifactRepository#checkout(int, String, int)}
+     * for more info.
+     *
+     */
+    @Deprecated
     public boolean checkout(int tenantId, String filePath, int depth)
             throws DeploymentSynchronizerException {
         log.info("SVN checking out " + filePath);
@@ -691,7 +697,7 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
         return false;
     }
 
-    @Override
+    @Deprecated
     public boolean update(int tenantId, String rootPath, String filePathToUpdate, int depth) throws DeploymentSynchronizerException {
         throw new UnsupportedOperationException();
     }
