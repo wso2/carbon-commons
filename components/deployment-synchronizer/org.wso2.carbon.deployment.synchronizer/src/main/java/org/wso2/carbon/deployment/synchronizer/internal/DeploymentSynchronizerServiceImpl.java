@@ -134,13 +134,25 @@ public class DeploymentSynchronizerServiceImpl implements DeploymentSynchronizer
         return synchronizer.checkout();
     }
 
-    @Override
+    /**
+     * This method is deprecated. This was introduced to enable partial update.
+     * That feature has been removed. Users should use {@link #checkout(String)}
+     * method.
+     *
+     */
+    @Deprecated
     public boolean checkout(String filePath, int depth) throws DeploymentSynchronizerException {
         DeploymentSynchronizer synchronizer = getSynchronizer(filePath);
         return synchronizer.checkout(filePath, depth);
     }
 
-    @Override
+    /**
+     * This method is deprecated. This was introduced to enable partial update.
+     * That feature has been removed. Users should use {@link #checkout(String)}
+     * method.
+     *
+     */
+    @Deprecated
     public boolean update(String rootPath, String filePath, int depth) throws DeploymentSynchronizerException {
         DeploymentSynchronizer synchronizer = getSynchronizer(rootPath);
         return synchronizer.update(rootPath, filePath, depth);
