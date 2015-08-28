@@ -69,6 +69,11 @@ function isDSValid(namemsg, invalidnamemsg, drivermsg, urlmsg, customdsmsg) {
         CARBON.showWarningDialog(namemsg);
         return false;
     }
+
+    if (/\s/g.test(name)) {
+        CARBON.showWarningDialog(invalidnamemsg);
+        return false;
+    }
     
     var dsType = document.getElementById('dsType').value;
     var customDsType = document.getElementById('customDsType').value;
@@ -77,7 +82,7 @@ function isDSValid(namemsg, invalidnamemsg, drivermsg, urlmsg, customdsmsg) {
         return false;
     }
 
-    var iChars = "!@#$%^&*()+=[]\\\';,/{}|\":<>?";
+    var iChars = "\s!@#$%^&*()+=[]\\\';,/{}|\":<>?";
     for (var i = 0; i < name.length; i++) {
         if (iChars.indexOf(name.charAt(i)) != -1) {
             CARBON.showWarningDialog(invalidnamemsg);
