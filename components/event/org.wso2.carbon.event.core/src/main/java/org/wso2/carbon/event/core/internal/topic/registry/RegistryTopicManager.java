@@ -76,7 +76,7 @@ public class RegistryTopicManager implements TopicManager {
                     this.registryService.getGovernanceSystemRegistry(EventBrokerHolder.getInstance().getTenantId());
             if (!userRegistry.resourceExists(topicStoragePath)) {
                 userRegistry.put(topicStoragePath,
-                                 userRegistry.newCollection());
+                        userRegistry.newCollection());
             }
             Resource root = userRegistry.get(this.topicStoragePath);
             TopicNode rootTopic = new TopicNode("/", "/");
@@ -151,16 +151,22 @@ public class RegistryTopicManager implements TopicManager {
                 Collection collection = userRegistry.newCollection();
                 userRegistry.put(resourcePath, collection);
 
-                // Grant this user (owner) rights to update permission on newly created topic
-                UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(
-                        CarbonContext.getThreadLocalCarbonContext().getTenantId());
+                // Grant this user (owner) rights to update permission on newly
+                // created topic. Ideally, loggedInUser
+                // cannot be null but sometimes components like rule mediator
+                // creates queues for internal use. So at
+                // that time username can be null.
+                if (loggedInUser != null) {
+                    UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(
+                            CarbonContext.getThreadLocalCarbonContext().getTenantId());
 
-                userRealm.getAuthorizationManager().authorizeUser(
-                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
-                userRealm.getAuthorizationManager().authorizeUser(
-                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
-                userRealm.getAuthorizationManager().authorizeUser(
-                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
+                    userRealm.getAuthorizationManager().authorizeUser(
+                            loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
+                    userRealm.getAuthorizationManager().authorizeUser(
+                            loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
+                    userRealm.getAuthorizationManager().authorizeUser(
+                            loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
+                }
             }
         } catch (RegistryException e) {
             throw new EventBrokerException("Cannot access the config registry", e);
