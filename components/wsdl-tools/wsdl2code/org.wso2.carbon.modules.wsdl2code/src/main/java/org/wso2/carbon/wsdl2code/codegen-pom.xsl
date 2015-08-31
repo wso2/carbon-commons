@@ -586,7 +586,7 @@
                 </repository>
                 <repository>
                     <id>wso2-maven2-repository</id>
-                    <url>http://dist.wso2.org/maven2</url>
+                    <url>http://maven.wso2.org/nexus/content/repositories/releases/</url>
                 </repository>
                 <repository>
                     <id>wso2-maven2-repository-nexus</id>
