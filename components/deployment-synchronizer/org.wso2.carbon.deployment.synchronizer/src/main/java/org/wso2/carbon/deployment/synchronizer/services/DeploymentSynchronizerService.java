@@ -86,21 +86,24 @@ public interface DeploymentSynchronizerService {
     public boolean checkout(String filePath) throws DeploymentSynchronizerException;
 
     /**
-     * This method is deprecated. This was introduced to enable partial update.
-     * That feature has been removed. Users should use {@link #checkout(String)}
-     * method.
+     * Invoke the checkout operation on the specified repository, with given depth
      *
+     * @param filePath Location of the repository in file system
+     * @param depth Depth given to check-out, eg 0 - empty, 3 - infinite
+     * @return true if files were checked out or updated, false otherwise
+     * @throws DeploymentSynchronizerException on error
      */
-    @Deprecated
     public boolean checkout(String filePath, int depth) throws DeploymentSynchronizerException;
 
     /**
-     * This method is deprecated. This was introduced to enable partial update.
-     * That feature has been removed. Users should use {@link #checkout(String)}
-     * method.
+     * Invoke the update operation on the specified file in the repository, with given depth
      *
+     * @param rootPath - root path of the repository of which the dep-sychronizer is registered
+     * @param filePath - location of the file in the repository
+     * @param depth Depth given to update, (eg 0 - empty, 3 - infinite)
+     * @return true if files were updated, false otherwise
+     * @throws DeploymentSynchronizerException on error
      */
-    @Deprecated
     public boolean update(String rootPath, String filePath, int depth) throws DeploymentSynchronizerException;
 
     /**

@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.Lock;
 
 /**
  * This class represents a clustered task manager, which is used when tasks are
@@ -84,16 +83,9 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
     }
 
     public void scheduleTask(String taskName) throws TaskException {
-        String taskLockId = this.getTaskType() + "_" + this.getTenantId() + "_" + taskName;
-        Lock lock = this.getClusterComm().getHazelcast().getLock(taskLockId);
-        try {
-            lock.lock();
-            String memberId = this.getMemberIdFromTaskName(taskName, true);
-            this.setServerLocationOfTask(taskName, memberId);
-            this.scheduleTask(memberId, taskName);
-        } finally {
-            lock.unlock();
-        }
+        String memberId = this.getMemberIdFromTaskName(taskName, true);
+        this.setServerLocationOfTask(taskName, memberId);
+        this.scheduleTask(memberId, taskName);
     }
 
     public void rescheduleTask(String taskName) throws TaskException {

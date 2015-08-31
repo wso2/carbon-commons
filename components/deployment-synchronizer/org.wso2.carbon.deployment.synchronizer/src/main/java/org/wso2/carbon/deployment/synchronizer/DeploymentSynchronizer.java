@@ -183,12 +183,12 @@ public class DeploymentSynchronizer {
         return result;
     }
 
-    /**
-     * This method is deprecated. Refer {@link ArtifactRepository#checkout(int, String, int)}
-     * for more info.
+        /**
+     * Checkout the artifacts stored in the repository to the file system. If the artifacts
+     * have already been checked out, an update will be executed instead.
      *
+     * @throws DeploymentSynchronizerException If an error occurs while checking out or updating the resources
      */
-    @Deprecated
     public synchronized boolean checkout(String filePath, int depth) throws DeploymentSynchronizerException {
         if (log.isDebugEnabled()) {
             log.debug("Started checkout to " + filePath + " with depth: " + depth);
@@ -200,13 +200,13 @@ public class DeploymentSynchronizer {
         }
         return result;
     }
-    /**
+
+        /**
      * Checkout the artifacts stored in the repository to the file system. If the artifacts
      * have already been checked out, an update will be executed instead.
      *
      * @throws DeploymentSynchronizerException If an error occurs while checking out or updating the resources
      */
-    @Deprecated
     public synchronized boolean update(String rootPath, String filePath, int depth) throws DeploymentSynchronizerException {
         if (log.isDebugEnabled()) {
             log.debug("Started to update " + filePath);
@@ -305,12 +305,6 @@ public class DeploymentSynchronizer {
         log.info("Completed initial artifact synchronization for tenant: " + tenantId);
     }
 
-    /**
-     * This method is deprecated. Refer {@link ArtifactRepository#checkout(int, String, int)}
-     * for more info.
-     *
-     */
-    @Deprecated
     public boolean syncGhostMetaArtifacts() throws DeploymentSynchronizerException {
         log.info("Doing ghost meta artifacts sync up...");
         boolean hasFailed = false;

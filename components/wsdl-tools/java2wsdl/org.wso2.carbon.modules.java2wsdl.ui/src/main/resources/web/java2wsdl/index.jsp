@@ -194,18 +194,17 @@
     function handleUpload(o) {
         var responseText = o.responseText;
         if (responseText) {
-            var index = responseText.indexOf("<pre");
+            var index = responseText.indexOf("<pre>");
             if (index < 0)
-                index = responseText.indexOf("<PRE");
+                index = responseText.indexOf("<PRE>");
             var endIndex = responseText.indexOf("</pre>");
             if (endIndex < 0)
                 endIndex = responseText.indexOf("</PRE>");
             var uuidString ='';
-            var indexEndofStartPre = responseText.indexOf(">") + 1;
             if (index < 0)
                 uuidString = responseText;
             else
-                uuidString = responseText.substring(index + indexEndofStartPre, endIndex);
+                uuidString = responseText.substring(index + 5, endIndex);
             
             var uuids = new Array();
             uuids = uuidString.split(",");

@@ -99,14 +99,15 @@ public class CarbonRepositoryUtils {
             //If configuration has not been specified in carbon.xml
             if (config == null) {
                 //Attempt to get configuration from local registry.
-                config = getDeploymentSyncConfigurationFromRegistry(tenantId);
+                config =  getDeploymentSyncConfigurationFromRegistry(tenantId);
 
                 //If configuration does not exist in the local registry as well.
                 if (config == null) {
                     //Get default Deployment Synchronizer Configuration
                     config = getDefaultDeploymentSyncConfiguration();
                 }
-            } else {
+            }
+            else{
                 //If config is obtained from carbon.xml, set attribute to disable UI
                 config.setServerBasedConfiguration(true);
             }
@@ -131,7 +132,7 @@ public class CarbonRepositoryUtils {
 
         String value = serverConfig.getFirstProperty(DeploymentSynchronizerConstants.ENABLED);
         //If Deployment Synchronizer Configuration is not found in carbon.xml
-        if (value == null) {
+        if(value == null){
             return null;
         }
         config.setEnabled(JavaUtils.isTrueExplicitly(value));
@@ -162,16 +163,16 @@ public class CarbonRepositoryUtils {
 
             ArtifactRepository repository =
                     RepositoryReferenceHolder.getInstance().getRepositoryByType(config.getRepositoryType());
-            if (repository == null) {
+            if(repository == null){
                 throw new DeploymentSynchronizerException("No Repository found for type " + config.getRepositoryType());
             }
 
             List<RepositoryConfigParameter> parameters = repository.getParameters();
 
             //If repository specific configuration parameters are found.
-            if (parameters != null) {
+            if(parameters != null){
                 //Find the 'value' of each parameter from the server config by parameter 'name' and attach to parameter
-                for (RepositoryConfigParameter parameter : parameters) {
+                for(RepositoryConfigParameter parameter : parameters){
                     parameter.setValue(serverConfig.getFirstProperty(parameter.getName()));
                 }
 
@@ -181,7 +182,7 @@ public class CarbonRepositoryUtils {
             }
 
             return config;
-        } else {
+        }else{
             return config;
         }
     }
@@ -198,14 +199,14 @@ public class CarbonRepositoryUtils {
 
         ArtifactRepository repository =
                 RepositoryReferenceHolder.getInstance().getRepositoryByType(config.getRepositoryType());
-        if (repository == null) {
+        if(repository == null){
             throw new DeploymentSynchronizerException("No Repository found for type " + config.getRepositoryType());
         }
 
         List<RepositoryConfigParameter> parameters = repository.getParameters();
 
         //If repository specific configuration parameters are found.
-        if (parameters != null && !parameters.isEmpty()) {
+        if(parameters != null && !parameters.isEmpty()){
             //Attach parameter list to config.
             config.setRepositoryConfigParameters(
                     parameters.toArray(new RepositoryConfigParameter[parameters.size()]));
@@ -276,16 +277,16 @@ public class CarbonRepositoryUtils {
 
         ArtifactRepository repository =
                 RepositoryReferenceHolder.getInstance().getRepositoryByType(config.getRepositoryType());
-        if (repository == null) {
+        if(repository == null){
             throw new RegistryException("No Repository found for type " + config.getRepositoryType());
         }
 
         List<RepositoryConfigParameter> parameters = repository.getParameters();
 
         //If repository specific configuration parameters are found.
-        if (parameters != null) {
+        if(parameters != null){
             //Find the 'value' of each parameter from the registry by parameter 'name' and attach to parameter
-            for (RepositoryConfigParameter parameter : parameters) {
+            for(RepositoryConfigParameter parameter : parameters){
                 parameter.setValue(resource.getProperty(parameter.getName()));
             }
 
@@ -333,9 +334,9 @@ public class CarbonRepositoryUtils {
         //Get Repository specific configuration parameters from config object.
         RepositoryConfigParameter[] parameters = config.getRepositoryConfigParameters();
 
-        if (parameters != null && parameters.length != 0) {
+        if(parameters != null && parameters.length != 0){
             //Save each Repository specific configuration parameter in registry.
-            for (int i = 0; i < parameters.length; i++) {
+            for(int i=0; i<parameters.length; i++){
                 resource.setProperty(parameters[i].getName(), parameters[i].getValue());
             }
         }
@@ -352,7 +353,7 @@ public class CarbonRepositoryUtils {
             String repositoryType) throws DeploymentSynchronizerException {
 
         ArtifactRepository artifactRepository = RepositoryReferenceHolder.getInstance().getRepositoryByType(repositoryType);
-        if (artifactRepository == null) {
+        if(artifactRepository == null){
             throw new DeploymentSynchronizerException("No Repository found for type " + repositoryType);
         }
 
