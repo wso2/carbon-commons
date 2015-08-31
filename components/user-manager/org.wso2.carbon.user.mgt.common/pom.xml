@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>user-manager</artifactId>
-        <version>4.4.5-SNAPSHOT</version>
+        <version>4.4.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.user.mgt.common</artifactId>
-    <version>4.4.5-SNAPSHOT</version>
+    <version>4.4.5</version>
     <packaging>bundle</packaging>
     <name>WSO2 Carbon - User Management Common</name>
     <description>org.wso2.carbon.user.mgt.common</description>
