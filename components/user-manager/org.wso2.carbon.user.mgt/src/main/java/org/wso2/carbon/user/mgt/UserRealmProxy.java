@@ -31,6 +31,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.transport.http.HTTPConstants;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.CarbonConstants;
@@ -666,7 +667,7 @@ public class UserRealmProxy {
      */
     private final String addPrimaryDomainIfNotExists(String userName) {
 
-        if ((userName.indexOf(UserCoreConstants.DOMAIN_SEPARATOR)) < 0) {
+        if ((userName.indexOf(UserCoreConstants.DOMAIN_SEPARATOR)) < 0 && StringUtils.isNotEmpty(userName)) {
             StringBuilder builder = new StringBuilder();
             builder.append(UserCoreConstants.PRIMARY_DEFAULT_DOMAIN_NAME).append(CarbonConstants.DOMAIN_SEPARATOR)
                     .append(userName);

@@ -159,7 +159,7 @@ public class UserAdminClient  {
     }
 
     public UserRealmInfo getUserRealmInfo() throws AxisFault {
-    	UserRealmInfo info = null;;
+    	UserRealmInfo info = null;
         try {
         	info = stub.getUserRealmInfo();
         } catch (Exception e) {
