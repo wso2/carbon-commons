@@ -20,12 +20,12 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>reporting-features</artifactId>
-        <version>4.4.6</version>
+        <version>4.4.7-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <version>4.4.6</version>
+    <version>4.4.7-SNAPSHOT</version>
     <artifactId>org.wso2.carbon.reporting.ui.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Reporting UI Feature</name>
