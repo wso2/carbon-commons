@@ -495,7 +495,9 @@ public class LoggingAdmin {
         Appender appender;
         while (appenders.hasMoreElements()) {
             appender = (Appender) appenders.nextElement();
-            appenderSet.add(appender);
+            if (appender.getName() != null) {
+                appenderSet.add(appender);
+            }
             if (LoggingAdmin.log.isDebugEnabled()) {
                 LoggingAdmin.log.debug("Add appender ==> " + appender.getName() + " to appender set");
             }
