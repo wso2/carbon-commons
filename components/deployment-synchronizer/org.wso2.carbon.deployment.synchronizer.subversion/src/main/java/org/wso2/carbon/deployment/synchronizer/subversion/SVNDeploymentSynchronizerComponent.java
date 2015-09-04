@@ -1,5 +1,5 @@
 /*
-*  Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+*  Copyright (c) 2005-2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
 *
 *  WSO2 Inc. licenses this file to you under the Apache License,
 *  Version 2.0 (the "License"); you may not use this file except
@@ -43,53 +43,76 @@ public class SVNDeploymentSynchronizerComponent {
     private ServiceRegistration svnDepSyncServiceRegistration;
 
     protected void activate(ComponentContext context) {
-        
-        boolean allClientsFailed = true;
-        
-        try {
-            SvnKitClientAdapterFactory.setup();
-            allClientsFailed = false;
-            log.debug("SVN Kit client adapter initialized");
-        } catch (Throwable t) {
-            log.debug("Unable to initialize the SVN Kit client adapter - Required jars " +
-                    "may be missing");
+
+        boolean hasFoundValidClient = false;
+
+        hasFoundValidClient = attemptSvnKit();
+
+        if (!hasFoundValidClient) {
+            hasFoundValidClient = attemptJavaHL();
         }
 
-        try {
-            JhlClientAdapterFactory.setup();
-            allClientsFailed = false;
-            log.debug("Java HL client adapter initialized");
-        } catch (Throwable t) {
-            log.debug("Unable to initialize the Java HL client adapter - Required jars " +
-                    " or the native libraries may be missing");
+        if (!hasFoundValidClient) {
+            hasFoundValidClient = attemptCommandLineClient();
         }
 
-        try {
-            CmdLineClientAdapterFactory.setup();
-            allClientsFailed = false;
-            log.debug("Command line client adapter initialized");
-        } catch (Throwable t) {
-            log.debug("Unable to initialize the command line client adapter - SVN command " +
-                    "line tools may be missing");
-        }
-        
-        if(allClientsFailed){
-            String error = "Could not initialize any of the SVN client adapters - " +
-                    "Required jars/libraries may be missing";
+        if (!hasFoundValidClient) {
+            String error =
+                    "Could not initialize any of the SVN client adapters - " + "Required jars/libraries may be missing";
             log.debug(error);
             return;
         }
 
         ArtifactRepository svnBasedArtifactRepository = new SVNBasedArtifactRepository();
-        svnDepSyncServiceRegistration = context.getBundleContext().registerService(ArtifactRepository.class.getName(),
-                svnBasedArtifactRepository, null);
+        svnDepSyncServiceRegistration = context.getBundleContext()
+                .registerService(ArtifactRepository.class.getName(), svnBasedArtifactRepository, null);
 
         log.debug("SVN based deployment synchronizer component activated");
     }
 
+    private boolean attemptCommandLineClient() {
+        boolean hasFoundValidClient = false;
+        try {
+            log.debug("Attempting to load SVN Kit baed SVN libraries");
+            CmdLineClientAdapterFactory.setup();
+            hasFoundValidClient = true;
+            log.debug("Command line client adapter initialized");
+        } catch (Throwable t) {
+            log.debug("Unable to initialize the SVN Kit client adapter - Required jars may be missing");
+        }
+        return hasFoundValidClient;
+    }
+
+    private boolean attemptJavaHL() {
+        boolean hasFoundValidClient = false;
+        try {
+            log.debug("Attempting to load Java-HL based SVN libraries");
+            JhlClientAdapterFactory.setup();
+            hasFoundValidClient = true;
+            log.debug("Java HL client adapter initialized");
+        } catch (Throwable t) {
+            log.debug(
+                    "Unable to initialize the Java HL client adapter - Required jars or the native libraries may be missing");
+        }
+        return hasFoundValidClient;
+    }
+
+    private boolean attemptSvnKit() {
+        boolean hasFoundValidClient = false;
+        try {
+            log.debug("Attempting to load command line based SVN libraries");
+            SvnKitClientAdapterFactory.setup();
+            hasFoundValidClient = true;
+            log.debug("SVN Kit client adapter initialized");
+        } catch (Throwable t) {
+            log.debug("Unable to initialize the SVN Kit client adapter - Required jars may be missing", t);
+        }
+        return hasFoundValidClient;
+    }
+
     protected void deactivate(ComponentContext context) {
 
-        if(svnDepSyncServiceRegistration != null){
+        if (svnDepSyncServiceRegistration != null) {
             svnDepSyncServiceRegistration.unregister();
             svnDepSyncServiceRegistration = null;
         }
