@@ -1468,6 +1468,11 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.ndatasource.capp.deployer</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.ndatasource.ui</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
@@ -1737,6 +1742,7 @@
         <axis2.wso2.version>1.6.1-wso2v14</axis2.wso2.version>
         <axis2.version>1.6.1-wso2v14</axis2.version>
         <axis2.osgi.version.range>[1.6.1.wso2v14, 1.7.0)</axis2.osgi.version.range>
+        <axis2.orbit.imp.pkg.version>[1.6, 1.7)</axis2.orbit.imp.pkg.version>
         <orbit.version.axis2>1.6.1.wso2v14</orbit.version.axis2>
         <neethi.osgi.version>2.0.4.wso2v4</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
@@ -1772,6 +1778,7 @@
         <commons-httpclient.version>3.1</commons-httpclient.version>
         <commons.pool.version>1.5.0.wso2v1</commons.pool.version>
         <commons-logging.version>1.1.1</commons-logging.version>
+        <commons-logging.imp.pkg.version>0.0.0</commons-logging.imp.pkg.version>
         <orbit.version.commons.lang>2.6.0.wso2v1</orbit.version.commons.lang>
         <orbit.version.commons.httpclient>3.1.0.wso2v2</orbit.version.commons.httpclient>
         <commons-collections.version>3.2.1</commons-collections.version>
@@ -1797,6 +1804,8 @@
         <commons.digester.wso2.version>1.8.1.wso2v1</commons.digester.wso2.version>
         <commons-fileupload.wso2.version>1.2.2.wso2v1</commons-fileupload.wso2.version>
         <commons-lang.wso2.version>2.6.0.wso2v1</commons-lang.wso2.version>
+        <osgi.framework.imp.pkg.version>[1.7.0,1.8.0)</osgi.framework.imp.pkg.version>
+        <osgi.service.imp.pkg.version>[1.2.0,1.3.0)</osgi.service.imp.pkg.version>
 
         <!-- Hector -->
         <hector.wso2.version>1.1.4.wso2v1</hector.wso2.version>

@@ -28,6 +28,7 @@
   <name>WSO2 Carbon - New Data Sources Aggregator Module</name>
   
   <modules>        
+        <module>org.wso2.carbon.ndatasource.capp.deployer</module>
         <module>org.wso2.carbon.ndatasource.ui</module>
 	<module>org.wso2.carbon.ndatasource.datasources</module>
   </modules>
