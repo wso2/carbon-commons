@@ -435,26 +435,30 @@ public class SVNBasedArtifactRepository implements ArtifactRepository {
 
         File root = new File(filePath);
         try {
-            //remove svn locks if any
-            svnClient.cleanup(root);
+            ISVNStatus singleStatus = svnClient.getSingleStatus(root);
+
+            if (singleStatus != null && singleStatus.getTextStatus().toInt() != UNVERSIONED) {
+                //remove svn locks if any
+                svnClient.cleanup(root);
+            }
 
             ISVNStatus[] svnStatus = svnClient.getStatus(root, true, false);
             if (conf.isAutoCommit() && svnStatus != null) {
                 cleanupDeletedFiles(tenantId, root, svnStatus);
             }
-            ISVNStatus status = svnClient.getSingleStatus(root);
+
 
             if (CarbonUtils.isWorkerNode()) {
                 //we need to remove local changes in worker nodes, if any
                 if (log.isDebugEnabled()) {
                     log.debug("reverting " + root);
                 }
-                if (status != null && status.getTextStatus().toInt() != UNVERSIONED) {
+                if (singleStatus != null && singleStatus.getTextStatus().toInt() != UNVERSIONED) {
                     svnClient.revert(root, true);
                 }
             }
 
-            if (status != null && status.getTextStatus().toInt() == UNVERSIONED) {
+            if (singleStatus != null && singleStatus.getTextStatus().toInt() == UNVERSIONED) {
                 //The repo is not versioned yet. So, we need to do a svn checkout.
 
                 cleanupUnversionedFiles(tenantId, svnUrl, root);
