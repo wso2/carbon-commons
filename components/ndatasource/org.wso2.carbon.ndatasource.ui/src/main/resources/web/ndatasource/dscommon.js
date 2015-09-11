@@ -82,7 +82,7 @@ function isDSValid(namemsg, invalidnamemsg, drivermsg, urlmsg, customdsmsg) {
         return false;
     }
 
-    var iChars = "\s!@#$%^&*()+=[]\\\';,/{}|\":<>?";
+    var iChars = "\\s!@#$%^&*()+=[]\\\';,/{}|\":<>?";
     for (var i = 0; i < name.length; i++) {
         if (iChars.indexOf(name.charAt(i)) != -1) {
             CARBON.showWarningDialog(invalidnamemsg);
