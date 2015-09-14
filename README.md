@@ -31,7 +31,7 @@ Latest Released Version v4.4.7.
 * Please report issues at [Carbon JIRA] (https://wso2.org/jira/browse/CARBON).
 * Send your bug fixes pull requests to [master branch] (https://github.com/wso2/carbon-commons/tree/master) and [4.4.x branch]
 (https://github.com/wso2/carbon-commons/tree/4.4.x)
-* Send your pull requests contains API Changes and new features only to [master branch] (https://github.com/wso2/carbon-commons/tree/master).
+* Send your pull requests contains, API additions and new features only to [master branch] (https://github.com/wso2/carbon-commons/tree/master).
 
 ## Contact us
 WSO2 Carbon developers can be contacted via the mailing lists:
