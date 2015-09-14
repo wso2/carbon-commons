@@ -1518,11 +1518,6 @@
                 <artifactId>hector-core</artifactId>
                 <version>${hector.wso2.version}</version>
             </dependency>
-            <!--<dependency>-->
-                <!--<groupId>com.google.guava.wso2</groupId>-->
-                <!--<artifactId>guava</artifactId>-->
-                <!--<version>${google.guava.wso2.version}</version>-->
-            <!--</dependency>-->
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.ntask.common</artifactId>
