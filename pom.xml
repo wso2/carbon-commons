@@ -1246,7 +1246,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>13.0.1</version>
+                <version>${google.guava.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.ws.commons.schema.wso2</groupId>
@@ -1518,11 +1518,11 @@
                 <artifactId>hector-core</artifactId>
                 <version>${hector.wso2.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.google.guava.wso2</groupId>
-                <artifactId>guava</artifactId>
-                <version>${google.guava.wso2.version}</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>com.google.guava.wso2</groupId>-->
+                <!--<artifactId>guava</artifactId>-->
+                <!--<version>${google.guava.wso2.version}</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.ntask.common</artifactId>
@@ -1987,7 +1987,7 @@
         <commons-digester.version>1.8</commons-digester.version>
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <commons-fileupload.version>1.1.1</commons-fileupload.version>
-        <commons-io.wso2.version>2.0.0.wso2v1</commons-io.wso2.version>
+        <commons-io.wso2.version>2.4.0.wso2v1</commons-io.wso2.version>
         <commons-codec.version>1.4.0.wso2v1</commons-codec.version>
         <commons.digester.wso2.version>1.8.1.wso2v1</commons.digester.wso2.version>
         <commons-fileupload.wso2.version>1.2.2.wso2v1</commons-fileupload.wso2.version>
@@ -2043,12 +2043,11 @@
         <wsdl4j.version>1.6.2-wso2v3</wsdl4j.version>
         <org.apache.ws.commons.schema.wso2.version>1.4.7.wso2v3</org.apache.ws.commons.schema.wso2.version>
         <org.scannotation.version>1.0.3</org.scannotation.version>
-        <commons-io.wso2.version>2.0.0.wso2v2</commons-io.wso2.version>
         <commons-collections.wso2.version>3.2.0.wso2v1</commons-collections.wso2.version>
         <org.wso2.securevault.version>1.0.0</org.wso2.securevault.version>
         <org.testng.version>6.3.1</org.testng.version>
-        <slf4j.version>1.6.1</slf4j.version>
-        <slf4j.imp.pkg.version.range>[1.6.1,1.8.0)</slf4j.imp.pkg.version.range>
+        <slf4j.version>1.7.12</slf4j.version>
+        <slf4j.imp.pkg.version.range>[1.7.0,1.8.0)</slf4j.imp.pkg.version.range>
 
         <!-- Misc -->
         <cassandra.version>1.1.0.wso2v2</cassandra.version>
@@ -2065,8 +2064,8 @@
         <orbit.version.wsdl4j>1.6.2.wso2v4</orbit.version.wsdl4j>
         <quartz2.wso2.version>2.1.1.wso2v1</quartz2.wso2.version>
         <orbit.version.geronimo-jms_1.1_spec>1.1.0.wso2v1</orbit.version.geronimo-jms_1.1_spec>
-        <google.guava.wso2.version>12.0.0.wso2v1</google.guava.wso2.version>
-        <google.guava.version>13.0.1</google.guava.version>
+        <!--<google.guava.wso2.version>12.0.0.wso2v1</google.guava.wso2.version>-->
+        <google.guava.version>15.0</google.guava.version>
         <hadoop.version>0.20.203.1-wso2v2</hadoop.version>
         <jdbc-pool.version>7.0.34.wso2v2</jdbc-pool.version>
         <hadoop.orbit.version>0.20.203.1.wso2v2</hadoop.orbit.version>
