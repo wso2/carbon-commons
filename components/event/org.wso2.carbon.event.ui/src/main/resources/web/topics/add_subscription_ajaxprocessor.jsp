@@ -51,7 +51,7 @@
 
         BrokerClient brokerClient = UIUtils.getBrokerClient(config, session, request);
         String message = "";
-        if (eventSink != null) {
+        if ((eventSink != null) && (eventSink != "")) {
             topic = topic.trim();
 
             String expirationDateTime = "";
@@ -71,14 +71,14 @@
             } catch (BrokerClientException e) {
                 message = e.getErrorMessage();
             } catch (ParseException e) {
-                message = "Expiration date/time(" + expirationDateTime + ") is invalid.";
+                message = "Error: Expiration date/time(" + expirationDateTime + ") is invalid.";
             }
 
 %>
 <%=message%>
 <%
 } else {
-    message = "Topic and Event Sink Must not be null";
+    message = "Error: Topic and Event Sink Must not be null";
 
 %>
 <%=message%>
