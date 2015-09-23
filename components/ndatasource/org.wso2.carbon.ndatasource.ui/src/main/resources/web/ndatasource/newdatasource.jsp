@@ -99,6 +99,7 @@
 	Integer suspectTimeout = null;
 	Integer validationQueryTimeout = null;
 	Boolean alternateUsernameAllowed = false;
+    String rdbmsEngineType = "#";
 	
 	if (dataSourceName != null && !dataSourceName.equals("")) {
 		NDataSourceAdminServiceClient client = NDataSourceAdminServiceClient.getInstance(config, session);
@@ -135,6 +136,7 @@
 				dsProvider = "default";
 				driverClassName = rdbmsCon.getDriverClassName();
 				url = rdbmsCon.getUrl();
+                rdbmsEngineType = NDataSourceHelper.getRDBMSEngine(url);
 				username = rdbmsCon.getUsername();
 				password = rdbmsCon.getPassword().getValue();
 			}
@@ -457,6 +459,14 @@ function displayPasswordField() {
 	}
 }
 
+ function setJDBCValues(obj, document) {
+     var selectedValue = obj[obj.selectedIndex].value;
+     var jdbcUrl = selectedValue.substring(0, selectedValue.indexOf("#"));
+     var driverClass = selectedValue.substring(selectedValue.indexOf("#") + 1, selectedValue.length);
+     document.getElementById('url').value = jdbcUrl;
+     document.getElementById('driver').value = driverClass;
+ }
+
 </script>
 <form method="post" name="dscreationform" id="dscreationform"
       action="savedatasource.jsp" >
@@ -565,6 +575,126 @@ function displayPasswordField() {
     </td>
 </tr>
 <% if ("default".equals(dsProvider)) { %>
+<tr>
+    <td class="leftCol-small" style="white-space: nowrap;"><label><fmt:message key="datasource.engine"/><font
+            color="red">*</font></label></td>
+    <td>
+        <select name="databaseEngine" id="databaseEngine"
+                onchange="javascript:setJDBCValues(this,document);return false;">
+
+            <%if (("#".equals(rdbmsEngineType)|| rdbmsEngineType.equals(""))) {%>
+            <option value="#" selected="selected">--SELECT--</option>
+            <%} else {%>
+            <option value="#">--SELECT--</option>
+            <%}%>
+
+            <%if ("mysql".equals(rdbmsEngineType)) {%>
+            <option selected="selected"
+                    value="jdbc:mysql://[machine-name/ip]:[port]/[database-name]#com.mysql.jdbc.Driver">
+                MySQL
+            </option>
+            <%} else {%>
+            <option value="jdbc:mysql://[machine-name/ip]:[port]/[database-name]#com.mysql.jdbc.Driver">
+                MySQL
+            </option>
+            <%}%>
+
+            <%if ("derby".equals(rdbmsEngineType)) {%>
+            <option selected="selected"
+                    value="jdbc:derby:[path-to-data-file]#org.apache.derby.jdbc.EmbeddedDriver">
+                Apache Derby
+            </option>
+            <%} else {%>
+            <option value="jdbc:derby:[path-to-data-file]#org.apache.derby.jdbc.EmbeddedDriver">
+                Apache Derby
+            </option>
+            <%}%>
+
+            <%if ("mssqlserver".equals(rdbmsEngineType)) {%>
+            <option selected="selected"
+                    value="jdbc:sqlserver://[HOST]:[PORT1433];databaseName#com.microsoft.sqlserver.jdbc.SQLServerDriver">
+                Microsoft SQL Server
+            </option>
+            <%} else {%>
+            <option value="jdbc:sqlserver://[HOST]:[PORT1433];databaseName=[DB]#com.microsoft.sqlserver.jdbc.SQLServerDriver">
+                Microsoft SQL Server
+            </option>
+            <%}%>
+
+            <%if ("oracle".equals(rdbmsEngineType)) {%>
+            <option selected="selected"
+                    value="jdbc:oracle:[drivertype]:[username/password]@[host]:[port]/[database]#oracle.jdbc.driver.OracleDriver">
+                Oracle
+            </option>
+            <%} else {%>
+            <option value="jdbc:oracle:[drivertype]:[username/password]@[host]:[port]/[database]#oracle.jdbc.driver.OracleDriver">
+                Oracle
+            </option>
+            <%}%>
+
+            <%if ("db2".equals(rdbmsEngineType)) {%>
+            <option selected="selected" value="jdbc:db2:[database]#com.ibm.db2.jcc.DB2Driver">IBM
+                                                                                              DB2
+            </option>
+            <%} else {%>
+            <option value="jdbc:db2:[database]#com.ibm.db2.jcc.DB2Driver">IBM DB2</option>
+            <%}%>
+
+            <%if ("hsqldb".equals(rdbmsEngineType)) {%>
+            <option selected="selected" value="jdbc:hsqldb:[path]#org.hsqldb.jdbcDriver">HSQLDB
+            </option>
+            <%} else {%>
+            <option value="jdbc:hsqldb:[path]#org.hsqldb.jdbcDriver">HSQLDB</option>
+            <%}%>
+            <%if ("informix-sqli".equals(rdbmsEngineType)) {%>
+            <option selected="selected"
+                    value="jdbc:informix-sqli://[HOST]:[PORT]/[database]:INFORMIXSERVER=[server-name]#com.informix.jdbc.IfxDriver">
+                Informix
+            </option>
+            <%} else {%>
+            <option value="jdbc:informix-sqli://[HOST]:[PORT]/[database]:INFORMIXSERVER=[server-name]#com.informix.jdbc.IfxDriver">
+                Informix
+            </option>
+            <%}%>
+
+            <%if ("postgresql".equals(rdbmsEngineType)) {%>
+            <option selected="selected"
+                    value="jdbc:postgresql://[HOST]:[PORT5432]/[database]#org.postgresql.Driver">
+                PostgreSQL
+            </option>
+            <%} else {%>
+            <option value="jdbc:postgresql://[HOST]:[PORT5432]/[database]#org.postgresql.Driver">
+                PostgreSQL
+            </option>
+            <%}%>
+
+            <%if ("sybase".equals(rdbmsEngineType)) {%>
+            <option selected="selected"
+                    value="jdbc:sybase:Tds:[HOST]:[PORT2048]/[database]#com.sybase.jdbc3.jdbc.SybDriver">
+                Sybase ASE
+            </option>
+            <%} else {%>
+            <option value="jdbc:sybase:Tds:[HOST]:[PORT2048]/[database]#com.sybase.jdbc3.jdbc.SybDriver">
+                Sybase ASE
+            </option>
+            <%}%>
+
+            <%if ("h2".equals(rdbmsEngineType)) {%>
+            <option selected="selected" value="jdbc:h2:tcp:[HOST]:[PORT]/[database]#org.h2.Driver">
+                H2
+            </option>
+            <%} else {%>
+            <option value="jdbc:h2:tcp:[HOST]:[PORT]/[database]#org.h2.Driver">H2</option>
+            <%}%>
+
+            <%if ("Generic".equals(rdbmsEngineType)) {%>
+            <option selected="selected" value="Generic#Generic">Generic</option>
+            <%} else {%>
+            <option value="Generic#Generic">Generic</option>
+            <%}%>
+        </select>
+    </td>
+</tr>
 <tr>
     <td><fmt:message key="driver"/><span class='required'>*</span></td>
     <td align="left">

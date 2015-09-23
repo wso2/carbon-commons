@@ -48,6 +48,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class NDataSourceHelper {
 
@@ -561,5 +563,36 @@ public class NDataSourceHelper {
 		log.error(msg);
 		throw new IllegalArgumentException(msg);
 	}
-	
+
+    /**
+     * Returns the RDBMS engine name by analyzing the JDBC URL.
+     */
+    public static String getRDBMSEngine(String jdbcUrl) {
+        Pattern p = Pattern.compile("jdbc:[a-zA-Z0-9]+");
+        Matcher m = p.matcher(jdbcUrl);
+        while (m.find()) {
+            if (NDataSourceClientConstants.JDBCDriverPrefixes.MYSQL.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.MYSQL;
+            } else if (NDataSourceClientConstants.JDBCDriverPrefixes.DERBY.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.DERBY;
+            } else if (NDataSourceClientConstants.JDBCDriverPrefixes.MSSQL.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.MSSQL;
+            } else if (NDataSourceClientConstants.JDBCDriverPrefixes.ORACLE.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.ORACLE;
+            } else if (NDataSourceClientConstants.JDBCDriverPrefixes.DB2.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.DB2;
+            } else if (NDataSourceClientConstants.JDBCDriverPrefixes.HSQLDB.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.HSQLDB;
+            } else if (NDataSourceClientConstants.JDBCDriverPrefixes.POSTGRESQL.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.POSTGRESQL;
+            } else if (NDataSourceClientConstants.JDBCDriverPrefixes.SYBASE.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.SYBASE;
+            } else if (NDataSourceClientConstants.JDBCDriverPrefixes.H2.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.H2;
+            } else if (NDataSourceClientConstants.JDBCDriverPrefixes.INFORMIX.equals(m.group())) {
+                return NDataSourceClientConstants.RDBMSEngines.INFORMIX_SQLI;
+            }
+        }
+        return NDataSourceClientConstants.RDBMSEngines.GENERIC;
+    }
 }
