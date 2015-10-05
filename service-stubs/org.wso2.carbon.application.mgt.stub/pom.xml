@@ -29,7 +29,7 @@
     <artifactId>org.wso2.carbon.application.mgt.stub</artifactId>
     <packaging>bundle</packaging>
     <version>4.4.8-SNAPSHOT</version>
-    <name>WSO2 Carbon - Aplication Management Stub</name>
+    <name>WSO2 Carbon - Application Management Stub</name>
     <url>http://wso2.org</url>
 
     <build>
