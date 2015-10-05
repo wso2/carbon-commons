@@ -20,13 +20,13 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>carbon-commons</artifactId>
-        <version>4.5.0-SNAPSHOT</version>
+        <version>4.5.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>identity-authentication</artifactId>
-    <version>4.5.0-SNAPSHOT</version>
+    <version>4.5.0</version>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Authentication Service Aggregator Module</name>
     <url>http://wso2.org</url>

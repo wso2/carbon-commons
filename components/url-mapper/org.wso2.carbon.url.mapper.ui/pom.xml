@@ -19,14 +19,14 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>url-mapper-parent</artifactId>
-        <version>4.5.0-SNAPSHOT</version>
+        <version>4.5.0</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.url.mapper.ui</artifactId>
     <packaging>bundle</packaging>
-    <version>4.5.0-SNAPSHOT</version>
+    <version>4.5.0</version>
     <name>WSO2 Carbon - Url Mapper UI</name>
 
     <build>
