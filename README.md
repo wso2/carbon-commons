@@ -1,4 +1,14 @@
 # carbon-commons
+
+---
+
+|  Branch | Build Status |
+| :------------ |:-------------
+| master      | [![Build Status](https://wso2.org/jenkins/job/carbon-commons/badge/icon)](https://wso2.org/jenkins/job/carbon-commons) |
+
+
+---
+
 Latest Released Versions v4.5.0, v4.4.7.
 
 #### carbon-commons repo contains the common components and features shared by many products. Following is the set of components included in carbon-commons repo.
