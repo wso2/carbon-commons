@@ -117,21 +117,21 @@ public class SVNFileChecksumResolverUtil {
                         bis.close();
                     }
                 } catch (IOException e) {
-                    log.error("Couldn't close the " + e.getMessage(), e);
+                    log.error("Couldn't close the BufferedReader " + e.getMessage(), e);
                 }
                 try {
                     if (fis != null) {
                         fis.close();
                     }
                 } catch (IOException e) {
-                    log.error("Couldn't close the " + e.getMessage(), e);
+                    log.error("Couldn't close the FileReader " + e.getMessage(), e);
                 }
                 try {
                     if (bw != null) {
                         bw.close();
                     }
                 } catch (IOException e) {
-                    log.error("Couldn't close the " + e.getMessage(), e);
+                    log.error("Couldn't close the BufferedWriter " + e.getMessage(), e);
                 }
             }
 
