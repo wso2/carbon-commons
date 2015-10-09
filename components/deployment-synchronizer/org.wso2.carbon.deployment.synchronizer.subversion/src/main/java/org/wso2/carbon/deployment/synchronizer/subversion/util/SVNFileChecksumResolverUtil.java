@@ -88,14 +88,10 @@ public class SVNFileChecksumResolverUtil {
             
             log.debug("Trying to correct the checksum mismatch for SVN file:" +fullSvnFilePath+ "." +
             		"Expected:" +expectedChecksum.trim()+ " but it is:" +actualChecksum.trim());
-            Reader fis = null;
-            BufferedReader bis = null;
-            BufferedWriter bw = null;
-            try{
-                fis = new FileReader(errorFile);
-                
-                bis = new BufferedReader(new InputStreamReader(new FileInputStream(errorFile)));
-                bw = new BufferedWriter(new FileWriter(tmpFile));
+
+            try (Reader fis = new FileReader(errorFile);
+                 BufferedReader bis = new BufferedReader(new InputStreamReader(new FileInputStream(errorFile)));
+                 BufferedWriter bw = new BufferedWriter(new FileWriter(tmpFile))) {
                 
                 String line;
                 while((line = bis.readLine()) != null){   
@@ -111,28 +107,6 @@ public class SVNFileChecksumResolverUtil {
                 }
             } catch(Exception e){
                 log.error(e.getMessage());
-            } finally {
-                try {
-                    if (bis != null) {
-                        bis.close();
-                    }
-                } catch (IOException e) {
-                    log.error("Couldn't close the BufferedReader " + e.getMessage(), e);
-                }
-                try {
-                    if (fis != null) {
-                        fis.close();
-                    }
-                } catch (IOException e) {
-                    log.error("Couldn't close the FileReader " + e.getMessage(), e);
-                }
-                try {
-                    if (bw != null) {
-                        bw.close();
-                    }
-                } catch (IOException e) {
-                    log.error("Couldn't close the BufferedWriter " + e.getMessage(), e);
-                }
             }
 
 //            Rename the tmp file and remove old file.
