@@ -554,8 +554,8 @@ function displayPasswordField() {
                     <option value="default">default</option>
                     <% } %>
                     <% if(dsProvider.equals(NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER)) { %>
-                   	<option value="<%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%>" s
-                            elected="selected"><%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%></option>
+                   	<option value="<%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%>"
+                            selected="selected"><%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%></option>
                    	<% } else { %>
                    	<option value="<%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%>">
                         <%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%></option>
