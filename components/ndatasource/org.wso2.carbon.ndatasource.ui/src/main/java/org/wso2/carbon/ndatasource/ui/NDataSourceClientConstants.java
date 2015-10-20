@@ -3,7 +3,7 @@ package org.wso2.carbon.ndatasource.ui;
 public class NDataSourceClientConstants {
 	
 	public static final String RDBMS_DTAASOURCE_TYPE = "RDBMS";
-       public static final String RDBMS_EXTERNAL_DATASOURCE_PROVIDER="External Datasource";
+       public static final String RDBMS_EXTERNAL_DATASOURCE_PROVIDER = "External Datasource";
 
     /**
      * JDBC URL prefixes used to identify the RDBMS engine from the driver.
