@@ -121,7 +121,7 @@
 			RDBMSDSXMLConfiguration rdbmsCon = (RDBMSDSXMLConfiguration)NDataSourceHelper.unMarshal(type, configuration);
 			dataSourceclassName = rdbmsCon.getDataSourceClassName();
 			if (dataSourceclassName != null && !("".equals(dataSourceclassName))) {
-				dsProvider = "External Datasource";
+				dsProvider = NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER;
 				dsproviderPropertiesEditMode = "true";
 				List <DataSourceProperty> dataSourceProperties = rdbmsCon.getDataSourceProps();
 				Iterator<DataSourceProperty> iterator = dataSourceProperties.iterator();
@@ -553,10 +553,12 @@ function displayPasswordField() {
                     <% } else { %>
                     <option value="default">default</option>
                     <% } %>
-                    <% if(dsProvider.equals("External Datasource")) { %>
-                   	<option value="External Datasource" selected="selected">External Datasource</option>
+                    <% if(dsProvider.equals(NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER)) { %>
+                   	<option value="<%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%>" s
+                            elected="selected"><%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%></option>
                    	<% } else { %>
-                   	<option value="External Datasource">External Datasource</option>
+                   	<option value="<%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%>">
+                        <%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%></option>
                    	<% } %>
          </select>
          <input type="hidden" id="dsProviderType" name="dsProviderType" value="<%=dsProvider %>" />
@@ -604,7 +606,7 @@ function displayPasswordField() {
 </tr>
 	
 
-<% } else if ("External Datasource".equals(dsProvider)){ %>
+<% } else if (NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER.equals(dsProvider)){ %>
 <tr>
     <td><fmt:message key="datasource.className"/><span class='required'>*</span></td>
     <td align="left">
@@ -664,7 +666,7 @@ function displayPasswordField() {
 </tr>
 <tr>
 	<td><label for="useDataSourceFactory"><fmt:message  key="jndi.use.data.source.factory"/></label></td>
-	<td><% if ("External Datasource".equals(dsProvider)) { %>
+	<td><% if (NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER.equals(dsProvider)) { %>
 	<input type="checkbox" id="useDataSourceFactory" name="useDataSourceFactory" disabled="disabled"/>
 	<%} else if (isUseDataSourceFactory) {%>
 		<input type="checkbox" id="useDataSourceFactory" name="useDataSourceFactory" checked/>

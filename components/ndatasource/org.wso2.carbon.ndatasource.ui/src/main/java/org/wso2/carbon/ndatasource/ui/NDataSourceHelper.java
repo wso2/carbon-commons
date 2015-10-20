@@ -123,7 +123,7 @@ public class NDataSourceHelper {
 			}
 
 			String dsProvider = request.getParameter("dsProviderType");
-			if ("External Data Source".equals(dsProvider)) {
+			if (NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER.equals(dsProvider)) {
 				String dsclassname = request.getParameter("dsclassname");
 				if (dsclassname == null || "".equals(dsclassname)) {
 					handleException(bundle.getString("ds.dsclassname.cannotfound.msg"));
