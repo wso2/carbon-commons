@@ -117,9 +117,9 @@ public class ClusterGroupCommunicator implements MembershipListener {
         Map.Entry<String, Member> currentEntry;
         while (itr.hasNext()) {
             currentEntry = itr.next();
-        	if (!existingMembers.contains(currentEntry.getValue())) {
-        	    removeList.add(currentEntry.getKey());
-        	}
+            if (!existingMembers.contains(currentEntry.getValue())) {
+                removeList.add(currentEntry.getKey());
+            }
         }
         for (String key : removeList) {
             this.membersMap.remove(key);
