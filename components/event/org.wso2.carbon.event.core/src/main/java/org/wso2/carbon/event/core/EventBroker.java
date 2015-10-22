@@ -36,6 +36,7 @@ import java.util.List;
  *      the given name. In a server restart again caller has to register the
  *      {@link org.wso2.carbon.event.core.subscription.EventDispatcher}.
  */
+@Deprecated
 public interface EventBroker {
 
     /**

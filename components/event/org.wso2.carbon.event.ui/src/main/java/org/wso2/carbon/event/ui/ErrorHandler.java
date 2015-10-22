@@ -2,6 +2,7 @@ package org.wso2.carbon.event.ui;
 
 import java.util.regex.Pattern;
 
+@Deprecated
 public class ErrorHandler {
     private static Pattern P1 = Pattern.compile("Failed to add new Collection.*already exist");
     

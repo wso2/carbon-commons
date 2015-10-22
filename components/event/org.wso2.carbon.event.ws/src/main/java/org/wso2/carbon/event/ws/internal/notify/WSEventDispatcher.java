@@ -34,6 +34,7 @@ import org.wso2.carbon.event.core.Message;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
+@Deprecated
 public class WSEventDispatcher implements EventDispatcher {
 
      private static Log log = LogFactory.getLog(WSEventDispatcher.class);

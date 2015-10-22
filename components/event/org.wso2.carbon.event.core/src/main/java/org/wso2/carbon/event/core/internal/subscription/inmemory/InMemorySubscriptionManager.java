@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * inmemory subscription manager. this keeps the subscriptions in a map
  * and returns the the subscriptions from that.
  */
+@Deprecated
 public class InMemorySubscriptionManager implements SubscriptionManager{
 
     private Map<String, Subscription> subscriptionsMap;

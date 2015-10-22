@@ -40,6 +40,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * in memory matching manager which keeps the topic and subscriptions in an hash map
  */
+@Deprecated
 public class SharedMemoryMatchingManager implements MatchingManager, Serializable {
 
     /**

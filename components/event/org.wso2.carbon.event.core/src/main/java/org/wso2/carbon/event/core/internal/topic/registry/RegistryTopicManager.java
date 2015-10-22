@@ -51,6 +51,7 @@ import java.util.regex.Pattern;
 /**
  * This class is utilized to perform actions related to topics.
  */
+@Deprecated
 public class RegistryTopicManager implements TopicManager {
     private static Log log = LogFactory.getLog(RegistryTopicManager.class);
     private static final String AT_REPLACE_CHAR = "_";

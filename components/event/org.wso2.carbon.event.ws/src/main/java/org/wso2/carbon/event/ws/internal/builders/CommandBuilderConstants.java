@@ -22,6 +22,7 @@ import org.wso2.carbon.event.ws.internal.util.EventingConstants;
 
 import javax.xml.namespace.QName;
 
+@Deprecated
 public class CommandBuilderConstants {
 
     private static final String NULL_NAMESPACE = "";

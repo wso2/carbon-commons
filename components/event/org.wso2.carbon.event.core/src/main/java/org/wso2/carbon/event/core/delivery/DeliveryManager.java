@@ -27,6 +27,7 @@ import org.wso2.carbon.event.core.subscription.Subscription;
  * many delivery managers. Delivery manager implemenation uses matching manager to manage and
  * get the matching subscriptions
  */
+@Deprecated
 public interface DeliveryManager {
     /**
      * subscribe with the subscription details.

@@ -3,6 +3,7 @@ package org.wso2.carbon.event.ui;
 import org.wso2.carbon.event.stub.internal.xsd.TopicNode;
 
 
+@Deprecated
 public class TopicNodeInfo {
     private TopicNode topicNode;
     private String path;

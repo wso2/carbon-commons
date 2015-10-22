@@ -32,6 +32,7 @@ import java.util.Iterator;
 /**
  * factory class for registry based subscription manager
  */
+@Deprecated
 public class RegistrySubscriptionManagerFactory implements SubscriptionManagerFactory {
 
     public static final String EB_ELE_TOPIC_STORAGE_PATH = "topicStoragePath";

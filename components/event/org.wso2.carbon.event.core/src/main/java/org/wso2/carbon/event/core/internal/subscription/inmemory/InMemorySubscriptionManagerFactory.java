@@ -20,6 +20,7 @@ import org.wso2.carbon.event.core.subscription.SubscriptionManagerFactory;
 import org.wso2.carbon.event.core.subscription.SubscriptionManager;
 import org.apache.axiom.om.OMElement;
 
+@Deprecated
 public class InMemorySubscriptionManagerFactory implements SubscriptionManagerFactory{
     
     public SubscriptionManager getSubscriptionManager(OMElement config) {

@@ -38,6 +38,7 @@ import javax.xml.namespace.QName;
 import java.net.SocketException;
 import java.rmi.RemoteException;
 
+@Deprecated
 public class QpidJMSDeliveryManagerFactory implements DeliveryManagerFactory {
 
     public static final String EB_REMOTE_MESSGE_BROKER = "remoteMessageBroker";

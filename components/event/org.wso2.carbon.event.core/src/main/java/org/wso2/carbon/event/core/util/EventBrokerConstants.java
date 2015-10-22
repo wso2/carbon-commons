@@ -16,6 +16,7 @@
 
 package org.wso2.carbon.event.core.util;
 
+@Deprecated
 public interface EventBrokerConstants {
 
     String EB_CONF = "event-broker.xml";

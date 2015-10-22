@@ -1,5 +1,6 @@
 package org.wso2.carbon.event.client.broker;
 
+@Deprecated
 public class BrokerClientException extends Exception{
     public String errorMessage;
 

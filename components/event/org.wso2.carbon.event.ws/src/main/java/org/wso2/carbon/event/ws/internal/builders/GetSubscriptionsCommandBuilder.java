@@ -12,6 +12,7 @@ import org.apache.axis2.databinding.utils.ConverterUtil;
 import org.wso2.carbon.event.core.subscription.Subscription;
 import org.wso2.carbon.event.ws.internal.util.EventingConstants;
 
+@Deprecated
 public class GetSubscriptionsCommandBuilder {
     private static SOAPFactory fac = OMAbstractFactory.getSOAP12Factory();
 

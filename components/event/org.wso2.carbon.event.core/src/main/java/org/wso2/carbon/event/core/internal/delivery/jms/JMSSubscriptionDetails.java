@@ -28,6 +28,7 @@ import javax.jms.JMSException;
  * this class is used to keep the details of the jms subscription
  * to close the connections at the end
  */
+@Deprecated
 public class JMSSubscriptionDetails {
 
     private TopicSubscriber topicSubscriber;

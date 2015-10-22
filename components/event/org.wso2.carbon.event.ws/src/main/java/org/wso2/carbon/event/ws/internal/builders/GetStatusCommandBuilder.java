@@ -31,6 +31,7 @@ import org.wso2.carbon.event.ws.internal.builders.exceptions.InvalidMessageExcep
 import org.wso2.carbon.event.ws.internal.util.EventingConstants;
 import org.wso2.carbon.event.core.subscription.Subscription;
 
+@Deprecated
 public class GetStatusCommandBuilder extends CommandBuilderConstants {
 
     private static final Log log = LogFactory.getLog(SubscribeCommandBuilder.class);

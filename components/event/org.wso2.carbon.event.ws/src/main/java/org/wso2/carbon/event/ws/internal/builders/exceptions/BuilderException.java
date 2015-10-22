@@ -18,6 +18,7 @@
  */
 package org.wso2.carbon.event.ws.internal.builders.exceptions;
 
+@Deprecated
 public class BuilderException extends RuntimeException {
 
     public BuilderException(String message) {
