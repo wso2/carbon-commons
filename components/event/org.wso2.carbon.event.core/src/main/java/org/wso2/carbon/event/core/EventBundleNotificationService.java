@@ -23,6 +23,7 @@ import org.wso2.carbon.event.core.qpid.QpidServerDetails;
  * Qpid compoent has an decalrative service to listen for this. so we know
  * it will start up after event compoent.
  */
+@Deprecated
 public interface EventBundleNotificationService {
 
     public void notifyStart(QpidServerDetails qpidServerDetails);

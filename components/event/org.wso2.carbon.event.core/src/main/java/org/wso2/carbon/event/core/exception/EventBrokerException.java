@@ -19,6 +19,7 @@ package org.wso2.carbon.event.core.exception;
 /**
  * this exceptions is thrown to any problem which occures at the message processing time.
  */
+@Deprecated
 public class EventBrokerException extends Exception{
 
     public EventBrokerException() {

@@ -9,6 +9,7 @@ import org.wso2.carbon.utils.AbstractAxis2ConfigurationContextObserver;
 import java.util.HashSet;
 import java.util.Set;
 
+@Deprecated
 public class EventAxis2ConfigurationContextObserver extends AbstractAxis2ConfigurationContextObserver {
 	
     private static Log log = LogFactory.getLog(EventAxis2ConfigurationContextObserver.class);

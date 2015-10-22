@@ -24,6 +24,7 @@ import java.util.HashMap;
 /**
  * this class is used to keep the OMMessage and 
  */
+@Deprecated
 public class Message {
 
     private Map<String, String> properties;

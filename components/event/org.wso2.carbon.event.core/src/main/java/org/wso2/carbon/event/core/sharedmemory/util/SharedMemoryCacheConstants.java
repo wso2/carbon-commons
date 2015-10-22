@@ -17,6 +17,7 @@
  */
 package org.wso2.carbon.event.core.sharedmemory.util;
 
+@Deprecated
 public class SharedMemoryCacheConstants {
 
 	private SharedMemoryCacheConstants(){}

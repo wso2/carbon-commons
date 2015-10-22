@@ -27,6 +27,7 @@ import javax.naming.NamingException;
 import javax.naming.Context;
 import java.util.Properties;
 
+@Deprecated
 public class QpidJMSDeliveryManager extends JMSDeliveryManager {
 
     public static final String QPID_ICF = "org.wso2.andes.jndi.PropertiesFileInitialContextFactory";

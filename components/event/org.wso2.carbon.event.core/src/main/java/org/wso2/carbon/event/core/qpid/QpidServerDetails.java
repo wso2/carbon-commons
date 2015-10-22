@@ -18,6 +18,7 @@ package org.wso2.carbon.event.core.qpid;
 
 import org.wso2.carbon.utils.ServerConstants;
 
+@Deprecated
 public class QpidServerDetails {
 
     private static final String DOMAIN_NAME_SEPARATOR = "@";

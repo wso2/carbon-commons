@@ -28,6 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * this class is used to keep the details of the subscription storage. Simply this contains
  * maps to keep the subscrition object deatils with the topic details
  */
+@Deprecated
 public class InMemorySubscriptionStorage {
     /**
      * map to keep the subscription details with the topics. This is important in finding subscriptions

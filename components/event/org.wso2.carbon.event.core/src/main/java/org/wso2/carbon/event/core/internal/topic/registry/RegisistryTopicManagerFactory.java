@@ -22,6 +22,7 @@ import org.wso2.carbon.event.core.internal.util.JavaUtil;
 import org.wso2.carbon.event.core.topic.TopicManager;
 import org.wso2.carbon.event.core.topic.TopicManagerFactory;
 
+@Deprecated
 public class RegisistryTopicManagerFactory implements TopicManagerFactory{
 
     public static final String EB_ELE_TOPIC_STORAGE_PATH = "topicStoragePath";

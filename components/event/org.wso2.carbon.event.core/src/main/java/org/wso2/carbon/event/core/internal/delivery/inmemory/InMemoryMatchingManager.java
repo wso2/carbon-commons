@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * in memory matching manager which keeps the topic and subscriptions in an hash map
  */
+@Deprecated
 public class InMemoryMatchingManager implements MatchingManager {
 
     private static final Log log = LogFactory.getLog(InMemoryMatchingManager.class);

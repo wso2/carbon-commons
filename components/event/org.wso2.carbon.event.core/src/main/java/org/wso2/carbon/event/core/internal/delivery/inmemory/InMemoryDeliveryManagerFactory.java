@@ -30,6 +30,7 @@ import java.util.concurrent.*;
 /**
  * factory class for inmemory Delivary manager
  */
+@Deprecated
 public class InMemoryDeliveryManagerFactory implements DeliveryManagerFactory {
 
     public static final String EB_DM_MIN_SPARE_THREADS = "minSpareThreads";

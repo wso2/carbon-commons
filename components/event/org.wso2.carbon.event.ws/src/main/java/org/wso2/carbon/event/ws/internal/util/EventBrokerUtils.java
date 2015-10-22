@@ -34,6 +34,7 @@ import org.wso2.carbon.event.ws.internal.exception.WSEventException;
 
 import java.util.regex.Matcher;
 
+@Deprecated
 public class EventBrokerUtils {
 
 

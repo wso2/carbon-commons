@@ -34,6 +34,7 @@ import java.io.*;
  * Start point to build the event broker. This class read the event broker file and calls the
  * event broker factory class to create event broker
  */
+@Deprecated
 public class EventBrokerBuilder {
 
     public static EventBroker createEventBroker() throws EventBrokerConfigurationException {

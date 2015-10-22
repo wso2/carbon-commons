@@ -27,6 +27,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * worker to send notifications. Delivary managers should start a new thread to send a notification.
  */
+@Deprecated
 public class Worker implements Runnable{
 
     private NotificationManager notificationManager;

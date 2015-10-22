@@ -19,6 +19,7 @@ package org.wso2.carbon.event.core.topic;
 import org.apache.axiom.om.OMElement;
 import org.wso2.carbon.event.core.exception.EventBrokerConfigurationException;
 
+@Deprecated
 public interface TopicManagerFactory {
 
     public TopicManager getTopicManager(OMElement config) throws EventBrokerConfigurationException;

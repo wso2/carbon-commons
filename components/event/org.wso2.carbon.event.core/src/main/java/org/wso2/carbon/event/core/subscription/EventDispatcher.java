@@ -22,6 +22,7 @@ import org.wso2.carbon.event.core.Message;
 /**
  * this interface can be used to receive the Events from the EventBroker interface
  */
+@Deprecated
 public interface EventDispatcher {
 
     /**

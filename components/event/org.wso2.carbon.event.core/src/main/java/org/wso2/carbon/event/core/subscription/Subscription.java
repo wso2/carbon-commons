@@ -29,6 +29,7 @@ import java.util.Date;
  * keeps all the subscription related data.
  * 
  */
+@Deprecated
 public class Subscription implements Serializable {
 
     // these properties are come from the eventing specification

@@ -33,6 +33,7 @@ import java.util.concurrent.*;
 /**
  * factory to create new carbon event brokers
  */
+@Deprecated
 public class CarbonEventBrokerFactory implements EventBrokerFactory {
 
     public static final String EB_MIN_SPARE_THREADS = "minSpareThreads";
