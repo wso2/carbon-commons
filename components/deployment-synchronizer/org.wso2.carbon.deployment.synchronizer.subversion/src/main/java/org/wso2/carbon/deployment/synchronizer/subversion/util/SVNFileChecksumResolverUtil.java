@@ -18,19 +18,20 @@
 
 package org.wso2.carbon.deployment.synchronizer.subversion.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
-import org.wso2.carbon.utils.multitenancy.MultitenantUtils;
 
 /**
  * This class resolves the checksum issues causing svn 1.6 in the .svn/entries file.
@@ -87,11 +88,10 @@ public class SVNFileChecksumResolverUtil {
             
             log.debug("Trying to correct the checksum mismatch for SVN file:" +fullSvnFilePath+ "." +
             		"Expected:" +expectedChecksum.trim()+ " but it is:" +actualChecksum.trim());
-            try{
-                Reader fis = new FileReader(errorFile);
-                
-                BufferedReader bis = new BufferedReader(new InputStreamReader(new FileInputStream(errorFile)));
-                BufferedWriter bw = new BufferedWriter(new FileWriter(tmpFile));
+
+            try (Reader fis = new FileReader(errorFile);
+                 BufferedReader bis = new BufferedReader(new InputStreamReader(new FileInputStream(errorFile)));
+                 BufferedWriter bw = new BufferedWriter(new FileWriter(tmpFile))) {
                 
                 String line;
                 while((line = bis.readLine()) != null){   
@@ -105,10 +105,7 @@ public class SVNFileChecksumResolverUtil {
                 	}
                 	bw.newLine();                	
                 }
-                bis.close();                
-                fis.close();
-                bw.close();
-            }catch(Exception e){
+            } catch(Exception e){
                 log.error(e.getMessage());
             }
 
