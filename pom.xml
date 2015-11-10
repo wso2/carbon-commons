@@ -1296,7 +1296,7 @@
             </dependency>
             <!-- Jasper -->
             <dependency>
-                <groupId>jasperreports.wso2</groupId>
+                <groupId>org.wso2.orbit.net.sf.jasperreports</groupId>
                 <artifactId>jasperreports</artifactId>
                 <version>${jasperreports.wso2.version}</version>
             </dependency>
