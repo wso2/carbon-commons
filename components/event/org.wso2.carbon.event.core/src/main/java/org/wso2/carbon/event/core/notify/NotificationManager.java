@@ -20,6 +20,7 @@ import org.wso2.carbon.event.core.subscription.Subscription;
 import org.wso2.carbon.event.core.exception.EventBrokerException;
 import org.wso2.carbon.event.core.Message;
 
+@Deprecated
 public interface NotificationManager {
 
     public void sendNotification(Message message, Subscription subscription) throws EventBrokerException;

@@ -22,6 +22,7 @@ import org.wso2.carbon.event.core.exception.EventBrokerConfigurationException;
 /**
  * factory to get the Event broker instances
  */
+@Deprecated
 public interface EventBrokerFactory {
 
     /**

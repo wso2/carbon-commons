@@ -30,6 +30,7 @@ import org.apache.axiom.om.impl.llom.factory.OMXMLBuilderFactory;
 
 import javax.xml.stream.XMLStreamException;
 
+@Deprecated
 public abstract class CommandBuilderTestUtils {
 
     public static MessageContext getMCWithSOAP11Envelope() throws AxisFault {

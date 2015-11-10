@@ -38,6 +38,7 @@ import org.wso2.carbon.utils.ConfigurationContextService;
  * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="1..1"
  * policy="dynamic" bind="setConfigurationContextService" unbind="unsetConfigurationContextService"
  */
+@Deprecated
 public class EventBrokerBuilderDS {
 
     private static final Log log = LogFactory.getLog(EventBrokerBuilderDS.class);

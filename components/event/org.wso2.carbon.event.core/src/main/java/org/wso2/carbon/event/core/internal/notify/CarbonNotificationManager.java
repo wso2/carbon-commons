@@ -30,6 +30,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Notification manager of the carbon. This implements the send notification
  * method which can be used by any delivary manager interface
  */
+@Deprecated
 public class CarbonNotificationManager implements NotificationManager{
 
     private Map<String, EventDispatcher> eventDispatchMap;

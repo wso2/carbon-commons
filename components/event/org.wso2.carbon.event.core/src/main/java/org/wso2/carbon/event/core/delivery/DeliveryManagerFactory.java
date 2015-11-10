@@ -22,6 +22,7 @@ import org.wso2.carbon.event.core.exception.EventBrokerConfigurationException;
 /**
  * factory interface to create Delivary managers
  */
+@Deprecated
 public interface DeliveryManagerFactory {
 
     /**

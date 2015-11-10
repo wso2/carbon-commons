@@ -29,6 +29,7 @@ import org.wso2.carbon.event.core.subscription.Subscription;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+@Deprecated
 public class RenewCommandBuilderTest extends TestCase {
 
     /**

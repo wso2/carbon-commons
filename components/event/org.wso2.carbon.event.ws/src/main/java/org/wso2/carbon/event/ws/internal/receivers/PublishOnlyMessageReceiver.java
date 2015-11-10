@@ -35,6 +35,7 @@ import org.wso2.carbon.event.core.EventBroker;
 import org.wso2.carbon.event.core.Message;
 import org.wso2.carbon.event.core.exception.EventBrokerException;
 
+@Deprecated
 public class PublishOnlyMessageReceiver extends AbstractMessageReceiver {
 
     private static final Log log = LogFactory.getLog(PublishOnlyMessageReceiver.class);

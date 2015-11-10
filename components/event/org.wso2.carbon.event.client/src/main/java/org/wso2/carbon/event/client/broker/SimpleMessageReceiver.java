@@ -17,7 +17,7 @@ import javax.xml.namespace.QName;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-
+@Deprecated
 public class SimpleMessageReceiver{
     private SimpleHTTPServer axis2Server;
     private ConfigurationContext configContext;

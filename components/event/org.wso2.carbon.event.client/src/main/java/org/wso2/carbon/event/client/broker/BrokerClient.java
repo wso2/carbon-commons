@@ -30,7 +30,7 @@ import java.rmi.RemoteException;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-
+@Deprecated
 public class BrokerClient {
     private static final Log log = LogFactory.getLog(BrokerClient.class);
     

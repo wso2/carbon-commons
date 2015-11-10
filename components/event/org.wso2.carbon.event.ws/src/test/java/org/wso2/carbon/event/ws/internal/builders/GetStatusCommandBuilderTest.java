@@ -27,6 +27,7 @@ import org.wso2.carbon.event.core.subscription.Subscription;
 
 import java.util.Calendar;
 
+@Deprecated
 public class GetStatusCommandBuilderTest extends TestCase {
 
     /**

@@ -40,6 +40,7 @@ import java.util.concurrent.ExecutorService;
  * The following class contains the carbon eventing implementation related to subscriptions and
  * topics.
  */
+@Deprecated
 public class CarbonEventBroker implements EventBroker {
 
     private SubscriptionManager subscriptionManager;

@@ -22,6 +22,7 @@ import org.wso2.carbon.user.api.UserRealmService;
 import org.wso2.carbon.utils.ConfigurationContextService;
 import org.wso2.carbon.event.core.qpid.QpidServerDetails;
 
+@Deprecated
 public class EventBrokerHolder {
 
     private static EventBrokerHolder instance = new EventBrokerHolder();

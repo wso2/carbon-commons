@@ -24,6 +24,7 @@ import java.util.List;
 /**
  * matches the subscriptions with the topics
  */
+@Deprecated
 public interface MatchingManager {
 
     /**

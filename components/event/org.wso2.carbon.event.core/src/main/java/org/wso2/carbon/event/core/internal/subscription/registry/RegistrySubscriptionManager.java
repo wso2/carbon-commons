@@ -51,6 +51,7 @@ import java.util.Properties;
  * When getting the subscriptions we calculate the subscription stored path using above two
  * parameters.
  */
+@Deprecated
 public class RegistrySubscriptionManager implements SubscriptionManager {
 
     /**

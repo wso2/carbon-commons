@@ -32,6 +32,7 @@ import javax.cache.CacheManager;
 import javax.cache.Caching;
 import java.util.concurrent.TimeUnit;
 
+@Deprecated
 public class SharedMemoryCacheUtil {
     private static boolean cacheInit = false;
 

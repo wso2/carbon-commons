@@ -33,6 +33,7 @@ import org.wso2.carbon.event.core.internal.util.EventBrokerHolder;
 import org.wso2.carbon.utils.Axis2ConfigurationContextObserver;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
+@Deprecated
 public class EventBrokerHandler implements EventBundleNotificationService {
 
     private static final Log log = LogFactory.getLog(EventBrokerHandler.class);

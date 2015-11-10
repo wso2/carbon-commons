@@ -24,6 +24,7 @@ import org.apache.axis2.context.MessageContext;
 import org.wso2.carbon.event.ws.internal.utils.CommandBuilderTestUtils;
 import org.wso2.carbon.event.core.subscription.Subscription;
 
+@Deprecated
 public class UnSubscribeCommandBuilderTest extends TestCase {
 
     /**

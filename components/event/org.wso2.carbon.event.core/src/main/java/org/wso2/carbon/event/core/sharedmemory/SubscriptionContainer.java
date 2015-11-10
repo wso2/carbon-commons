@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 @SuppressWarnings("serial")
+@Deprecated
 public class SubscriptionContainer implements Serializable {
     //variable to store the cache name related to this container (this container's topic name)
     private String topicCacheName = null;
