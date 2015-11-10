@@ -30,6 +30,7 @@ import org.wso2.carbon.utils.ConfigurationContextService;
  * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="1..1"
  * policy="dynamic" bind="setConfigurationContextService" unbind="unsetConfigurationContextService"
  */
+@Deprecated
 public class WSEventBrokerDS {
 
     protected void activate(ComponentContext context) {

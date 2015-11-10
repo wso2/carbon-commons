@@ -45,6 +45,7 @@ import java.util.concurrent.TimeUnit;
  * maps to keep the subscription object details with the topic details
  */
 @SuppressWarnings("serial")
+@Deprecated
 public class SharedMemorySubscriptionStorage implements Serializable {
 
     private static boolean topicSubscriptionCacheInit =false;

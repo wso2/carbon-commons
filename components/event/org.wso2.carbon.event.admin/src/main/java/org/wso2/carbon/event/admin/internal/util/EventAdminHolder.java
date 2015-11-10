@@ -18,6 +18,7 @@ package org.wso2.carbon.event.admin.internal.util;
 
 import org.wso2.carbon.event.core.EventBroker;
 
+@Deprecated
 public class EventAdminHolder {
 
     private static EventAdminHolder eventAdminHolder = new EventAdminHolder();

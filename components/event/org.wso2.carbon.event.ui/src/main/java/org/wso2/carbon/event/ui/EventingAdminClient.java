@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.event.stub.service.EventingAdminServiceStub;
 import org.wso2.carbon.event.stub.service.dto.SubscriptionDTO;
 
+@Deprecated
 public class EventingAdminClient {
 
 	private static final Log log = LogFactory.getLog(EventingAdminClient.class);

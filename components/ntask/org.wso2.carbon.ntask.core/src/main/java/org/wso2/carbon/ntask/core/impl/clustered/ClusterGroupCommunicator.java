@@ -112,11 +112,17 @@ public class ClusterGroupCommunicator implements MembershipListener {
      */
     private void checkAndRemoveExpiredMembers() {
         Set<Member> existingMembers = this.getHazelcast().getCluster().getMembers();
-        Iterator<Member> itr = this.membersMap.values().iterator();
+        Iterator<Map.Entry<String, Member>> itr = this.membersMap.entrySet().iterator();
+        List<String> removeList = new ArrayList<>();
+        Map.Entry<String, Member> currentEntry;
         while (itr.hasNext()) {
-        	if (!existingMembers.contains(itr.next())) {
-        		itr.remove();
-        	}
+            currentEntry = itr.next();
+            if (!existingMembers.contains(currentEntry.getValue())) {
+                removeList.add(currentEntry.getKey());
+            }
+        }
+        for (String key : removeList) {
+            this.membersMap.remove(key);
         }
     }
 

@@ -19,6 +19,7 @@ package org.wso2.carbon.event.core.exception;
 /**
  * Event broker building logic throws this exception to any configuration problem.
  */
+@Deprecated
 public class EventBrokerConfigurationException extends EventBrokerException {
 
     public EventBrokerConfigurationException() {

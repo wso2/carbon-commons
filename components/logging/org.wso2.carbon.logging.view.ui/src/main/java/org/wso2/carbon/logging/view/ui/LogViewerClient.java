@@ -66,6 +66,8 @@ public class LogViewerClient {
             throws RemoteException, LogViewerException {
         String msg = "Error occurred while getting logger data. Backend service may be " +
                      "unavailable";
+
+        InputStream fileToDownload = null;
         try {
             logFile = logFile.replace(".gz", "");
             ServletOutputStream outputStream = response.getOutputStream();
@@ -73,7 +75,7 @@ public class LogViewerClient {
             response.setHeader("Content-Disposition",
                                "attachment;filename=" + logFile.replaceAll("\\s", "_"));
             DataHandler data = stub.downloadArchivedLogFiles(logFile, tenantDomain, serverKey);
-            InputStream fileToDownload = data.getInputStream();
+            fileToDownload = data.getInputStream();
             int c;
             while ((c = fileToDownload.read()) != -1) {
                 outputStream.write(c);
@@ -90,6 +92,14 @@ public class LogViewerClient {
             String errorWhileDownloadingMsg = "Error while downloading file.";
             log.error(errorWhileDownloadingMsg, e);
             throw new LogViewerException(errorWhileDownloadingMsg, e);
+        } finally {
+            try {
+                if(fileToDownload != null) {
+                    fileToDownload.close();
+                }
+            } catch (IOException e) {
+                log.error("Couldn't close the InputStream " + e.getMessage(), e);
+            }
         }
     }
 

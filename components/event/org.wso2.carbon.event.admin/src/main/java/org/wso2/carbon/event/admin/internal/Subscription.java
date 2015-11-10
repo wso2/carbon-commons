@@ -5,6 +5,7 @@ import org.wso2.carbon.event.core.subscription.EventFilter;
 
 import java.util.Calendar;
 
+@Deprecated
 public class Subscription {
     // these properties are come from the eventing specification
     private String eventSinkURL;

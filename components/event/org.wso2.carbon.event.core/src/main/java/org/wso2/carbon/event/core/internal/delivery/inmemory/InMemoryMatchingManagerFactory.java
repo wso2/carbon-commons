@@ -22,6 +22,7 @@ import org.wso2.carbon.event.core.exception.EventBrokerException;
 import org.wso2.carbon.event.core.exception.EventBrokerConfigurationException;
 import org.apache.axiom.om.OMElement;
 
+@Deprecated
 public class InMemoryMatchingManagerFactory implements MatchingManagerFactory {
 
     public MatchingManager getMatchingManager(OMElement config) throws EventBrokerConfigurationException {

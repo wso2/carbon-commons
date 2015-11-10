@@ -34,6 +34,7 @@ import java.util.Properties;
 /**
  * some utility classes.
  */
+@Deprecated
 public class JavaUtil {
 
     /**

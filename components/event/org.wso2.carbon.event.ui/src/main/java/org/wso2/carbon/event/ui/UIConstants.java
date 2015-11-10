@@ -1,5 +1,6 @@
 package org.wso2.carbon.event.ui;
 
+@Deprecated
 public class UIConstants {
     public static final String SUBSCRIPTION_MODE_0 = "mode_0";
     public static final String SUBSCRIPTION_MODE_1 = "mode_1";

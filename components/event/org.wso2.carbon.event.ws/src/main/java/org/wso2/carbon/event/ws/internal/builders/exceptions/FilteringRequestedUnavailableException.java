@@ -19,6 +19,7 @@
 package org.wso2.carbon.event.ws.internal.builders.exceptions;
 
 
+@Deprecated
 public class FilteringRequestedUnavailableException extends Exception {
 
     public FilteringRequestedUnavailableException(String message) {

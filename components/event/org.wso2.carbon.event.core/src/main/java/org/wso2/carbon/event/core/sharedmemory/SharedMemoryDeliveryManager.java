@@ -47,6 +47,7 @@ import java.util.concurrent.ExecutorService;
 /**
  * shared memory implementation of the delivery manager.
  */
+@Deprecated
 public class SharedMemoryDeliveryManager implements DeliveryManager {
 
 	private static final Log log = LogFactory.getLog(SharedMemoryDeliveryManager.class);

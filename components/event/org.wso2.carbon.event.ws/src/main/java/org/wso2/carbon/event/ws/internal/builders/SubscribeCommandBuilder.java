@@ -44,6 +44,7 @@ import org.wso2.carbon.event.ws.internal.util.EventingConstants;
 import org.wso2.carbon.event.core.subscription.Subscription;
 import org.wso2.carbon.event.core.subscription.EventFilter;
 
+@Deprecated
 public class SubscribeCommandBuilder extends CommandBuilderConstants {
 
     private static final Log log = LogFactory.getLog(SubscribeCommandBuilder.class);

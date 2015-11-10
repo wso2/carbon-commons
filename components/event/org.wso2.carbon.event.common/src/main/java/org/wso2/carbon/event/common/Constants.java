@@ -2,6 +2,7 @@ package org.wso2.carbon.event.common;
 
 import javax.xml.namespace.QName;
 
+@Deprecated
 public class Constants {
     public static final String EXTSNSIONS_URI = "http://wso2.org/Services/extensions";
     public static QName SORTING_DATA = new QName(EXTSNSIONS_URI,"sortby");

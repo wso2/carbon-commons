@@ -30,6 +30,7 @@ import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.event.core.sharedmemory.SharedMemorySubscriptionStorage;
 import org.wso2.carbon.event.core.sharedmemory.SubscriptionContainer;
 
+@Deprecated
 public class SubscriptionClusterMessage extends ClusteringMessage implements
 		Serializable {
 	

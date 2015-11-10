@@ -19,6 +19,7 @@ package org.wso2.carbon.event.ws.internal.util;
 import javax.xml.namespace.QName;
 import java.util.regex.Pattern;
 
+@Deprecated
 public interface EventingConstants {
 
     String WSE_EVENTING_NS = "http://schemas.xmlsoap.org/ws/2004/08/eventing";

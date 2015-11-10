@@ -26,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * this class use as the worker for the executor pool which publish the message
  */
+@Deprecated
 public class EventPublisher implements Runnable{
 
     private static final Log log = LogFactory.getLog(EventPublisher.class);

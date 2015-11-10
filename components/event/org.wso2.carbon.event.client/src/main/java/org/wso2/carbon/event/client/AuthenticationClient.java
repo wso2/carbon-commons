@@ -27,6 +27,7 @@ import org.wso2.carbon.utils.NetworkUtils;
 import java.net.SocketException;
 import java.rmi.RemoteException;
 
+@Deprecated
 public class AuthenticationClient {    
     private String sessionCookie;
     private AuthenticationAdminServiceStub stub;

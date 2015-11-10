@@ -16,6 +16,7 @@
 
 package org.wso2.carbon.event.core.subscription;
 
+@Deprecated
 public class EventFilter {
 
     private String dialect;

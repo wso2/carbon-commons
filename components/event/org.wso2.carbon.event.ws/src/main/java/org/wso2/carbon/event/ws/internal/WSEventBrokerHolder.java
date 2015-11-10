@@ -21,6 +21,7 @@ import org.wso2.carbon.event.core.util.EventBrokerConstants;
 import org.wso2.carbon.event.ws.internal.notify.WSEventDispatcher;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
+@Deprecated
 public class WSEventBrokerHolder {
 
     private static WSEventBrokerHolder wsEventBrokerHolder = new WSEventBrokerHolder();

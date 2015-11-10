@@ -22,6 +22,7 @@ import org.wso2.carbon.event.core.subscription.Subscription;
 /**
  * An interface for topic manager. Includes actions which are related to topics.
  */
+@Deprecated
 public interface TopicManager {
 
     /**

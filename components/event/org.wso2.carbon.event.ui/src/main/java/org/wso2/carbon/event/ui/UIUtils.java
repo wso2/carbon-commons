@@ -33,6 +33,7 @@ import java.util.ArrayList;
 /**
  * This class is used by the UI to connect to services and provides utilities. Used by JSP pages.
  */
+@Deprecated
 public class UIUtils {
 
     /**

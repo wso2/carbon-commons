@@ -16,6 +16,7 @@
 
 package org.wso2.carbon.event.core.topic;
 
+@Deprecated
 public class TopicRolePermission {
 
     private String roleName;

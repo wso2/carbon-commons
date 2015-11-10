@@ -26,6 +26,7 @@ import org.wso2.carbon.event.core.EventBroker;
  * policy="dynamic" bind="setEventBroker" unbind="unSetEventBroker"
  *
  */
+@Deprecated
 public class EventAdminDS {
 
     protected void activate(ComponentContext context) {

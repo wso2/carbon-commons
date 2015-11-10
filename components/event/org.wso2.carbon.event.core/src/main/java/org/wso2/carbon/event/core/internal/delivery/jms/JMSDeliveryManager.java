@@ -38,6 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * this class provides a JMS based delivary manager
  */
+@Deprecated
 public abstract class JMSDeliveryManager implements DeliveryManager {
 
      private static final Log log = LogFactory.getLog(JMSDeliveryManager.class);

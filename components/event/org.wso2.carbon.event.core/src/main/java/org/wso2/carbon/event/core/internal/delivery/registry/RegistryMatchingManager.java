@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+@Deprecated
 public class RegistryMatchingManager implements MatchingManager {
 
     /**

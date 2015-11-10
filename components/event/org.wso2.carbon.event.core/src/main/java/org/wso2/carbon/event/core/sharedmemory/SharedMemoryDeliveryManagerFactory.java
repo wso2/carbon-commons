@@ -33,6 +33,7 @@ import org.apache.axiom.om.OMElement;
 /**
  * factory class for shared memory Delivery manager
  */
+@Deprecated
 public class SharedMemoryDeliveryManagerFactory implements DeliveryManagerFactory {
 
     public static final String EB_DM_MIN_SPARE_THREADS = "minSpareThreads";

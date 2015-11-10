@@ -28,6 +28,7 @@ import org.wso2.carbon.event.core.sharedmemory.util.SharedMemoryCacheUtil;
 
 import javax.cache.Cache;
 
+@Deprecated
 public class SharedMemoryMatchingManagerFactory implements MatchingManagerFactory {
 
 	private static Cache<Integer, SharedMemoryMatchingManager> getInMemoryMatchingCache() {

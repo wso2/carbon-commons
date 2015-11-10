@@ -32,6 +32,7 @@ import javax.xml.stream.XMLStreamException;
 import java.io.ByteArrayInputStream;
 import java.util.Enumeration;
 
+@Deprecated
 public class JMSMessageListener implements MessageListener {
 
     private Log log = LogFactory.getLog(JMSMessageListener.class);

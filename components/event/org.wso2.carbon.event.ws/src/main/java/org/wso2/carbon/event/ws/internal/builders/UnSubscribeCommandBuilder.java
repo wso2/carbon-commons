@@ -31,6 +31,7 @@ import org.wso2.carbon.event.core.subscription.Subscription;
 
 import javax.xml.namespace.QName;
 
+@Deprecated
 public class UnSubscribeCommandBuilder extends CommandBuilderConstants {
 
     private static final Log log = LogFactory.getLog(SubscribeCommandBuilder.class);

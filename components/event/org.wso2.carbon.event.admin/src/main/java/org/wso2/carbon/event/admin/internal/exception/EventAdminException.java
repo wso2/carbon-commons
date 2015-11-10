@@ -1,5 +1,6 @@
 package org.wso2.carbon.event.admin.internal.exception;
 
+@Deprecated
 public class EventAdminException extends Exception{
 
     public String errorMessage;

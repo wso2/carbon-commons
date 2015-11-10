@@ -25,6 +25,7 @@ import java.util.List;
  * call this interface to add new subscriptions.
  * At the restart of the server it can retrieve all the subscriptions and resubscribes.
  */
+@Deprecated
 public interface SubscriptionManager {
 
     /**

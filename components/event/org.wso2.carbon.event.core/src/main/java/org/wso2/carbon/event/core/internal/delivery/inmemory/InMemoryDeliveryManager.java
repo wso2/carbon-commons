@@ -37,6 +37,7 @@ import java.util.concurrent.ExecutorService;
 /**
  * in memory implementation of the delivary manager.
  */
+@Deprecated
 public class InMemoryDeliveryManager implements DeliveryManager {
 
     private ExecutorService executor;

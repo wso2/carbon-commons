@@ -16,6 +16,7 @@
 
 package org.wso2.carbon.event.ws.internal.exception;
 
+@Deprecated
 public class WSEventException extends Exception {
 
     public WSEventException() {
