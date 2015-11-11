@@ -84,7 +84,7 @@
                                 </bundleDef>
                             </bundles>
                             <importBundles>
-                                <importBundleDef>jasperreports.wso2:jasperreports</importBundleDef>
+                                <importBundleDef>org.wso2.orbit.net.sf.jasperreports:jasperreports</importBundleDef>
                                 <importBundleDef>jxl.wso2:jxl</importBundleDef>
                                 <importBundleDef>com.lowagie.wso2:itext</importBundleDef>
                                 <importBundleDef>commons-beanutils.wso2:commons-beanutils</importBundleDef>
