@@ -52,7 +52,6 @@ public class HtmlReport {
         }
 
         try {
-
             // exclude the repeating (paged) column headers
             jasperPrint
                     .setProperty("net.sf.jasperreports.export.html.exclude.origin.keep.first.band.2", "columnHeader");
@@ -68,12 +67,9 @@ public class HtmlReport {
             //To generate a html report we need to embed images using base64 encoding.
             //Otherwise it shows corrupted images.
             simpleHtmlExporterOutput.setImageHandler(new HtmlResourceHandler() {
-
                 @Override public void handleResource(String id, byte[] data) {
-
                     images.put(id, "data:image/gif;base64," + new String(Base64.encodeBase64(data)));
                 }
-
                 @Override public String getResourcePath(String id) {
                     return images.get(id);
                 }

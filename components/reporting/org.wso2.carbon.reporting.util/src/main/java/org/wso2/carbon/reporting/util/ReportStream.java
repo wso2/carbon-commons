@@ -19,7 +19,6 @@ public class ReportStream {
             try {
 
                 if (reportType.equalsIgnoreCase("pdf")) {
-
                     // used PdfReport to generate PDF report
                     PdfReport pdfReport = new PdfReport();
                     try {
