@@ -45,7 +45,7 @@
             <artifactId>org.wso2.carbon.reporting.api</artifactId>
         </dependency>
         <dependency>
-            <groupId>jasperreports.wso2</groupId>
+            <groupId>org.wso2.orbit.net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
         </dependency>
         <dependency>
@@ -104,7 +104,7 @@
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.core</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.util</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.api</bundleDef>
-                                <bundleDef>jasperreports.wso2:jasperreports</bundleDef>
+                                <bundleDef>org.wso2.orbit.net.sf.jasperreports:jasperreports</bundleDef>
                                 <bundleDef>jxl.wso2:jxl</bundleDef>
                                 <bundleDef>com.lowagie.wso2:itext</bundleDef>
                                 <bundleDef>commons-beanutils.wso2:commons-beanutils</bundleDef>
