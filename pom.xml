@@ -1434,7 +1434,7 @@
             </dependency>
             <!-- Jasper -->
             <dependency>
-                <groupId>jasperreports.wso2</groupId>
+                <groupId>org.wso2.orbit.net.sf.jasperreports</groupId>
                 <artifactId>jasperreports</artifactId>
                 <version>${jasperreports.wso2.version}</version>
             </dependency>
@@ -2002,7 +2002,7 @@
 
         <!-- Jasper Reports Version -->
         <version.jasper>2.2.2.v201205150955</version.jasper>
-        <jasperreports.wso2.version>3.7.1.wso2v1</jasperreports.wso2.version>
+        <jasperreports.wso2.version>6.1.1.wso2v1</jasperreports.wso2.version>
 
         <!-- Equinox dependency versions -->
         <version.equinox.osgi>3.8.1.v20120830-144521</version.equinox.osgi>

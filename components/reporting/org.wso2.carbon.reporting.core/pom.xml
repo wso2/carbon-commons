@@ -51,7 +51,7 @@
             <artifactId>commons-logging</artifactId>
         </dependency>
         <dependency>
-            <groupId>jasperreports.wso2</groupId>
+            <groupId>org.wso2.orbit.net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <exclusions>
                 <exclusion>
@@ -68,7 +68,21 @@
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.ndatasource.core</artifactId>
         </dependency>
-
+        <dependency>
+            <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.6.1.wso2v1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.6.1.wso2v1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.6.1.wso2v1</version>
+        </dependency>
     </dependencies>
 
     <build>
