@@ -19,7 +19,6 @@ package org.wso2.carbon.reporting.util.types;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.HtmlExporter;
-import net.sf.jasperreports.export.Exporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleHtmlExporterOutput;
 import org.wso2.carbon.reporting.api.ReportingException;
@@ -53,7 +52,7 @@ public class HtmlReport {
                     .setProperty("net.sf.jasperreports.export.html.exclude.origin.keep.first.band.2", "columnHeader");
             // exclude the page footers
             jasperPrint.setProperty("net.sf.jasperreports.export.html.exclude.origin.band.2", "pageFooter");
-            Exporter exporterHTML = new HtmlExporter();
+            HtmlExporter exporterHTML = new HtmlExporter();
             //setting up an input stream to HtmlExporter object
             SimpleExporterInput exporterInput = new SimpleExporterInput(jasperPrint);
             exporterHTML.setExporterInput(exporterInput);
