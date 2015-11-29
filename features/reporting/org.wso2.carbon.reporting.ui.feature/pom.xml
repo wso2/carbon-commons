@@ -84,21 +84,6 @@
 	        <groupId>xalan.wso2</groupId>
 	        <artifactId>xalan</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.6.1.wso2v1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.6.1.wso2v1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.6.1.wso2v1</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -139,10 +124,7 @@
                             <importBundles>
                                 <importBundleDef>org.wso2.orbit.net.sf.jasperreports:jasperreports</importBundleDef>
 				 <importBundleDef>xalan.wso2:xalan</importBundleDef>
-				 <importBundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-annotations</importBundleDef>
-				 <importBundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-core</importBundleDef>
-				 <importBundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-databind</importBundleDef>
-                                <importBundleDef>jxl.wso2:jxl</importBundleDef>
+				 <importBundleDef>jxl.wso2:jxl</importBundleDef>
                                 <importBundleDef>com.lowagie.wso2:itext</importBundleDef>
                                 <importBundleDef>commons-beanutils.wso2:commons-beanutils</importBundleDef>
                                 <importBundleDef>commons-digester.wso2:commons-digester</importBundleDef>

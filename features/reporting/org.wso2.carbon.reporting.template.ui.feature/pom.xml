@@ -92,9 +92,6 @@
                                 <importBundleDef>jcommon.wso2:jcommon</importBundleDef>
                                 <importBundleDef>jfree.wso2:jfreechart</importBundleDef>
 				 <importBundleDef>xalan.wso2:xalan</importBundleDef>
-				 <importBundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-annotations:2.6.1.wso2v1</importBundleDef>
-				 <importBundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-core:2.6.1.wso2v1</importBundleDef>
-				 <importBundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-databind:2.6.1.wso2v1</importBundleDef>
                             </importBundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.ui:${carbon.kernel.version}</importFeatureDef>
