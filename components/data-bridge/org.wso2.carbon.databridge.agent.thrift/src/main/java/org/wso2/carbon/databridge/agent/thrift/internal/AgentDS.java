@@ -20,8 +20,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.databridge.agent.thrift.Agent;
 import org.wso2.carbon.databridge.agent.thrift.AgentHolder;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 /**
  * @scr.component name="agentservice.component" immediate="true"
@@ -37,6 +39,12 @@ public class AgentDS {
      * @param context
      */
     protected void activate(ComponentContext context) {
+        // Setting Tenant domain and Tenant ID
+        // We assume it's super tenant during the agent creation time
+        PrivilegedCarbonContext privilegedCarbonContext = PrivilegedCarbonContext.getThreadLocalCarbonContext();
+        privilegedCarbonContext.setTenantDomain(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+        privilegedCarbonContext.setTenantId(MultitenantConstants.SUPER_TENANT_ID);
+
         if (!agentLoaded) {
             serviceRegistration = context.getBundleContext().
                     registerService(Agent.class.getName(), AgentHolder.getOrCreateAgent(), null);
