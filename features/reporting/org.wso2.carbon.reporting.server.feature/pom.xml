@@ -83,17 +83,14 @@
         <dependency>
             <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>2.6.1.wso2v1</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.6.1.wso2v1</version>
         </dependency>
         <dependency>
             <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.6.1.wso2v1</version>
         </dependency>
     </dependencies>
 
@@ -130,10 +127,10 @@
                                 <bundleDef>commons-digester.wso2:commons-digester</bundleDef>
                                 <bundleDef>jcommon.wso2:jcommon</bundleDef>
                                 <bundleDef>jfree.wso2:jfreechart</bundleDef>
-				 <bundleDef>xalan.wso2:xalan</bundleDef>
-				 <bundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-annotations</bundleDef>
-				 <bundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-core</bundleDef>
-				 <bundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-databind</bundleDef>
+                                <bundleDef>xalan.wso2:xalan</bundleDef>
+                                <bundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-annotations</bundleDef>
+                                <bundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-core</bundleDef>
+                                <bundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-databind</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>

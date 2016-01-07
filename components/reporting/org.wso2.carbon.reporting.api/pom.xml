@@ -47,10 +47,9 @@
                 </exclusion>
             </exclusions>
         </dependency>
-	<dependency>
-                <groupId>com.lowagie.wso2</groupId>
-                <artifactId>itext</artifactId>
-                <version>2.1.7.wso2v1</version>
+        <dependency>
+            <groupId>com.lowagie.wso2</groupId>
+            <artifactId>itext</artifactId>
         </dependency>
      </dependencies>
 
