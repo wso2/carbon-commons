@@ -1695,6 +1695,21 @@
                 <artifactId>org.wso2.carbon.caching.invalidator</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>${fasterxml.jackson.core.orbit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${fasterxml.jackson.core.orbit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${fasterxml.jackson.core.orbit.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -2092,6 +2107,7 @@
         <highscale.version>1.0.wso2v1</highscale.version>
         <orbit.version.distruptor>2.10.4-wso2v2</orbit.version.distruptor>
         <orbit.version.httpcomponents.httpclient>4.3.1.wso2v2</orbit.version.httpcomponents.httpclient>
+        <fasterxml.jackson.core.orbit.version>2.6.1.wso2v1</fasterxml.jackson.core.orbit.version>
     </properties>
 
     <repositories>
