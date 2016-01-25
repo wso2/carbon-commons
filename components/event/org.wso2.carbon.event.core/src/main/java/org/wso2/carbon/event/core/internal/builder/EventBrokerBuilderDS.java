@@ -38,6 +38,7 @@ import org.wso2.carbon.utils.ConfigurationContextService;
  * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="1..1"
  * policy="dynamic" bind="setConfigurationContextService" unbind="unsetConfigurationContextService"
  */
+@Deprecated
 public class EventBrokerBuilderDS {
 
     private static final Log log = LogFactory.getLog(EventBrokerBuilderDS.class);
@@ -57,7 +58,11 @@ public class EventBrokerBuilderDS {
         boolean isQpidBundlePresent = false;
         final BundleContext bundleContext = context.getBundleContext();
         for (Bundle bundle : bundleContext.getBundles()) {
-            if (bundle.getSymbolicName().equals("org.wso2.carbon.andes") || bundle.getSymbolicName().equals("org.wso2.carbon.qpid") ) {
+//            if (bundle.getSymbolicName().equals("org.wso2.carbon.andes") || bundle.getSymbolicName().equals("org.wso2.carbon.qpid") ) {
+//                isQpidBundlePresent = true;
+//                break;
+//            }
+            if (bundle.getSymbolicName().equals("org.wso2.carbon.qpid") ) {
                 isQpidBundlePresent = true;
                 break;
             }
