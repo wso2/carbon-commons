@@ -153,16 +153,18 @@ public class RegistryTopicManager implements TopicManager {
                 Collection collection = userRegistry.newCollection();
                 userRegistry.put(resourcePath, collection);
 
-                // Grant this user (owner) rights to update permission on newly created topic
-                UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(
-                        CarbonContext.getThreadLocalCarbonContext().getTenantId());
+                if (loggedInUser != null) {
+                    // Grant this user (owner) rights to update permission on newly created topic
+                    UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(
+                            CarbonContext.getThreadLocalCarbonContext().getTenantId());
 
-                userRealm.getAuthorizationManager().authorizeUser(
-                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
-                userRealm.getAuthorizationManager().authorizeUser(
-                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
-                userRealm.getAuthorizationManager().authorizeUser(
-                        loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
+                    userRealm.getAuthorizationManager().authorizeUser(loggedInUser, resourcePath,
+                                                                      EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
+                    userRealm.getAuthorizationManager()
+                             .authorizeUser(loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_PUBLISH);
+                    userRealm.getAuthorizationManager()
+                             .authorizeUser(loggedInUser, resourcePath, EventBrokerConstants.EB_PERMISSION_SUBSCRIBE);
+                }
             }
         } catch (RegistryException e) {
             throw new EventBrokerException("Cannot access the config registry", e);
