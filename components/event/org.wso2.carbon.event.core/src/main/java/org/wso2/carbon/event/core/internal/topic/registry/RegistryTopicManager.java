@@ -152,12 +152,10 @@ public class RegistryTopicManager implements TopicManager {
             if (!userRegistry.resourceExists(resourcePath)) {
                 Collection collection = userRegistry.newCollection();
                 userRegistry.put(resourcePath, collection);
-
                 if (loggedInUser != null) {
                     // Grant this user (owner) rights to update permission on newly created topic
                     UserRealm userRealm = EventBrokerHolder.getInstance().getRealmService().getTenantUserRealm(
                             CarbonContext.getThreadLocalCarbonContext().getTenantId());
-
                     userRealm.getAuthorizationManager().authorizeUser(loggedInUser, resourcePath,
                                                                       EventBrokerConstants.EB_PERMISSION_CHANGE_PERMISSION);
                     userRealm.getAuthorizationManager()
