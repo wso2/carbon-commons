@@ -15,7 +15,6 @@ import java.util.Calendar;
 /**
  * Provides topic related functions as a web service.
  */
-@Deprecated
 public class TopicManagerAdminService {
 
     /**
