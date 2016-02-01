@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2009-2015, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * Copyright (c) 2009-2016, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,7 @@ public class HtmlReport {
             //setting up an output stream to HtmlExporter object
             SimpleHtmlExporterOutput simpleHtmlExporterOutput = new SimpleHtmlExporterOutput(outputStream);
             exporterHTML.setExporterOutput(simpleHtmlExporterOutput);
-	        //To generate a html report we need to embed images using base64 encoding.
+            //To generate a html report we need to embed images using base64 encoding.
             //Otherwise it shows corrupted images.
             simpleHtmlExporterOutput.setImageHandler(new HtmlResourceHandler() {
                 @Override public void handleResource(String id, byte[] data) {
