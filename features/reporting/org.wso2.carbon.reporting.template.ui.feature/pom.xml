@@ -84,13 +84,14 @@
                                 </bundleDef>
                             </bundles>
                             <importBundles>
-                                <importBundleDef>jasperreports.wso2:jasperreports</importBundleDef>
+                                <importBundleDef>org.wso2.orbit.net.sf.jasperreports:jasperreports</importBundleDef>
                                 <importBundleDef>jxl.wso2:jxl</importBundleDef>
                                 <importBundleDef>com.lowagie.wso2:itext</importBundleDef>
                                 <importBundleDef>commons-beanutils.wso2:commons-beanutils</importBundleDef>
                                 <importBundleDef>commons-digester.wso2:commons-digester</importBundleDef>
                                 <importBundleDef>jcommon.wso2:jcommon</importBundleDef>
                                 <importBundleDef>jfree.wso2:jfreechart</importBundleDef>
+				 <importBundleDef>xalan.wso2:xalan</importBundleDef>
                             </importBundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.ui:${carbon.kernel.version}</importFeatureDef>
