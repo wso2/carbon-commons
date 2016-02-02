@@ -46,7 +46,7 @@
             <artifactId>org.wso2.carbon.reporting.api</artifactId>
         </dependency>
         <dependency>
-            <groupId>jasperreports.wso2</groupId>
+            <groupId>org.wso2.orbit.net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
         </dependency>
         <dependency>
@@ -77,6 +77,22 @@
             <groupId>jfree.wso2</groupId>
             <artifactId>jfreechart</artifactId>
         </dependency>
+        <dependency>
+	        <groupId>xalan.wso2</groupId>
+	        <artifactId>xalan</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -105,13 +121,17 @@
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.core</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.util</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.api</bundleDef>
-                                <bundleDef>jasperreports.wso2:jasperreports</bundleDef>
+                                <bundleDef>org.wso2.orbit.net.sf.jasperreports:jasperreports</bundleDef>
                                 <bundleDef>jxl.wso2:jxl</bundleDef>
                                 <bundleDef>com.lowagie.wso2:itext</bundleDef>
                                 <bundleDef>commons-beanutils.wso2:commons-beanutils</bundleDef>
                                 <bundleDef>commons-digester.wso2:commons-digester</bundleDef>
                                 <bundleDef>jcommon.wso2:jcommon</bundleDef>
                                 <bundleDef>jfree.wso2:jfreechart</bundleDef>
+                                <bundleDef>xalan.wso2:xalan</bundleDef>
+                                <bundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-annotations</bundleDef>
+                                <bundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-core</bundleDef>
+                                <bundleDef>org.wso2.orbit.com.fasterxml.jackson.core:jackson-databind</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.server:${carbon.kernel.version}</importFeatureDef>

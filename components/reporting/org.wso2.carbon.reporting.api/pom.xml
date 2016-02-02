@@ -39,7 +39,7 @@
             <artifactId>org.wso2.carbon.utils</artifactId>
         </dependency>
         <dependency>
-            <groupId>jasperreports.wso2</groupId>
+            <groupId>org.wso2.orbit.net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <exclusions>
                 <exclusion>
@@ -47,6 +47,10 @@
                     <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.lowagie.wso2</groupId>
+            <artifactId>itext</artifactId>
         </dependency>
      </dependencies>
 
