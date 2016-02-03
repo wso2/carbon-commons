@@ -58,11 +58,7 @@ public class EventBrokerBuilderDS {
         boolean isQpidBundlePresent = false;
         final BundleContext bundleContext = context.getBundleContext();
         for (Bundle bundle : bundleContext.getBundles()) {
-//            if (bundle.getSymbolicName().equals("org.wso2.carbon.andes") || bundle.getSymbolicName().equals("org.wso2.carbon.qpid") ) {
-//                isQpidBundlePresent = true;
-//                break;
-//            }
-            if (bundle.getSymbolicName().equals("org.wso2.carbon.qpid") ) {
+            if (bundle.getSymbolicName().equals("org.wso2.carbon.qpid")) {
                 isQpidBundlePresent = true;
                 break;
             }
