@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>event-feature</artifactId>
-        <version>4.4.9</version>
+        <version>4.4.10-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -28,7 +28,7 @@
     <artifactId>org.wso2.carbon.event.feature</artifactId>
     <packaging>pom</packaging>
     <name>WSO2 Carbon - Event Feature</name>
-    <version>4.4.9</version>
+    <version>4.4.10-SNAPSHOT</version>
     <url>http://wso2.org</url>
     <description> Event service feature</description>
 
