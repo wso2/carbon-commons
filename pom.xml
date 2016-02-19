@@ -308,7 +308,7 @@
                 <version>${wsdl4j.wso2.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.apache.neethi.wso2</groupId>
+                <groupId>org.wso2.orbit.org.apache.neethi</groupId>
                 <artifactId>neethi</artifactId>
                 <version>${neethi.osgi.version}</version>
             </dependency>
@@ -1949,11 +1949,11 @@
         <orbit.version.axiom>1.2.11.wso2v6</orbit.version.axiom>
 
         <!-- Axis2 Version -->
-        <axis2.wso2.version>1.6.1-wso2v14</axis2.wso2.version>
-        <axis2.version>1.6.1-wso2v14</axis2.version>
+        <axis2.wso2.version>1.6.1-wso2v17</axis2.wso2.version>
+        <axis2.version>1.6.1-wso2v17</axis2.version>
         <axis2.osgi.version.range>[1.6.1.wso2v14, 1.7.0)</axis2.osgi.version.range>
         <orbit.version.axis2>1.6.1.wso2v14</orbit.version.axis2>
-        <neethi.osgi.version>2.0.4.wso2v4</neethi.osgi.version>
+        <neethi.osgi.version>2.0.4.wso2v5</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
         <orbit.version.axis2.transports>1.1.0-wso2v10</orbit.version.axis2.transports>
 
