@@ -1955,7 +1955,7 @@
         <orbit.version.axis2>1.6.1.wso2v14</orbit.version.axis2>
         <neethi.osgi.version>2.0.4.wso2v5</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
-        <orbit.version.axis2.transports>1.1.0-wso2v10</orbit.version.axis2.transports>
+        <orbit.version.axis2.transports>1.1.1-wso2v2</orbit.version.axis2.transports>
 
         <!-- Xerces Version -->
         <xercesImpl.version>2.11.0</xercesImpl.version>
