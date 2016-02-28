@@ -70,6 +70,11 @@
                         <Export-Package>
                             org.wso2.carbon.hostobjects.sso.*;
                         </Export-Package>
+                        <Import-Package>
+                            !org.wso2.carbon.hostobjects.sso.*,
+                            javax.xml.parsers; version="${javax.xml.parsers.import.pkg.version}",
+                            *;resolution:=optional
+                        </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
