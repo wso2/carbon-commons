@@ -2070,6 +2070,10 @@
         <slf4j.version>1.6.1</slf4j.version>
         <slf4j.imp.pkg.version.range>[1.6.1,1.8.0)</slf4j.imp.pkg.version.range>
 
+        <javax.xml.parsers.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.parsers.import.pkg.version>
+        <javax.xml.transform.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.transform.import.pkg.version>
+
+
         <!-- Misc -->
         <cassandra.version>1.1.0.wso2v2</cassandra.version>
         <jxl.wso2.version>2.6.8.wso2v1</jxl.wso2.version>
