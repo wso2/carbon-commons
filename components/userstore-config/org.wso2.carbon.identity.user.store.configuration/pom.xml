@@ -91,6 +91,8 @@
                             org.wso2.carbon.core.*,
                             org.apache.commons.logging.*,
                             org.apache.commons.httpclient.*,
+                            javax.xml.parsers; version="${javax.xml.parsers.import.pkg.version}",
+                            javax.xml.transform.*; version="${javax.xml.transform.import.pkg.version}",
                             *;resolution:=optional
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>

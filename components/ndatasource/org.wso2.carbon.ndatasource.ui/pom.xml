@@ -44,6 +44,7 @@
                             org.apache.synapse.commons.*,
                             javax.servlet;version="${imp.pkg.version.javax.servlet}",
                             javax.servlet.http;version="${imp.pkg.version.javax.servlet}",
+                            javax.xml.parsers; version="${javax.xml.parsers.import.pkg.version}",
                             *;resolution:=optional,
                             org.wso2.carbon.ndatasource.stub.*;version="${carbon.commons.exp.package.version}",
                         </Import-Package>

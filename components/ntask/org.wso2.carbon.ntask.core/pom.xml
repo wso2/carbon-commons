@@ -76,7 +76,8 @@
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Import-Package>
                             org.quartz.*;version="2.1.1",
-		            *;resolution:=optional
+                            javax.xml.parsers; version="${javax.xml.parsers.import.pkg.version}",
+                            *;resolution:=optional
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.ntask.internal,
