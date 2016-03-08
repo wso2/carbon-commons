@@ -1796,7 +1796,7 @@
         <commons-logging.imp.pkg.version>0.0.0</commons-logging.imp.pkg.version>
         <orbit.version.commons.lang>2.6.0.wso2v1</orbit.version.commons.lang>
         <orbit.version.commons.httpclient>3.1.0.wso2v2</orbit.version.commons.httpclient>
-        <commons-collections.version>3.2.1</commons-collections.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
         <commons-beanutils.version>1.8.3</commons-beanutils.version>
         <commons-digester.version>1.8</commons-digester.version>
         <orbit.version.commons.codec>1.4.0.wso2v1</orbit.version.commons.codec>
