@@ -46,7 +46,7 @@ public class TaskUtils {
     public static Registry getGovRegistryForTenant(int tid) throws TaskException {
         try {
             PrivilegedCarbonContext.startTenantFlow();
-            PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(tid);
+            PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(tid, true);
             return TasksDSComponent.getRegistryService().getGovernanceSystemRegistry(tid);
         } catch (RegistryException e) {
             throw new TaskException("Error in retrieving registry instance", Code.UNKNOWN, e);
