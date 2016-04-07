@@ -328,7 +328,7 @@ public class LoggingUtil {
 
     public static Appender getAppenderFromSet(Set<Appender> appenderSet, String name) {
         for (Appender appender : appenderSet) {
-            if (appender.getName().equals(name)) {
+            if ((appender.getName() != null) && (appender.getName().equals(name))) {
                 return appender;
             }
         }
