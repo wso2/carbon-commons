@@ -130,6 +130,10 @@ public class CarbonMemoryAppender extends AppenderSkeleton implements LoggingBri
     public void setCircularBuffer(CircularBuffer<TenantAwareLoggingEvent> circularBuffer) {
         this.circularBuffer = circularBuffer;
     }
+    
+    public void clearCircularBuffer() {
+        this.circularBuffer.clear();
+    }
 
     public void activateOptions() {
         if (bufferSize < 0) {
