@@ -234,6 +234,12 @@ public class InMemoryLogProvider implements LogProvider {
 
     @Override
     public boolean clearLogs() {
+        Appender appender = Logger.getRootLogger().getAppender(LoggingConstants.WSO2CARBON_MEMORY_APPENDER);
+        if (appender instanceof CarbonMemoryAppender) {
+            CarbonMemoryAppender memoryAppender = (CarbonMemoryAppender) appender;
+            memoryAppender.clearCircularBuffer();
+            return true;
+        }
         return false;
     }
 
