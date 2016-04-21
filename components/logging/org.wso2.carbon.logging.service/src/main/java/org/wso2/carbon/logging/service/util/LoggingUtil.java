@@ -54,6 +54,7 @@ import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -72,6 +73,7 @@ public class LoggingUtil {
 
     public static final String SYSTEM_LOG_PATTERN = "[%d] %5p - %x %m {%c}%n";
     private static final int MAX_LOG_MESSAGES = 200;
+    private static final String CARBON_LOGFILE_APPENDER = "CARBON_LOGFILE";
     private static final Log log = LogFactory.getLog(LoggingUtil.class);
     private static RegistryManager registryManager = new RegistryManager();
 
@@ -144,7 +146,7 @@ public class LoggingUtil {
     public static boolean isFileAppenderConfiguredForST() {
         Logger rootLogger = Logger.getRootLogger();
         DailyRollingFileAppender logger = (DailyRollingFileAppender) rootLogger
-                .getAppender("CARBON_LOGFILE");
+                .getAppender(CARBON_LOGFILE_APPENDER);
         if (logger != null
                 && CarbonContext.getThreadLocalCarbonContext().getTenantId() == org.wso2.carbon.base.MultitenantConstants.SUPER_TENANT_ID) {
             return true;
@@ -427,10 +429,21 @@ public class LoggingUtil {
         return logsList.toArray(new String[logsList.size()]);
     }
 
-    private static InputStream getLocalInputStream(String logFile) throws FileNotFoundException {
-        String fileName = CarbonUtils.getCarbonLogsPath() + LoggingConstants.URL_SEPARATOR
-                + logFile;
-        InputStream is = new BufferedInputStream(new FileInputStream(fileName));
+    private static InputStream getLocalInputStream(String logFile) throws FileNotFoundException, LogViewerException {
+        Path logFilePath = Paths.get(CarbonUtils.getCarbonLogsPath(), logFile);
+
+        if (!isPathInsideBaseDirectory(Paths.get(CarbonUtils.getCarbonLogsPath()), logFilePath)) {
+            throw new LogViewerException("Specified log file path is outside carbon logs directory.");
+        }
+
+        FileAppender carbonLogFileAppender = (FileAppender) Logger.getRootLogger().getAppender(CARBON_LOGFILE_APPENDER);
+        String carbonLogFileName = new File(carbonLogFileAppender.getFile()).getName();
+
+        if (!logFilePath.getFileName().startsWith(carbonLogFileName)) {
+            throw new LogViewerException("Trying to access logs other than CARBON_LOGFILE appender log file.");
+        }
+
+        InputStream is = new BufferedInputStream(new FileInputStream(logFilePath.toString()));
         return is;
     }
 
@@ -486,5 +499,17 @@ public class LoggingUtil {
         return y;
     }
 
+    /**
+     * Tests if the provided path is inside the base directory path.
+     *
+     * @param baseDirPath absolute {@link Path} of the base directory in which we want to check whether the given path
+     *                    is inside
+     * @param path        relative {@link Path} to be tested
+     * @return {@code true} if the given path is inside the base directory path, otherwise {@code false}
+     */
+    private static boolean isPathInsideBaseDirectory(Path baseDirPath, Path path) {
+        Path resolvedPath = baseDirPath.resolve(path).normalize();
+        return resolvedPath.startsWith(baseDirPath);
+    }
 }
 
