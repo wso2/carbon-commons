@@ -1744,7 +1744,7 @@
         <!-- Stratos Version -->
         <stratos.version>2.2.0</stratos.version>
 
-        <version.tomcat>7.0.59</version.tomcat>
+        <version.tomcat>7.0.69</version.tomcat>
         <orbit.version.tomcat.servlet.api>${version.tomcat}.wso2v1</orbit.version.tomcat.servlet.api>
 
         <!-- Axiom Version -->
