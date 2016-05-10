@@ -504,12 +504,12 @@ public class LoggingUtil {
      *
      * @param baseDirPath absolute {@link Path} of the base directory in which we want to check whether the given path
      *                    is inside
-     * @param path        relative {@link Path} to be tested
+     * @param path        {@link Path} to be tested
      * @return {@code true} if the given path is inside the base directory path, otherwise {@code false}
      */
     private static boolean isPathInsideBaseDirectory(Path baseDirPath, Path path) {
         Path resolvedPath = baseDirPath.resolve(path).normalize();
-        return resolvedPath.startsWith(baseDirPath);
+        return resolvedPath.startsWith(baseDirPath.normalize());
     }
 }
 
