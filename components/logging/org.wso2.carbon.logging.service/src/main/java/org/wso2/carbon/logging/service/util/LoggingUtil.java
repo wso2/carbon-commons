@@ -439,7 +439,7 @@ public class LoggingUtil {
         FileAppender carbonLogFileAppender = (FileAppender) Logger.getRootLogger().getAppender(CARBON_LOGFILE_APPENDER);
         String carbonLogFileName = new File(carbonLogFileAppender.getFile()).getName();
 
-        if (!logFilePath.getFileName().startsWith(carbonLogFileName)) {
+        if (!logFilePath.getFileName().toString().startsWith(carbonLogFileName)) {
             throw new LogViewerException("Trying to access logs other than CARBON_LOGFILE appender log file.");
         }
 
