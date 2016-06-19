@@ -28,6 +28,7 @@
 <%@ page import="org.wso2.carbon.wsdl2code.ui.endpoints.EndPointsSetter" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://wso2.org/projects/carbon/taglibs/carbontags.jar" prefix="carbon" %>
+<%@ taglib uri="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project/Owasp.CsrfGuard.tld" prefix="csrf" %>
 <%
     String backendServerURL = CarbonUIUtil.getServerURL(this.getServletConfig().getServletContext(),
             session);
@@ -323,7 +324,7 @@ function codeGenFileUploadeHelper(codegenParentTextId, executor) {
     }
 
     var innerHTML = "<div id='formset'><form method='post' id='codegenFileUpload' name='codegenFileUpload' " +
-            "action='../../fileupload/"+executor+"' enctype='multipart/form-data' target='self'><fieldset>" +
+            "action='../../fileupload/"+executor+"?<csrf:tokenname/>=<csrf:tokenvalue/>' enctype='multipart/form-data' target='self'><fieldset>" +
             "<legend>" + uploadFile + "</legend><div><input type='file' size='40' name='codegenFile'" +
             " id='codegenFile'/></div><div><p>" + uploadFileHelp + "</p></div><div>"+
             "<input type='button' value=" + submit + " onclick=\"submitFormAsync('" +
