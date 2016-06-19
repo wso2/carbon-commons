@@ -1831,7 +1831,7 @@
 
         <!-- Jasper Reports Version -->
         <version.jasper>2.2.2.v201205150955</version.jasper>
-        <jasperreports.wso2.version>6.1.1.wso2v1</jasperreports.wso2.version>
+        <jasperreports.wso2.version>6.1.1.wso2v2</jasperreports.wso2.version>
 
         <!-- Equinox dependency versions -->
         <version.equinox.osgi>3.8.1.v20120830-144521</version.equinox.osgi>
