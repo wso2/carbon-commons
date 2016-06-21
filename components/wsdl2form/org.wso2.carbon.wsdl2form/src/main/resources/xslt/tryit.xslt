@@ -34,7 +34,7 @@
     <xsl:param name="js-jQuery" select="'?wsdl2form&amp;contentType=text/javascript&amp;resource=js/jquery-1.5.2.min.js'"/>
     <xsl:param name="js-jQueryUI" select="'?wsdl2form&amp;contentType=text/javascript&amp;resource=js/jquery-ui-1.8.11.custom.min.js'"/>
     <xsl:param name="js-corners" select="'?wsdl2form&amp;contentType=text/javascript&amp;resource=extras/jquery.corner.js'"/>
-    <xsl:param name="js-editArea" select="'?wsdl2form&amp;resource=editarea/edit_area_full.js'"/>
+    <xsl:param name="js-editArea" select="'?wsdl2form&amp;contentType=text/javascript&amp;resource=editarea/edit_area_full.js'"/>
     <xsl:param name="proxyAddress" select="'../admin/jsp/WSRequestXSSproxy_ajaxprocessor.jsp'"/>
     <xsl:param name="xslt-location" select="'?wsdl2form&amp;contentType=text/xml&amp;resource=xslt/prettyprinter.xslt'"/>
     <xsl:param name="enable-header" select="'false'"/>
