@@ -29,6 +29,7 @@
     <xsl:param name="service" select="services/service[1]/@name"/>
 
     <!-- Paths to external resources can be specified here. -->
+    <xsl:param name="js-csrf-protection" select="'../carbon/admin/js/csrfPrevention.js'"/>
     <xsl:param name="js-global-params" select="'../carbon/global-params.js'"/>
     <xsl:param name="js-WSRequest" select="'?wsdl2form&amp;contentType=text/javascript&amp;resource=js/WSRequest.js'"/>
     <xsl:param name="js-jQuery" select="'?wsdl2form&amp;contentType=text/javascript&amp;resource=js/jquery-1.5.2.min.js'"/>
@@ -122,6 +123,9 @@
         <xsl:text>
         </xsl:text>
         <script type="text/javascript" src="{$js-global-params}"></script>
+        <xsl:text>
+        </xsl:text>
+        <script type="text/javascript" src="{$js-csrf-protection}"></script>
         <xsl:text>
         </xsl:text>
         <!-- Calculate the source of the stub, including whether it's e4x or not -->
