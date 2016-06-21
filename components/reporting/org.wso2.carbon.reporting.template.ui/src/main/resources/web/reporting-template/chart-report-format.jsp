@@ -25,6 +25,7 @@
 <%@ page import="org.wso2.carbon.reporting.template.ui.client.ReportTemplateClient" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://wso2.org/projects/carbon/taglibs/carbontags.jar" prefix="carbon" %>
+<%@ taglib uri="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project/Owasp.CsrfGuard.tld" prefix="csrf" %>
 <fmt:bundle basename="org.wso2.carbon.reporting.template.ui.i18n.Resources">
 
 <carbon:breadcrumb label="add.report.step2"
@@ -34,7 +35,7 @@
 <script type="text/javascript">
 
     function submitChartReport() {
-        document.chartReportFormat.action = '../../fileupload/upload';
+        document.chartReportFormat.action = '../../fileupload/upload?<csrf:tokenname/>=<csrf:tokenvalue/>';
         var reportTitle = document.getElementById("reportTitle").value;
         if (reportTitle == '') {
                 CARBON.showErrorDialog('Please enter a title for the report.');

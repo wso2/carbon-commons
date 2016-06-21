@@ -34,7 +34,7 @@
 <script type="text/javascript">
 
     function submitTableReport() {
-        document.tableReportFormat.action = '../../fileupload/upload';
+        document.tableReportFormat.action = '../../fileupload/upload?<csrf:tokenname/>=<csrf:tokenvalue/>';
         var reportTitle = document.getElementById("reportTitle").value;
         if (reportTitle == '') {
                 CARBON.showErrorDialog('Please enter a title for the report.');

@@ -22,6 +22,7 @@
 <%@ page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://wso2.org/projects/carbon/taglibs/carbontags.jar" prefix="carbon" %>
+<%@ taglib uri="http://www.owasp.org/index.php/Category:OWASP_CSRFGuard_Project/Owasp.CsrfGuard.tld" prefix="csrf" %>
 
 <script type="text/javascript" src="../carbon/global-params.js"></script>
 <script type="text/javascript" src="../yui/build/utilities/utilities.js"></script>
@@ -230,7 +231,7 @@
             <tr>
                 <td>
                     <form id="form" method="post" enctype="multipart/form-data"
-                          action="../../fileupload/tools">
+                          action="../../fileupload/tools?<csrf:tokenname/>=<csrf:tokenvalue/>">
 
                         <table class="styledLeft">
                             <thead>
