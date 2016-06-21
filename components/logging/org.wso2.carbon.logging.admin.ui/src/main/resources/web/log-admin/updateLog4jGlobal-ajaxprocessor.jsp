@@ -25,6 +25,12 @@
 <%@ page import="org.wso2.carbon.ui.CarbonUIMessage" %>
 <fmt:bundle basename="org.wso2.carbon.logging.admin.ui.i18n.Resources">
 <%
+    String httpMethod = request.getMethod().toLowerCase();
+    if (!"post".equals(httpMethod)) {
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        return;
+    }
+
     String backendServerURL = CarbonUIUtil.getServerURL(config.getServletContext(), session);
     ConfigurationContext configContext =
             (ConfigurationContext) config.getServletContext().getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
