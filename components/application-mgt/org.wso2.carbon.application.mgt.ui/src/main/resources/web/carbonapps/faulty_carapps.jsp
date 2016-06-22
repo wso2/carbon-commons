@@ -116,7 +116,20 @@
                     if (allCarbonappsSelected) {
                         CARBON.showConfirmationDialog("<fmt:message key="delete.selected.faulty.carapps.prompt"><fmt:param value="<%= numberFaultyApps%>"/></fmt:message>",
                                                       function() {
-                                                          location.href = 'delete_faulty_carbon_apps.jsp?deleteAllCarbonApps=true';
+                                                            jQuery.ajax({
+                                                                type: "POST",
+                                                                url: "delete_faulty_carbon_apps_ajaxprocessor.jsp",
+                                                                headers: {
+                                                                    Accept: "text/html"
+                                                                },
+                                                                data: {"deleteAllCarbonApps": "true"},
+                                                                async: false,
+                                                                success: function (responseText, status, XMLHttpRequest) {
+                                                                    if (status == "success") {
+                                                                        location.assign("faulty_carapps.jsp");
+                                                                    }
+                                                                }
+                                                            });
                                                       });
                     } else {
                         CARBON.showConfirmationDialog("<fmt:message key="delete.all.faulty.carapps.prompt"/>", function() {
@@ -174,7 +187,7 @@
             <p>&nbsp;</p>
 
 
-            <form action="delete_faulty_carbon_apps.jsp" name="faultyCarbonAppsForm">
+            <form action="delete_faulty_carbon_apps_ajaxprocessor.jsp" name="faultyCarbonAppsForm" method="post">
 
                 <table class="styledLeft" id="faultyCarbonAppsTable">
                     <thead>
