@@ -76,7 +76,7 @@
 
     function deleteApplication(appName) {
         CARBON.showConfirmationDialog("<fmt:message key="confirm.delete.app"/>" , function(){
-            document.applicationsForm.action = "delete_artifact.jsp?appName=" + appName;
+            document.applicationsForm.action = "delete_artifact_ajaxprocessor.jsp?appName=" + appName;
             document.applicationsForm.submit();
         });
     }

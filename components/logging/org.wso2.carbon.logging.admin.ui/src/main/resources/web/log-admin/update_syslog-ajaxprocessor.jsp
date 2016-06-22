@@ -23,6 +23,12 @@
 <%@ page import="org.wso2.carbon.CarbonConstants" %>
 <fmt:bundle basename="org.wso2.carbon.logging.admin.ui.i18n.Resources">
     <%
+        String httpMethod = request.getMethod().toLowerCase();
+        if (!"post".equals(httpMethod)) {
+            response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+            return;
+        }
+
         response.setHeader("Cache-Control", "no-cache");
         String syslogURL = request.getParameter("syslogURL");
         String syslogPort = request.getParameter("syslogPort");
