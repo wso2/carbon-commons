@@ -61,29 +61,14 @@
 					}
 				}
 				
-				if (!canAdd) { %>
-				
-		<script type="text/javascript">
-              jQuery(document).ready(function() {
-                  CARBON.showWarningDialog("<fmt:message key="cannot.add.a.data.source"/>"+"<fmt:message key="a.datasource.with.name"/> " + '<%=name%>' + " <fmt:message key="already.exists"/>", 
-                  	function() {
-                  	 goBackOnePage();
-                      }, function () {
-                       goBackOnePage();
-                  });
-              });
-          </script>
+				if (!canAdd) {%>
+					<script type="text/javascript">
+						forward("dialog.jsp?message=<%=name%>&type=existing");
+					</script>
 			<%} else if (isSystem) {%>
 				<script type="text/javascript">
-              jQuery(document).ready(function() {
-                  CARBON.showWarningDialog("<fmt:message key="cannot.add.a.data.source"/>", 
-                  	function() {
-                  	 goBackOnePage();
-                      }, function () {
-                       goBackOnePage();
-                  });
-              });
-          			</script>
+					forward("dialog.jsp?type=issystem");
+          		</script>
 			<%}else {%>
 		
 		<script type="text/javascript">
@@ -94,14 +79,7 @@
 				request.getSession().setAttribute("", e);
 	%>
 	<script type="text/javascript">
-        jQuery(document).ready(function() {
-            CARBON.showErrorDialog("<%=e.getMessage()%>", function () {
-                goBackOnePage();
-            }, function () {
-                goBackOnePage();
-            });
-        });
-
+		forward("dialog.jsp?message=<%=e.getMessage()%>&type=error");
     </script>
 	<%
 		}
