@@ -196,30 +196,12 @@
                     }
 
                     eventSink = eventSink.trim();
-
-                    try {
-                        brokerClient.renewSubscription(subscriptionId, time);
-
-                        message = "Subscription renewed successfully";
-        %>
-        <script type="text/javascript">CARBON.showInfoDialog('<%=message%>', function() {
-            location.href = "../topics/topics.jsp"
-        });</script>
-        <%
-        } catch (Exception e) {
-            message = "Error while renewing the subscription ";
-        %>
-        <script type="text/javascript">CARBON.showErrorDialog('<%=message%>', function() {
-            location.href = "../topics/topics.jsp"
-        });</script>
-        <%
-                    }
                 }
 
             }
         %>
 
-        <form name="input" action="" method="get" id="renewSub">
+        <form name="input" action="renew_subscription_ajaxprocessor.jsp" method="post" id="renewSub">
             <table style="width:100%" id="userAdd" class="styledLeft">
                 <thead>
                 <tr>

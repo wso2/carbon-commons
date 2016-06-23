@@ -6,6 +6,11 @@
 <%@ page import="org.wso2.carbon.event.stub.internal.xsd.TopicRolePermission" %>
 <%@ page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%
+    //ignore methods other than post
+    if (!request.getMethod().equalsIgnoreCase("POST")) {
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        return;
+    }
     ConfigurationContext configContext = (ConfigurationContext) config.getServletContext()
             .getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
 
