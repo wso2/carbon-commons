@@ -134,7 +134,7 @@ function deleteRow(name, msg) {
 			async: false,
 			success: function (responseText, status, XMLHttpRequest) {
 				if (status == "success") {
-					location.assign("index.jsp");
+					location.assign("index.jsp?region=region1&item=new_datasource_menu");
 				}
 			}
 		});
