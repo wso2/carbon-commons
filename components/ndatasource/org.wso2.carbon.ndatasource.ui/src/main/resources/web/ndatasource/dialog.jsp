@@ -24,14 +24,14 @@
     %>
 
     <script type="text/javascript">
-        <%if(type!=null) { if("existing".equals(type)){%>
+        <%if (type != null) { if ("existing".equals(type)) {%>
         CARBON.showWarningDialog("<fmt:message key="cannot.add.a.data.source"/>"+"<fmt:message key="a.datasource.with.name"/> " + '<%=message%>' + " <fmt:message key="already.exists"/>",
                 function() {
                     goBackOnePage();
                 }, function () {
                     goBackOnePage();
                 });
-        <%} else if("issystem".equals(type)) {%>
+        <%} else if ("issystem".equals(type)) {%>
         CARBON.showWarningDialog("<fmt:message key="cannot.add.a.data.source"/>",
                 function() {
                     goBackOnePage();
@@ -39,7 +39,7 @@
                     goBackOnePage();
                 });
 
-        <%} else if("error".equals(type)) {%>
+        <%} else if ("error".equals(type)) {%>
         CARBON.showErrorDialog("<%=message%>", function () {
             goBackOnePage();
         }, function () {
