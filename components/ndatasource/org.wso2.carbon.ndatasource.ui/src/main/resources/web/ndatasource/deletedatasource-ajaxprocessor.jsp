@@ -21,6 +21,12 @@
 <script type="text/javascript" src="dscommon.js"></script>
 <fmt:bundle basename="org.wso2.carbon.ndatasource.ui.i18n.Resources">
  <%
+String httpMethod = request.getMethod().toLowerCase();
+if (!"post".equals(httpMethod)) {
+    response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+    return;
+}
+
 String dataSourceName = request.getParameter("name");
 if (dataSourceName == null || "".equals(dataSourceName)) {
     throw new ServletException("Name is empty");

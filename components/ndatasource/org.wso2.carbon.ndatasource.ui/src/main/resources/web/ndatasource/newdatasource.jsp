@@ -469,7 +469,7 @@ function displayPasswordField() {
 
 </script>
 <form method="post" name="dscreationform" id="dscreationform"
-      action="savedatasource.jsp" >
+      action="savedatasource-ajaxprocessor.jsp" >
 
 <div id="middle">
 <h2>

@@ -26,6 +26,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <fmt:bundle basename="org.wso2.carbon.ndatasource.ui.i18n.Resources">
 	<%
+		String httpMethod = request.getMethod().toLowerCase();
+		if (!"post".equals(httpMethod)) {
+			response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			return;
+		}
+
 		NDataSourceAdminServiceClient client;
 		String name = "";
 		boolean canAdd = true;
