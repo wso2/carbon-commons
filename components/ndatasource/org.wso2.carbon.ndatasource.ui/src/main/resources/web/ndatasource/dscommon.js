@@ -124,7 +124,21 @@ function forward(destinationJSP) {
 
 function deleteRow(name, msg) {
     CARBON.showConfirmationDialog(msg + "' " + name + " ' ?", function() {
-        document.location.href = "deletedatasource.jsp?" + "name=" + name;
+
+        jQuery.ajax({
+            type: "POST",
+            url: "deletedatasource.jsp",
+            headers: {
+                Accept: "text/html"
+            },
+            data: {"name": name},
+            async: false,
+            success: function (responseText, status, XMLHttpRequest) {
+                if (status == "success") {
+                    location.assign("index.jsp");
+                }
+            }
+        });
     });
 }
 
