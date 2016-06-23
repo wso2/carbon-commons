@@ -8,6 +8,11 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.net.URLDecoder" %>
 <%
+    //ignore methods other than post
+    if (!request.getMethod().equalsIgnoreCase("POST")) {
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        return;
+    }
     ConfigurationContext configContext = (ConfigurationContext) config.getServletContext()
             .getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
     //Server URL which is defined in the server.xml

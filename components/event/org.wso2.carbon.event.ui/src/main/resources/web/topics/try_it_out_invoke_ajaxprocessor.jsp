@@ -6,7 +6,11 @@
 <%@ page import="org.wso2.carbon.event.client.broker.BrokerClientException" %>
 
 <%
-
+    //ignore methods other than post
+    if (!request.getMethod().equalsIgnoreCase("POST")) {
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        return;
+    }
     BrokerClient brokerClient = UIUtils.getBrokerClient(config, session, request);
     String topic = request.getParameter("topic");
     String textMsg = request.getParameter("xmlMessage");

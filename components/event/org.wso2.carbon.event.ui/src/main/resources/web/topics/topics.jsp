@@ -33,9 +33,28 @@
 
 <fmt:bundle basename="org.wso2.carbon.event.ui.i18n.Resources">
     <script type="text/javascript" src="../admin/js/breadcrumbs.js"></script>
+    <script type="text/javascript">
+
+        function showStatus(status){
+            CARBON.showInfoDialog(status);
+        }
+
+    </script>
+
+    <%
+        if (request.getParameter("status") != null) {
+
+    %>
+    <script type="text/javascript">
+            CARBON.showInfoDialog(<%=(request.getParameter("status"))%>);
+    </script>
+    <%
+        }
+    %>
 
     <%
         String message = request.getParameter("message");
+
         if (message != null) {
     %><h3><%=message%>
 </h3><%
