@@ -36,6 +36,13 @@ Latest Released Versions v4.5.0, v4.4.8.
 * ws-discovery
 * ws-discovery-core       
 * wsdl-tools
+
+Following components are deprecated form version 4.5.4 onwards,
+* org.wso2.carbon.cluster.mgt.admin.ui
+* org.wso2.carbon.deployment.synchonizer.ui
+* org.wso2.carbon.discovery.ui
+* org.wso2.carbon.reporting.custom.ui
+* org.wso2.carbon.reporting.template.ui
     
 ## How to Contribute
 * Please report issues at [Carbon JIRA] (https://wso2.org/jira/browse/CARBON).
