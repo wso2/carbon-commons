@@ -26,6 +26,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <fmt:bundle basename="org.wso2.carbon.ndatasource.ui.i18n.Resources">
 	<%
+		String httpMethod = request.getMethod().toLowerCase();
+		if (!"post".equals(httpMethod)) {
+			response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+			return;
+		}
+
 		NDataSourceAdminServiceClient client;
 		String name = "";
 		boolean canAdd = true;
@@ -55,29 +61,14 @@
 					}
 				}
 				
-				if (!canAdd) { %>
-				
-		<script type="text/javascript">
-              jQuery(document).ready(function() {
-                  CARBON.showWarningDialog("<fmt:message key="cannot.add.a.data.source"/>"+"<fmt:message key="a.datasource.with.name"/> " + '<%=name%>' + " <fmt:message key="already.exists"/>", 
-                  	function() {
-                  	 goBackOnePage();
-                      }, function () {
-                       goBackOnePage();
-                  });
-              });
-          </script>
+				if (!canAdd) {%>
+					<script type="text/javascript">
+						forward("dialog.jsp?message=<%=name%>&type=existing");
+					</script>
 			<%} else if (isSystem) {%>
 				<script type="text/javascript">
-              jQuery(document).ready(function() {
-                  CARBON.showWarningDialog("<fmt:message key="cannot.add.a.data.source"/>", 
-                  	function() {
-                  	 goBackOnePage();
-                      }, function () {
-                       goBackOnePage();
-                  });
-              });
-          			</script>
+					forward("dialog.jsp?type=issystem");
+          		</script>
 			<%}else {%>
 		
 		<script type="text/javascript">
@@ -88,14 +79,7 @@
 				request.getSession().setAttribute("", e);
 	%>
 	<script type="text/javascript">
-        jQuery(document).ready(function() {
-            CARBON.showErrorDialog("<%=e.getMessage()%>", function () {
-                goBackOnePage();
-            }, function () {
-                goBackOnePage();
-            });
-        });
-
+		forward("dialog.jsp?message=<%=e.getMessage()%>&type=error");
     </script>
 	<%
 		}
