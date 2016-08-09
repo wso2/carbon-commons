@@ -29,6 +29,7 @@
 <%@ page import="org.apache.axis2.client.ServiceClient" %>
 <%@ page import="org.apache.axis2.client.Options" %>
 <%@ page import="org.wso2.carbon.ui.CarbonUIMessage" %>
+<%@ page import="java.net.URLEncoder" %>
 
 
 <link href="extensions/core/css/handler_flow.css" rel="stylesheet" type="text/css" media="all"/>
@@ -101,7 +102,7 @@
 		topPage="false" request="<%=request%>" />
 
     <div id="middle">
-        <h2><%= flowHeader%> <fmt:message key="flow"/> : <%= phase%> <fmt:message key="phase.handlers"/></h2>
+        <h2><%= flowHeader%> <fmt:message key="flow"/> : <%= URLEncoder.encode(phase)%> <fmt:message key="phase.handlers"/></h2>
 
         <div id="workArea">
 
