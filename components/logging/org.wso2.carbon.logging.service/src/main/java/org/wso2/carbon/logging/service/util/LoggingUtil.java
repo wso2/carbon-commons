@@ -29,6 +29,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.net.SyslogAppender;
+import org.springframework.util.Log4jConfigurer;
 import org.wso2.carbon.base.ServerConfiguration;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.core.util.SystemFilter;
@@ -42,6 +43,7 @@ import org.wso2.carbon.logging.service.internal.DataHolder;
 import org.wso2.carbon.logging.service.internal.LoggingServiceComponent;
 import org.wso2.carbon.logging.service.registry.RegistryManager;
 import org.wso2.carbon.registry.core.Collection;
+import org.wso2.carbon.registry.core.RegistryConstants;
 import org.wso2.carbon.registry.core.Resource;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.user.api.UserStoreException;
@@ -427,6 +429,21 @@ public class LoggingUtil {
             throw new LogViewerException("Cannot read the log file", e);
         }
         return logsList.toArray(new String[logsList.size()]);
+    }
+
+    public static void restoreDefaults() throws Exception {
+        registryManager.removeAllRegistryEntries();
+        LogManager.resetConfiguration();
+
+        try {
+            String logFile = CarbonUtils.getCarbonConfigDirPath()
+                    + RegistryConstants.PATH_SEPARATOR + "log4j.properties";
+            Log4jConfigurer.initLogging(logFile);
+        } catch (FileNotFoundException e) {
+            String msg = "Cannot restore default logging configuration."
+                    + " log4j.properties file not found in the classpath";
+            throw new Exception(msg, e);
+        }
     }
 
     private static InputStream getLocalInputStream(String logFile) throws FileNotFoundException, LogViewerException {
