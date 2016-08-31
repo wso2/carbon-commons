@@ -551,9 +551,11 @@ public class LoggingAdmin {
         Appender targetAppender = null;
         while (appenders.hasMoreElements()) {
             Appender appender = (Appender) appenders.nextElement();
-            if (appender.getName().equals(appenderName)) {
-                targetAppender = appender;
-                break;
+            if (appender.getName() != null) {
+                if (appender.getName().equals(appenderName)) {
+                    targetAppender = appender;
+                    break;
+                }
             }
         }
         return targetAppender;
