@@ -17,6 +17,7 @@
  --%>
 <%@ page import="org.apache.axiom.om.OMElement" %>
 <%@ page import="org.apache.axis2.context.ConfigurationContext" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page import="org.wso2.carbon.CarbonConstants" %>
 <%@ page import="org.wso2.carbon.ui.CarbonUIMessage" %>
 <%@page import="org.wso2.carbon.ui.CarbonUIUtil" %>
@@ -141,7 +142,7 @@ function startCodegen(optionsObj) {
     var optionsString = "";
 
     <%if (generateClient != null) { %>
-    optionsString += "-uri,<%= generateClient%>,";
+    optionsString += "-uri,<%= Encode.forHtml(generateClient)%>,";
     <%}%>
 
     for (var o in optionsObj) {
@@ -188,13 +189,13 @@ function startCodegenForCXF(optionsObj) {
     var optionsString = "";
 
     <%if (generateClient != null) { %>
-    optionsString += "-<%= generateMethod%>,";
+    optionsString += "-<%= Encode.forHtml(generateMethod)%>,";
     <%}%>
 
     <%if (wsdl != null) { %>
-    optionsString += "-Service,<%= wsdl%>,";
+    optionsString += "-Service,<%= Encode.forHtml(wsdl)%>,";
     <%}else if(wadl!=null){%>
-    optionsString += "-Service,<%= wadl%>,";
+    optionsString += "-Service,<%= Encode.forHtml(wadl)%>,";
     <%}%>
 
     for (var o in optionsObj) {
@@ -573,7 +574,7 @@ function codeGenFileUploadeHelper(codegenParentTextId, executor) {
                             <td>
                                 
                                 <% EndPointsSetter parcer = new EndPointsSetter();%>
-                                <%= parcer.getEndPoints(endPointsStr) %>
+                                <%= parcer.getEndPoints(Encode.forHtml(endPointsStr)) %>
 
                                 <% dynamicJS = dynamicJS + "var obj_id_pn = document.getElementById('id_pn'); " +
                                         "options['id_pn'] = obj_id_pn[obj_id_pn.selectedIndex].value;" ; %>
