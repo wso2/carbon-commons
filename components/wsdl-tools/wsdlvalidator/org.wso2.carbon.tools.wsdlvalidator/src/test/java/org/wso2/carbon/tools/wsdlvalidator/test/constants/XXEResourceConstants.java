@@ -28,8 +28,12 @@ import java.util.List;
  */
 public class XXEResourceConstants {
 
-    private XXEResourceConstants() {
+    private static final String INSIDE_SOAP_BODY_EXCEPTION = "WSDLException (at /soap:Envelope): " +
+            "faultCode=INVALID_WSDL: Expected element '{http://schemas.xmlsoap.org/wsdl/}definitions'.";
+    private static final String VALID_WSDL_EXCEPTION = null;
+    private static final String SAX_ERROR_PROCESSING_XML = "SAX error in processing XML document";
 
+    private XXEResourceConstants() {
     }
 
     /**
@@ -38,28 +42,17 @@ public class XXEResourceConstants {
     public static final List<XXEResource> XXE_RESOURCE_LIST = Collections
             .unmodifiableList(new ArrayList<XXEResource>() {
                 {
-                    add(new XXEResource("filenotfound.xml", ExceptionString.SAX_ERROR_PROCESSING_XML));
-                    add(new XXEResource("ftp.xml", ExceptionString.SAX_ERROR_PROCESSING_XML));
-                    add(new XXEResource("insidesoapbody.xml", ExceptionString.INSIDE_SOAP_BODY_EXCEPTION));
-                    add(new XXEResource("onbextraction1.xml", ExceptionString.SAX_ERROR_PROCESSING_XML));
-                    add(new XXEResource("onbextraction2.xml", ExceptionString.SAX_ERROR_PROCESSING_XML));
-                    add(new XXEResource("onbextraerror.xml", ExceptionString.SAX_ERROR_PROCESSING_XML));
-                    add(new XXEResource("onbextranice.xml", ExceptionString.SAX_ERROR_PROCESSING_XML));
-                    add(new XXEResource("onbvariation.xml", ExceptionString.SAX_ERROR_PROCESSING_XML));
-                    add(new XXEResource("outboundxxe.xml", ExceptionString.SAX_ERROR_PROCESSING_XML));
-                    add(new XXEResource("validwsdl.xml", ExceptionString.VALID_WSDL_EXCEPTION));
-                    add(new XXEResource("wafbypass.xml", ExceptionString.SAX_ERROR_PROCESSING_XML));
+                    add(new XXEResource("filenotfound.xml", SAX_ERROR_PROCESSING_XML));
+                    add(new XXEResource("ftp.xml", SAX_ERROR_PROCESSING_XML));
+                    add(new XXEResource("insidesoapbody.xml", INSIDE_SOAP_BODY_EXCEPTION));
+                    add(new XXEResource("onbextraction1.xml", SAX_ERROR_PROCESSING_XML));
+                    add(new XXEResource("onbextraction2.xml", SAX_ERROR_PROCESSING_XML));
+                    add(new XXEResource("onbextraerror.xml", SAX_ERROR_PROCESSING_XML));
+                    add(new XXEResource("onbextranice.xml", SAX_ERROR_PROCESSING_XML));
+                    add(new XXEResource("onbvariation.xml", SAX_ERROR_PROCESSING_XML));
+                    add(new XXEResource("outboundxxe.xml", SAX_ERROR_PROCESSING_XML));
+                    add(new XXEResource("validwsdl.xml", VALID_WSDL_EXCEPTION));
+                    add(new XXEResource("wafbypass.xml", SAX_ERROR_PROCESSING_XML));
                 }
             });
-
-    /**
-     * Exception constants for resource files.
-     */
-    private static class ExceptionString {
-
-        private static final String INSIDE_SOAP_BODY_EXCEPTION = "WSDLException (at /soap:Envelope): " +
-                "faultCode=INVALID_WSDL: Expected element '{http://schemas.xmlsoap.org/wsdl/}definitions'.";
-        private static final String VALID_WSDL_EXCEPTION = null;
-        private static final String SAX_ERROR_PROCESSING_XML = "SAX error in processing XML document";
-    }
 }

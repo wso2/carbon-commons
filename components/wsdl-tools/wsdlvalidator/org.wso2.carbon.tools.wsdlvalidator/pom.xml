@@ -98,8 +98,6 @@
                     </instructions>
                 </configuration>
             </plugin>
-
-
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.12.4</version>
@@ -114,7 +112,6 @@
                     <workingDirectory>${basedir}/target</workingDirectory>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
 

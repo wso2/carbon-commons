@@ -225,14 +225,11 @@ public class WsdlValidator {
      * @throws TransformerException on transforming error
      */
     private URL loadXMLToFile(Document document) throws TransformerException, IOException {
-
-
         DOMSource source = new DOMSource(document);
         File tempFile = File.createTempFile("temp", ".txt");
         tempFile.deleteOnExit();
         FileWriter writer = new FileWriter(tempFile);
         StreamResult result = new StreamResult(writer);
-
         TransformerFactory transformerFactory = TransformerFactory
                 .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
         transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -253,7 +250,6 @@ public class WsdlValidator {
         Document document;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
-
             dbf.setValidating(true);
             dbf.setNamespaceAware(true);
 
@@ -270,11 +266,9 @@ public class WsdlValidator {
             dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
             DocumentBuilder db = dbf.newDocumentBuilder();
-
             InputSource inputSource = new InputSource();
             inputSource.setCharacterStream(new StringReader(payload));
             document = db.parse(inputSource);
-
         } catch (ParserConfigurationException e) {
             throw new WSDLValidatorException("Error parsing XML document", e);
         } catch (SAXException e) {

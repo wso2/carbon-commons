@@ -29,5 +29,4 @@ public class WSDLValidatorException extends Exception {
     public WSDLValidatorException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }
