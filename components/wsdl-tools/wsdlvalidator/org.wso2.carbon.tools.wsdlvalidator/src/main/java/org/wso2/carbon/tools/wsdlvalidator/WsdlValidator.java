@@ -233,7 +233,8 @@ public class WsdlValidator {
         FileWriter writer = new FileWriter(tempFile);
         StreamResult result = new StreamResult(writer);
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        TransformerFactory transformerFactory = TransformerFactory
+                .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
         transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         Transformer transformer = transformerFactory.newTransformer();
         transformer.transform(source, result);
@@ -253,11 +254,19 @@ public class WsdlValidator {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
 
-            dbf.setValidating(false);
+            dbf.setValidating(true);
             dbf.setNamespaceAware(true);
-            dbf.setFeature("http://xml.org/sax/features/namespaces", false);
-            dbf.setFeature("http://xml.org/sax/features/validation", false);
+
+            // Perform namespace processing
+            dbf.setFeature("http://xml.org/sax/features/namespaces", true);
+
+            // Validate the document and report validity errors.
+            dbf.setFeature("http://xml.org/sax/features/validation", true);
+
+            // Build the grammar but do not use the default attributes and attribute types information it contains.
             dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+
+            // Ignore the external DTD completely.
             dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
 
             DocumentBuilder db = dbf.newDocumentBuilder();

