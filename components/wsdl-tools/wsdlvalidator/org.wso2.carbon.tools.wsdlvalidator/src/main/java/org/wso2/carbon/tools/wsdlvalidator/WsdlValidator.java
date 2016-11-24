@@ -16,33 +16,54 @@
 */
 package org.wso2.carbon.tools.wsdlvalidator;
 
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.IOUtils;
 import org.apache.xerces.xs.XSModel;
-
 import org.eclipse.wst.wsdl.validation.internal.Constants;
 import org.eclipse.wst.wsdl.validation.internal.ControllerValidationInfo;
 import org.eclipse.wst.wsdl.validation.internal.IValidationMessage;
+import org.eclipse.wst.wsdl.validation.internal.ValidationInfoImpl;
 import org.eclipse.wst.wsdl.validation.internal.exception.ValidateWSDLException;
-import org.eclipse.wst.wsdl.validation.internal.wsdl11.*;
+import org.eclipse.wst.wsdl.validation.internal.resolver.URIResolver;
+import org.eclipse.wst.wsdl.validation.internal.util.MessageGenerator;
+import org.eclipse.wst.wsdl.validation.internal.wsdl11.ClassloaderWSDL11ValidatorDelegate;
+import org.eclipse.wst.wsdl.validation.internal.wsdl11.IWSDL11ValidationInfo;
+import org.eclipse.wst.wsdl.validation.internal.wsdl11.ValidatorRegistry;
+import org.eclipse.wst.wsdl.validation.internal.wsdl11.WSDL11BasicValidator;
+import org.eclipse.wst.wsdl.validation.internal.wsdl11.WSDL11ValidationInfoImpl;
+import org.eclipse.wst.wsdl.validation.internal.wsdl11.WSDL11ValidatorController;
+import org.eclipse.wst.wsdl.validation.internal.wsdl11.WSDL11ValidatorDelegate;
+import org.eclipse.wst.wsdl.validation.internal.wsdl11.WSDLDocument;
 import org.eclipse.wst.wsdl.validation.internal.wsdl11.http.HTTPValidator;
 import org.eclipse.wst.wsdl.validation.internal.wsdl11.mime.MIMEValidator;
 import org.eclipse.wst.wsdl.validation.internal.wsdl11.soap.SOAPValidator;
-import org.eclipse.wst.wsdl.validation.internal.resolver.URIResolver;
-import org.eclipse.wst.wsdl.validation.internal.ValidationInfoImpl;
-import org.eclipse.wst.wsdl.validation.internal.util.MessageGenerator;
-
 import org.w3c.dom.Document;
+import org.wso2.carbon.tools.wsdlvalidator.exception.WSDLValidatorException;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 import javax.activation.DataHandler;
+import javax.wsdl.Definition;
+import javax.wsdl.factory.WSDLFactory;
+import javax.wsdl.xml.WSDLReader;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.wsdl.xml.WSDLReader;
-import javax.wsdl.factory.WSDLFactory;
-import javax.wsdl.Definition;
-import java.io.*;
-import java.util.*;
-import java.net.URL;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 public class WsdlValidator {
     public static final String WSDL_VALID = "WSDL DOCUMENT IS VALID";
@@ -61,9 +82,9 @@ public class WsdlValidator {
         try {
             inputStream = filedata.getDataSource().getInputStream();
         } catch (IOException e) {
-            throw new Exception(e);
+            throw new WSDLValidatorException("Exception occurred when validating XML document", e);
         }
-        WSDLValidationInfo info1 = validaWSDLFromURI(inputStream, null);
+        WSDLValidationInfo info1 = validaWSDLFromURI(inputStream);
         return dataPacker(info1);
     }
 
@@ -75,10 +96,8 @@ public class WsdlValidator {
     *  @return - Report bean object
     */
     public Report validateFromUrl(String type, String url) throws Exception {
-        HttpMethod httpMethod = new GetMethod(url);
-        InputStream inputStream = httpMethod.getResponseBodyAsStream();
-
-        WSDLValidationInfo info2 = validaWSDLFromURI(inputStream, url);
+        InputStream inputStream = new URL(url).openStream();
+        WSDLValidationInfo info2 = validaWSDLFromURI(inputStream);
         return dataPacker(info2);
     }
 
@@ -88,43 +107,18 @@ public class WsdlValidator {
     *  @param sourceURL - String that contains url to wsdl file
     *  @return - WSDLValidationInfo
     */
-   private WSDLValidationInfo validaWSDLFromURI(InputStream stream,
-                                                String sourceURL) throws Exception {
+   private WSDLValidationInfo validaWSDLFromURI(InputStream stream) throws Exception {
        InputStream inputStream = null;
        URL url;
 
        try {
-           if (sourceURL == null) {
-               File tempFile = File.createTempFile("temp", ".txt");
-               tempFile.deleteOnExit();
-
-               BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(tempFile));
-               byte[] contentChunk = new byte[1024];
-               int byteCount;
-               while ((byteCount = stream.read(contentChunk)) != -1) {
-                   out.write(contentChunk, 0, byteCount);
-               }
-               out.flush();
-               url = tempFile.toURI().toURL();
-           } else {
-               url =  new URL(sourceURL);
-           }
+           String sanitizedXMLString = sanitizeXMLFileData(stream);
+           Document doc = secureParseXML(sanitizedXMLString);
+           url = loadXMLToFile(doc);
            inputStream = url.openStream();
 
            ResourceBundle rb = ResourceBundle.getBundle("validatewsdl");
            MessageGenerator messagegenerator = new MessageGenerator(rb);
-           DocumentBuilder db;
-           DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-           dbf.setNamespaceAware(true);
-
-           try {
-               db = dbf.newDocumentBuilder();
-           } catch (Exception e) {
-               dbf = DocumentBuilderFactory.newInstance();
-               db = dbf.newDocumentBuilder();
-           }
-
-           Document doc = db.parse(inputStream);
            WSDLReader reader = WSDLFactory.newInstance().newWSDLReader();
            reader.setFeature("javax.wsdl.importDocuments", true);
            Definition wsdlDefinition = reader.readWSDL(url.toString());
@@ -220,5 +214,82 @@ public class WsdlValidator {
                 throws ValidateWSDLException {
             return super.readWSDLDocument(domModel, file, messagegenerator, wsdlvalinfo);
         }
+    }
+
+    /**
+     * Load XML data to a temporary file.
+     *
+     * @param document XML DOM
+     * @return URL of the file
+     * @throws IOException          on error writing to file
+     * @throws TransformerException on transforming error
+     */
+    private URL loadXMLToFile(Document document) throws TransformerException, IOException {
+        DOMSource source = new DOMSource(document);
+        File tempFile = File.createTempFile("temp", ".txt");
+        tempFile.deleteOnExit();
+        FileWriter writer = new FileWriter(tempFile);
+        StreamResult result = new StreamResult(writer);
+        TransformerFactory transformerFactory = TransformerFactory
+                .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+        transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        Transformer transformer = transformerFactory.newTransformer();
+        transformer.transform(source, result);
+        return tempFile.toURI().toURL();
+    }
+
+    /**
+     * Securely parse XML document.
+     *
+     * @param payload String XML
+     * @return XML Document
+     * @throws WSDLValidatorException on SAX, IO or parsing error
+     */
+    private Document secureParseXML(String payload) throws WSDLValidatorException {
+
+        Document document;
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        try {
+            dbf.setValidating(true);
+            dbf.setNamespaceAware(true);
+
+            // Perform namespace processing
+            dbf.setFeature("http://xml.org/sax/features/namespaces", true);
+
+            // Validate the document and report validity errors.
+            dbf.setFeature("http://xml.org/sax/features/validation", true);
+
+            // Build the grammar but do not use the default attributes and attribute types information it contains.
+            dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+
+            // Ignore the external DTD completely.
+            dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputSource inputSource = new InputSource();
+            inputSource.setCharacterStream(new StringReader(payload));
+            document = db.parse(inputSource);
+        } catch (ParserConfigurationException e) {
+            throw new WSDLValidatorException("Error parsing XML document", e);
+        } catch (SAXException e) {
+            throw new WSDLValidatorException("SAX error in processing XML document", e);
+        } catch (IOException e) {
+            throw new WSDLValidatorException("IO error in processing XML document", e);
+        }
+        return document;
+    }
+
+    /**
+     * Remove XML doc type declaration.
+     *
+     * @param inputStream file data input stream
+     * @return Sanitized XML output
+     * @throws IOException IOException
+     */
+    private String sanitizeXMLFileData(InputStream inputStream) throws IOException {
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(inputStream, writer, "UTF-8");
+        return writer.toString().replaceAll("\\<(\\!DOCTYPE[^\\>\\[]+(\\[[^\\]]+)?)+[^>]+\\>\n", "")
+                .replaceAll("\n", "");
     }
 }

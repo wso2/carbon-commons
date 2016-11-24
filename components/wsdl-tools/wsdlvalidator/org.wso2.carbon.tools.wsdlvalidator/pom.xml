@@ -67,6 +67,10 @@
             <groupId>org.apache.ws.commons.axiom.wso2</groupId>
             <artifactId>axiom</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -92,6 +96,20 @@
                         </Include-Resource>
                         <Dynamic-Import>*</Dynamic-Import>
                     </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.12.4</version>
+                <inherited>false</inherited>
+                <configuration>
+                    <argLine>-Xms512m -Xmx1024m -XX:MaxPermSize=128m</argLine>
+                    <disableXmlReport>false</disableXmlReport>
+                    <parallel>false</parallel>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <workingDirectory>${basedir}/target</workingDirectory>
                 </configuration>
             </plugin>
         </plugins>

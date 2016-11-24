@@ -73,7 +73,7 @@
             document.getElementById("fileResult").innerHTML = value;
         }
 
-        if (value.search(/INVALID/g) == -1) {
+        if (value === "WSDL DOCUMENT IS VALID") {
             document.getElementById("fileResult").style.color = "#008000";
         } else {
             document.getElementById("fileResult").style.color = "#ff0000";
@@ -102,7 +102,7 @@
             value = o.responseXML.documentElement.firstChild.textContent;
             document.getElementById("urlResult").innerHTML = value;
         }
-        if (value.search(/INVALID/g) == -1) {
+        if (value === "WSDL DOCUMENT IS VALID") {
             document.getElementById("urlResult").style.color = "#008000";
         } else {
             document.getElementById("urlResult").style.color = "#ff0000";
