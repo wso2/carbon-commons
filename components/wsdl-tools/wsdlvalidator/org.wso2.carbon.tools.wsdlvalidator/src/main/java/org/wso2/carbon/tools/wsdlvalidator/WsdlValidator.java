@@ -51,6 +51,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.wsdl.Definition;
 import javax.wsdl.factory.WSDLFactory;
@@ -70,6 +72,8 @@ public class WsdlValidator {
     public static final String WSDL_VALID_I = "WSDL DOCUMENT IS VALID";
     public static final String WSDL_INVALID = " WSDL DOCUMENT IS INVALID";
     public static final String WSDL_INVALID_I = " WSDL DOCUMENT IS INVALID";
+
+    private static Logger logger = Logger.getLogger(WsdlValidator.class.getName());
 
     /*
     *     This method walidate a uploded WSDL file
@@ -230,8 +234,15 @@ public class WsdlValidator {
         tempFile.deleteOnExit();
         FileWriter writer = new FileWriter(tempFile);
         StreamResult result = new StreamResult(writer);
-        TransformerFactory transformerFactory = TransformerFactory
-                .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+        TransformerFactory transformerFactory;
+        try {
+            transformerFactory = TransformerFactory
+                    .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+        } catch (NoSuchMethodError e) {
+            logger.log(Level.INFO, "TransformerFactory.newInstance(String, ClassLoader) method not found. " +
+                    "Using TransformerFactory.newInstance()");
+            transformerFactory = TransformerFactory.newInstance();
+        }
         transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         Transformer transformer = transformerFactory.newTransformer();
         transformer.transform(source, result);
