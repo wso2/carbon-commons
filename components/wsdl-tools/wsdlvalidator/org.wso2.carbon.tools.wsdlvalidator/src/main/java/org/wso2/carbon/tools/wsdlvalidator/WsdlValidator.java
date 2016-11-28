@@ -17,6 +17,8 @@
 package org.wso2.carbon.tools.wsdlvalidator;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.xerces.xs.XSModel;
 import org.eclipse.wst.wsdl.validation.internal.Constants;
 import org.eclipse.wst.wsdl.validation.internal.ControllerValidationInfo;
@@ -71,6 +73,8 @@ public class WsdlValidator {
     public static final String WSDL_INVALID = " WSDL DOCUMENT IS INVALID";
     public static final String WSDL_INVALID_I = " WSDL DOCUMENT IS INVALID";
 
+    private static final Log log = LogFactory.getLog(WsdlValidator.class);
+
     /*
     *     This method walidate a uploded WSDL file
     *  @param type - not used
@@ -84,8 +88,8 @@ public class WsdlValidator {
         } catch (IOException e) {
             throw new WSDLValidatorException("Exception occurred when validating XML document", e);
         }
-        WSDLValidationInfo info1 = validaWSDLFromURI(inputStream);
-        return dataPacker(info1);
+        WSDLValidationInfo info = validaWSDLFromURI(inputStream);
+        return dataPacker(info);
     }
 
 
@@ -97,8 +101,8 @@ public class WsdlValidator {
     */
     public Report validateFromUrl(String type, String url) throws Exception {
         InputStream inputStream = new URL(url).openStream();
-        WSDLValidationInfo info2 = validaWSDLFromURI(inputStream);
-        return dataPacker(info2);
+        WSDLValidationInfo info = validaWSDLFromURI(inputStream);
+        return dataPacker(info);
     }
 
    /*
@@ -230,8 +234,15 @@ public class WsdlValidator {
         tempFile.deleteOnExit();
         FileWriter writer = new FileWriter(tempFile);
         StreamResult result = new StreamResult(writer);
-        TransformerFactory transformerFactory = TransformerFactory
-                .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+        TransformerFactory transformerFactory;
+        try {
+            transformerFactory = TransformerFactory
+                    .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+        } catch (NoSuchMethodError e) {
+            log.info("TransformerFactory.newInstance(String, ClassLoader) method not found. " +
+                    "Using TransformerFactory.newInstance()");
+            transformerFactory = TransformerFactory.newInstance();
+        }
         transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         Transformer transformer = transformerFactory.newTransformer();
         transformer.transform(source, result);

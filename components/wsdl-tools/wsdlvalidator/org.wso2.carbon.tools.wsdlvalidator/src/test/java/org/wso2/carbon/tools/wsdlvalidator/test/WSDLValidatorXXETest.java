@@ -46,7 +46,6 @@ public class WSDLValidatorXXETest {
      */
     @BeforeClass
     public void init() {
-
         wsdlValidator = new WsdlValidator();
     }
 
