@@ -18,26 +18,42 @@ package org.wso2.carbon.wsdl2form;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.context.MessageContext;
 import org.apache.axis2.description.AxisService;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.w3c.dom.Document;
 import org.wso2.carbon.CarbonException;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URL;
+import java.util.Map;
+import java.util.Set;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.TransformerFactoryConfigurationError;
+import javax.xml.transform.URIResolver;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.Map;
-import java.util.Set;
 
 public class Util {
 
@@ -210,88 +226,123 @@ public class Util {
      * @throws AxisFault will be thrown
      */
     public static File writeWSDLToFileSystemHelpler(String url) throws AxisFault {
-        InputStream inStrm = null;
-        BufferedInputStream bIn = null;
-        FileOutputStream out = null;
-        HttpURLConnection uconn = null;
-        try {
-            URL wsdlURL = new URL(url);
-            URLConnection connection = wsdlURL.openConnection();
-            if (connection instanceof HttpURLConnection) {
-                uconn = (HttpURLConnection) connection;
-            } else {
-                String msg = "Unable to process given URL. " +
-                             "Only HTTP protocol is currently supported.";
-                log.error(msg);
-                throw new AxisFault(msg);
-            }
-            uconn.setRequestMethod("GET");
-            uconn.setAllowUserInteraction(false);
-            uconn.setDefaultUseCaches(false);
-            uconn.setDoInput(true);
-            uconn.setDoOutput(false);
-            uconn.setInstanceFollowRedirects(true);
-            uconn.setUseCaches(false);
-            uconn.connect();
-            inStrm = uconn.getInputStream();
-            bIn = new BufferedInputStream(inStrm);
-            File outFile = getOutputFileLocation(".xml").getFile();
-            out = new FileOutputStream(outFile);
-            // Transfer bytes from in to out
-            byte[] buf = new byte[1024];
-            int len;
-            while ((len = bIn.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            return outFile;
-        } catch (IllegalArgumentException e) {
-            String msg = "URL provided is invalid. Please use a valid URL - " + url;
-            log.error(msg, e);
-            throw new AxisFault(msg);
-        } catch (MalformedURLException e) {
-            String msg = "URL provided is invalid. Please use a valid URL - " + url;
-            log.error(msg, e);
-            throw new AxisFault(msg);
-        } catch (FileNotFoundException e) {
-            String msg = "File provided is invalid. Please use a valid file.";
-            log.error(msg, e);
-            throw new AxisFault(msg);
+        try (InputStream inputStream = new URL(url).openStream()) {
+            String sanitizedXMLString = sanitizeXMLFileData(inputStream);
+            Document doc = secureParseXML(sanitizedXMLString);
+            return loadXMLToFile(doc);
         } catch (IOException e) {
-            String msg = "Error in connection while retrieving the WSDL. " +
-                         "Please check the connection and the url provided.";
+            String msg = "IO error in processing XML document";
             log.error(msg, e);
-            throw new AxisFault(msg);
-        } catch (CarbonException e) {
-            log.error(e.getMessage(), e);
-            throw new AxisFault(e.getMessage());
-        } finally {
-            if (uconn != null) {
-                uconn.disconnect();
-            }
-            if (bIn != null) {
-                try {
-                    bIn.close();
-                } catch (IOException e) {
-                    log.error("Error closing I/O streams", e);
-                }
-            }
-            if (inStrm != null) {
-                try {
-                    inStrm.close();
-                } catch (IOException e) {
-                    log.error("Error closing I/O streams", e);
-                }
-            }
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    log.error("Error closing I/O streams", e);
-                }
-            }
-
+            throw new AxisFault(msg, e);
+        } catch (ParserConfigurationException e) {
+            String msg = "Error parsing XML document";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
+        } catch (SAXException e) {
+            String msg = "SAX error in processing XML document";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
         }
+    }
 
+    /**
+     * Load XML data to a temporary file.
+     *
+     * @param document XML URL
+     * @return URL of the file
+     * @throws IOException          on error writing to file
+     */
+    private static File loadXMLToFile(Document document) throws IOException {
+        DOMSource source = new DOMSource(document);
+        File tempFile = File.createTempFile("temp", ".txt");
+        tempFile.deleteOnExit();
+        try (FileWriter writer = new FileWriter(tempFile)) {
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory transformerFactory = getTransformerFactory();
+            transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.transform(source, result);
+        } catch (IOException e) {
+            String msg = "Error occurred when creating FileWriter";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
+        } catch (TransformerException e) {
+            String msg = "Error occurred when transforming the document safely";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
+        }
+        return tempFile;
+    }
+
+    /**
+     * Securely parse XML document.
+     *
+     * @param payload String XML
+     * @return XML Document
+     * @throws ParserConfigurationException error parsing xml
+     * @throws IOException                  IO error in processing XML document
+     * @throws SAXException                 SAX error in processing XML document
+     */
+    private static Document secureParseXML(String payload)
+            throws ParserConfigurationException, IOException, SAXException {
+
+        Document document;
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setValidating(true);
+        dbf.setNamespaceAware(true);
+
+        // Perform namespace processing
+        dbf.setFeature("http://xml.org/sax/features/namespaces", true);
+
+        // Validate the document and report validity errors.
+        dbf.setFeature("http://xml.org/sax/features/validation", true);
+
+        // Build the grammar but do not use the default attributes and attribute types information it contains.
+        dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
+
+        // Ignore the external DTD completely.
+        dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+
+        DocumentBuilder db = dbf.newDocumentBuilder();
+        InputSource inputSource = new InputSource();
+        inputSource.setCharacterStream(new StringReader(payload));
+        document = db.parse(inputSource);
+        return document;
+    }
+
+    /**
+     * Remove XML doc type declaration.
+     *
+     * @param inputStream file data input stream
+     * @return Sanitized XML output
+     * @throws AxisFault AxisFault
+     */
+    private static String sanitizeXMLFileData(InputStream inputStream) throws AxisFault {
+        try (StringWriter writer = new StringWriter()) {
+            IOUtils.copy(inputStream, writer, "UTF-8");
+            return writer.toString().replaceAll("\\<(\\!DOCTYPE[^\\>\\[]+(\\[[^\\]]+)?)+[^>]+\\>\n", "")
+                    .replaceAll("\n", "");
+        } catch (IOException e) {
+            String msg = "Error occurred when creating StringWriter";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
+        }
+    }
+
+    /**
+     * Get instance of transformer factory.
+     *
+     * @return TransformerFactory instance
+     */
+    private static TransformerFactory getTransformerFactory() {
+        try {
+            return TransformerFactory
+                    .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+        } catch (NoSuchMethodError e) {
+            log.info("TransformerFactory.newInstance(String, ClassLoader) method not found. " +
+                    "Using TransformerFactory.newInstance()");
+            return TransformerFactory.newInstance();
+        }
     }
 
     /**

