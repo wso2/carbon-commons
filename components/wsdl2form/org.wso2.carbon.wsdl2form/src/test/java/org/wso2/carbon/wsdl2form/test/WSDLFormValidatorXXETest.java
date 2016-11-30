@@ -18,14 +18,11 @@
 
 package org.wso2.carbon.wsdl2form.test;
 
-import org.apache.axis2.AxisFault;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.wso2.carbon.wsdl2form.Util;
 import org.wso2.carbon.wsdl2form.test.constants.XXEResourceConstants;
 import org.wso2.carbon.wsdl2form.test.models.XXEResource;
-
-import java.io.File;
 
 /**
  * Class for validating Util against XXE attacks.
@@ -39,13 +36,15 @@ public class WSDLFormValidatorXXETest {
     public void testXMLXXEValidation() {
         for (XXEResource xxeResource : XXEResourceConstants.XXE_RESOURCE_LIST) {
             String url = xxeResource.getURLForFile().toString();
-
             try {
-                File file = Util.writeWSDLToFileSystemHelpler(url);
-                Assert.assertNotNull(file);
-            } catch (AxisFault e) {
+                Util.writeWSDLToFileSystemHelpler(url);
+            } catch (Exception e) {
                 Assert.assertTrue(xxeResource.getExpectedException()
                         .equals(e.getMessage()));
+                continue;
+            }
+            if (xxeResource.getExpectedException() != null) {
+                Assert.fail("WSDL file validation should throw an exception since invalid WSDL");
             }
         }
     }

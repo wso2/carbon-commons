@@ -28,8 +28,7 @@ import java.util.List;
  */
 public class XXEResourceConstants {
 
-    private static final String INSIDE_SOAP_BODY_EXCEPTION = "WSDLException (at /soap:Envelope): " +
-            "faultCode=INVALID_WSDL: Expected element '{http://schemas.xmlsoap.org/wsdl/}definitions'.";
+    private static final String INSIDE_SOAP_BODY_EXCEPTION = null;
     private static final String VALID_WSDL_EXCEPTION = null;
     private static final String SAX_ERROR_PROCESSING_XML = "SAX error in processing XML document";
 

@@ -226,19 +226,22 @@ public class Util {
      * @throws AxisFault will be thrown
      */
     public static File writeWSDLToFileSystemHelpler(String url) throws AxisFault {
-        try {
-            InputStream inputStream = new URL(url).openStream();
+        try (InputStream inputStream = new URL(url).openStream()) {
             String sanitizedXMLString = sanitizeXMLFileData(inputStream);
             Document doc = secureParseXML(sanitizedXMLString);
             return loadXMLToFile(doc);
         } catch (IOException e) {
-            throw new AxisFault("IO error in processing XML document", e);
+            String msg = "IO error in processing XML document";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
         } catch (ParserConfigurationException e) {
-            throw new AxisFault("Error parsing XML document", e);
+            String msg = "Error parsing XML document";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
         } catch (SAXException e) {
-            throw new AxisFault("SAX error in processing XML document", e);
-        } catch (TransformerException e) {
-            throw new AxisFault("Error occurred when transforming the document safely", e);
+            String msg = "SAX error in processing XML document";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
         }
     }
 
@@ -248,26 +251,26 @@ public class Util {
      * @param document XML URL
      * @return URL of the file
      * @throws IOException          on error writing to file
-     * @throws TransformerException on transforming error
      */
-    private static File loadXMLToFile(Document document) throws TransformerException, IOException {
+    private static File loadXMLToFile(Document document) throws IOException {
         DOMSource source = new DOMSource(document);
         File tempFile = File.createTempFile("temp", ".txt");
         tempFile.deleteOnExit();
-        FileWriter writer = new FileWriter(tempFile);
-        StreamResult result = new StreamResult(writer);
-        TransformerFactory transformerFactory;
-        try {
-            transformerFactory = TransformerFactory
-                    .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
-        } catch (NoSuchMethodError e) {
-            log.info("TransformerFactory.newInstance(String, ClassLoader) method not found. " +
-                    "Using TransformerFactory.newInstance()");
-            transformerFactory = TransformerFactory.newInstance();
+        try (FileWriter writer = new FileWriter(tempFile)) {
+            StreamResult result = new StreamResult(writer);
+            TransformerFactory transformerFactory = getTransformerFactory();
+            transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.transform(source, result);
+        } catch (IOException e) {
+            String msg = "Error occurred when creating FileWriter";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
+        } catch (TransformerException e) {
+            String msg = "Error occurred when transforming the document safely";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
         }
-        transformerFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-        Transformer transformer = transformerFactory.newTransformer();
-        transformer.transform(source, result);
         return tempFile;
     }
 
@@ -312,13 +315,34 @@ public class Util {
      *
      * @param inputStream file data input stream
      * @return Sanitized XML output
-     * @throws IOException IOException
+     * @throws AxisFault AxisFault
      */
-    private static String sanitizeXMLFileData(InputStream inputStream) throws IOException {
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(inputStream, writer, "UTF-8");
-        return writer.toString().replaceAll("\\<(\\!DOCTYPE[^\\>\\[]+(\\[[^\\]]+)?)+[^>]+\\>\n", "")
-                .replaceAll("\n", "");
+    private static String sanitizeXMLFileData(InputStream inputStream) throws AxisFault {
+        try (StringWriter writer = new StringWriter()) {
+            IOUtils.copy(inputStream, writer, "UTF-8");
+            return writer.toString().replaceAll("\\<(\\!DOCTYPE[^\\>\\[]+(\\[[^\\]]+)?)+[^>]+\\>\n", "")
+                    .replaceAll("\n", "");
+        } catch (IOException e) {
+            String msg = "Error occurred when creating StringWriter";
+            log.error(msg, e);
+            throw new AxisFault(msg, e);
+        }
+    }
+
+    /**
+     * Get instance of transformer factory.
+     *
+     * @return TransformerFactory instance
+     */
+    private static TransformerFactory getTransformerFactory() {
+        try {
+            return TransformerFactory
+                    .newInstance("com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl", null);
+        } catch (NoSuchMethodError e) {
+            log.info("TransformerFactory.newInstance(String, ClassLoader) method not found. " +
+                    "Using TransformerFactory.newInstance()");
+            return TransformerFactory.newInstance();
+        }
     }
 
     /**
