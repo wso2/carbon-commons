@@ -1,0 +1,9 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="WSDLValidator" parallel="false">
+    <test name="WSDLValidateXMLXXE" preserve-order="true" verbose="2">
+        <classes>
+            <class name="org.wso2.carbon.tools.wsdlvalidator.test.WSDLValidatorXXETest"/>
+        </classes>
+    </test>
+</suite>
