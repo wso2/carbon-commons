@@ -59,12 +59,12 @@ public class NDataSourceHelper {
 	
 	public static WSDataSourceMetaInfo createWSDataSourceMetaInfo(HttpServletRequest request, NDataSourceAdminServiceClient client) throws RemoteException, DataSourceException, NDataSourceAdminDataSourceException {
 		WSDataSourceMetaInfo_WSDataSourceDefinition dataSourceDefinition = null;
-		String datasourceType = request.getParameter("dsType");
-		String datasourceCustomType = request.getParameter("customDsType");
+		String datasourceType = sanitizeInput(request.getParameter("dsType"));
+		String datasourceCustomType = sanitizeInput(request.getParameter("customDsType"));
 		boolean configView = Boolean.parseBoolean(request.getParameter("configView"));
 		bundle = ResourceBundle.getBundle("org.wso2.carbon.ndatasource.ui.i18n.Resources",
 				request.getLocale());
-		String name = request.getParameter("dsName");
+		String name = sanitizeInput(request.getParameter("dsName"));
 		if (name == null || "".equals(name)) {
 			name = request.getParameter("name_hidden");
 			if (name == null || "".equals(name)) {
@@ -76,7 +76,7 @@ public class NDataSourceHelper {
 			handleException(bundle.getString("custom.ds.type.name.cannotfound.msg"));
 		}
 
-		String description = request.getParameter("description");
+		String description = sanitizeInput(request.getParameter("description"));
 
 		WSDataSourceMetaInfo dataSourceMetaInfo = new WSDataSourceMetaInfo();
 		dataSourceMetaInfo.setName(name);
@@ -124,15 +124,15 @@ public class NDataSourceHelper {
 				handleException(e.getMessage());
 			}
 
-			String dsProvider = request.getParameter("dsProviderType");
+			String dsProvider = sanitizeInput(request.getParameter("dsProviderType"));
 			if (NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER.equals(dsProvider)) {
-				String dsclassname = request.getParameter("dsclassname");
+				String dsclassname = sanitizeInput(request.getParameter("dsclassname"));
 				if (dsclassname == null || "".equals(dsclassname)) {
 					handleException(bundle.getString("ds.dsclassname.cannotfound.msg"));
 				}
 
 				// retrieve external data source properties
-				String dsproviderProperties = request.getParameter("dsproviderProperties");
+				String dsproviderProperties = sanitizeInput(request.getParameter("dsproviderProperties"));
 				if (dsproviderProperties == null || "".equals(dsproviderProperties)) {
 					handleException(bundle.getString("ds.external.datasource.property.cannotfound.msg"));
 				}
@@ -150,15 +150,15 @@ public class NDataSourceHelper {
 				rdbmsDSXMLConfig.setDataSourceClassName(dsclassname);
 				rdbmsDSXMLConfig.setDataSourceProps(dataSourceProps);
 			} else if ("default".equals(dsProvider)) {
-				String driver = request.getParameter("driver");
+				String driver = sanitizeInput(request.getParameter("driver"));
 				if (driver == null || "".equals(driver)) {
 					handleException(bundle.getString("ds.driver.cannotfound.msg"));
 				}
-				String url = request.getParameter("url");
+				String url = sanitizeInput(request.getParameter("url"));
 				if (url == null || "".equals(url)) {
 					handleException(bundle.getString("ds.url.cannotfound.msg"));
 				}
-				String username = request.getParameter("username");
+				String username = sanitizeInput(request.getParameter("username"));
 				String password = null;
 				
 				boolean isEditMode = Boolean.parseBoolean(request.getParameter("editMode"));
@@ -595,4 +595,38 @@ public class NDataSourceHelper {
         }
         return NDataSourceClientConstants.RDBMSEngines.GENERIC;
     }
+
+	/**
+	 * Sanitize the input to prevent XSS.
+	 *
+	 * @param input {String} input to be sanitize
+	 * @return {String} sanitized input value or null
+	 */
+	private static String sanitizeInput(String input) {
+		if (input == null || input.isEmpty()) {
+			return null;
+		}
+		return input
+				.replaceAll("(?i)<script.*?>.*?</script.*?>", "")
+				.replaceAll("(?i)<script.*?>", "")
+				.replaceAll("(?i)<script.*?/>", "")
+				.replaceAll("(?i)<iframe.*?>.*?</iframe.*?>", "")
+				.replaceAll("(?i)<iframe.*?>", "")
+				.replaceAll("(?i)<iframe.*?/>", "")
+				.replaceAll("(?i)<object.*?>.*?</object.*?>", "")
+				.replaceAll("(?i)<object.*?>", "")
+				.replaceAll("(?i)<object.*?/>", "")
+				.replaceAll("(?i)<.*?javascript:.*?>.*?</.*?>", "")
+				.replaceAll("(?i)<.*?javascript:.*?>", "")
+				.replaceAll("(?i)<.*?javascript:.*?/>", "")
+				.replaceAll("(?i)<.*?onload=.*?>.*?</.*?>", "")
+				.replaceAll("(?i)<.*?onload=.*?>", "")
+				.replaceAll("(?i)<.*?onload=.*?/>", "")
+				.replaceAll("(?i)<.*?expression.*?>.*?</.*?>", "")
+				.replaceAll("(?i)<.*?expression.*?>", "")
+				.replaceAll("(?i)<.*?expression.*?/>", "")
+				.replaceAll("(?i)<.*?\\\\s+on.*?>.*?</.*?>", "")
+				.replaceAll("(?i)<.*?\\\\s+on.*?>", "")
+				.replaceAll("(?i)<.*?\\\\s+on.*?/>", "");
+	}
 }
