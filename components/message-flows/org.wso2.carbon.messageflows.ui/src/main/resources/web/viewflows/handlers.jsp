@@ -102,7 +102,7 @@
 		topPage="false" request="<%=request%>" />
 
     <div id="middle">
-        <h2><%= flowHeader%> <fmt:message key="flow"/> : <%= URLEncoder.encode(phase)%> <fmt:message key="phase.handlers"/></h2>
+        <h2><%= flowHeader%> <fmt:message key="flow"/> : <%= URLEncoder.encode(phase, "UTF-8")%> <fmt:message key="phase.handlers"/></h2>
 
         <div id="workArea">
 
