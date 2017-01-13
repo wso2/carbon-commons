@@ -16,19 +16,24 @@
 
 package org.wso2.carbon.event.core.internal.builder;
 
+import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+import org.wso2.carbon.base.CarbonBaseUtils;
 import org.wso2.carbon.event.core.EventBroker;
 import org.wso2.carbon.event.core.EventBrokerFactory;
 import org.wso2.carbon.event.core.exception.EventBrokerConfigurationException;
 import org.wso2.carbon.event.core.util.EventBrokerConstants;
-import org.wso2.carbon.utils.ServerConstants;
-import org.apache.axiom.om.OMElement;
-import org.apache.axiom.om.impl.builder.StAXOMBuilder;
 
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.namespace.QName;
-import java.io.*;
+import javax.xml.stream.XMLStreamReader;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * Start point to build the event broker. This class read the event broker file and calls the
@@ -74,8 +79,8 @@ public class EventBrokerBuilder {
      */
     private static OMElement loadConfigXML() throws EventBrokerConfigurationException {
 
-        String carbonHome = System.getProperty(ServerConstants.CARBON_HOME);
-        String path = carbonHome + File.separator + "repository" + File.separator + "conf" + File.separator + EventBrokerConstants.EB_CONF;
+        String carbonConfigHome = CarbonBaseUtils.getCarbonConfigDirPath();
+        String path = Paths.get(carbonConfigHome, EventBrokerConstants.EB_CONF).toString();
         BufferedInputStream inputStream = null;
         try {
             inputStream = new BufferedInputStream(new FileInputStream(new File(path)));
