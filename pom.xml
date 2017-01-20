@@ -1711,7 +1711,7 @@
     </profiles>
 
     <properties>
-        <!-- Carbon kernel version -->
+        <!--  Carbon kernel version  -->
         <carbon.kernel.version>4.4.6</carbon.kernel.version>
         <carbon.kernel.imp.pkg.version>[4.4.0, 5.0.0)</carbon.kernel.imp.pkg.version>
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
