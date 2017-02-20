@@ -115,6 +115,7 @@ public class WSDL2FormGenerator {
 
                     // This is a fix for Mashup-861. If the transport is disabled we redirect the user to
                     // the alternative transport
+
 //                    if (!axisService.isEnableAllTransports() &&
 //                            !axisService.isExposedTransport(url.getProtocol())) {
 //                        String redirectURL;
