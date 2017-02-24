@@ -34,6 +34,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.Iterator" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 
 <script type="text/javascript" src="global-params.js"></script>
 <script type="text/javascript" src="dscommon.js"></script>
@@ -527,7 +528,7 @@ function displayPasswordField() {
 		<%if(!editMode) { %>
 			<input id="customDsType" name="customDsType"/>
 		<%} else { %>
-			<input id="customDsType" name="customDsType" value="<%=type %>"/>
+			<input id="customDsType" name="customDsType" value="<%=Encode.forHtml(type) %>"/>
 		<%} %>
 	</td>
 </tr>
@@ -536,9 +537,9 @@ function displayPasswordField() {
     <td align="left">
     	 <input type="hidden" id="isSystem" name="isSystem" value="<%=isSystem %>"/>
     	 <%if (editMode) { %>
-            <input id="dsName" name=dsName class="longInput" value="<%=dataSourceName %>" readonly>
+            <input id="dsName" name=dsName class="longInput" value="<%=Encode.forHtml(dataSourceName) %>" readonly>
         <%} else { %>
-        	<input id="dsName" name=dsName class="longInput" value="<%=dataSourceName %>">
+        	<input id="dsName" name=dsName class="longInput" value="<%=Encode.forHtml(dataSourceName) %>">
         <%} %>
         <input type="hidden" id="editMode" name="editMode" value="<%=editMode %>"/>
     </td>
@@ -546,7 +547,7 @@ function displayPasswordField() {
 <tr>
     <td style="width:170px;"><fmt:message key="description"/></td>
     <td align="left">
-        <input id="description" name="description" class="longInput" value="<%=description %>" />
+        <input id="description" name="description" class="longInput" value="<%=Encode.forHtml(description) %>" />
     </td>
 </tr>
 </tbody>
@@ -700,26 +701,26 @@ function displayPasswordField() {
 <tr>
     <td><fmt:message key="driver"/><span class='required'>*</span></td>
     <td align="left">
-        <input id="driver" name="driver" class="longInput" value="<%=driverClassName %>"/>
+        <input id="driver" name="driver" class="longInput" value="<%=Encode.forHtml(driverClassName) %>"/>
     </td>
 </tr>
 <tr>
     <td><fmt:message key="url"/><span class='required'>*</span></td>
     <td align="left">
-        <input id="url" name="url" class="longInput" value="<%=url %>"/>
+        <input id="url" name="url" class="longInput" value="<%=Encode.forHtml(url) %>"/>
     </td>
 </tr>
 <tr>
     <td><fmt:message key="user.name"/></td>
     <td align="left">
-        <input id="username" name="username" class="longInput" value="<%=username %>"/>
+        <input id="username" name="username" class="longInput" value="<%=Encode.forHtml(username) %>"/>
     </td>
 </tr>
 <% if (!editMode) { %>
 	<tr>
     <td><fmt:message key="password"/></td>
     <td align="left">
-        <input id="password" name="password" type="password" class="longInput"/>
+        <input id="password" name="password" type="password" class="longInput" autocomplete="off"/>
     </td>
 	</tr>
 <%} else if (!isSystem){%>
@@ -732,7 +733,7 @@ function displayPasswordField() {
 	
 <tr id="newPasswordRow" style="display:none">
 	<td><label for="changePassword"><fmt:message  key="password"/></label></td>
-	<td><input type="password" id="newPassword" name="newPassword" class="longInput"/></td>
+	<td><input type="password" id="newPassword" name="newPassword" class="longInput" autocomplete="off"/></td>
 </tr>
 	
 
@@ -740,7 +741,7 @@ function displayPasswordField() {
 <tr>
     <td><fmt:message key="datasource.className"/><span class='required'>*</span></td>
     <td align="left">
-        <input id="dsclassname" name="dsclassname" class="longInput" value="<%=dataSourceclassName %>"/>
+        <input id="dsclassname" name="dsclassname" class="longInput" value="<%=Encode.forHtml(dataSourceclassName) %>"/>
     </td>
 </tr>
 <tr>
@@ -790,7 +791,7 @@ function displayPasswordField() {
         	<tr>
     <td style="width:170px;"><fmt:message key="jndi.name"/></td>
     <td align="left">
-    	<input id="jndiname" name="jndiname" class="longInput" value="<%=jndiConfigName %>" />
+    	<input id="jndiname" name="jndiname" class="longInput" value="<%=Encode.forHtml(jndiConfigName) %>" />
     	<input type="hidden" id="jndiPropertiesHidden" name="jndiPropertiesHidden" class="longInput" value="<%=jndiPropertiesEditMode %>"/>
     </td>
 </tr>
@@ -915,7 +916,7 @@ function displayPasswordField() {
 			<tr>
 			    <td><fmt:message key="default.catalogn"/></td>
 			    <td align="left">
-			        <input id="defaultCatalog" name="defaultCatalog" type="text" value="<%=defaultCatalog %>"/>
+			        <input id="defaultCatalog" name="defaultCatalog" type="text" value="<%=Encode.forHtml(defaultCatalog) %>"/>
 			    </td>
 			</tr>
 			<tr>
@@ -1024,12 +1025,12 @@ function displayPasswordField() {
 			<tr>
 			    <td><fmt:message key="validation.query"/></td>
 			    <td align="left">
-			    <input id="validationquery" name="validationquery" type="text" value="<%=validationquery %>"/>
+			    <input id="validationquery" name="validationquery" type="text" value="<%=Encode.forHtml(validationquery) %>"/>
 			</tr>
 			<tr>
 			    <td><fmt:message key="validation.class.name"/></td>
 			    <td align="left">
-			    <input id="validatorClassName" name="validatorClassName" type="text" value="<%=validatorClassName %>"/>
+			    <input id="validatorClassName" name="validatorClassName" type="text" value="<%=Encode.forHtml(validatorClassName) %>"/>
 			</tr>
 			<tr>
 			    <td><fmt:message key="time.between.eviction.runs.millis"/></td>
@@ -1124,17 +1125,17 @@ function displayPasswordField() {
 			<tr> 
 			    <td><fmt:message key="connection.properties"/></td>
 			    <td align="left">
-			    <input id="connectionProperties" name="connectionProperties" type="text" value="<%=connectionProperties %>"/>
+			    <input id="connectionProperties" name="connectionProperties" type="text" value="<%=Encode.forHtml(connectionProperties) %>"/>
 			</tr>
 			<tr>
     			<td style="width:230px;"><fmt:message key="init.sql"/></td>
     			<td align="left">
-    				<input id="initSQL" name="initSQL" type="text" value="<%=initSQL %>"/>
+    				<input id="initSQL" name="initSQL" type="text" value="<%=Encode.forHtml(initSQL) %>"/>
 			</tr>
 			<tr>
     			<td><fmt:message key="jdbc.interceptors"/></td>
     			<td align="left">
-    				<input id="jdbcInterceptors" name="jdbcInterceptors" type="text" value="<%=jdbcInterceptors %>"/>
+    				<input id="jdbcInterceptors" name="jdbcInterceptors" type="text" value="<%=Encode.forHtml(jdbcInterceptors) %>"/>
 			</tr>
 			<tr>
     			<td><fmt:message key="validation.interval"/></td>
