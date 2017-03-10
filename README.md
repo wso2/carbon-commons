@@ -1,4 +1,4 @@
-# carbon-commons
+# Carbon Commons
 
 ---
 
@@ -11,7 +11,7 @@
 
 Latest Released Versions v4.5.0, v4.4.8.
 
-#### carbon-commons repo contains the common components and features shared by many products. Following is the set of components included in carbon-commons repo.
+#### Carbon Commons repo contains the common components and features shared by many products. Following is the set of components included in carbon-commons repo.
 
 * application-mgt      
 * caching-invalidator
