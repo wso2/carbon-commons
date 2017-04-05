@@ -1,4 +1,4 @@
-<!--
+<%--
  ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -14,7 +14,7 @@
  ~ KIND, either express or implied.  See the License for the
  ~ specific language governing permissions and limitations
  ~ under the License.
- -->
+ --%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="org.apache.axis2.context.ConfigurationContext" %>
 <%@ page import="org.wso2.carbon.logging.admin.ui.LoggingAdminClient" %>
@@ -51,11 +51,11 @@
         try {
             client.updateLoggerData(loggerName, logLevel, additivity, persist); 
     %>
-    <p><fmt:message key="successfully.updated.logger"/></p>
+    <fmt:message key="successfully.updated.logger"/>
     <%
     } catch (Exception e) {
     %>
-    <p><fmt:message key="logger.update.failed"/></p>
+    <fmt:message key="logger.update.failed"/>
     <%
         }
     %>
