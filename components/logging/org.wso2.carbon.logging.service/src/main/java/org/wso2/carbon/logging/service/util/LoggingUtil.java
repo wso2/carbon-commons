@@ -413,17 +413,15 @@ public class LoggingUtil {
             throw new LogViewerException("Cannot find the specified file location to the log file",
                     e);
         }
-        BufferedReader dataInput = new BufferedReader(new InputStreamReader(logStream));
         int index = 1;
         String line;
-        try {
+        try (BufferedReader dataInput = new BufferedReader(new InputStreamReader(logStream))) {
             while ((line = dataInput.readLine()) != null) {
                 if (index <= end && index > start) {
                     logsList.add(line);
                 }
                 index++;
             }
-            dataInput.close();
         } catch (IOException e) {
             log.error("Cannot read the log file", e);
             throw new LogViewerException("Cannot read the log file", e);
