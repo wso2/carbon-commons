@@ -168,7 +168,7 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
     public void resumeTask(String taskName) throws TaskException {
         String memberId = this.getMemberIdFromTaskName(taskName, false);
         this.resumeTask(memberId, taskName);
-        TaskUtils.setTaskPaused(this.getTaskRepository(), taskName, true);
+        TaskUtils.setTaskPaused(this.getTaskRepository(), taskName, false);
     }
 
     @Override
