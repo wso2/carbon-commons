@@ -103,6 +103,7 @@ public class CarbonRepositoryUtils {
             //If config is obtained from carbon.xml, set attribute to disable UI
             config.setServerBasedConfiguration(true);
         }
+
         return config;
     }
 
