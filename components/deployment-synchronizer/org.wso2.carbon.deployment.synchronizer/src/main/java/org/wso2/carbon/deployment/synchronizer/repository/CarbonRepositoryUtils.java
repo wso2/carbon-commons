@@ -92,29 +92,18 @@ public class CarbonRepositoryUtils {
     public static DeploymentSynchronizerConfiguration getActiveSynchronizerConfiguration(
             int tenantId) throws DeploymentSynchronizerException {
 
-        try {
-            //Firrst attempt to get the configuration from carbon.xml
-            DeploymentSynchronizerConfiguration config = getDeploymentSyncConfigurationFromConf();
+        //Firrst attempt to get the configuration from carbon.xml
+        DeploymentSynchronizerConfiguration config = getDeploymentSyncConfigurationFromConf();
 
-            //If configuration has not been specified in carbon.xml
-            if (config == null) {
-                //Attempt to get configuration from local registry.
-                config = getDeploymentSyncConfigurationFromRegistry(tenantId);
-
-                //If configuration does not exist in the local registry as well.
-                if (config == null) {
-                    //Get default Deployment Synchronizer Configuration
-                    config = getDefaultDeploymentSyncConfiguration();
-                }
-            } else {
-                //If config is obtained from carbon.xml, set attribute to disable UI
-                config.setServerBasedConfiguration(true);
-            }
-            return config;
-        } catch (RegistryException e) {
-            throw new DeploymentSynchronizerException("Error while loading synchronizer " +
-                    "configuration from the registry", e);
+        //If configuration has not been specified in carbon.xml
+        if (config == null) {
+            //Get default Deployment Synchronizer Configuration
+            config = getDefaultDeploymentSyncConfiguration();
+        } else {
+            //If config is obtained from carbon.xml, set attribute to disable UI
+            config.setServerBasedConfiguration(true);
         }
+        return config;
     }
 
     /**
