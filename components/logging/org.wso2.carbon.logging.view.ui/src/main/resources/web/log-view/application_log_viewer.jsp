@@ -306,7 +306,7 @@
 										src="<%=logViewerClient.getImageName(logMessage.getPriority().trim())%>">
 									</td>
 									<td><nobr><%=logMessage.getLogTime()%></nobr></td>
-									<td><%=CharacterEncoder.getSafeText(logMessage.getMessage())%></td>
+									<td><%=CharacterEncoder.getSafeText(logMessage.getTruncatedMessage())%></td>
 										<%
 											String imgId = "traceSymbolMax" + index;
 										%>
@@ -332,8 +332,16 @@
 										}
 									%>
 
-                                    <td colspan="4" width="100%">TID[<%=logMessage.getTenantId()%>] AppID[<%=logMessage.getAppName()%>] [<%=logMessage.getServerName()%>] [<%=logMessage.getLogTime()%>] <%=logMessage.getPriority().trim()%> {<%=logMessage.getLogger()%>} - <%=CharacterEncoder.getSafeText(logMessage.getMessage())%>
-                                        <%=logMessage.getStacktrace()%><br/>
+                                    <td colspan="4" width="100%">TID[<%=logMessage.getTenantId()%>] AppID[<%=logMessage.getAppName()%>] [<%=logMessage.getServerName()%>] [<%=logMessage.getLogTime()%>] <%=logMessage.getPriority().trim()%> {<%=logMessage.getLogger()%>} - <%=CharacterEncoder.getSafeText(logMessage.getTruncatedMessage())%>
+                                        <%=logMessage.getStacktrace()%>
+                                        <%
+                                            if (logMessage.getIsMessageTruncatable()) {
+                                        %>
+                                        <fmt:message key="indicate.large.log.message"/>
+                                        <%
+                                            }
+                                        %>
+                                        <br/>
                                     </td>
 									</tr>
 							<%

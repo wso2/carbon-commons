@@ -16,6 +16,9 @@
 package org.wso2.carbon.logging.service.data;
 
 public class LogEvent {
+
+    private static final int MAX_LOG_MESSAGE_LENGTH = 250;
+
     private String key;
     private String tenantId;
     private String serverName;
@@ -112,6 +115,28 @@ public class LogEvent {
 
     public String getMessage() {
         return message;
+    }
+
+    /**
+     * Returns the message string for the log event.
+     * If the message string length is greater that {@value MAX_LOG_MESSAGE_LENGTH} then the message string
+     * will be truncated to the length of {@value MAX_LOG_MESSAGE_LENGTH} and returned.
+     * The truncation of the message is handled in server side to avoid client downloading the full log message.
+     *
+     * @return message string
+     */
+    public String getTruncatedMessage() {
+        return message.length() > MAX_LOG_MESSAGE_LENGTH ?
+               message.substring(0, MAX_LOG_MESSAGE_LENGTH) + "..." : message;
+    }
+
+    /**
+     * Returns whether the message length is larger than {@value MAX_LOG_MESSAGE_LENGTH}.
+     *
+     * @return true if the message length is larger than {@value MAX_LOG_MESSAGE_LENGTH}, false otherwise
+     */
+    public boolean getIsMessageTruncatable() {
+        return message.length() > MAX_LOG_MESSAGE_LENGTH;
     }
 
     public void setMessage(String message) {
