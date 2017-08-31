@@ -335,6 +335,7 @@
                <xs:element minOccurs="0" name="appName" nillable="true" type="xs:string"/>
                <xs:element minOccurs="0" name="instance" nillable="true" type="xs:string"/>
                <xs:element minOccurs="0" name="ip" nillable="true" type="xs:string"/>
+               <xs:element minOccurs="0" name="isMessageTruncatable" type="xs:boolean"/>
                <xs:element minOccurs="0" name="key" nillable="true" type="xs:string"/>
                <xs:element minOccurs="0" name="logTime" nillable="true" type="xs:string"/>
                <xs:element minOccurs="0" name="logger" nillable="true" type="xs:string"/>
@@ -343,6 +344,7 @@
                <xs:element minOccurs="0" name="serverName" nillable="true" type="xs:string"/>
                <xs:element minOccurs="0" name="stacktrace" nillable="true" type="xs:string"/>
                <xs:element minOccurs="0" name="tenantId" nillable="true" type="xs:string"/>
+               <xs:element minOccurs="0" name="truncatedMessage" nillable="true" type="xs:string"/>
             </xs:sequence>
          </xs:complexType>
       </xs:schema>
