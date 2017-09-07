@@ -22,8 +22,8 @@ import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.xml.namespace.QName;
-import java.io.File;
 import java.io.FileInputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -47,8 +47,7 @@ public class ConfigurationManager {
         boolean propertyExists = false;
         providerUrl = null;
 
-        String configFilePath = CarbonUtils.getCarbonHome() + File.separator + "repository"
-                + File.separator + "conf" + File.separator + "cache.xml";
+        String configFilePath = Paths.get(CarbonUtils.getCarbonConfigDirPath(), "cache.xml").toString();
         try{
             StAXOMBuilder stAXOMBuilder = new StAXOMBuilder(new FileInputStream(configFilePath));
             OMElement documentElement = stAXOMBuilder.getDocumentElement();
