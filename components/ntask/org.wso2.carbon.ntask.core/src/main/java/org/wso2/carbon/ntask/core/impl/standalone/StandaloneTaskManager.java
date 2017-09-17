@@ -46,10 +46,18 @@ public class StandaloneTaskManager extends AbstractQuartzTaskManager {
     
     @Override
     public void scheduleTask(String taskName) throws TaskException {
+        scheduleTask(taskName, false);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void scheduleTask(String taskName, boolean requestRecovery) throws TaskException {
         if (this.isMyTaskTypeRegistered()) {
-            this.scheduleLocalTask(taskName);
+            this.scheduleLocalTask(taskName, requestRecovery);
         } else {
-            throw new TaskException("Task type: '" + this.getTaskType() + 
+            throw new TaskException("Task type: '" + this.getTaskType() +
                     "' is not registered in the current task node", Code.TASK_NODE_NOT_AVAILABLE);
         }
     }

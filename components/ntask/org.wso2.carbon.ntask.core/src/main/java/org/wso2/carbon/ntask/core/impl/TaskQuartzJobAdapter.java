@@ -27,6 +27,7 @@ import org.wso2.carbon.ntask.core.Task;
 import org.wso2.carbon.ntask.core.TaskInfo;
 import org.wso2.carbon.ntask.core.internal.TasksDSComponent;
 
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -42,6 +43,14 @@ public class TaskQuartzJobAdapter implements Job {
     @SuppressWarnings("unchecked")
     @Override
     public void execute(JobExecutionContext ctx) throws JobExecutionException {
+        if (log.isDebugEnabled()) {
+            if (ctx.isRecovering()) {
+                log.debug("Job: " + ctx.getJobDetail().getKey() + " is recovering at " + new Date());
+            } else {
+                log.debug("Job: " + ctx.getJobDetail().getKey() + " is starting at " + new Date());
+            }
+        }
+
         /* if task execution node is not fully started yet, ignore this trigger */
         if (!TasksDSComponent.getTaskService().isServerInit()) {
             if (log.isDebugEnabled()) {

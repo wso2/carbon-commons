@@ -27,6 +27,11 @@ public class TaskConstants {
 	public static final String TASK_PROPERTIES = "__TASK_PROPERTIES__";
 	
 	public static final String FIXED_LOCATION_RESOLVER_PARAM = "__FIXED_LOCATION_RESOLVER_PARAM__";
+
+	/**
+	 * Constant to refer to the property which specifies whether or not the task requires recovery.
+	 */
+	public static final String REQUEST_RECOVERY = "REQUEST_RECOVERY";
 	
 	@XmlEnum
 	public static enum TaskMisfirePolicy {

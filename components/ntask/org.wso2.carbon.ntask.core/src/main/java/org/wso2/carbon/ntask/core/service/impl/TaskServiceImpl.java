@@ -25,25 +25,19 @@ import org.wso2.carbon.ntask.core.TaskManager;
 import org.wso2.carbon.ntask.core.TaskManagerFactory;
 import org.wso2.carbon.ntask.core.TaskManagerId;
 import org.wso2.carbon.ntask.core.TaskUtils;
-import org.wso2.carbon.ntask.core.impl.clustered.ClusterGroupCommunicator;
 import org.wso2.carbon.ntask.core.impl.clustered.ClusteredTaskManagerFactory;
 import org.wso2.carbon.ntask.core.impl.remote.RemoteTaskManager;
 import org.wso2.carbon.ntask.core.impl.remote.RemoteTaskManagerFactory;
 import org.wso2.carbon.ntask.core.impl.standalone.StandaloneTaskManagerFactory;
 import org.wso2.carbon.ntask.core.service.TaskService;
-import org.wso2.carbon.ntask.core.service.impl.TaskServiceXMLConfiguration.DefaultLocationResolver;
-import org.wso2.carbon.ntask.core.service.impl.TaskServiceXMLConfiguration.DefaultLocationResolver.Property;
 import org.wso2.carbon.utils.CarbonUtils;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-
 import java.io.File;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 
 /**
  * This class represents the TaskService implementation.
@@ -153,17 +147,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public synchronized void registerTaskType(String taskType) throws TaskException {
         this.registeredTaskTypes.add(taskType);
-        this.processClusteredTaskTypeRegistration(taskType);
         /* if server has finished initializing, lets initialize the
          * task managers for this type */
         if (this.isServerInit()) {
             this.initTaskManagersForType(taskType);
-        }
-    }
-    
-    private void processClusteredTaskTypeRegistration(String taskType) throws TaskException {
-        if (this.getEffectiveTaskServerMode() == TaskServerMode.CLUSTERED) {
-            ClusterGroupCommunicator.getInstance(taskType).addMyselfToGroup();
         }
     }
 
@@ -190,8 +177,6 @@ public class TaskServiceImpl implements TaskService {
 
         private TaskServerMode taskServerMode;
 
-        private int taskServerCount = -1;
-
         private String taskClientDispatchAddress;
 
         private String remoteServerAddress;
@@ -199,10 +184,6 @@ public class TaskServiceImpl implements TaskService {
         private String remoteServerUsername;
 
         private String remoteServerPassword;
-
-        private String locationResolverClass;
-        
-        private Map<String, String> locationResolverProperties;
 
         public TaskServiceConfigurationImpl(TaskServiceXMLConfiguration taskXMLConfig) {
             this.processXMLConfig(taskXMLConfig);
@@ -218,21 +199,6 @@ public class TaskServiceImpl implements TaskService {
             this.remoteServerUsername = taskXMLConfig.getRemoteServerUsername();
             this.remoteServerPassword = taskXMLConfig.getRemoteServerPassword();
             this.taskServerMode = taskXMLConfig.getTaskServerMode();
-            this.taskServerCount = taskXMLConfig.getTaskServerCount();
-            DefaultLocationResolver locationResolver = taskXMLConfig.getDefaultLocationResolver();
-            this.locationResolverClass = locationResolver.getLocationResolverClass();
-            this.locationResolverProperties = this.extractLocationResolverProperties(locationResolver);
-        }
-        
-        private Map<String, String> extractLocationResolverProperties(DefaultLocationResolver locationResolver) {
-        	Map<String, String> result = new HashMap<String, String>();
-        	Property[] props = locationResolver.getProperties();
-        	if (props != null) {
-        		for (Property prop : props) {
-        			result.put(prop.getName(), prop.getValue());
-        		}
-        	}
-        	return result;
         }
 
         private void processSystemProps() {
@@ -247,15 +213,6 @@ public class TaskServiceImpl implements TaskService {
             if (this.taskServerMode == null) {
                 this.taskServerMode = TaskServerMode.AUTO;
                 
-            }
-            if (this.taskServerCount == -1) {
-                String taskServerCountStr = System.getProperty(
-                        ClusterGroupCommunicator.TASK_SERVER_COUNT_SYS_PROP);
-                if (taskServerCountStr != null) {
-                    this.taskServerCount = Integer.parseInt(taskServerCountStr);
-                } else {
-                    this.taskServerCount = -1;
-                }
             }
         }
 
@@ -292,38 +249,13 @@ public class TaskServiceImpl implements TaskService {
         public String getRemoteServerPassword() {
             return remoteServerPassword;
         }
-
-        @Override
-        public int getTaskServerCount() {
-            return taskServerCount;
-        }
-
-        @Override
-        public String getLocationResolverClass() {
-            if (locationResolverClass == null) {
-                return TaskServiceXMLConfiguration.DEFAULT_LOCATION_RESOLVER_CLASS;
-            }
-            return locationResolverClass;
-        }
-
-		@Override
-		public Map<String, String> getLocationResolverProperties() {
-			return locationResolverProperties;
-		}
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public TaskServerMode getEffectiveTaskServerMode() {
         return effectiveTaskServerMode;
     }
-
-    @Override
-    public void runAfterRegistrationActions() throws TaskException {
-        if (this.getEffectiveTaskServerMode() == TaskServerMode.CLUSTERED) {
-            for (String taskType : this.getRegisteredTaskTypes()) {
-                ClusterGroupCommunicator.getInstance(taskType).checkServers();
-            }
-        }
-    }
-
 }

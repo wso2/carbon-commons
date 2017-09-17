@@ -38,6 +38,14 @@ public interface TaskManager {
     public void scheduleTask(String taskName) throws TaskException;
 
     /**
+     * Starts a task with the given name with request recovery set to the specified value.
+     * @param taskName the name of the task
+     * @param requestRecovery whether or not this task requires recovery
+     * @throws TaskException if an error occurs when scheduling the task
+     */
+    void scheduleTask(String taskName, boolean requestRecovery) throws TaskException;
+
+    /**
      * Reschedules a task with the given name, only the trigger information will be updated in the
      * reschedule. 
      * @param taskName The task to be rescheduled
