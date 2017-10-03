@@ -32,5 +32,5 @@
 
     <parameter name="adminService" locked="true">true</parameter>
     <parameter name="hiddenService" locked="true">true</parameter>
-    <parameter name="AuthorizationAction" locked="true">/permission/admin/manage/add/application</parameter>
+    <parameter name="AuthorizationAction" locked="true">/permission/admin/manage/capps/add</parameter>
 </serviceGroup>

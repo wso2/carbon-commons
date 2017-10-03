@@ -16,6 +16,22 @@
  ~ under the License.
  -->
 <component xmlns="http://products.wso2.org/carbon">
+
+    <ManagementPermissions>
+        <ManagementPermission>
+            <DisplayName>Carbon Applications</DisplayName>
+            <ResourceId>/permission/admin/manage/capps</ResourceId>
+        </ManagementPermission>
+        <ManagementPermission>
+            <DisplayName>list</DisplayName>
+            <ResourceId>/permission/admin/manage/capps/list</ResourceId>
+        </ManagementPermission>
+        <ManagementPermission>
+            <DisplayName>add</DisplayName>
+            <ResourceId>/permission/admin/manage/capps/add</ResourceId>
+        </ManagementPermission>
+    </ManagementPermissions>
+
 	<menus>
 	    <menu>
             <id>apps_menu</id>
@@ -38,7 +54,7 @@
 			<order>5</order>
 			<style-class>manage</style-class>
             <icon>../carbonapps/images/list.gif</icon>
-            <require-permission>/permission/admin/manage</require-permission>
+            <require-permission>/permission/admin/manage/capps/list</require-permission>
         </menu>
 		 <menu>
             <id>apps_add_menu</id>
@@ -50,7 +66,7 @@
             <order>10</order>
             <style-class>manage</style-class>
             <icon>../carbonapps/images/add.gif</icon>
-            <require-permission>/permission/admin/manage/add/application</require-permission>
+            <require-permission>/permission/admin/manage/capps/add</require-permission>
         </menu>
 	</menus>
 
