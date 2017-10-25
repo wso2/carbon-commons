@@ -29,6 +29,7 @@ import org.wso2.carbon.ntask.core.Task;
 import org.wso2.carbon.ntask.core.TaskInfo;
 import org.wso2.carbon.ntask.core.TaskManager;
 import org.wso2.carbon.ntask.core.TaskRepository;
+import org.wso2.carbon.ntask.core.impl.LocalTaskActionListener;
 import org.wso2.carbon.ntask.core.impl.RegistryBasedTaskRepository;
 import org.wso2.carbon.ntask.core.internal.TasksDSComponent;
 import org.wso2.carbon.registry.core.Registry;
@@ -474,6 +475,11 @@ public class RemoteTaskManager implements TaskManager {
         public void execute(ConfigurationContext ctx) throws ClusteringFault {
         }
 
+    }
+
+    @Override
+    public void registerLocalTaskActionListener(LocalTaskActionListener listener, String taskName) {
+        //Do nothing since this is the remote task manager and there are no local tasks associated to it.
     }
 
 }

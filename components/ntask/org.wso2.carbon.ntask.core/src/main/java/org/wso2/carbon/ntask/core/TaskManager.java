@@ -16,6 +16,7 @@
 package org.wso2.carbon.ntask.core;
 
 import org.wso2.carbon.ntask.common.TaskException;
+import org.wso2.carbon.ntask.core.impl.LocalTaskActionListener;
 
 import java.util.List;
 
@@ -111,5 +112,13 @@ public interface TaskManager {
     public enum TaskState {
         NORMAL, PAUSED, ERROR, FINISHED, NONE, BLOCKED, UNKNOWN
     }
+
+    /**
+     * Registers a listener to be notified when an action is performed on a task.
+     *
+     * @param listener the listener to be notified
+     * @param taskName the name of the task for which the listener should be registered
+     */
+    void registerLocalTaskActionListener(LocalTaskActionListener listener, String taskName);
 
 }
