@@ -43,6 +43,12 @@ public abstract class AbstractQuartzTaskManager implements TaskManager {
 
     private static final Log log = LogFactory.getLog(AbstractQuartzTaskManager.class);
 
+    /**
+     * The set of listeners to be notified when a local task is deleted where each listener is mapped to the job that
+     * it should be notified of the deletion.
+     */
+    private static Map<String, LocalTaskActionListener> localTaskActionListeners = new HashMap<>();
+
     private TaskRepository taskRepository;
 
     private Scheduler scheduler;
@@ -133,6 +139,8 @@ public abstract class AbstractQuartzTaskManager implements TaskManager {
             if (result) {
                 log.info("Task deleted: [" + this.getTenantId() +
                         "][" + this.getTaskType() + "][" + taskName + "]");
+                //notify the listeners of the task deletion
+                localTaskActionListeners.get(taskName).notifyLocalTaskDeletion(taskName);
             }
         } catch (SchedulerException e) {
             throw new TaskException("Error in deleting task with name: " + taskName,
@@ -429,6 +437,14 @@ public abstract class AbstractQuartzTaskManager implements TaskManager {
             PrivilegedCarbonContext.endTenantFlow();
         }
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void registerLocalTaskActionListener(LocalTaskActionListener listener, String taskName) {
+        localTaskActionListeners.put(taskName, listener);
     }
 
 }
