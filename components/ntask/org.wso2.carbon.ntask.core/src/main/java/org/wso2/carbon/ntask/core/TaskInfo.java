@@ -192,7 +192,7 @@ public class TaskInfo implements Serializable {
 
         private Date endTime;
 
-        private int intervalMillis;
+        private long intervalMillis;
 
         private int repeatCount;
 
@@ -205,7 +205,7 @@ public class TaskInfo implements Serializable {
         public TriggerInfo() {
         }
 
-        public TriggerInfo(Date startTime, Date endTime, int intervalMillis, int repeatCount) {
+        public TriggerInfo(Date startTime, Date endTime, long intervalMillis, int repeatCount) {
             this.startTime = startTime;
             this.endTime = endTime;
             this.intervalMillis = intervalMillis;
@@ -232,7 +232,7 @@ public class TaskInfo implements Serializable {
             this.endTime = endTime;
         }
 
-        public void setIntervalMillis(int intervalMillis) {
+        public void setIntervalMillis(long intervalMillis) {
             this.intervalMillis = intervalMillis;
         }
 
@@ -270,7 +270,7 @@ public class TaskInfo implements Serializable {
         }
 
         @XmlElement(name = "intervalMillis")
-        public int getIntervalMillis() {
+        public long getIntervalMillis() {
             return intervalMillis;
         }
 
