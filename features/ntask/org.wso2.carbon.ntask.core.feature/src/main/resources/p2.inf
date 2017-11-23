@@ -1,2 +1,5 @@
 instructions.configure = \
 org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.ntask.core_${feature.version}/conf/tasks-config.xml,target:${installFolder}/../../conf/etc/tasks-config.xml,overwrite:true);\
+org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../../dbscripts); \
+org.eclipse.equinox.p2.touchpoint.natives.mkdir(path:${installFolder}/../../../dbscripts/task); \
+org.eclipse.equinox.p2.touchpoint.natives.copy(source:${installFolder}/../features/org.wso2.carbon.ntask.core_${feature.version}/dbscripts/task/,target:${installFolder}/../../../dbscripts/task/,overwrite:true);\
