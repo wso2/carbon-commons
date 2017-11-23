@@ -17,11 +17,7 @@ package org.wso2.carbon.ntask.core;
 
 import org.wso2.carbon.ntask.common.TaskException;
 
-import com.hazelcast.core.Member;
-
-import java.net.InetSocketAddress;
 import java.util.List;
-import java.util.Map;
 
 /**
  * This class represents a runtime context of the task service.
@@ -30,15 +26,8 @@ public class TaskServiceContext {
 
     private TaskRepository taskRepo;
 
-    private List<String> memberIds;
-    
-    private Map<String, Member> memberMap;
-
-    public TaskServiceContext(TaskRepository taskRepo, List<String> memberIds, 
-            Map<String, Member> memberMap) {
+    public TaskServiceContext(TaskRepository taskRepo) {
         this.taskRepo = taskRepo;
-        this.memberIds = memberIds;
-        this.memberMap = memberMap;
     }
 
     public int getTenantId() {
@@ -52,18 +41,4 @@ public class TaskServiceContext {
     public List<TaskInfo> getTasks() throws TaskException {
         return this.taskRepo.getAllTasks();
     }
-
-    public int getServerCount() {
-        return this.memberIds.size();
-    }
-    
-    public InetSocketAddress getServerAddress(int index) {
-        String memberId = this.memberIds.get(index);
-        Member member = this.memberMap.get(memberId);
-        if (member == null) {
-            return null;
-        }
-        return member.getSocketAddress();
-    }
-
 }

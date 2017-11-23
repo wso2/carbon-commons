@@ -15,12 +15,12 @@
  */
 package org.wso2.carbon.ntask.core.service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.wso2.carbon.ntask.common.TaskException;
 import org.wso2.carbon.ntask.core.TaskManager;
+
+import java.util.List;
+import java.util.Set;
+
 
 /**
  * This interface represents the task OSGi service.
@@ -74,17 +74,10 @@ public interface TaskService {
      * @return The task server configuration
      */
     public TaskServiceConfiguration getServerConfiguration();
-    
-    /**
-     * This is called after the current task service is registered.
-     */
-    public void runAfterRegistrationActions() throws TaskException;
 
     public static interface TaskServiceConfiguration {
 
         TaskServerMode getTaskServerMode();
-
-        int getTaskServerCount();
 
         String getTaskClientDispatchAddress();
 
@@ -94,14 +87,15 @@ public interface TaskService {
 
         String getRemoteServerPassword();
 
-        String getLocationResolverClass();
-        
-        Map<String, String> getLocationResolverProperties();
-
     }
 
     public static enum TaskServerMode {
         STANDALONE, CLUSTERED, REMOTE, AUTO
     }
 
+    /**
+     * Method to retrieve the task server mode (Clustered, Remote or Standalone).
+     * @return the effective TaskServerMode
+     */
+    TaskServerMode getEffectiveTaskServerMode();
 }

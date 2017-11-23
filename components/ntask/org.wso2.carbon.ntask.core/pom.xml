@@ -52,7 +52,7 @@
             <artifactId>org.wso2.carbon.remote-tasks.stub</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.quartz-scheduler.wso2</groupId>
+            <groupId>org.wso2.orbit.org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
         </dependency>
     </dependencies>
@@ -74,13 +74,13 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Import-Package>
-                            org.quartz.*;version="2.1.1",
+                            org.quartz.*;version="${quartz.wso2.imp.pkg.version}",
                             javax.xml.parsers; version="${javax.xml.parsers.import.pkg.version}",
                             *;resolution:=optional
                         </Import-Package>
                         <Export-Package>
                             !org.wso2.carbon.ntask.internal,
-                            org.wso2.carbon.ntask.core.*; version="${carbon.commons.exp.package.version}",
+                            org.wso2.carbon.ntask.core.*; version="${carbon.commons.exp.package.version}"
                         </Export-Package>
 			<Carbon-Component>UIBundle</Carbon-Component>
                     </instructions>

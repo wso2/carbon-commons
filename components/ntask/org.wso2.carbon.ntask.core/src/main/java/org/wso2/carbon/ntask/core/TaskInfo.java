@@ -16,16 +16,14 @@
 package org.wso2.carbon.ntask.core;
 
 import org.wso2.carbon.ntask.common.TaskConstants.TaskMisfirePolicy;
-import org.wso2.carbon.ntask.core.internal.TasksDSComponent;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * This class represents a task job definition.
@@ -43,19 +41,11 @@ public class TaskInfo implements Serializable {
 
     private Map<String, String> properties;
     
-    private Map<String, String> locationResolverProperties;
-
-    private String locationResolverClass;
-
     private TriggerInfo triggerInfo;
 
     @Deprecated
     public TaskInfo() {
     	this.setProperties(null);
-    	this.setLocationResolverClass(TasksDSComponent.getTaskService()
-                .getServerConfiguration().getLocationResolverClass());
-        this.setLocationResolverProperties(TasksDSComponent.getTaskService()
-                .getServerConfiguration().getLocationResolverProperties());
     }
 
     /**
@@ -75,10 +65,6 @@ public class TaskInfo implements Serializable {
         if (this.getTriggerInfo() == null) {
             throw new IllegalArgumentException("Trigger information cannot be null");
         }
-        this.setLocationResolverClass(TasksDSComponent.getTaskService()
-                .getServerConfiguration().getLocationResolverClass());
-        this.setLocationResolverProperties(TasksDSComponent.getTaskService()
-                .getServerConfiguration().getLocationResolverProperties());
     }
 
     /**
@@ -99,8 +85,6 @@ public class TaskInfo implements Serializable {
         this.name = name;
         this.taskClass = taskClass;
         this.setProperties(properties);
-        this.setLocationResolverClass(TasksDSComponent.getTaskService()
-                .getServerConfiguration().getLocationResolverClass());
         this.triggerInfo = triggerInfo;
         if (this.getTriggerInfo() == null) {
             throw new IllegalArgumentException("Trigger information cannot be null");
@@ -139,27 +123,6 @@ public class TaskInfo implements Serializable {
     @XmlElement(name = "taskClass")
     public String getTaskClass() {
         return taskClass;
-    }
-
-    @XmlElement(name = "locationResolverClass")
-    public String getLocationResolverClass() {
-        return locationResolverClass;
-    }
-
-    public void setLocationResolverClass(String locationResolverClass) {
-        this.locationResolverClass = locationResolverClass;
-    }
-    
-    @XmlElementWrapper(name = "locationResolverProperties", required = false, nillable = true)
-    public Map<String, String> getLocationResolverProperties() {
-        return locationResolverProperties;
-    }
-
-    public void setLocationResolverProperties(Map<String, String> locationResolverProperties) {
-    	this.locationResolverProperties = new HashMap<String, String>();
-    	if (locationResolverProperties != null) {
-            this.locationResolverProperties.putAll(locationResolverProperties);
-    	}
     }
 
     @XmlElementWrapper(name = "properties")

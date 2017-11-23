@@ -15,17 +15,15 @@
  */
 package org.wso2.carbon.ntask.core.internal;
 
-import com.hazelcast.core.HazelcastInstance;
-
 import org.apache.axis2.engine.ListenerManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
 import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.impl.jdbcjobstore.JobStoreTX;
+import org.quartz.impl.jdbcjobstore.StdJDBCDelegate;
 import org.wso2.carbon.core.ServerStartupObserver;
 import org.wso2.carbon.ntask.core.TaskStartupHandler;
 import org.wso2.carbon.ntask.core.impl.QuartzCachedThreadPool;
@@ -87,32 +85,73 @@ public class TasksDSComponent {
             if (executor.isShutdown()) {
                 executor = Executors.newCachedThreadPool();
             }
+            if (getTaskService() == null) {
+                taskService = new TaskServiceImpl();
+            }
             String quartzConfigFilePath = CarbonUtils.getCarbonConfigDirPath() + File.separator
                     + "etc" + File.separator + QUARTZ_PROPERTIES_FILE_NAME;
             StdSchedulerFactory fac;
             if (new File(quartzConfigFilePath).exists()) {
                 fac = new StdSchedulerFactory(quartzConfigFilePath);
             } else {
-                fac = new StdSchedulerFactory(this.getStandardQuartzProps());
+                if (taskService.getEffectiveTaskServerMode().equals(TaskService.TaskServerMode.CLUSTERED)) {
+                    fac = new StdSchedulerFactory(this.getClusteredQuartzProps());
+                } else {
+                    fac = new StdSchedulerFactory(this.getStandardQuartzProps());
+                }
             }
             TasksDSComponent.scheduler = fac.getScheduler();
             TasksDSComponent.getScheduler().start();
-            if (getTaskService() == null) {
-                taskService = new TaskServiceImpl();
-            }
             BundleContext bundleContext = ctx.getBundleContext();
             bundleContext.registerService(ServerStartupObserver.class.getName(),
                     new TaskStartupHandler(taskService), null);
             bundleContext.registerService(TaskService.class.getName(), getTaskService(), null);
             bundleContext.registerService(Axis2ConfigurationContextObserver.class.getName(),
                     new TaskAxis2ConfigurationContextObserver(getTaskService()), null);
-            taskService.runAfterRegistrationActions();
         } catch (Throwable e) {
             log.error("Error in intializing Tasks component: " + e.getMessage(), e);
         }
     }
 
+    /**
+     * Method to retrieve default Quartz properties (when clustering is disabled).
+     *
+     * @return default Quartz properties
+     */
     private Properties getStandardQuartzProps() {
+        Properties result = getCommonQuartzProps();
+        result.put("org.quartz.jobStore.isClustered", "false");
+        return result;
+    }
+
+    /**
+     * Method to retrieve default Quartz properties when clustering is enabled.
+     * Points to a datasource configured in master-datasources.xml with JNDI name QuartzDB.
+     *
+     * @return default Quartz properties when clustered
+     */
+    private Properties getClusteredQuartzProps() {
+        if (log.isDebugEnabled()) {
+            log.debug("No user specified quartz properties found for clustered mode: using default values.");
+        }
+        Properties result = getCommonQuartzProps();
+        result.put("org.quartz.scheduler.instanceName", "MyScheduler");
+        result.put("org.quartz.scheduler.instanceId", "AUTO");
+        result.put("org.quartz.jobStore.class", JobStoreTX.class.getName());
+        result.put("org.quartz.jobStore.driverDelegateClass", StdJDBCDelegate.class.getName());
+        result.put("org.quartz.jobStore.dataSource", "quartzDS");
+        result.put("org.quartz.jobStore.isClustered", "true");
+        result.put("org.quartz.jobStore.clusterCheckinInterval", "5000");
+        result.put("org.quartz.dataSource.quartzDS.jndiURL", "QuartzDB");
+        return result;
+    }
+
+    /**
+     * Method to retrieve common Quartz properties.
+     *
+     * @return common Quartz properties
+     */
+    private Properties getCommonQuartzProps() {
         Properties result = new Properties();
         result.put("org.quartz.scheduler.skipUpdateCheck", "true");
         result.put("org.quartz.threadPool.class", QuartzCachedThreadPool.class.getName());
@@ -192,17 +231,7 @@ public class TasksDSComponent {
             SecretCallbackHandlerService secretCallbackHandlerService) {
         TasksDSComponent.secretCallbackHandlerService = null;
     }
-    
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static HazelcastInstance getHazelcastInstance() {
-        BundleContext ctx = FrameworkUtil.getBundle(TasksDSComponent.class).getBundleContext();
-        ServiceReference ref = ctx.getServiceReference(HazelcastInstance.class);
-        if (ref == null) {
-            return null;
-        }
-        return (HazelcastInstance) ctx.getService(ref);
-    }
-    
+
     protected void setListenerManager(ListenerManager lm) {
         /* we don't really need this, the listener manager service is acquired
          * to make sure, as a workaround, that the task component is initialized 

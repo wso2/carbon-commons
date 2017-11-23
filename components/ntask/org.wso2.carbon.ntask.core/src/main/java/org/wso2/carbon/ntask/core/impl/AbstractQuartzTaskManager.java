@@ -17,8 +17,22 @@ package org.wso2.carbon.ntask.core.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.quartz.*;
+import org.quartz.CronScheduleBuilder;
+import org.quartz.Job;
+import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobKey;
+import org.quartz.Matcher;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.Trigger;
 import org.quartz.Trigger.TriggerState;
+import org.quartz.TriggerBuilder;
+import org.quartz.TriggerKey;
+import org.quartz.TriggerListener;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.quartz.spi.OperableTrigger;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
@@ -32,7 +46,12 @@ import org.wso2.carbon.ntask.core.TaskRepository;
 import org.wso2.carbon.ntask.core.TaskUtils;
 import org.wso2.carbon.ntask.core.internal.TasksDSComponent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class represents an abstract class implementation of TaskManager based on Quartz Scheduler.
@@ -194,29 +213,53 @@ public abstract class AbstractQuartzTaskManager implements TaskManager {
         }
     }
 
+    /**
+     * Method to schedule a task that does not require recovery.
+     * @param taskName the name of the task to be scheduled
+     * @throws TaskException if there is an error in scheduling the task
+     */
     protected synchronized void scheduleLocalTask(String taskName) throws TaskException {
-        boolean paused = TaskUtils.isTaskPaused(this.getTaskRepository(), taskName);
-        this.scheduleLocalTask(taskName, paused);
+        scheduleLocalTask(taskName, false);
     }
 
-    protected synchronized void scheduleLocalTask(String taskName,
-                                                  boolean paused) throws TaskException {
+    /**
+     * Method to schedule a task with whether or not the task is paused and/or requires recovery set to the specified
+     * values.
+     * @param taskName the name of the task to be scheduled
+     * @param requestRecovery whether or not the task requires recovery
+     * @throws TaskException if there is an error in scheduling the task
+     */
+    protected synchronized void scheduleLocalTask(String taskName, boolean requestRecovery) throws TaskException {
         TaskInfo taskInfo = this.getTaskRepository().getTask(taskName);
         String taskGroup = this.getTenantTaskGroup();
+        boolean paused = TaskUtils.isTaskPaused(this.getTaskRepository(), taskName);
         if (taskInfo == null) {
             throw new TaskException("Non-existing task for scheduling with name: " + taskName,
                     Code.NO_TASK_EXISTS);
         }
-        if (this.containsLocalTask(taskName, taskGroup)) {
-            /* to make the scheduleLocalTask operation idempotent */
-            return;
-        }
         Class<? extends Job> jobClass = taskInfo.getTriggerInfo().isDisallowConcurrentExecution() ?
                 NonConcurrentTaskQuartzJobAdapter.class : TaskQuartzJobAdapter.class;
-        JobDetail job = JobBuilder.newJob(jobClass).withIdentity(taskName, taskGroup).usingJobData(
-                this.getJobDataMapFromTaskInfo(taskInfo)).build();
+        if (!taskInfo.getProperties().containsKey(TaskConstants.REQUEST_RECOVERY)) {
+            Map<String, String> taskPropertiesMap = taskInfo.getProperties();
+            taskPropertiesMap.put(TaskConstants.REQUEST_RECOVERY, Boolean.toString(requestRecovery));
+            taskInfo.setProperties(taskPropertiesMap);
+        }
+        JobDetail job = JobBuilder.newJob(jobClass).withIdentity(taskName, taskGroup).requestRecovery(requestRecovery).
+                usingJobData(this.getJobDataMapFromTaskInfo(taskInfo)).build();
         Trigger trigger = this.getTriggerFromInfo(taskName, taskGroup, taskInfo.getTriggerInfo());
         try {
+            if (this.getScheduler().checkExists(new JobKey(taskName, taskGroup))) {
+                if (!this.getScheduler().getJobDetail((new JobKey(taskName, taskGroup))).equals(job)) {
+                    //Deletion is done to replace the task if a task by the same name is already scheduled
+                    this.getScheduler().deleteJob(new JobKey(taskName, taskGroup));
+                    if (log.isDebugEnabled()) {
+                        log.debug("Deleted task [" + taskName + "] to override.");
+                    }
+                } else {
+                    //Makes the schedule task operation idempotent, if the same task is scheduled
+                    return;
+                }
+            }
             this.getScheduler().scheduleJob(job, trigger);
             if (paused) {
                 this.getScheduler().pauseJob(job.getKey());
@@ -266,8 +309,9 @@ public abstract class AbstractQuartzTaskManager implements TaskManager {
             Date resultDate = this.getScheduler().rescheduleJob(
                     new TriggerKey(taskName, taskGroup), trigger);
             if (resultDate == null) {
+                boolean requestRecovery = taskInfo.getProperties().get(TaskConstants.REQUEST_RECOVERY).equals("true");
                 /* do normal schedule */
-                this.scheduleLocalTask(taskName, paused);
+                this.scheduleLocalTask(taskName, requestRecovery);
             } else if (paused) {
                 this.pauseLocalTask(taskName);
             }

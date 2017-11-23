@@ -125,6 +125,18 @@ public class RemoteTaskManager implements TaskManager {
         }
     }
 
+    /**
+     * This method is introduced to be used with the Quartz scheduling, and is not supported in remote mode.
+     */
+    @Override
+    public void scheduleTask(String taskName, boolean requestRecovery) throws TaskException {
+        if (requestRecovery) {
+            log.warn("Requesting recovery is not supported in remote mode: scheduling task [" + taskName
+                    + "] without task recovery");
+        }
+        this.scheduleTask(taskName);
+    }
+
     @Override
     public void rescheduleTask(String taskName) throws TaskException {
         this.deleteTask(taskName, false);
