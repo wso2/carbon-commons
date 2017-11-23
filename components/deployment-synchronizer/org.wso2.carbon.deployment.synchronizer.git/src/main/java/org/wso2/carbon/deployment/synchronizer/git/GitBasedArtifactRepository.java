@@ -24,6 +24,7 @@ import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.storage.file.FileRepository;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.tigris.subversion.svnclientadapter.SVNClientException;
 import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
 import org.wso2.carbon.deployment.synchronizer.DeploymentSynchronizerException;
 import org.wso2.carbon.deployment.synchronizer.RepositoryManager;
@@ -672,6 +673,11 @@ public class GitBasedArtifactRepository implements ArtifactRepository {
     public void cleanupTenantContext(int tenantId) {
         TenantGitRepositoryContextCache.getTenantRepositoryContextCache().
                 removeCachedTenantGitContext(tenantId);
+    }
+
+    @Override
+    public void delete(int tenantId) throws SVNClientException {
+
     }
 
     private void handleError (String errorMsg, Exception e) throws DeploymentSynchronizerException {
