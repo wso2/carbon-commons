@@ -439,7 +439,7 @@ public class LoggingUtil {
             Log4jConfigurer.initLogging(logFile);
         } catch (FileNotFoundException e) {
             String msg = "Cannot restore default logging configuration."
-                    + " log4j.properties file not found in the classpath";
+                    + " log4j.properties file is not found in the classpath";
             throw new LogViewerException(msg, e);
         }
     }
