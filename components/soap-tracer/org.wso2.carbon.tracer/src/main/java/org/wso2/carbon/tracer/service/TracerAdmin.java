@@ -133,7 +133,7 @@ public class TracerAdmin extends AbstractAdmin {
      */
     public TracerServiceInfo setMonitoring(String flag) throws AxisFault {
         if (!flag.equalsIgnoreCase("ON") && !flag.equalsIgnoreCase("OFF")) {
-            throw new RuntimeException("IllegalArgument for monitoring status :" + flag);
+            throw new RuntimeException("IllegalArgument for monitoring status. Only 'ON' and 'OFF' is allowed");
         }
         TracerServiceInfo tracerServiceInfo = new TracerServiceInfo();
         ConfigurationContext configurationContext = getConfigContext();
