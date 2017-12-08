@@ -16,6 +16,10 @@
 package org.wso2.carbon.ntask.core;
 
 import org.apache.axiom.om.OMElement;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.xerces.impl.Constants;
+import org.apache.xerces.util.SecurityManager;
 import org.w3c.dom.*;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.core.util.CryptoException;
@@ -27,13 +31,17 @@ import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.securevault.SecretResolver;
 import org.wso2.securevault.SecretResolverFactory;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 
 /**
  * This class contains utitilty functions related to tasks.
  */
 public class TaskUtils {
+
+    private static final Log log = LogFactory.getLog(TaskUtils.class);
 
     public static final String SECURE_VAULT_NS = "http://org.wso2.securevault/configuration";
 
@@ -56,9 +64,8 @@ public class TaskUtils {
     }
 
     public static Document convertToDocument(File file) throws TaskException {
-        DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
-        fac.setNamespaceAware(true);
         try {
+            DocumentBuilderFactory fac = getSecuredDocumentBuilder();
             return fac.newDocumentBuilder().parse(file);
         } catch (Exception e) {
             throw new TaskException("Error in creating an XML document from file: "
@@ -156,6 +163,29 @@ public class TaskUtils {
             return false;
         } else
             return true;
+    }
+
+    private static DocumentBuilderFactory getSecuredDocumentBuilder() {
+        final int ENTITY_EXPANSION_LIMIT = 0;
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        dbf.setXIncludeAware(false);
+        dbf.setExpandEntityReferences(false);
+
+        try {
+            dbf.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE, false);
+            dbf.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE, false);
+            dbf.setFeature(Constants.XERCES_FEATURE_PREFIX + Constants.LOAD_EXTERNAL_DTD_FEATURE, false);
+            dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        } catch (ParserConfigurationException e) {
+            log.error("Failed to load XML Processor Feature " + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE + " or "
+                    + Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE + " or " + Constants.LOAD_EXTERNAL_DTD_FEATURE);
+        }
+
+        SecurityManager securityManager = new SecurityManager();
+        securityManager.setEntityExpansionLimit(ENTITY_EXPANSION_LIMIT);
+        dbf.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
+        return dbf;
     }
 
 }
