@@ -71,8 +71,8 @@ public class RuleBasedLocationResolver implements TaskLocationResolver {
 	public int getLocation(TaskServiceContext ctx, TaskInfo taskInfo)
 			throws TaskException {
 		List<Integer> locations;
-		/* if matched by no one, lets just assign it to the first server */
-		int result = 0;
+		/* if matched by no one, then throws a TaskException to prevent scheduling. */
+		int result = -1;
 		for (Rule rule : this.rules) {
 			try {
 			    locations = rule.evaluate(ctx, taskInfo);
@@ -92,6 +92,10 @@ public class RuleBasedLocationResolver implements TaskLocationResolver {
 		if (log.isDebugEnabled()) {
 			log.debug("Task location resolved to: " + result + 
 					" for task: [" + ctx.getTaskType() + "][" + taskInfo.getName() + "]");
+		}
+		if (result == -1) {
+			throw new TaskException("Task location unavailable for RuleBasedLocationResolver: "
+					+ ctx.getTaskType() + "#" + taskInfo.getName(), Code.TASK_NODE_NOT_AVAILABLE);
 		}
 		return result;
 	}
