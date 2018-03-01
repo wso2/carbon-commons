@@ -20,6 +20,7 @@
 <%@ page import="org.wso2.carbon.tracer.ui.TracerAdminClient" %>
 <%@ page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%@ page import="org.wso2.carbon.utils.ServerConstants" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 
 <%
     String backendServerURL = CarbonUIUtil.getServerURL(config.getServletContext(), session);
@@ -34,7 +35,7 @@
         client.setMonitoring(flag);
     } catch (Exception e) {
         response.setStatus(500);
-        response.getWriter().write(e.getMessage());
+        response.getWriter().write(Encode.forHtml(e.getMessage()));
         return;
     }
 %>
