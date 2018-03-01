@@ -41,6 +41,8 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.TimeZone" %>
 <%@ page import="org.wso2.carbon.logging.view.stub.types.carbon.LogFileInfo" %>
+<%@ page import="org.owasp.encoder.Encode" %>
+
 <script type="text/javascript" src="js/logviewer.js"></script>
 <script type="text/javascript" src="../admin/dialog/js/dialog.js"></script>
 
@@ -341,7 +343,7 @@
                                     if(isManager && isSuperTenant) {
                                 %>
                                 <td style="padding-right: 2px !important;"><input onkeypress="submitenter(event)"
-                                        value="<%=keyword%>" id="logkeyword"
+                                        value="<%=Encode.forHtmlAttribute(keyword)%>" id="logkeyword"
                                         size="20" type="text"></td>
                                 <td style="padding-right: 2px !important;">
                                     <a
@@ -351,7 +353,7 @@
                                             </a>
                                 </td>
                                 <td><input type="hidden" id="keyWord"
-                                           name="keyword" value="<%=keyword%>" />
+                                           name="keyword" value="<%=Encode.forHtmlAttribute(keyword)%>" />
 
                                 </td>
                                 <%
@@ -359,7 +361,8 @@
 
                                 %>
                                 <td style="padding-right: 2px !important;"><input onkeypress="submitenterNormalManager(event)"
-                                                                                  value="<%=keyword%>" id="logkeyword"
+                                                                                  value="<%=Encode.forHtmlAttribute(keyword)%>"
+                                                                                  id="logkeyword"
                                                                                   size="20" type="text"></td>
                                 <td style="padding-right: 2px !important;">
                                     <a
@@ -368,14 +371,15 @@
                                             href="javascript:searchNormalManager()"></a>
                                 </td>
                                 <td><input type="hidden" id="keyWord"
-                                           name="keyword" value="<%=keyword%>" />
+                                           name="keyword" value="<%=Encode.forHtmlAttribute(keyword)%>" />
 
                                 </td>
                                 <%
                                     } else if(!isManager) {
                                         %>
                                 <td style="padding-right: 2px !important;"><input onkeypress="submitenterNormal(event)"
-                                                                                  value="<%=keyword%>" id="logkeyword"
+                                                                                  value="<%=Encode.forHtmlAttribute(keyword)%>"
+                                                                                  id="logkeyword"
                                                                                   size="20" type="text"></td>
                                 <td style="padding-right: 2px !important;">
                                     <a
@@ -385,7 +389,7 @@
                                             ></a>
                                 </td>
                                 <td><input type="hidden" id="keyWord"
-                                           name="keyword" value="<%=keyword%>" />
+                                           name="keyword" value="<%=Encode.forHtmlAttribute(keyword)%>" />
 
                                 </td>
                                 <td style="width: 37%;"></td>
@@ -508,7 +512,7 @@
 							   <carbon:paginator pageNumber="<%=pageNumber%>" numberOfPages="<%=numberOfPages%>"
                       page="index.jsp" pageNumberParameterName="pageNumber"
                       prevKey="prev" nextKey="next"
-                      parameters="<%= parameter%>"/>
+                      parameters="<%=Encode.forUriComponent(parameter)%>"/>
 					</tr>
 					
 				
@@ -624,7 +628,7 @@
 							  <carbon:paginator pageNumber="<%=pageIndexNumber%>" numberOfPages="<%=numberOfIndexPages%>"
                       page="index.jsp" pageNumberParameterName="pageIndexNumber"
                       prevKey="prev" nextKey="next"
-                      parameters="<%=indexParameter%>"/>
+                      parameters="<%=Encode.forUriComponent(indexParameter)%>"/>
 						</td>
 					</tr>
 										
