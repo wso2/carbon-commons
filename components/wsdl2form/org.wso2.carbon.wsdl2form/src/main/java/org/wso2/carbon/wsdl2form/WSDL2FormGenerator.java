@@ -169,6 +169,8 @@ public class WSDL2FormGenerator {
                     }
 
                     String proxyContextPath = CarbonUtils.getProxyContextPath(false);
+                    paramMap.put("js-csrf-protection", 
+                            proxyContextPath + multitenantPrefix + "carbon/admin/js/csrfPrevention.js");
                     paramMap.put("js-global-params", proxyContextPath + multitenantPrefix + "carbon/global-params.js");
                     paramMap.put("proxyAddress",
                             proxyContextPath + contextRoot + "carbon/admin/jsp/WSRequestXSSproxy_ajaxprocessor.jsp");
@@ -603,6 +605,7 @@ public class WSDL2FormGenerator {
         OutputStream tryItOutFileStream = new FileOutputStream(tryItOutFile);
         Result tryItResult = new StreamResult(tryItOutFileStream);
 
+        paramMap.put("js-csrf-protection", "carbon/admin/js/csrfPrevention.js");
         paramMap.put("js-global-params", "carbon/global-params.js");
         paramMap.put("proxyAddress", "carbon/admin/jsp/WSRequestXSSproxy_ajaxprocessor.jsp");
         paramMap.put("js-service-stub", "filedownload?id=" + jsFileLocation.getUuid());
