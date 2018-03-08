@@ -17,6 +17,8 @@ package org.wso2.carbon.ndatasource.ui;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.xerces.impl.Constants;
+import org.apache.xerces.util.SecurityManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -278,8 +280,22 @@ public class NDataSourceHelper {
 		try {
 			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
 			docFactory.setNamespaceAware(false);
-		    DocumentBuilder db = docFactory.newDocumentBuilder();
-		    return db.parse(new ByteArrayInputStream(xml.getBytes())).getDocumentElement();
+			docFactory.setXIncludeAware(false);
+			docFactory.setExpandEntityReferences(false);
+
+			docFactory.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE, false);
+
+			docFactory.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE, false);
+
+			docFactory.setFeature(Constants.XERCES_FEATURE_PREFIX + Constants.LOAD_EXTERNAL_DTD_FEATURE, false);
+
+			SecurityManager securityManager = new SecurityManager();
+			securityManager.setEntityExpansionLimit(0);
+			docFactory.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY,
+					securityManager);
+
+			DocumentBuilder db = docFactory.newDocumentBuilder();
+			return db.parse(new ByteArrayInputStream(xml.getBytes())).getDocumentElement();
 		} catch (Exception e) {
 			throw new RuntimeException(e.getMessage(), e);
 		}
