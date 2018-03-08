@@ -16,6 +16,8 @@
 package org.wso2.carbon.ntask.core;
 
 import org.apache.axiom.om.OMElement;
+import org.apache.xerces.impl.Constants;
+import org.apache.xerces.util.SecurityManager;
 import org.w3c.dom.*;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.core.util.CryptoException;
@@ -58,7 +60,15 @@ public class TaskUtils {
     public static Document convertToDocument(File file) throws TaskException {
         DocumentBuilderFactory fac = DocumentBuilderFactory.newInstance();
         fac.setNamespaceAware(true);
+        fac.setXIncludeAware(false);
+        fac.setExpandEntityReferences(false);
         try {
+            fac.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_GENERAL_ENTITIES_FEATURE, false);
+            fac.setFeature(Constants.SAX_FEATURE_PREFIX + Constants.EXTERNAL_PARAMETER_ENTITIES_FEATURE, false);
+            fac.setFeature(Constants.XERCES_FEATURE_PREFIX + Constants.LOAD_EXTERNAL_DTD_FEATURE, false);
+            SecurityManager securityManager = new SecurityManager();
+            securityManager.setEntityExpansionLimit(0);
+            fac.setAttribute(Constants.XERCES_PROPERTY_PREFIX + Constants.SECURITY_MANAGER_PROPERTY, securityManager);
             return fac.newDocumentBuilder().parse(file);
         } catch (Exception e) {
             throw new TaskException("Error in creating an XML document from file: "
