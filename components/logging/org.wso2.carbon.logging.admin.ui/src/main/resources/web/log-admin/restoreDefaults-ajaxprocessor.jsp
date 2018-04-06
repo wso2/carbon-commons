@@ -1,4 +1,4 @@
-<!--
+<%--
  ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -13,8 +13,7 @@
  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
  ~ KIND, either express or implied.  See the License for the
  ~ specific language governing permissions and limitations
- ~ under the License.
- -->
+--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://wso2.org/projects/carbon/taglibs/carbontags.jar" prefix="carbon" %>
 <%@ page import="org.wso2.carbon.logging.admin.ui.LoggingAdminClient" %>
@@ -36,11 +35,11 @@
         client = new LoggingAdminClient(cookie, backendServerURL, configContext);
         client.restoreToDefaults();
     %>
-    <p><fmt:message key="successfully.restored.gloable.log4j.configuration"/></p>
+    <fmt:message key="successfully.restored.gloable.log4j.configuration"/>
     <%
     } catch (Exception e) {
     %>
-    <p><fmt:message key="gloable.log4j.configuration.retore.failed"/></p>
+    <fmt:message key="gloable.log4j.configuration.retore.failed"/>
     <%
         }
     %>

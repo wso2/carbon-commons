@@ -1,4 +1,4 @@
-<!--
+<%--
  ~ Copyright (c) 2005-2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ WSO2 Inc. licenses this file to you under the Apache License,
@@ -14,7 +14,7 @@
  ~ KIND, either express or implied.  See the License for the
  ~ specific language governing permissions and limitations
  ~ under the License.
- -->
+--%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page import="org.apache.axis2.context.ConfigurationContext" %>
 <%@ page import="org.wso2.carbon.CarbonConstants" %>
@@ -43,11 +43,11 @@
         try {
             client.updateAppenderData(appenderName, logPattern, threshold, logFile, sysLogHost, facility, persist);
     %>
-    <p><fmt:message key="successfully.updated.appender"/></p>
+    <fmt:message key="successfully.updated.appender"/>
     <%
     } catch (Exception e) {
     %>
-    <p><fmt:message key="appender.update.failed"/></p>
+    <fmt:message key="appender.update.failed"/>
     <%
         }
     %>
