@@ -34,6 +34,8 @@ public class TaskServiceContext {
     
     private Map<String, Member> memberMap;
 
+    private static final String LOCAL_MEMBER_IDENTIFIER = "localMemberIdentifier";
+
     public TaskServiceContext(TaskRepository taskRepo, List<String> memberIds, 
             Map<String, Member> memberMap) {
         this.taskRepo = taskRepo;
@@ -66,4 +68,12 @@ public class TaskServiceContext {
         return member.getSocketAddress();
     }
 
+    public String getServerIdentifier(int index) {
+        String memberId = this.memberIds.get(index);
+        Member member = this.memberMap.get(memberId);
+        if (member == null) {
+            return null;
+        }
+        return member.getStringAttribute(LOCAL_MEMBER_IDENTIFIER);
+    }
 }
