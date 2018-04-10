@@ -84,6 +84,7 @@ public class RuleBasedLocationResolver implements TaskLocationResolver {
 				if (log.isDebugEnabled()) {
 					log.debug("Task rule hit: " + rule + 
 							" for task: [" + ctx.getTaskType() + "][" + taskInfo.getName() + "]");
+					log.debug("Task rule hit: " + rule +" Location count : " + locations.size());
 				}
 				result = this.getRoundRobinLocation(rule, locations);
 				break;
@@ -101,13 +102,19 @@ public class RuleBasedLocationResolver implements TaskLocationResolver {
 	}
 	
 	private int getRoundRobinLocation(Rule rule, List<Integer> locations) {
+		if (log.isDebugEnabled()) {
+			log.debug("Performing RoundRobin for " + rule);
+		}
 		HazelcastInstance hz = TasksDSComponent.getHazelcastInstance();
         if (hz == null) {
             return 0;
         }
         int result = (int) Math.abs(hz.getAtomicLong(RULE_BASED_TASK_RESOLVER_ID + rule.hashCode()).incrementAndGet());
         result = locations.get(result % locations.size());
-        return result;
+		if (log.isDebugEnabled()) {
+			log.debug("Selected Node for " + rule + " is " + result);
+		}
+		return result;
 	}
 	
 	private class Rule implements Comparable<Rule> {
@@ -172,23 +179,50 @@ public class RuleBasedLocationResolver implements TaskLocationResolver {
 					int count = ctx.getServerCount();
 					InetSocketAddress sockAddr;
 					InetAddress inetAddr;
-					String ip = null, host1, host2 = null;
+					if (log.isDebugEnabled()) {
+						log.debug("Task server count : " + count);
+						log.debug("Address pattern : " + this.addressPattern);
+					}
+					String ip = null, host1, host2 = null, identifier = null;
 					for (int i = 0; i < count; i++) {
 						sockAddr = ctx.getServerAddress(i);
+						identifier = ctx.getServerIdentifier(i);
 						if (sockAddr != null) {
 						    host1 = sockAddr.getHostName();
+							if (log.isDebugEnabled()) {
+								log.debug("Hostname 1 : " + host1);
+							}
 						    inetAddr = sockAddr.getAddress();
 						    if (inetAddr != null) {
 							    ip = inetAddr.getHostAddress();
 							    host2 = inetAddr.getCanonicalHostName();
+								if (log.isDebugEnabled()) {
+									log.debug("IP address : " + ip);
+									log.debug("Hostname 1 : " + host2);
+								}
 						    }
 						    if (host1.matches(this.getAddressPattern())) {
+								if (log.isDebugEnabled()) {
+									log.debug("Hostname 1 matched");
+								}
 							    result.add(i);
 						    } else if (ip != null && ip.matches(this.getAddressPattern())) {
+								if (log.isDebugEnabled()) {
+									log.debug("IP address matched");
+								}
 							    result.add(i);
 						    } else if (!host1.equals(host2) && host2 != null && host2.matches(this.getAddressPattern())) {
-							    result.add(i);
-						    }
+								if (log.isDebugEnabled()) {
+									log.debug("Hostname 2 matched");
+								}
+								result.add(i);
+							} else if (identifier != null && identifier.matches(this.getAddressPattern())) {
+								if (log.isDebugEnabled()) {
+									log.debug("localMemberIdentifier : " + identifier);
+									log.debug("localMemberIdentifier matched");
+								}
+								result.add(i);
+							}
 						} else {
 							log.warn("RuleBasedLocationResolver: cannot find the host address for node: " + i);
 						}					
