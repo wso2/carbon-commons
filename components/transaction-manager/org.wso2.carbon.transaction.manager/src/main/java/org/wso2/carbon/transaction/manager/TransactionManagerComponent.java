@@ -44,7 +44,7 @@ import java.util.List;
  * @scr.reference name="usertransaction" interface="javax.transaction.UserTransaction"
  * cardinality="1..1" policy="dynamic" bind="setUserTransaction"  unbind="unsetUserTransaction"
  * @scr.reference name="user.realmservice.default"
- * interface="org.wso2.carbon.user.core.service.RealmService" cardinality="1..1" policy="dynamic"
+ * interface="org.wso2.carbon.user.core.service.RealmService" cardinality="0..1" policy="dynamic"
  * bind="setRealmService" unbind="unsetRealmService"
  */
 public class TransactionManagerComponent {
@@ -128,20 +128,24 @@ public class TransactionManagerComponent {
     }
 
     private List<Integer> getAllTenantIds() throws TransactionManagerException {
-		try {
-			Tenant[] tenants = TransactionManagerComponent.getRealmService().getTenantManager().
-					getAllTenants();
-			List<Integer> tids = new ArrayList<Integer>();
-			for (Tenant tenant : tenants) {
-				tids.add(tenant.getId());
-			}
-			tids.add(MultitenantConstants.SUPER_TENANT_ID);
-			return tids;
-		} catch (UserStoreException e) {
+        try {
+            RealmService realmService = TransactionManagerComponent.getRealmService();
+            if (realmService != null) {
+                Tenant[] tenants = TransactionManagerComponent.getRealmService().getTenantManager().
+                        getAllTenants();
+                List<Integer> tids = new ArrayList<Integer>();
+                for (Tenant tenant : tenants) {
+                    tids.add(tenant.getId());
+                }
+                tids.add(MultitenantConstants.SUPER_TENANT_ID);
+                return tids;
+            }
+            return new ArrayList<Integer>();
+        } catch (UserStoreException e) {
             log.error(e);
-			throw new TransactionManagerException("Error in listing all the tenants", e);
-		}
-	}
+            throw new TransactionManagerException("Error in listing all the tenants", e);
+        }
+    }
 
     protected void setRealmService(RealmService realmService) {
     	TransactionManagerComponent.realmService = realmService;
