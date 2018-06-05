@@ -46,7 +46,6 @@
                         <Import-Package>
                             !org.wso2.carbon.logging.service.*;version="4.3.0",
                             org.apache.axis2.*; version="${axis2.osgi.version.range}",
-                            org.wso2.carbon.registry.core.*;version="1.0.1",
                             org.apache.commons.logging,
                             org.apache.log4j; version="0.0.0",
                             org.apache.log4j.net;
