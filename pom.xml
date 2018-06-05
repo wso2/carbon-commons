@@ -1779,7 +1779,7 @@
 
     <properties>
         <!-- Carbon kernel version -->
-        <carbon.kernel.version>4.4.29</carbon.kernel.version>
+        <carbon.kernel.version>4.4.31</carbon.kernel.version>
         <carbon.kernel.imp.pkg.version>[4.4.0, 5.0.0)</carbon.kernel.imp.pkg.version>
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
 
@@ -1816,14 +1816,14 @@
         <orbit.version.axiom>1.2.11.wso2v6</orbit.version.axiom>
 
         <!-- Axis2 Version -->
-        <axis2.wso2.version>1.6.1-wso2v23</axis2.wso2.version>
-        <axis2.version>1.6.1-wso2v23</axis2.version>
-        <axis2.osgi.version.range>[1.6.1.wso2v14, 2.0.0)</axis2.osgi.version.range>
+        <axis2.wso2.version>1.6.1-wso2v26</axis2.wso2.version>
+        <axis2.version>1.6.1-wso2v26</axis2.version>
+        <axis2.osgi.version.range>[1.6.1, 2.0.0)</axis2.osgi.version.range>
         <axis2.orbit.imp.pkg.version>[1.6, 2.0)</axis2.orbit.imp.pkg.version>
-        <orbit.version.axis2>1.6.1-wso2v23</orbit.version.axis2>
+        <orbit.version.axis2>1.6.1-wso2v26</orbit.version.axis2>
         <neethi.osgi.version>2.0.4.wso2v5</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
-        <orbit.version.axis2.transports>2.0.0-wso2v21</orbit.version.axis2.transports>
+        <orbit.version.axis2.transports>2.0.0-wso2v22</orbit.version.axis2.transports>
 
         <!-- Xerces Version -->
         <xercesImpl.version>2.11.0</xercesImpl.version>
