@@ -14,6 +14,11 @@
       are activated before the tasks are scheduled -->
     <taskServerCount>2</taskServerCount>
 
+    <!--
+     You can explicitly configure task repository class
+     FileBasedTaskRepository is supported in only micro ei profile where multitenancy and clustering is disabled-->
+     <!--<taskRepositoryClass>org.wso2.carbon.ntask.core.impl.FileBasedTaskRepository</taskRepositoryClass>-->
+
     <!-- The default location resolver configuration -->
     <defaultLocationResolver>
         <locationResolverClass>org.wso2.carbon.ntask.core.impl.RoundRobinTaskLocationResolver</locationResolverClass>
