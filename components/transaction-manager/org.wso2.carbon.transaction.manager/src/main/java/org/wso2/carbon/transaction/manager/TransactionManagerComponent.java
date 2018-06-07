@@ -129,18 +129,20 @@ public class TransactionManagerComponent {
 
     private List<Integer> getAllTenantIds() throws TransactionManagerException {
         try {
+            List<Integer> tids = new ArrayList<Integer>();
             RealmService realmService = TransactionManagerComponent.getRealmService();
             if (realmService != null) {
                 Tenant[] tenants = TransactionManagerComponent.getRealmService().getTenantManager().
                         getAllTenants();
-                List<Integer> tids = new ArrayList<Integer>();
                 for (Tenant tenant : tenants) {
                     tids.add(tenant.getId());
                 }
                 tids.add(MultitenantConstants.SUPER_TENANT_ID);
                 return tids;
+            } else {
+                tids.add(MultitenantConstants.SUPER_TENANT_ID);
+                return tids;
             }
-            return new ArrayList<Integer>();
         } catch (UserStoreException e) {
             log.error(e);
             throw new TransactionManagerException("Error in listing all the tenants", e);
