@@ -1,6 +1,7 @@
 <%@ page import="org.apache.axis2.client.Options" %>
 <%@ page import="org.apache.axis2.client.ServiceClient" %>
 <%@ page import="org.apache.axis2.context.ConfigurationContext" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ page import="org.wso2.carbon.CarbonConstants" %>
 <%@ page import="org.wso2.carbon.event.stub.internal.TopicManagerAdminServiceStub" %>
 <%@ page import="org.wso2.carbon.event.stub.internal.xsd.TopicRolePermission" %>
@@ -210,7 +211,7 @@
                         <input class="longInput" id="existingTopic" type="hidden"
                                readonly="true"
                                value="<%=topicPath%>">
-                        <strong><fmt:message key="parent.topic"/>:</strong> <%=topicPath%>
+                        <strong><fmt:message key="parent.topic"/>:</strong> <%=Encode.forHtmlContent(topicPath)%>
                     </td>
                 </tr>
                 </tbody>

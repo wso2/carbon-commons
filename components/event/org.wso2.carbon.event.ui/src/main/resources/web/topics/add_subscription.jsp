@@ -1,4 +1,5 @@
 <%@ page import="org.wso2.carbon.event.ui.UIConstants" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 
 
 <%@ taglib uri="http://wso2.org/projects/carbon/taglibs/carbontags.jar" prefix="carbon" %>
@@ -96,7 +97,7 @@
                             <tr>
                                 <td class="leftCol-med">Topic<span class="required">*</span></td>
                                 <td colspan="3"><input id="topicId" type="text" name="topic"
-                                                       value="<%=topic%>" readonly="true"/></td>
+                                                       value="<%=Encode.forHtmlAttribute(topic)%>" readonly="true"/></td>
                             </tr>
                             <tr>
                                 <td class="leftCol-med"><fmt:message key="subscription.mode"/>
