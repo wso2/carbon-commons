@@ -1,17 +1,17 @@
 /**
- *  Copyright (c) 2012, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
- *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
- *
- *        http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Copyright (c) 2012, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.wso2.carbon.ntask.core.impl.standalone;
 
@@ -20,6 +20,7 @@ import org.wso2.carbon.ntask.core.TaskManager;
 import org.wso2.carbon.ntask.core.TaskManagerFactory;
 import org.wso2.carbon.ntask.core.TaskManagerId;
 import org.wso2.carbon.ntask.core.TaskRepository;
+import org.wso2.carbon.ntask.core.impl.FileBasedTaskRepository;
 import org.wso2.carbon.ntask.core.impl.RegistryBasedTaskRepository;
 
 import java.util.ArrayList;
@@ -30,6 +31,8 @@ import java.util.List;
  */
 public class StandaloneTaskManagerFactory implements TaskManagerFactory {
 
+    private String taskRepositoryClass;
+
     @Override
     public TaskManager getTaskManager(TaskManagerId tmId) throws TaskException {
         /* the best effort is made to not to cache the task managers, since the tenant loading/unloading/
@@ -38,16 +41,29 @@ public class StandaloneTaskManagerFactory implements TaskManagerFactory {
     }
 
     protected TaskManager createTaskManager(TaskManagerId tmId) throws TaskException {
-        TaskRepository taskRepo = new RegistryBasedTaskRepository(tmId.getTenantId(),
-                tmId.getTaskType());
+        TaskRepository taskRepo;
+        if (taskRepositoryClass != null && taskRepositoryClass.equalsIgnoreCase("org.wso2.carbon.ntask.core.impl.FileBasedTaskRepository")) {
+            taskRepo = new FileBasedTaskRepository(tmId.getTenantId(),
+                    tmId.getTaskType());
+        } else {
+            taskRepo = new RegistryBasedTaskRepository(tmId.getTenantId(),
+                    tmId.getTaskType());
+        }
+
         return new StandaloneTaskManager(taskRepo);
     }
 
     @Override
     public List<TaskManager> getStartupSchedulingTaskManagersForType(String taskType)
             throws TaskException {
-        List<TaskManagerId> tmIds = RegistryBasedTaskRepository
-                .getAllTenantTaskManagersForType(taskType);
+        List<TaskManagerId> tmIds;
+        if (taskRepositoryClass != null && taskRepositoryClass.equalsIgnoreCase("org.wso2.carbon.ntask.core.impl.FileBasedTaskRepository")) {
+            tmIds = FileBasedTaskRepository
+                    .getAllTenantTaskManagersForType(taskType);
+        } else {
+            tmIds = RegistryBasedTaskRepository
+                    .getAllTenantTaskManagersForType(taskType);
+        }
         List<TaskManager> result = new ArrayList<TaskManager>();
         for (TaskManagerId tmId : tmIds) {
             result.add(this.createTaskManager(tmId));
@@ -57,8 +73,14 @@ public class StandaloneTaskManagerFactory implements TaskManagerFactory {
 
     @Override
     public List<TaskManager> getAllTenantTaskManagersForType(String taskType) throws TaskException {
-        List<TaskManagerId> tmIds = RegistryBasedTaskRepository
-                .getAllTenantTaskManagersForType(taskType);
+        List<TaskManagerId> tmIds;
+        if (taskRepositoryClass != null && taskRepositoryClass.equalsIgnoreCase("org.wso2.carbon.ntask.core.impl.FileBasedTaskRepository")) {
+            tmIds = FileBasedTaskRepository
+                    .getAllTenantTaskManagersForType(taskType);
+        } else {
+            tmIds = RegistryBasedTaskRepository
+                    .getAllTenantTaskManagersForType(taskType);
+        }
         List<TaskManager> result = new ArrayList<TaskManager>();
         for (TaskManagerId tmId : tmIds) {
             result.add(this.createTaskManager(tmId));
@@ -66,4 +88,11 @@ public class StandaloneTaskManagerFactory implements TaskManagerFactory {
         return result;
     }
 
+    public String getTaskRepositoryClass() {
+        return taskRepositoryClass;
+    }
+
+    public void setTaskRepositoryClass(String taskRepositoryClass) {
+        this.taskRepositoryClass = taskRepositoryClass;
+    }
 }

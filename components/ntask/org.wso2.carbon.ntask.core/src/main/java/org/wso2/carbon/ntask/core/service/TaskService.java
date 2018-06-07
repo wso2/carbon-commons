@@ -95,6 +95,8 @@ public interface TaskService {
         String getRemoteServerPassword();
 
         String getLocationResolverClass();
+
+        String getTaskRepositoryClass();
         
         Map<String, String> getLocationResolverProperties();
 

@@ -48,9 +48,9 @@ import java.util.concurrent.Executors;
  * This class represents the Tasks declarative service component.
  * @scr.component name="tasks.component" immediate="true"
  * @scr.reference name="registry.service" interface="org.wso2.carbon.registry.core.service.RegistryService"
- * cardinality="1..1" policy="dynamic"  bind="setRegistryService" unbind="unsetRegistryService"
+ * cardinality="0..1" policy="dynamic"  bind="setRegistryService" unbind="unsetRegistryService"
  * @scr.reference name="user.realmservice.default"
- * interface="org.wso2.carbon.user.core.service.RealmService" cardinality="1..1" policy="dynamic"
+ * interface="org.wso2.carbon.user.core.service.RealmService" cardinality="0..1" policy="dynamic"
  * bind="setRealmService" unbind="unsetRealmService"
  * @scr.reference name="config.context.service"
  * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="1..1" policy="dynamic" 

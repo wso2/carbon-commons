@@ -15,13 +15,13 @@
  */
 package org.wso2.carbon.ntask.core.service.impl;
 
+import org.wso2.carbon.ntask.core.service.TaskService.TaskServerMode;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
-
-import org.wso2.carbon.ntask.core.service.TaskService.TaskServerMode;
 
 /**
  * This represents the task service XML based configuration.
@@ -36,6 +36,8 @@ public class TaskServiceXMLConfiguration {
     private String taskClientDispatchAddress;
 
     private String remoteServerAddress;
+
+    private String taskRepositoryClass;
 
     private String remoteServerUsername;
 
@@ -96,6 +98,19 @@ public class TaskServiceXMLConfiguration {
 
     public void setRemoteServerPassword(String remoteServerPassword) {
         this.remoteServerPassword = remoteServerPassword;
+    }
+
+    @XmlElement(name = "taskRepositoryClass", defaultValue = "org.wso2.carbon.ntask.core.impl.RegistryBasedTaskRepository")
+    public String getTaskRepositoryClass() {
+        return taskRepositoryClass;
+    }
+
+    public void setTaskRepositoryClass(String taskRepositoryClass) {
+        if (taskRepositoryClass != null) {
+            this.taskRepositoryClass = taskRepositoryClass;
+        } else {
+            this.taskRepositoryClass = "org.wso2.carbon.ntask.core.impl.RegistryBasedTaskRepository";
+        }
     }
     
     @XmlElement(name = "defaultLocationResolver", nillable = true, required = false)
