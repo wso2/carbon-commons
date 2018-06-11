@@ -231,13 +231,13 @@ public class FileBasedTaskRepository implements TaskRepository {
     public void addTask(TaskInfo taskInfo) throws TaskException {
         String tasksPath = this.getMyTasksPath();
         String currentTaskPath = tasksPath + "/" + taskInfo.getName();
+        File file = new File(getSystemDependentPath(resourcePath + tasksPath));
+        if (!file.exists()) {
+            file.mkdirs();
+        }
         try (FileOutputStream fos = new FileOutputStream(getSystemDependentPath(resourcePath + currentTaskPath))) {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             getTaskMarshaller().marshal(taskInfo, out);
-            File file = new File(getSystemDependentPath(resourcePath + tasksPath));
-            if (!file.exists()) {
-                file.mkdirs();
-            }
             fos.write(out.toByteArray());
         } catch (Exception e) {
             throw new TaskException("Error in adding task '" + taskInfo.getName()
