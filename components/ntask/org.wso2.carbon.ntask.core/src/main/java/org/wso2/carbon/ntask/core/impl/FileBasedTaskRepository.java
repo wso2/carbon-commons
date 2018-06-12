@@ -15,8 +15,8 @@
  */
 package org.wso2.carbon.ntask.core.impl;
 
-import org.wso2.carbon.base.MultitenantConstants;
-import org.wso2.carbon.context.PrivilegedCarbonContext;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.ntask.common.TaskException;
 import org.wso2.carbon.ntask.core.TaskInfo;
 import org.wso2.carbon.ntask.core.TaskManagerId;
@@ -44,7 +44,7 @@ import java.util.Set;
  * Files based task repository implementation.
  */
 public class FileBasedTaskRepository implements TaskRepository {
-
+    private static final Log log = LogFactory.getLog(FileBasedTaskRepository.class);
 
     private static final String REG_TASK_BASE_PATH = "/repository/components/org.wso2.carbon.tasks";
 
@@ -130,9 +130,9 @@ public class FileBasedTaskRepository implements TaskRepository {
     }
 
     private TaskInfo getTaskInfoRegistryPath(String path) throws Exception {
+        InputStream in = null;
         try {
-
-            InputStream in = new FileInputStream(path);
+            in = new FileInputStream(path);
             TaskInfo taskInfo;
             /*
              * the following synchronized block is to avoid
@@ -147,7 +147,9 @@ public class FileBasedTaskRepository implements TaskRepository {
                     String.valueOf(this.getTenantId()));
             return taskInfo;
         } finally {
-            PrivilegedCarbonContext.endTenantFlow();
+            if (in != null) {
+                in.close();
+            }
         }
     }
 
@@ -184,9 +186,6 @@ public class FileBasedTaskRepository implements TaskRepository {
     private static List<TaskManagerId> getAvailableTenantTasksInRepo() throws TaskException {
         List<TaskManagerId> tmList = new ArrayList<TaskManagerId>();
         try {
-            PrivilegedCarbonContext.startTenantFlow();
-            PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantDomain(
-                    MultitenantConstants.SUPER_TENANT_DOMAIN_NAME, true);
             File file = new File(getSystemDependentPath(resourcePath + REG_TASK_BASE_PATH));
             boolean result = file.exists();
             int tid;
@@ -220,8 +219,6 @@ public class FileBasedTaskRepository implements TaskRepository {
             }
         } catch (Exception e) {
             throw new TaskException(e.getMessage(), TaskException.Code.UNKNOWN, e);
-        } finally {
-            PrivilegedCarbonContext.endTenantFlow();
         }
         return tmList;
     }
@@ -300,6 +297,8 @@ public class FileBasedTaskRepository implements TaskRepository {
         String currentTaskMetaPath = tasksPath + "/_meta_" + taskName;
         try (FileInputStream fis = new FileInputStream(getSystemDependentPath(resourcePath + currentTaskMetaPath))) {
             properties.load(fis);
+        } catch (Exception e) {
+            log.debug("Retrieving Meta file is failed.");
         }
         return properties;
     }
