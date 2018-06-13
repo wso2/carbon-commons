@@ -247,9 +247,28 @@ public class FileBasedTaskRepository implements TaskRepository {
     public boolean deleteTask(String taskName) throws TaskException {
         String tasksPath = this.getMyTasksPath();
         String currentTaskPath = tasksPath + "/" + taskName;
+        boolean deleteSuccess = false;
         try {
             File file = new File(getSystemDependentPath(resourcePath + currentTaskPath));
-            return file.exists() && file.delete();
+            if (file.exists()){
+                if (file.delete()) {
+                    deleteSuccess = true;
+                } else {
+                    log.error("Error occurred while deleting task. Unable to delete: " +
+                            getSystemDependentPath(resourcePath + currentTaskPath));
+                }
+            }
+
+            File metaFile = new File(getSystemDependentPath(resourcePath + tasksPath + "/_meta_" + taskName));
+            if (metaFile.exists()) {
+                if (metaFile.delete()) {
+                    deleteSuccess = true;
+                } else {
+                    log.error("Error occurred while deleting task. Unable to delete: " +
+                            getSystemDependentPath(resourcePath + tasksPath + "/_meta_" + taskName));
+                }
+            }
+            return deleteSuccess;
         } catch (Exception e) {
             throw new TaskException("Error in deleting task '" + taskName + "' in the repository",
                     TaskException.Code.CONFIG_ERROR, e);
