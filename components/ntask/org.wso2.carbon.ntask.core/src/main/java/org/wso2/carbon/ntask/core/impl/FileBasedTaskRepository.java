@@ -102,7 +102,7 @@ public class FileBasedTaskRepository implements TaskRepository {
         Set<TaskInfo> result = new HashSet<TaskInfo>();
         String tasksPath = this.getMyTasksPath();
         try {
-            File resource = new File(new URI(getSystemDependentPath(resourcePath + tasksPath)));
+            File resource = new File(getSystemDependentPath(resourcePath + tasksPath));
             if (resource.exists()) {
                 File[] taskPaths = resource.listFiles();
                 TaskInfo taskInfo;
