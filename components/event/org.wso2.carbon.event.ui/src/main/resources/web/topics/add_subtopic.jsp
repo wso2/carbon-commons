@@ -210,8 +210,8 @@
                     <td>
                         <input class="longInput" id="existingTopic" type="hidden"
                                readonly="true"
-                               value="<%=topicPath%>">
-                        <strong><fmt:message key="parent.topic"/>:</strong> <%=Encode.forHtmlContent(topicPath)%>
+                               value="<%=Encode.forHtml(topicPath)%>">
+                        <strong><fmt:message key="parent.topic"/>:</strong> <%=Encode.forHtml(topicPath)%>
                     </td>
                 </tr>
                 </tbody>
