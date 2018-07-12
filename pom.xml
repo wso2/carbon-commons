@@ -1779,7 +1779,7 @@
 
     <properties>
         <!-- Carbon kernel version -->
-        <carbon.kernel.version>4.4.31</carbon.kernel.version>
+        <carbon.kernel.version>4.4.33</carbon.kernel.version>
         <carbon.kernel.imp.pkg.version>[4.4.0, 5.0.0)</carbon.kernel.imp.pkg.version>
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
 
@@ -1823,7 +1823,7 @@
         <orbit.version.axis2>1.6.1-wso2v27</orbit.version.axis2>
         <neethi.osgi.version>2.0.4.wso2v5</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
-        <orbit.version.axis2.transports>2.0.0-wso2v23</orbit.version.axis2.transports>
+        <orbit.version.axis2.transports>2.0.0-wso2v24</orbit.version.axis2.transports>
 
         <!-- Xerces Version -->
         <xercesImpl.version>2.11.0</xercesImpl.version>
