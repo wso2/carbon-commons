@@ -132,7 +132,10 @@ public class ApplicationAdminClient {
         ServletOutputStream out = response.getOutputStream();
         DataHandler dataHandler = stub.downloadCappArchive(filename);
         if (dataHandler != null) {
-            response.setHeader("Content-Disposition", "fileName=" + filename + ".car");
+            if (!filename.endsWith(".car")) {
+                filename += ".car";
+            }
+            response.setHeader("Content-Disposition", "fileName=" + filename);
             response.setContentType(dataHandler.getContentType());
             InputStream in = dataHandler.getDataSource().getInputStream();
             int nextChar;
@@ -143,9 +146,8 @@ public class ApplicationAdminClient {
             in.close();
             out.close();
         } else {
-			out.write("The requested capp archive was not found on the server".getBytes());
-		}
-
+            out.write("The requested capp archive was not found on the server".getBytes());
+        }
     }
 
 }

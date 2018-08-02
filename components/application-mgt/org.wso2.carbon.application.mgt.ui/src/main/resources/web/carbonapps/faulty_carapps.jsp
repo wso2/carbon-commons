@@ -202,6 +202,12 @@
                         </td>
                         <td width="300px">
                             <%=carbonApp%>
+                            <fmt:bundle basename="org.wso2.carbon.application.mgt.ui.i18n.Resources">
+                                <fmt:message key="download.capp" var="downloadCappTitle"/>
+				<a href="download-ajaxprocessor.jsp?cappName=<%=carbonApp%>" class="icon-link-nofloat" style="background-image:url(images/download.gif);" title="${downloadCappTitle}">
+                                    <fmt:message key="download"/>
+                                </a>
+                            </fmt:bundle>
                         </td>
                         <td>
                             <pre style="white-space: pre-wrap;"><%=faultReason%></pre>
