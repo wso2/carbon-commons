@@ -503,24 +503,34 @@ public class ApplicationAdmin extends AbstractAdmin {
      * @throws Exception for invalid scenarios 
      */
     public DataHandler downloadCappArchive(String fileName) throws Exception {
-        CarbonApplication currentApp = null;
+        String filePath = null;
+        String tenantId = AppDeployerUtils.getTenantIdString(getAxisConfig());
 
         // Iterate all applications for this tenant and find the application to download
-        String tenantId = AppDeployerUtils.getTenantIdString(getAxisConfig());
         ArrayList<CarbonApplication> appList =
                 AppManagementServiceComponent.getAppManager().getCarbonApps(tenantId);
         for (CarbonApplication carbonApp : appList) {
             if (fileName.equals(carbonApp.getAppNameWithVersion())) {
-                currentApp = carbonApp;
+                filePath = carbonApp.getAppFilePath();
+            }
+        }
+
+        // Application not found in standard carbon apps, check if the app is faulty
+        HashMap<String, Exception> faultyCarbonAppsList
+                = AppManagementServiceComponent.getAppManager().getFaultyCarbonApps(tenantId);
+        for (String faultyCarbonApp : faultyCarbonAppsList.keySet()) {
+            String faultyFileName = faultyCarbonApp.substring(faultyCarbonApp.lastIndexOf('/') + 1);
+            if (fileName.equals(faultyFileName) || fileName.equals(faultyFileName.substring(0, faultyFileName.lastIndexOf('_')))) {
+                filePath = faultyCarbonApp;
             }
         }
 
         // Check if the app has been found
-        if (currentApp == null) {
+        if (filePath == null) {
             handleException("The application '" + fileName + "' cannot be found");
         }
 
-        FileDataSource datasource = new FileDataSource(new File(currentApp.getAppFilePath()));
+	FileDataSource datasource = new FileDataSource(new File(filePath));
         DataHandler handler = new DataHandler(datasource);
 
         return handler;
