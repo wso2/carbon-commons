@@ -204,7 +204,7 @@
                             <%=carbonApp%>
                         </td>
                         <td>
-                            <%=faultReason%>
+                            <pre style="white-space: pre-wrap;"><%=faultReason%></pre>
                         </td>
                     </tr>
                     <%
