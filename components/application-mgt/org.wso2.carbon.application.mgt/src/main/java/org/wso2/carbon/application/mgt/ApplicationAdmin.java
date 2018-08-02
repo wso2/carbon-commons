@@ -234,6 +234,20 @@ public class ApplicationAdmin extends AbstractAdmin {
     }
 
     /**
+     * Mark an application to be redeployed again in the next deployment pass.
+     *
+     * @param appPName - input app name
+     * @throws Exception - error on redeploying app file
+     */
+    public void redeployApplication(String appName) throws Exception {
+        String filePath = this.getCappFilepath(appName);
+
+        // Reset the last modified time to trigger a redeployment of the file
+        File cappFile = new File(filePath);
+        cappFile.setLastModified(System.currentTimeMillis());
+    }
+
+    /**
      * Gives an ApplicationMetadata object with axis2 artifacts deployed through the given app.
      *
      * @param appName - input app name
@@ -503,15 +517,31 @@ public class ApplicationAdmin extends AbstractAdmin {
      * @throws Exception for invalid scenarios 
      */
     public DataHandler downloadCappArchive(String fileName) throws Exception {
+        String filePath = this.getCappFilepath(fileName);
+
+        // Get a handle to the Capp file
+        FileDataSource datasource = new FileDataSource(new File(filePath));
+        DataHandler handler = new DataHandler(datasource);
+
+        return handler;
+    }
+
+    private String getCappFilepath(String appName) throws Exception {
         String filePath = null;
         String tenantId = AppDeployerUtils.getTenantIdString(getAxisConfig());
+
+        // Validate if there's a filename
+        if (appName == null) {
+            handleException("The app name must be specified (the value was null)");
+        }
 
         // Iterate all applications for this tenant and find the application to download
         ArrayList<CarbonApplication> appList =
                 AppManagementServiceComponent.getAppManager().getCarbonApps(tenantId);
         for (CarbonApplication carbonApp : appList) {
-            if (fileName.equals(carbonApp.getAppNameWithVersion())) {
+            if (appName.equals(carbonApp.getAppNameWithVersion())) {
                 filePath = carbonApp.getAppFilePath();
+                break;
             }
         }
 
@@ -520,20 +550,18 @@ public class ApplicationAdmin extends AbstractAdmin {
                 = AppManagementServiceComponent.getAppManager().getFaultyCarbonApps(tenantId);
         for (String faultyCarbonApp : faultyCarbonAppsList.keySet()) {
             String faultyFileName = faultyCarbonApp.substring(faultyCarbonApp.lastIndexOf('/') + 1);
-            if (fileName.equals(faultyFileName) || fileName.equals(faultyFileName.substring(0, faultyFileName.lastIndexOf('_')))) {
+            if (appName.equals(faultyFileName) || appName.equals(faultyFileName.substring(0, faultyFileName.lastIndexOf('_')))) {
                 filePath = faultyCarbonApp;
+                break;
             }
         }
 
         // Check if the app has been found
         if (filePath == null) {
-            handleException("The application '" + fileName + "' cannot be found");
+            handleException("The application '" + appName + "' cannot be found");
         }
 
-	FileDataSource datasource = new FileDataSource(new File(filePath));
-        DataHandler handler = new DataHandler(datasource);
-
-        return handler;
+        return filePath;
     }
 
     private void handleException(String msg) throws CarbonException {
