@@ -505,7 +505,7 @@ public class ApplicationAdmin extends AbstractAdmin {
     public DataHandler downloadCappArchive(String fileName) throws Exception {
         CarbonApplication currentApp = null;
 
-        // Iterate all applications for this tenant and find the application to delete
+        // Iterate all applications for this tenant and find the application to download
         String tenantId = AppDeployerUtils.getTenantIdString(getAxisConfig());
         ArrayList<CarbonApplication> appList =
                 AppManagementServiceComponent.getAppManager().getCarbonApps(tenantId);
@@ -513,6 +513,11 @@ public class ApplicationAdmin extends AbstractAdmin {
             if (fileName.equals(carbonApp.getAppNameWithVersion())) {
                 currentApp = carbonApp;
             }
+        }
+
+        // Check if the app has been found
+        if (currentApp == null) {
+            handleException("The application '" + fileName + "' cannot be found");
         }
 
         FileDataSource datasource = new FileDataSource(new File(currentApp.getAppFilePath()));
