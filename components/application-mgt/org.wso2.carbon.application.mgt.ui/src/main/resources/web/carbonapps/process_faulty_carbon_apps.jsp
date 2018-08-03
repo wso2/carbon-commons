@@ -23,13 +23,14 @@
 <%@ page import="org.wso2.carbon.utils.ServerConstants" %>
 <%@ page import="org.wso2.carbon.ui.util.CharacterEncoder" %>
 <%
+    String pageAction = CharacterEncoder.getSafeText(request.getParameter("action"));
     String pageNumber = CharacterEncoder.getSafeText(request.getParameter("pageNumber"));
     int pageNumberInt = 0;
     if (pageNumber != null) {
         pageNumberInt = Integer.parseInt(pageNumber);
     }
     String[] faultyCarbonAppFileNames = request.getParameterValues("carbonAppFileName");
-    String deleteAllServiceGroups = CharacterEncoder.getSafeText(request.getParameter("deleteAllCarbonApps"));
+    String processAllServiceGroups = CharacterEncoder.getSafeText(request.getParameter("processAllCarbonApps"));
 %>
 
 <%
@@ -50,25 +51,34 @@
         return;
     }
 
-        try {
-            if (deleteAllServiceGroups != null) {
+    try {
+        if (pageAction.equals("delete")) {
+            if (processAllServiceGroups != null) {
                 String[] faultyList = client.getAllFaultyApps();
                 client.deleteFaultyApp(faultyList);
             } else {
                 client.deleteFaultyApp(faultyCarbonAppFileNames);
             }
-
-
+        } else if (pageAction.equals("redeploy")) {
+            if (processAllServiceGroups != null) {
+                String[] faultyList = client.getAllFaultyApps();
+                client.redeployApplications(faultyList);
+            } else {
+                client.redeployApplications(faultyCarbonAppFileNames);
+            }
+        } else {
+            throw new Exception("Invalid page action : " + pageAction);
+        }
 %>
 <script>
     location.href = 'faulty_carapps.jsp?pageNumber=<%=pageNumberInt%>'
-
 </script>
-
 <%
-} catch (Exception e) {
+    } catch (Exception e) {
+        CarbonUIMessage uiMsg = new CarbonUIMessage(CarbonUIMessage.ERROR, e.getMessage(), e);
+        session.setAttribute(CarbonUIMessage.ID, uiMsg);
 %>
-<jsp:forward page="../admin/error.jsp?<%=e.getMessage()%>"/>
+<jsp:include page="../admin/error.jsp"/>
 <%
         return;
     }
