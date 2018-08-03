@@ -116,6 +116,16 @@ public class ApplicationAdminClient {
         }
     }
 
+    public void redeployApplications(String[] appNames) throws AxisFault {
+        try {
+            for (String appName: appNames) {
+                stub.redeployApplication(appName);
+            }
+        } catch (java.lang.Exception e) {
+            handleException(bundle.getString("cannot.get.service.data"), e);
+        }
+    }
+
 //    public void deleteServiceGroup(String sgName) throws AxisFault {
 //        try {
 //            stub.deleteServiceGroup(sgName);

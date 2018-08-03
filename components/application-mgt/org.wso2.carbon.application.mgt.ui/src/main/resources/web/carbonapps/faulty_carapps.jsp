@@ -66,6 +66,23 @@
 
 %>
 
+<style>
+    a#redeploy1, a#redeploy2 {
+        background-image: url( images/redeploy.gif );
+        background-repeat: no-repeat;
+        background-position: left top;
+        padding-left: 20px;
+        line-height: 17px;
+        height: 17px;
+        float: left;
+        position: relative;
+        margin-left: 10px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        white-space: nowrap;
+    }
+</style>
+
 <div id="middle">
     <div id="workArea">
         <fmt:bundle basename="org.wso2.carbon.application.mgt.ui.i18n.Resources">
@@ -100,6 +117,8 @@
                 }
 
                 function deleteFaultyCarbonApps() {
+                    document.getElementById("faulty_form_action").value = "delete";
+
                     var selected = false;
                     if (document.faultyCarbonAppsForm.carbonAppFileName[0] != null) { // there is more than 1 sg
                         for (var j = 0; j < document.faultyCarbonAppsForm.carbonAppFileName.length; j++) {
@@ -116,10 +135,38 @@
                     if (allCarbonappsSelected) {
                         CARBON.showConfirmationDialog("<fmt:message key="delete.selected.faulty.carapps.prompt"><fmt:param value="<%= numberFaultyApps%>"/></fmt:message>",
                                                       function() {
-                                                          location.href = 'delete_faulty_carbon_apps.jsp?deleteAllCarbonApps=true';
+                                                          location.href = 'process_faulty_carbon_apps.jsp?processAllCarbonApps=true';
                                                       });
                     } else {
                         CARBON.showConfirmationDialog("<fmt:message key="delete.all.faulty.carapps.prompt"/>", function() {
+                            document.faultyCarbonAppsForm.submit();
+                        });
+                    }
+                }
+
+                function redeployFaultyCarbonApps() {
+                    document.getElementById("faulty_form_action").value = "redeploy";
+
+                    var selected = false;
+                    if (document.faultyCarbonAppsForm.carbonAppFileName[0] != null) { // there is more than 1 sg
+                        for (var j = 0; j < document.faultyCarbonAppsForm.carbonAppFileName.length; j++) {
+                            selected = document.faultyCarbonAppsForm.carbonAppFileName[j].checked;
+                            if (selected) break;
+                        }
+                    } else if (document.faultyCarbonAppsForm.carbonAppFileName != null) { // only 1 sg
+                        selected = document.faultyCarbonAppsForm.carbonAppFileName.checked;
+                    }
+                    if (!selected) {
+                        CARBON.showInfoDialog('<fmt:message key="select.faulty.carapps.to.be.redeployed"/>');
+                        return;
+                    }
+                    if (allCarbonappsSelected) {
+                        CARBON.showConfirmationDialog("<fmt:message key="redeploy.selected.faulty.carapps.prompt"><fmt:param value="<%= numberFaultyApps%>"/></fmt:message>",
+                                                      function() {
+                                                          location.href = 'process_faulty_carbon_apps.jsp?processAllCarbonApps=true';
+                                                      });
+                    } else {
+                        CARBON.showConfirmationDialog("<fmt:message key="redeploy.all.faulty.carapps.prompt"/>", function() {
                             document.faultyCarbonAppsForm.submit();
                         });
                     }
@@ -168,14 +215,15 @@
                                       selectAllFunction="selectAllInAllPages()"
                                       selectNoneFunction="selectAllInThisPage(false)"
                                       addRemoveFunction="deleteFaultyCarbonApps()"
-                                      addRemoveButtonId="delete1"/>
+                                      addRemoveButtonId="delete1"
+                                      extraHtml="<a href='#' id='redeploy1' onclick='redeployFaultyCarbonApps();return false;'>Redeploy</a>"/>
             <carbon:paginator pageNumber="<%=0%>" numberOfPages="<%=numberOfPages%>"
                               page="faulty_services.jsp" pageNumberParameterName="pageNumber"/>
             <p>&nbsp;</p>
 
 
-            <form action="delete_faulty_carbon_apps.jsp" name="faultyCarbonAppsForm">
-
+            <form action="process_faulty_carbon_apps.jsp" name="faultyCarbonAppsForm">
+                <input id="faulty_form_action" type="hidden" name="action" value="delete"/>
                 <table class="styledLeft" id="faultyCarbonAppsTable">
                     <thead>
                     <tr>
@@ -204,7 +252,7 @@
                             <%=carbonApp%>
                             <fmt:bundle basename="org.wso2.carbon.application.mgt.ui.i18n.Resources">
                                 <fmt:message key="download.capp" var="downloadCappTitle"/>
-				<a href="download-ajaxprocessor.jsp?cappName=<%=carbonApp%>" class="icon-link-nofloat" style="background-image:url(images/download.gif);" title="${downloadCappTitle}">
+                                <a href="download-ajaxprocessor.jsp?cappName=<%=carbonApp%>" class="icon-link-nofloat" style="background-image:url(images/download.gif);" title="${downloadCappTitle}">
                                     <fmt:message key="download"/>
                                 </a>
                             </fmt:bundle>
@@ -228,7 +276,8 @@
                                       selectAllFunction="selectAllInAllPages()"
                                       selectNoneFunction="selectAllInThisPage(false)"
                                       addRemoveFunction="deleteFaultyCarbonApps()"
-                                      addRemoveButtonId="delete2"/>
+                                      addRemoveButtonId="delete2"
+                                      extraHtml="<a href='#' id='redeploy2' onclick='redeployFaultyCarbonApps();return false;'>Redeploy</a>"/>
         </fmt:bundle>
         <script type="text/javascript">
             alternateTableRows('faultyCarbonAppsTable', 'tableEvenRow', 'tableOddRow');
