@@ -291,9 +291,7 @@ public class ApplicationAdmin extends AbstractAdmin {
             String type = artifact.getType();
             String instanceName = artifact.getRuntimeObjectName();
 
-            if (DefaultAppDeployer.AAR_TYPE.equals(type) ||
-                    DefaultAppDeployer.DS_TYPE.equals(type)) {
-
+            if (DefaultAppDeployer.AAR_TYPE.equals(type)) {
                 AxisServiceGroup sg;
                 if (instanceName == null) {
                     sg = findServiceGroupForArtifact(artifact);
@@ -477,8 +475,6 @@ public class ApplicationAdmin extends AbstractAdmin {
 
         if (serviceType.equals("axis2")) {
             artifactType = DefaultAppDeployer.AAR_TYPE;
-        } else if (serviceType.equals("data_service")) {
-            artifactType = DefaultAppDeployer.DS_TYPE;
         }
         return artifactType;
     }
