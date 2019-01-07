@@ -178,9 +178,7 @@ public class DataSourceCappDeployer implements AppDeploymentHandler {
             InputStream in = new FileInputStream(file);
 
             Document doc = DataSourceUtils.convertToDocument(in);
-            /* only super tenant will lookup secure vault information for system data sources,
-             * others are not allowed to */
-            DataSourceUtils.secureResolveDocument(doc, false);
+            DataSourceUtils.secureResolveDocument(doc, true);
 
             // create JAXB context and initializing Marshaller
             JAXBContext jaxbContext = JAXBContext.newInstance(DataSourceMetaInfo.class);
