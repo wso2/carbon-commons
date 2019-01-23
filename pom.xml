@@ -1946,7 +1946,7 @@
         <commons-collections.wso2.version>3.2.0.wso2v1</commons-collections.wso2.version>
         <org.wso2.securevault.version>1.0.0</org.wso2.securevault.version>
         <org.testng.version>6.3.1</org.testng.version>
-        <slf4j.version>1.7.21</slf4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <slf4j.imp.pkg.version.range>[1.6.1,1.8.0)</slf4j.imp.pkg.version.range>
         <javax.xml.parsers.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.parsers.import.pkg.version>
         <javax.xml.transform.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.transform.import.pkg.version>
