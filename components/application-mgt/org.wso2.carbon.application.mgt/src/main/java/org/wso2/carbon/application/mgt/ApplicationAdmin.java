@@ -46,6 +46,7 @@ import java.util.*;
 public class ApplicationAdmin extends AbstractAdmin {
 
     private static final Log log = LogFactory.getLog(ApplicationAdmin.class);
+    private static final String DS_TYPE = "service/dataservice";
 
     /**
      * Give the names of all applications in the system
@@ -291,7 +292,7 @@ public class ApplicationAdmin extends AbstractAdmin {
             String type = artifact.getType();
             String instanceName = artifact.getRuntimeObjectName();
 
-            if (DefaultAppDeployer.AAR_TYPE.equals(type)) {
+            if (DefaultAppDeployer.AAR_TYPE.equals(type) || DS_TYPE.equals(type)) {
                 AxisServiceGroup sg;
                 if (instanceName == null) {
                     sg = findServiceGroupForArtifact(artifact);
@@ -475,6 +476,8 @@ public class ApplicationAdmin extends AbstractAdmin {
 
         if (serviceType.equals("axis2")) {
             artifactType = DefaultAppDeployer.AAR_TYPE;
+        } else if (serviceType.equals("data_service")) {
+            artifactType = DS_TYPE;
         }
         return artifactType;
     }
