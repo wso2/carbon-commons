@@ -33,6 +33,7 @@
 <%
     String backendServerURL = CarbonUIUtil.getServerURL(config.getServletContext(), session);
     Boolean allowCappDelete = false;
+    Boolean allowCappRedeploy = false;
     ConfigurationContext configContext =
             (ConfigurationContext) config.getServletContext().getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
 
@@ -46,6 +47,7 @@
         || (permissions.contains("/permission/admin/manage/capps/add")
             && permissions.contains("/permission/admin/manage/capps/list"))) {
         allowCappDelete = true;
+        allowCappRedeploy = true;
     }
 
     String BUNDLE = "org.wso2.carbon.application.mgt.ui.i18n.Resources";
@@ -89,6 +91,13 @@
     function deleteApplication(appName) {
         CARBON.showConfirmationDialog("<fmt:message key="confirm.delete.app"/>" , function(){
             document.applicationsForm.action = "delete_artifact.jsp?appName=" + appName;
+            document.applicationsForm.submit();
+        });
+    }
+
+    function redeployApplication(appName) {
+        CARBON.showConfirmationDialog("<fmt:message key="confirm.redeploy.app"/>" , function(){
+            document.applicationsForm.action = "redeploy_artifact.jsp?appName=" + appName;
             document.applicationsForm.submit();
         });
     }
@@ -152,7 +161,7 @@
                     <tr>
                         <th><fmt:message key="carbonapps.applications"/></th>
                         <th><fmt:message key="carbonapps.version"/></th>
-                        <th colspan="2"><fmt:message key="carbonapps.actions"/></th>
+                        <th colspan="3"><fmt:message key="carbonapps.actions"/></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -177,6 +186,13 @@
                             if(allowCappDelete) {
                         %>
                             <td><a href="#" class="icon-link-nofloat" style="background-image:url(images/delete.gif);" onclick="deleteApplication('<%= appNameWithVersion%>');" title="<%= bundle.getString("carbonapps.delete.this.row")%>"><%= bundle.getString("carbonapps.delete")%></a></td>
+                        <%
+                            }
+                        %>
+                        <%
+                            if(allowCappRedeploy) {
+                        %>
+                            <td><a href="#" class="icon-link-nofloat" style="background-image:url(images/redeploy.gif);" onclick="redeployApplication('<%= appNameWithVersion%>');" title="<%= bundle.getString("carbonapps.redeploy.this.row")%>"><%= bundle.getString("carbonapps.redeploy")%></a></td>
                         <%
                             }
                         %>
