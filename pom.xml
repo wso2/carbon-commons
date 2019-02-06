@@ -215,9 +215,9 @@
             </dependency>
 
             <dependency>
-                <groupId>commons-codec</groupId>
+                <groupId>commons-codec.wso2</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>${commons-codec.version}</version>
+                <version>${orbit.version.commons.codec}</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
@@ -1381,6 +1381,11 @@
                 <version>${hector.wso2.version}</version>
             </dependency>
             <dependency>
+                <groupId>com.google.guava.wso2</groupId>
+                <artifactId>guava</artifactId>
+                <version>${google.guava.wso2.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.ntask.common</artifactId>
                 <version>${carbon.commons.version}</version>
@@ -1529,6 +1534,11 @@
                 <artifactId>org.wso2.carbon.ndatasource.capp.deployer.server.feature</artifactId>
                 <version>${carbon.commons.version}</version>
                 <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.orbit.javax.activation</groupId>
+                <artifactId>activation</artifactId>
+                <version>${version.org.wso2.orbit.javax.activation}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -1986,6 +1996,7 @@
         <orbit.version.distruptor>2.10.4-wso2v2</orbit.version.distruptor>
         <orbit.version.httpcomponents.httpclient>4.3.6.wso2v1</orbit.version.httpcomponents.httpclient>
         <fasterxml.jackson.core.orbit.version>2.9.8.wso2v1</fasterxml.jackson.core.orbit.version>
+        <version.org.wso2.orbit.javax.activation>1.1.1.wso2v1</version.org.wso2.orbit.javax.activation>
     </properties>
 
     <repositories>
