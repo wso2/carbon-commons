@@ -1974,7 +1974,7 @@
         <jdbc-pool.version>7.0.34.wso2v2</jdbc-pool.version>
         <hadoop.orbit.version>0.20.203.1.wso2v2</hadoop.orbit.version>
         <atomikos.version>3.8.0.wso2v1</atomikos.version>
-        <jboss-transaction-api_1.1_spec.version>1.0.0.Final</jboss-transaction-api_1.1_spec.version>
+        <jboss-transaction-api_1.1_spec.version>1.0.1.Final</jboss-transaction-api_1.1_spec.version>
         <xalan.version>2.7.1.wso2v1</xalan.version>
         <perf4j.version>0.9.12.wso2v1</perf4j.version>
         <highscale.version>1.1.2.wso2v1</highscale.version>
