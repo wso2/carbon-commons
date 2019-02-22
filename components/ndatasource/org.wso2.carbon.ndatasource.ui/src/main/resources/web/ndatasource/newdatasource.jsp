@@ -1319,14 +1319,14 @@ function displayPasswordField() {
             	
             	         	
                 var url = 'validateconnection-ajaxprocessor.jsp?&dsName=' + document.getElementById('dsName').value+'&driver='+driver+
-           	'&url='+encodeURIComponent(url)+'&username='+username+'&dsType=' + datasourceType+'&customDsType='+datasourceCustomType+'&dsProviderType='+dsProvider+
+           	'&url=' + encodeURIComponent(url) + '&dsType=' + datasourceType + '&customDsType=' + datasourceCustomType + '&dsProviderType=' + dsProvider +
     	'&dsclassname='+dsclassname+'&dsclassname='+dsclassname+'&dsproviderProperties='+dsproviderProperties+'&editMode='+<%=editMode%>;
     	
     		var editMode = document.getElementById("editMode").value;
 			if (editMode == null || editMode == "false") {
 				password = document.getElementById('password').value;
                 password = encodeURIComponent(password);
-				url = url + '&password='+password;
+				jQuery.post(url, ({username : username, password : password}), displayMsg);
 			} else {
 				var changePassword = "false";
 				password = document.getElementById('newPassword').value;
@@ -1334,9 +1334,8 @@ function displayPasswordField() {
 				if (document.getElementById('changePassword') != null) {
 					changePassword = document.getElementById('changePassword').checked;
 				}
-				url = url + '&changePassword='+changePassword + '&newPassword='+password;
+				jQuery.post(url, ({username : username, changePassword : changePassword, newPassword : password}), displayMsg);
 			}
-                jQuery('#connectionTestMsgDiv').load(url, displayMsg);
                 return false;
             }
         </script>
