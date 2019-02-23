@@ -1355,8 +1355,8 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.spec.javax.transaction</groupId>
-                <artifactId>jboss-transaction-api_1.1_spec</artifactId>
-                <version>${jboss-transaction-api_1.1_spec.version}</version>
+                <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+                <version>${jboss-transaction-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.atomikos.wso2</groupId>
@@ -1647,7 +1647,7 @@
 		<plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>0.8.0</version>
+                    <version>${jacoco.maven.plugin.version}</version>
                     <executions>
                         <execution>
                             <id>default-prepare-agent-by-coverage-enforcer</id>
@@ -1951,7 +1951,7 @@
         <commons-collections.wso2.version>3.2.0.wso2v1</commons-collections.wso2.version>
         <org.wso2.securevault.version>1.0.0</org.wso2.securevault.version>
         <org.testng.version>6.3.1</org.testng.version>
-        <slf4j.version>1.7.21</slf4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <slf4j.imp.pkg.version.range>[1.6.1,1.8.0)</slf4j.imp.pkg.version.range>
         <javax.xml.parsers.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.parsers.import.pkg.version>
         <javax.xml.transform.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.transform.import.pkg.version>
@@ -1977,7 +1977,7 @@
         <jdbc-pool.version>7.0.34.wso2v2</jdbc-pool.version>
         <hadoop.orbit.version>0.20.203.1.wso2v2</hadoop.orbit.version>
         <atomikos.version>3.8.0.wso2v1</atomikos.version>
-        <jboss-transaction-api_1.1_spec.version>1.0.1.Final</jboss-transaction-api_1.1_spec.version>
+        <jboss-transaction-api.version>1.1.1.Final</jboss-transaction-api.version>
         <xalan.version>2.7.1.wso2v1</xalan.version>
         <perf4j.version>0.9.12.wso2v1</perf4j.version>
         <highscale.version>1.1.2.wso2v1</highscale.version>
@@ -2000,6 +2000,7 @@
         <orbit.version.httpcomponents.httpclient>4.3.6.wso2v1</orbit.version.httpcomponents.httpclient>
         <fasterxml.jackson.core.orbit.version>2.6.1.wso2v1</fasterxml.jackson.core.orbit.version>
         <version.org.wso2.orbit.javax.activation>1.1.1.wso2v1</version.org.wso2.orbit.javax.activation>
+        <jacoco.maven.plugin.version>0.8.2</jacoco.maven.plugin.version>
     </properties>
 
     <repositories>
