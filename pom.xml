@@ -942,7 +942,7 @@
                 <version>${jcommon.wso2.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-httpclient.wso2</groupId>
+                <groupId>org.wso2.orbit.commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>${orbit.version.commons.httpclient}</version>
             </dependency>
@@ -1868,7 +1868,7 @@
         <commons-logging.version>1.1.1</commons-logging.version>
         <commons-logging.imp.pkg.version>0.0.0</commons-logging.imp.pkg.version>
         <orbit.version.commons.lang>2.6.0.wso2v1</orbit.version.commons.lang>
-        <orbit.version.commons.httpclient>3.1.0.wso2v2</orbit.version.commons.httpclient>
+        <orbit.version.commons.httpclient>3.1.0.wso2v6</orbit.version.commons.httpclient>
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-beanutils.version>1.8.3</commons-beanutils.version>
         <commons-digester.version>1.8</commons-digester.version>
