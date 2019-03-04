@@ -42,6 +42,12 @@ public class TryitRequestProcessor implements HttpGetRequestProcessor {
         String endpointParameter = request.getParameter(WSDL2FormGenerator.ENDPOINT_QUERY_PARAM);
         String operationParameter = request.getParameter(WSDL2FormGenerator.OPERATION_PARAM);
 
+        String isAuthenticated = request.getParameter("authenticated");
+        if ("false".equalsIgnoreCase(isAuthenticated)) {
+            response.setRedirect("/carbon/admin/login.jsp");
+            return;
+        }
+
         response.addHeader(HTTP.CONTENT_TYPE, "text/html; charset=utf-8");
 
         try {
