@@ -1983,7 +1983,6 @@
         <jfree.wso2.version>1.0.13.wso2v1</jfree.wso2.version>
         <version.xmlunit>1.1</version.xmlunit>
         <testng.version>6.1.1</testng.version>
-        <axis2.wso2.verison.logging>${axis2.wso2.version}</axis2.wso2.verison.logging>
         <orbit.version.commons.httpclient.logging>${orbit.version.commons.httpclient}
         </orbit.version.commons.httpclient.logging>
         <libthrift.version>0.5</libthrift.version>
