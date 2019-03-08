@@ -2001,7 +2001,7 @@
         <fasterxml.jackson.core.orbit.version>2.9.8.wso2v1</fasterxml.jackson.core.orbit.version>
         <apache.felix.scr.ds.annotations.version>1.2.4</apache.felix.scr.ds.annotations.version>
         <maven.scr.plugin.version>1.26.0</maven.scr.plugin.version>
-        <version.org.wso2.orbit.javax.activation>1.1.1.wso2v1</version.org.wso2.orbit.javax.activation>
+        <version.org.wso2.orbit.javax.activation>1.1.1.wso2v2</version.org.wso2.orbit.javax.activation>
         <jacoco.maven.plugin.version>0.8.2</jacoco.maven.plugin.version>
     </properties>
 
