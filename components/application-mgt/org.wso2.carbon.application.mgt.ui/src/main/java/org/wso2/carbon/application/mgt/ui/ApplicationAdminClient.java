@@ -81,6 +81,7 @@ public class ApplicationAdminClient {
             handleException(bundle.getString("cannot.delete.artifact"), e);
         }
     }
+
     public String[] getAllFaultyApps() throws AxisFault {
         try {
             return stub.listAllFaultyApplications();
@@ -89,7 +90,8 @@ public class ApplicationAdminClient {
         }
         return null;
     }
-    public String getFaultException(String faultyAppName) throws AxisFault{
+
+    public String getFaultException(String faultyAppName) throws AxisFault {
         try {
             return stub.getFaultException(faultyAppName);
         } catch (java.lang.Exception e) {
@@ -97,11 +99,30 @@ public class ApplicationAdminClient {
         }
         return null;
     }
-    public void deleteFaultyApp(String[] faultyAppName) throws AxisFault{
+
+    public void deleteFaultyApp(String[] faultyAppName) throws AxisFault {
         try {
             stub.deleteFaultyApplication(faultyAppName);
         } catch (java.lang.Exception e) {
             handleException(bundle.getString("cannot.get.service.data"), e);
+        }
+    }
+
+    public void redeployApplication(String appName) throws AxisFault {
+        try {
+            stub.redeployApplication(appName);
+        } catch (java.lang.Exception e) {
+            handleException(bundle.getString("cannot.get.service.data"), e);
+        }
+    }
+
+    public void redeployApplications(String[] appNames) throws AxisFault {
+        for (String appName: appNames) {
+            try {
+                stub.redeployApplication(appName);
+            } catch (java.lang.Exception e) {
+                handleException(bundle.getString("cannot.get.service.data"), e);
+            }
         }
     }
 
@@ -132,7 +153,10 @@ public class ApplicationAdminClient {
         ServletOutputStream out = response.getOutputStream();
         DataHandler dataHandler = stub.downloadCappArchive(filename);
         if (dataHandler != null) {
-            response.setHeader("Content-Disposition", "fileName=" + filename + ".car");
+            if (!filename.endsWith(".car")) {
+                filename += ".car";
+            }
+            response.setHeader("Content-Disposition", "fileName=" + filename);
             response.setContentType(dataHandler.getContentType());
             InputStream in = dataHandler.getDataSource().getInputStream();
             int nextChar;
@@ -143,9 +167,8 @@ public class ApplicationAdminClient {
             in.close();
             out.close();
         } else {
-			out.write("The requested capp archive was not found on the server".getBytes());
-		}
-
+            out.write("The requested capp archive was not found on the server".getBytes());
+        }
     }
 
 }
