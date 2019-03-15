@@ -117,12 +117,12 @@ public class ApplicationAdminClient {
     }
 
     public void redeployApplications(String[] appNames) throws AxisFault {
-        try {
-            for (String appName: appNames) {
+        for (String appName: appNames) {
+            try {
                 stub.redeployApplication(appName);
+            } catch (java.lang.Exception e) {
+                handleException(bundle.getString("cannot.get.service.data"), e);
             }
-        } catch (java.lang.Exception e) {
-            handleException(bundle.getString("cannot.get.service.data"), e);
         }
     }
 
