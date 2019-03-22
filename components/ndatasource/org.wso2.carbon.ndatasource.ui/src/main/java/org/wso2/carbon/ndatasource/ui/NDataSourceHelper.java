@@ -36,6 +36,7 @@ import org.wso2.carbon.ndatasource.ui.stub.core.xsd.JNDIConfig_EnvEntry;
 import org.wso2.carbon.utils.xml.XMLPrettyPrinter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
@@ -504,8 +505,11 @@ public class NDataSourceHelper {
 			if (element == null) {
 				return null;
 			}
-		    Transformer transformer = TransformerFactory.newInstance().newTransformer();
-		    StringWriter buff = new StringWriter();
+			TransformerFactory factory = TransformerFactory.newInstance();
+			factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			Transformer transformer = factory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			StringWriter buff = new StringWriter();
 		    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
 		    transformer.transform(new DOMSource(element), new StreamResult(buff));
 		    return buff.toString();
