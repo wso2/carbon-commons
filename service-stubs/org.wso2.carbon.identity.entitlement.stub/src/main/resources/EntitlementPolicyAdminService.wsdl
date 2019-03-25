@@ -53,21 +53,23 @@
             <xs:element name="publishToPDP">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="policyIds" nillable="true" type="xs:string"></xs:element>
-                        <xs:element minOccurs="0" name="version" nillable="true" type="xs:string"></xs:element>
-                        <xs:element minOccurs="0" name="action" nillable="true" type="xs:string"></xs:element>
-                        <xs:element minOccurs="0" name="order" type="xs:int"></xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="policyIds" nillable="true" type="xs:string"/>
+		<xs:element minOccurs="0" name="action" nillable="true" type="xs:string"/>
+		<xs:element minOccurs="0" name="version" nillable="true" type="xs:string"/>
+		<xs:element minOccurs="0" name="enabled" type="xs:boolean"/>
+		<xs:element minOccurs="0" name="order" type="xs:int"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="publishPolicies">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="policyIds" nillable="true" type="xs:string"></xs:element>
-                        <xs:element minOccurs="0" name="version" nillable="true" type="xs:string"></xs:element>
-                        <xs:element minOccurs="0" name="action" nillable="true" type="xs:string"></xs:element>
-                        <xs:element minOccurs="0" name="order" type="xs:int"></xs:element>
-                        <xs:element maxOccurs="unbounded" minOccurs="0" name="subscriberIds" nillable="true" type="xs:string"></xs:element>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="policyIds" nillable="true" type="xs:string"/>
+		<xs:element maxOccurs="unbounded" minOccurs="0" name="subscriberIds" nillable="true" type="xs:string"/>
+		<xs:element minOccurs="0" name="action" nillable="true" type="xs:string"/>
+		<xs:element minOccurs="0" name="version" nillable="true" type="xs:string"/>
+		<xs:element minOccurs="0" name="enabled" type="xs:boolean"/>
+		<xs:element minOccurs="0" name="order" type="xs:int"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
