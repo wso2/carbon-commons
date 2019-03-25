@@ -46,6 +46,7 @@ import java.util.*;
 public class ApplicationAdmin extends AbstractAdmin {
 
     private static final Log log = LogFactory.getLog(ApplicationAdmin.class);
+    private static final String DS_TYPE = "service/dataservice";
 
     /**
      * Give the names of all applications in the system
@@ -234,6 +235,20 @@ public class ApplicationAdmin extends AbstractAdmin {
     }
 
     /**
+     * Mark an application to be redeployed again in the next deployment pass.
+     *
+     * @param appPName - input app name
+     * @throws Exception - error on redeploying app file
+     */
+    public void redeployApplication(String appName) throws Exception {
+        String filePath = this.getCappFilepath(appName);
+
+        // Reset the last modified time to trigger a redeployment of the file
+        File cappFile = new File(filePath);
+        cappFile.setLastModified(System.currentTimeMillis());
+    }
+
+    /**
      * Gives an ApplicationMetadata object with axis2 artifacts deployed through the given app.
      *
      * @param appName - input app name
@@ -291,9 +306,7 @@ public class ApplicationAdmin extends AbstractAdmin {
             String type = artifact.getType();
             String instanceName = artifact.getRuntimeObjectName();
 
-            if (DefaultAppDeployer.AAR_TYPE.equals(type) ||
-                    DefaultAppDeployer.DS_TYPE.equals(type)) {
-
+            if (DefaultAppDeployer.AAR_TYPE.equals(type) || DS_TYPE.equals(type)) {
                 AxisServiceGroup sg;
                 if (instanceName == null) {
                     sg = findServiceGroupForArtifact(artifact);
@@ -478,7 +491,7 @@ public class ApplicationAdmin extends AbstractAdmin {
         if (serviceType.equals("axis2")) {
             artifactType = DefaultAppDeployer.AAR_TYPE;
         } else if (serviceType.equals("data_service")) {
-            artifactType = DefaultAppDeployer.DS_TYPE;
+            artifactType = DS_TYPE;
         }
         return artifactType;
     }
@@ -503,22 +516,51 @@ public class ApplicationAdmin extends AbstractAdmin {
      * @throws Exception for invalid scenarios 
      */
     public DataHandler downloadCappArchive(String fileName) throws Exception {
-        CarbonApplication currentApp = null;
+        String filePath = this.getCappFilepath(fileName);
 
-        // Iterate all applications for this tenant and find the application to delete
-        String tenantId = AppDeployerUtils.getTenantIdString(getAxisConfig());
-        ArrayList<CarbonApplication> appList =
-                AppManagementServiceComponent.getAppManager().getCarbonApps(tenantId);
-        for (CarbonApplication carbonApp : appList) {
-            if (fileName.equals(carbonApp.getAppNameWithVersion())) {
-                currentApp = carbonApp;
-            }
-        }
-
-        FileDataSource datasource = new FileDataSource(new File(currentApp.getAppFilePath()));
+        // Get a handle to the Capp file
+        FileDataSource datasource = new FileDataSource(new File(filePath));
         DataHandler handler = new DataHandler(datasource);
 
         return handler;
+    }
+
+    private String getCappFilepath(String appName) throws Exception {
+        String filePath = null;
+        String tenantId = AppDeployerUtils.getTenantIdString(getAxisConfig());
+
+        // Validate if there's a filename
+        if (appName == null) {
+            handleException("The app name must be specified (the value was null)");
+        }
+
+        // Iterate all applications for this tenant and find the application to download
+        ArrayList<CarbonApplication> appList =
+                AppManagementServiceComponent.getAppManager().getCarbonApps(tenantId);
+        for (CarbonApplication carbonApp : appList) {
+            if (appName.equals(carbonApp.getAppNameWithVersion())) {
+                filePath = carbonApp.getAppFilePath();
+                break;
+            }
+        }
+
+        // Application not found in standard carbon apps, check if the app is faulty
+        HashMap<String, Exception> faultyCarbonAppsList
+                = AppManagementServiceComponent.getAppManager().getFaultyCarbonApps(tenantId);
+        for (String faultyCarbonApp : faultyCarbonAppsList.keySet()) {
+            String faultyFileName = faultyCarbonApp.substring(faultyCarbonApp.lastIndexOf('/') + 1);
+            if (appName.equals(faultyFileName) || appName.equals(faultyFileName.substring(0, faultyFileName.lastIndexOf('_')))) {
+                filePath = faultyCarbonApp;
+                break;
+            }
+        }
+
+        // Check if the app has been found
+        if (filePath == null) {
+            handleException("The application '" + appName + "' cannot be found");
+        }
+
+        return filePath;
     }
 
     private void handleException(String msg) throws CarbonException {

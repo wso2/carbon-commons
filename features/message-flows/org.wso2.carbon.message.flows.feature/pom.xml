@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
     	<artifactId>message-flows-feature</artifactId>
-        <version>4.6.47-SNAPSHOT</version>
+        <version>4.6.57-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
