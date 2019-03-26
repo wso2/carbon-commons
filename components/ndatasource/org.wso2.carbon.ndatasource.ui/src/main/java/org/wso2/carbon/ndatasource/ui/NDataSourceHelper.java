@@ -43,11 +43,13 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
 import java.util.*;
@@ -499,25 +501,30 @@ public class NDataSourceHelper {
                         }
                 }
 	}
-	
-	public static String elementToString(Element element) {
-		try {
-			if (element == null) {
-				return null;
-			}
-			TransformerFactory factory = TransformerFactory.newInstance();
-			factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-			Transformer transformer = factory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			StringWriter buff = new StringWriter();
-		    transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		    transformer.transform(new DOMSource(element), new StreamResult(buff));
-		    return buff.toString();
-		} catch (Exception e) {
-			log.error("Error while convering element to string: " + e.getMessage(), e);
-			return null;
-		}
-	}
+
+    public static String elementToString(Element element) {
+        try {
+            if (element == null) {
+                return null;
+            }
+            TransformerFactory factory = TransformerFactory.newInstance();
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            Transformer transformer = factory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            StringWriter buff = new StringWriter();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.transform(new DOMSource(element), new StreamResult(buff));
+            String returnValue = buff.toString();
+            buff.close();
+            return returnValue;
+        } catch (TransformerException e) {
+            log.error("Error while converting element to string: " + e.getMessage(), e);
+            return null;
+        } catch (IOException e) {
+            log.error("Error while closing StringWriter " + e.getMessage(), e);
+            return null;
+        }
+    }
 	
 	private static List<Element> getChildElements(Element element) {
     	List<Element> childEls = new ArrayList<Element>();
