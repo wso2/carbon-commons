@@ -1893,7 +1893,7 @@
         <poi.wso2.version>3.17.0.wso2v1</poi.wso2.version>
 
         <!-- Hector -->
-        <hector.wso2.version>1.1.4.wso2v1</hector.wso2.version>
+        <hector.wso2.version>1.1.4.wso2v2</hector.wso2.version>
 
         <log4j.version>1.2.13</log4j.version>
 
