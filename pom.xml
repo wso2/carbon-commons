@@ -215,9 +215,9 @@
             </dependency>
 
             <dependency>
-                <groupId>commons-codec.wso2</groupId>
+                <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>${orbit.version.commons.codec}</version>
+                <version>${commons-codec.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-logging</groupId>
@@ -1828,7 +1828,7 @@
         <orbit.version.axis2>1.6.1-wso2v34</orbit.version.axis2>
         <neethi.osgi.version>2.0.4.wso2v5</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
-        <orbit.version.axis2.transports>2.0.0-wso2v32</orbit.version.axis2.transports>
+        <orbit.version.axis2.transports>2.0.0-wso2v33</orbit.version.axis2.transports>
 
         <!-- Xerces Version -->
         <xercesImpl.version>2.11.0</xercesImpl.version>
@@ -1866,7 +1866,6 @@
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-beanutils.version>1.8.3</commons-beanutils.version>
         <commons-digester.version>1.8</commons-digester.version>
-        <orbit.version.commons.codec>1.4.0.wso2v1</orbit.version.commons.codec>
         <orbit.version.backport.util>3.1.0.wso2v1</orbit.version.backport.util>
         <version.commons.lang3>3.1</version.commons.lang3>
         <commons-httpclient.version>3.1</commons-httpclient.version>
@@ -1882,7 +1881,7 @@
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <commons-fileupload.version>1.1.1</commons-fileupload.version>
         <commons-io.wso2.version>2.0.0.wso2v1</commons-io.wso2.version>
-        <commons-codec.version>1.4.0.wso2v1</commons-codec.version>
+        <commons-codec.version>1.12</commons-codec.version>
         <commons.digester.wso2.version>1.8.1.wso2v1</commons.digester.wso2.version>
         <commons-fileupload.wso2.version>1.2.2.wso2v1</commons-fileupload.wso2.version>
         <commons-lang.wso2.version>2.6.0.wso2v1</commons-lang.wso2.version>
@@ -1934,7 +1933,7 @@
         <opensaml2.wso2.version>2.4.1.wso2v1</opensaml2.wso2.version>
 
 
-        <com.google.code.gson.version>2.7</com.google.code.gson.version>
+        <com.google.code.gson.version>2.8.5</com.google.code.gson.version>
         <org.eclipse.osgi.version>3.9.1.v20130814-1242</org.eclipse.osgi.version>
         <version.equinox.osgi.services>3.3.100.v20130513-1956</version.equinox.osgi.services>
         <amqp.version>3.0.3.wso2v1</amqp.version>
