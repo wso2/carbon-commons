@@ -1381,11 +1381,6 @@
                 <version>${hector.wso2.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.google.guava.wso2</groupId>
-                <artifactId>guava</artifactId>
-                <version>${google.guava.wso2.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.ntask.common</artifactId>
                 <version>${carbon.commons.version}</version>
@@ -1966,8 +1961,7 @@
         <orbit.version.wsdl4j>1.6.2.wso2v4</orbit.version.wsdl4j>
         <quartz2.wso2.version>2.1.1.wso2v1</quartz2.wso2.version>
         <orbit.version.geronimo-jms_1.1_spec>1.1.0.wso2v1</orbit.version.geronimo-jms_1.1_spec>
-        <google.guava.wso2.version>12.0.0.wso2v1</google.guava.wso2.version>
-        <google.guava.version>19.0</google.guava.version>
+        <google.guava.version>23.0</google.guava.version>
         <hadoop.version>0.20.203.1-wso2v2</hadoop.version>
         <jdbc-pool.version>7.0.34.wso2v2</jdbc-pool.version>
         <hadoop.orbit.version>0.20.203.1.wso2v2</hadoop.orbit.version>
