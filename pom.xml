@@ -1522,7 +1522,7 @@
             <dependency>
                 <groupId>org.wso2.orbit.com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>${fasterxml.jackson.databind.version}</version>
+                <version>${fasterxml.jackson.core.orbit.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.orbit.org.owasp.encoder</groupId>
@@ -1639,7 +1639,7 @@
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>1.8</version>
                 </plugin>
-		<plugin>
+		        <plugin>
                     <groupId>org.jacoco</groupId>
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>0.8.0</version>
@@ -1993,8 +1993,7 @@
         <highscale.version>1.0.wso2v1</highscale.version>
         <orbit.version.distruptor>2.10.4-wso2v2</orbit.version.distruptor>
         <orbit.version.httpcomponents.httpclient>4.3.6.wso2v1</orbit.version.httpcomponents.httpclient>
-        <fasterxml.jackson.core.orbit.version>2.6.1.wso2v1</fasterxml.jackson.core.orbit.version>
-        <fasterxml.jackson.databind.version>2.6.1.wso2v3</fasterxml.jackson.databind.version>
+        <fasterxml.jackson.core.orbit.version>2.9.8.wso2v1</fasterxml.jackson.core.orbit.version>
     </properties>
 
     <repositories>
