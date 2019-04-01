@@ -42,7 +42,7 @@
 
 
        <dependency>
-            <groupId>com.google.guava.wso2</groupId>
+            <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
           <!--Hector-->
@@ -225,7 +225,7 @@
 				<bundleDef>org.wso2.carbon:org.wso2.carbon.analytics.hive</bundleDef>
                                 <bundleDef>antlr.wso2:antlr</bundleDef>
                                 <bundleDef>org.antlr.wso2:antlr-runtime</bundleDef>
-                                <bundleDef>com.google.guava.wso2:guava</bundleDef>
+                                <bundleDef>com.google.guava:guava</bundleDef>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.databridge.agent.thrift</bundleDef>
 				 <importBundleDef>org.apache.hadoop.wso2:hadoop-core</importBundleDef>
                             </bundles>
