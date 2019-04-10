@@ -942,11 +942,6 @@
                 <version>${jcommon.wso2.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.orbit.commons-httpclient</groupId>
-                <artifactId>commons-httpclient</artifactId>
-                <version>${orbit.version.commons.httpclient}</version>
-            </dependency>
-            <dependency>
                 <groupId>jasper-jdt.wso2</groupId>
                 <artifactId>jasper-jdt</artifactId>
                 <version>${jasper.jdt.wso2.version}</version>
@@ -1790,7 +1785,7 @@
 
     <properties>
         <!-- Carbon kernel version -->
-        <carbon.kernel.version>4.4.37-SNAPSHOT</carbon.kernel.version>
+        <carbon.kernel.version>4.4.39-SNAPSHOT</carbon.kernel.version>
         <carbon.kernel.imp.pkg.version>[4.4.0, 5.0.0)</carbon.kernel.imp.pkg.version>
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
 
@@ -1827,13 +1822,13 @@
         <orbit.version.axiom>1.2.11.wso2v13</orbit.version.axiom>
 
         <!-- Axis2 Version -->
-        <axis2.wso2.version>1.6.1-wso2v34</axis2.wso2.version>
+        <axis2.wso2.version>1.6.1-wso2v35-SNAPSHOT</axis2.wso2.version>
         <axis2.osgi.version.range>[1.6.1, 2.0.0)</axis2.osgi.version.range>
         <axis2.orbit.imp.pkg.version>[1.6, 2.0)</axis2.orbit.imp.pkg.version>
-        <orbit.version.axis2>1.6.1-wso2v34</orbit.version.axis2>
+        <orbit.version.axis2>1.6.1-wso2v35-SNAPSHOT</orbit.version.axis2>
         <neethi.osgi.version>2.0.4.wso2v5</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
-        <orbit.version.axis2.transports>2.0.0-wso2v33</orbit.version.axis2.transports>
+        <orbit.version.axis2.transports>2.0.0-wso2v34-SNAPSHOT</orbit.version.axis2.transports>
 
         <!-- Xerces Version -->
         <xercesImpl.version>2.11.0</xercesImpl.version>
@@ -1868,6 +1863,7 @@
         <orbit.version.commons.lang>2.6.0.wso2v1</orbit.version.commons.lang>
         <orbit.version.commons.httpclient>3.1.0.wso2v6</orbit.version.commons.httpclient>
         <commons-collections.version>3.2.1</commons-collections.version>
+        <orbit.version.commons.codec>1.4.0.wso2v1</orbit.version.commons.codec>
         <commons-beanutils.version>1.8.3</commons-beanutils.version>
         <commons-digester.version>1.8</commons-digester.version>
         <orbit.version.backport.util>3.1.0.wso2v1</orbit.version.backport.util>
