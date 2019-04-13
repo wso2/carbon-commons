@@ -42,7 +42,7 @@
 
 
        <dependency>
-            <groupId>com.google.guava.wso2</groupId>
+            <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
           <!--Hector-->
@@ -225,7 +225,7 @@
 				<bundleDef>org.wso2.carbon:org.wso2.carbon.analytics.hive</bundleDef>
                                 <bundleDef>antlr.wso2:antlr</bundleDef>
                                 <bundleDef>org.antlr.wso2:antlr-runtime</bundleDef>
-                                <bundleDef>com.google.guava.wso2:guava</bundleDef>
+                                <bundleDef>com.google.guava:guava</bundleDef>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.databridge.agent.thrift</bundleDef>
 				 <importBundleDef>org.apache.hadoop.wso2:hadoop-core</importBundleDef>
                             </bundles>
@@ -240,7 +240,7 @@
     </build>
     <properties>
 	<cassandra.version>1.1.3.wso2v2</cassandra.version>
-	<libthrift.patch.version>0.7.0.wso2v2</libthrift.patch.version>
+	<libthrift.patch.version>0.12.0.wso2v1</libthrift.patch.version>
 	<antlr.orbit.version>3.0.1.wso2v1</antlr.orbit.version>
 	<databridge.agent.thrift.version>${carbon.commons.version}</databridge.agent.thrift.version>
        <hadoop.orbit.version>0.20.203.1.wso2v2</hadoop.orbit.version>

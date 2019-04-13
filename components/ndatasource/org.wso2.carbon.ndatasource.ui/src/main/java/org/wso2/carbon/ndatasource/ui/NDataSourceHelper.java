@@ -19,6 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.xerces.impl.Constants;
 import org.apache.xerces.util.SecurityManager;
+import org.owasp.encoder.Encode;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -152,7 +153,7 @@ public class NDataSourceHelper {
 				rdbmsDSXMLConfig.setDataSourceClassName(dsclassname);
 				rdbmsDSXMLConfig.setDataSourceProps(dataSourceProps);
 			} else if ("default".equals(dsProvider)) {
-				String driver = sanitizeInput(request.getParameter("driver"));
+				String driver = Encode.forHtmlContent(request.getParameter("driver"));
 				if (driver == null || "".equals(driver)) {
 					handleException(bundle.getString("ds.driver.cannotfound.msg"));
 				}
