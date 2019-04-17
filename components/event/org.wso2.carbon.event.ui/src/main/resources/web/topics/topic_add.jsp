@@ -8,6 +8,7 @@
 <%@ page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.regex.Pattern" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%@ taglib uri="http://wso2.org/projects/carbon/taglibs/carbontags.jar" prefix="carbon" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -201,7 +202,7 @@
             <tr>
                 <td class="leftCol-big"><fmt:message key="topic"/><span
                         class="required">*</span></td>
-                <td><input type="text" id="topic" value=<%=topicName%>></td>
+                <td><input type="text" id="topic" value=<%=Encode.forHtml(topicName)%>></td>
             </tr>
             </tbody>
         </table>
@@ -219,7 +220,7 @@
             <tr>
                 <td class="leftCol-big"><fmt:message key="search.label"/></td>
                 <td>
-                    <input type="text" id="search" value="<%=searchTerm%>"/>
+                    <input type="text" id="search" value="<%=Encode.forHtml(searchTerm)%>"/>
                     <input id="searchButton" class="button" type="button" onclick="searchRole()" value="Search"/>
                 </td>
             </tr>
@@ -232,7 +233,7 @@
                                           page="topic_add.jsp" pageNumberParameterName="pageNumber"
                                           resourceBundle="org.wso2.carbon.event.ui.i18n.Resources"
                                           prevKey="prev" nextKey="next"
-                                          parameters="<%=concatenatedParams%>"/>
+                                          parameters="<%=Encode.forHtml(concatenatedParams)%>"/>
                     </div>
                     <table class="styledLeft" style="width:100%" id="permissionsTable">
                         <thead>
@@ -282,7 +283,7 @@
                                           page="topic_add.jsp" pageNumberParameterName="pageNumber"
                                           resourceBundle="org.wso2.carbon.event.ui.i18n.Resources"
                                           prevKey="prev" nextKey="next"
-                                          parameters="<%=concatenatedParams%>"/>
+                                          parameters="<%=Encode.forHtml(concatenatedParams)%>"/>
                     </div>
                 </td>
             </tr>
