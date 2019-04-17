@@ -1780,7 +1780,7 @@
 
     <properties>
         <!-- Carbon kernel version -->
-        <carbon.kernel.version>4.4.38</carbon.kernel.version>
+        <carbon.kernel.version>4.4.40</carbon.kernel.version>
         <carbon.kernel.imp.pkg.version>[4.4.0, 5.0.0)</carbon.kernel.imp.pkg.version>
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
 
@@ -1820,10 +1820,10 @@
         <axis2.wso2.version>1.6.1-wso2v34</axis2.wso2.version>
         <axis2.osgi.version.range>[1.6.1, 2.0.0)</axis2.osgi.version.range>
         <axis2.orbit.imp.pkg.version>[1.6, 2.0)</axis2.orbit.imp.pkg.version>
-        <orbit.version.axis2>1.6.1-wso2v34</orbit.version.axis2>
+        <orbit.version.axis2>1.6.1-wso2v35</orbit.version.axis2>
         <neethi.osgi.version>2.0.4.wso2v5</neethi.osgi.version>
         <neethi.osgi.version.range>[2.0.4.wso2v4, 3.1.0)</neethi.osgi.version.range>
-        <orbit.version.axis2.transports>2.0.0-wso2v33</orbit.version.axis2.transports>
+        <orbit.version.axis2.transports>2.0.0-wso2v34</orbit.version.axis2.transports>
 
         <!-- Xerces Version -->
         <xercesImpl.version>2.11.0</xercesImpl.version>
@@ -1838,8 +1838,8 @@
 
         <slf4j.wso2.version>1.5.10.wso2v1</slf4j.wso2.version>
 
-        <libthrift.wso2.version>0.12.0.wso2v1</libthrift.wso2.version>
-        <libthrift.wso2.imp.pkg.version.range>[0.12.0.wso2v1,1.0.0]</libthrift.wso2.imp.pkg.version.range>
+        <libthrift.wso2.version>${libthrift.version}</libthrift.wso2.version>
+        <libthrift.wso2.imp.pkg.version.range>[0.9.2.wso2v1,1.0.0]</libthrift.wso2.imp.pkg.version.range>
 
         <!-- JSON Version -->
         <orbit.version.json>2.0.0.wso2v1</orbit.version.json>
@@ -1979,7 +1979,7 @@
         <axis2.wso2.verison.logging>${axis2.wso2.version}</axis2.wso2.verison.logging>
         <orbit.version.commons.httpclient.logging>${orbit.version.commons.httpclient}
         </orbit.version.commons.httpclient.logging>
-        <libthrift.version>0.5</libthrift.version>
+        <libthrift.version>0.9.2.wso2v1</libthrift.version>
         <hector-core.version>1.1-0</hector-core.version>
         <perf4j.version>0.9.12.wso2v1</perf4j.version>
         <highscale.version>1.0.wso2v1</highscale.version>
