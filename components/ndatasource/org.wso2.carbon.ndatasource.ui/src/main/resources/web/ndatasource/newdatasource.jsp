@@ -572,9 +572,10 @@ function displayPasswordField() {
                         <%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%></option>
                    	<% } %>
          </select>
-         <input type="hidden" id="dsProviderType" name="dsProviderType" value="<%=dsProvider %>" />
+         <input type="hidden" id="dsProviderType" name="dsProviderType" value="<%=Encode.forHtml(dsProvider)%>" />
          <input type="hidden" id="dsproviderProperties" name="dsproviderProperties" class="longInput"/>
-         <input type="hidden" id="dsproviderPropertiesHidden" name="dsproviderPropertiesHidden" class="longInput" value="<%=dsproviderPropertiesEditMode %>"/>
+         <input type="hidden" id="dsproviderPropertiesHidden" name="dsproviderPropertiesHidden" class="longInput"
+				value="<%=Encode.forHtml(dsproviderPropertiesEditMode)%>"/>
     </td>
 </tr>
 <% if ("default".equals(dsProvider)) { %>
@@ -792,7 +793,8 @@ function displayPasswordField() {
     <td style="width:170px;"><fmt:message key="jndi.name"/></td>
     <td align="left">
     	<input id="jndiname" name="jndiname" class="longInput" value="<%=Encode.forHtml(jndiConfigName) %>" />
-    	<input type="hidden" id="jndiPropertiesHidden" name="jndiPropertiesHidden" class="longInput" value="<%=jndiPropertiesEditMode %>"/>
+    	<input type="hidden" id="jndiPropertiesHidden" name="jndiPropertiesHidden" class="longInput"
+			   value="<%=Encode.forHtml(jndiPropertiesEditMode) %>"/>
     </td>
 </tr>
 <tr>
