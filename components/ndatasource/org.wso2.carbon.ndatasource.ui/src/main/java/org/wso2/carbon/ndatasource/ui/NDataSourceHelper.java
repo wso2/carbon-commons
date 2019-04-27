@@ -503,7 +503,7 @@ public class NDataSourceHelper {
 	}
 
     public static String elementToString(Element element) {
-        try {
+        try (StringWriter buff = new StringWriter()) {
             if (element == null) {
                 return null;
             }
@@ -511,12 +511,9 @@ public class NDataSourceHelper {
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
             Transformer transformer = factory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            StringWriter buff = new StringWriter();
             transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
             transformer.transform(new DOMSource(element), new StreamResult(buff));
-            String returnValue = buff.toString();
-            buff.close();
-            return returnValue;
+            return buff.toString();
         } catch (TransformerException e) {
             log.error("Error while converting element to string: " + e.getMessage(), e);
             return null;
