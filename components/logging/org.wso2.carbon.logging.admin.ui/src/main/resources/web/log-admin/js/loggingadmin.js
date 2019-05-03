@@ -1,3 +1,9 @@
+//Checks the browser support for the localstorage functions
+var has_localStorage_support = !!window.localStorage
+    && typeof localStorage.getItem === 'function'
+    && typeof localStorage.setItem === 'function'
+    && typeof localStorage.removeItem === 'function';
+
 function getSelectedValue(comboBoxName) {
     var comboBox = document.getElementById(comboBoxName);
     return comboBox[comboBox.selectedIndex].value;
@@ -131,9 +137,10 @@ function syslogUpdateConfig(){
 function globalLog4jUpdateConfig(){
     sessionAwareFunction(function() {
         jQuery.noConflict();
-        var persist = document.getElementById('persistLogId').value;
+        var persist = document.getElementById('persistLogId').checked;
         var logLevel = getSelectedValue("globalLogLevel");
         var logPattern = jQuery.trim(document.getElementById('globalLogPattern').value);
+        setPersistState(persist)
 
         jQuery.post('updateLog4jGlobal-ajaxprocessor.jsp',
             {logLevel: logLevel,
@@ -167,9 +174,34 @@ function showConfirmationDialogBox(message, yesCallback){
 function loadPage() {
     sessionAwareFunction(function() {
         jQuery.noConflict()
-        jQuery("#globlaLog4jConfig").load('globalLogConfig-ajaxprocessor.jsp');
+        jQuery("#globlaLog4jConfig").load('globalLogConfig-ajaxprocessor.jsp', loadPersistState);
         jQuery("#syslogConfig").load('syslogConfig-ajaxprocessor.jsp');
         jQuery("#appenderSettings").load('appenders-ajaxprocessor.jsp');
         jQuery("#loggers").load('loggers-ajaxprocessor.jsp');
     });
 }
+
+/**
+* Loads the state of persist configuration checkbox
+*
+**/
+function loadPersistState() {
+    if (has_localStorage_support) {
+      jQuery.noConflict();
+      var persist = localStorage.getItem("persist");
+      if (persist != null) {
+        jQuery("#persistLogId").prop("checked", persist == "true" ? true : false);
+      }
+    }
+}
+
+/**
+* Stores the state of persist configuration checkbox
+*
+**/
+function setPersistState(state) {
+    if (has_localStorage_support) {
+      localStorage.setItem("persist", state);
+    }
+}
+
