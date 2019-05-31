@@ -572,7 +572,7 @@ function displayPasswordField() {
                         <%=NDataSourceClientConstants.RDBMS_EXTERNAL_DATASOURCE_PROVIDER%></option>
                    	<% } %>
          </select>
-         <input type="hidden" id="dsProviderType" name="dsProviderType" value="<%=dsProvider %>" />
+         <input type="hidden" id="dsProviderType" name="dsProviderType" value="<%=Encode.forJavaScript(dsProvider)%>"/>
          <input type="hidden" id="dsproviderProperties" name="dsproviderProperties" class="longInput"/>
          <input type="hidden" id="dsproviderPropertiesHidden" name="dsproviderPropertiesHidden" class="longInput" value="<%=dsproviderPropertiesEditMode %>"/>
     </td>
