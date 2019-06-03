@@ -33,6 +33,7 @@ import org.wso2.carbon.qpid.stub.service.QpidAdminServiceStub;
 import org.wso2.carbon.utils.NetworkUtils;
 import org.wso2.securevault.SecretResolver;
 import org.wso2.securevault.SecretResolverFactory;
+import org.wso2.securevault.commons.MiscellaneousUtil;
 
 import javax.xml.namespace.QName;
 import java.net.SocketException;
@@ -78,11 +79,12 @@ public class QpidJMSDeliveryManagerFactory implements DeliveryManagerFactory {
             // resolve password if it is secured with secure vault
             SecretResolver secretResolver = SecretResolverFactory.create(remoteQpidAdminService, false);
             if (secretResolver != null && secretResolver.isInitialized()) {
-                if (secretResolver.isTokenProtected(EB_REMOTE_MESSAGE_BROKER_PASSWORD_ALIAS)) {
-                    password = secretResolver.resolve(EB_REMOTE_MESSAGE_BROKER_PASSWORD_ALIAS);
-                } else {
-                     throw new EventBrokerConfigurationException("Can not resolve password for " +
-                                                                 "remote message broker from secret resolver.");
+                if (password != null) {
+                    if (secretResolver.isTokenProtected(EB_REMOTE_MESSAGE_BROKER_PASSWORD_ALIAS)) {
+                        password = secretResolver.resolve(EB_REMOTE_MESSAGE_BROKER_PASSWORD_ALIAS);
+                    } else {
+                        password = MiscellaneousUtil.resolve(password, secretResolver);
+                    }
                 }
             }
 
