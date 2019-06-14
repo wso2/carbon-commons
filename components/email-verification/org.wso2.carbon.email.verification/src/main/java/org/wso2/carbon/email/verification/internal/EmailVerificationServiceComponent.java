@@ -15,30 +15,34 @@
  */
 package org.wso2.carbon.email.verification.internal;
 
+import org.apache.axis2.context.ConfigurationContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.axis2.context.ConfigurationContext;
-import org.osgi.service.component.ComponentContext;
 import org.osgi.framework.BundleContext;
-import org.wso2.carbon.registry.core.service.RegistryService;
-import org.wso2.carbon.email.verification.util.Util;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.email.verification.util.EmailVerifcationSubscriber;
+import org.wso2.carbon.email.verification.util.Util;
+import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
-/**
- * @scr.component name="org.wso2.carbon.email.verification.internal.EmailVerificationServiceComponent"
- * immediate="true"
- * @scr.reference name="registry.service"
- * interface="org.wso2.carbon.registry.core.service.RegistryService" cardinality="1..1"
- * policy="dynamic" bind="setRegistryService" unbind="unsetRegistryService"
- * @scr.reference name="configuration.context.service"
- * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="1..1"
- * policy="dynamic" bind="setConfigurationContextService" unbind="unsetConfigurationContextService"
- */
+@Component(
+        name = "org.wso2.carbon.email.verification.internal.EmailVerificationServiceComponent",
+        immediate = true)
 public class EmailVerificationServiceComponent {
+
     private static Log log = LogFactory.getLog(EmailVerificationServiceComponent.class);
+
     private static ConfigurationContextService configurationContextService;
+
+    @Activate
     protected void activate(ComponentContext context) {
+
         log.debug("******* Email Verification bundle is activated ******* ");
         try {
             start(context.getBundleContext());
@@ -47,34 +51,56 @@ public class EmailVerificationServiceComponent {
             log.debug("******* Failed to activate Email Verification bundle bundle ******* ");
         }
     }
-    public void start(BundleContext context){
+
+    public void start(BundleContext context) {
         // Registering the Emailverification Service as an OSGi Service
         EmailVerifcationSubscriber verifier = new EmailVerifcationSubscriber();
         context.registerService(EmailVerifcationSubscriber.class.getName(), verifier, null);
     }
+
+    @Deactivate
     protected void deactivate(ComponentContext context) {
+
         log.debug("******* Email Verification bundle is deactivated ******* ");
     }
 
+    @Reference(
+            name = "registry.service",
+            service = org.wso2.carbon.registry.core.service.RegistryService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRegistryService")
     protected void setRegistryService(RegistryService registryService) {
+
         Util.setRegistryService(registryService);
     }
 
     protected void unsetRegistryService(RegistryService registryService) {
+
         Util.setRegistryService(null);
     }
 
-    protected void setConfigurationContextService(ConfigurationContextService configurationContextService){
+    @Reference(
+            name = "configuration.context.service",
+            service = org.wso2.carbon.utils.ConfigurationContextService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetConfigurationContextService")
+    protected void setConfigurationContextService(ConfigurationContextService configurationContextService) {
+
         log.debug("Recieving ConfigurationContext Service");
         this.configurationContextService = configurationContextService;
-
     }
-    protected void unsetConfigurationContextService(ConfigurationContextService configurationContextService){
+
+    protected void unsetConfigurationContextService(ConfigurationContextService configurationContextService) {
+
         log.debug("Unsetting ConfigurationContext Service");
         this.configurationContextService = null;
     }
-    public static ConfigurationContext getConfigurationContext(){
-        if(configurationContextService.getServerConfigContext() ==  null){
+
+    public static ConfigurationContext getConfigurationContext() {
+
+        if (configurationContextService.getServerConfigContext() == null) {
             return null;
         }
         return configurationContextService.getServerConfigContext();

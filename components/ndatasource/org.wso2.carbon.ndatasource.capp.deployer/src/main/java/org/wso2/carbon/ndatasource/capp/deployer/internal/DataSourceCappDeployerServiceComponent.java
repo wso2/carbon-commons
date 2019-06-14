@@ -18,20 +18,24 @@ package org.wso2.carbon.ndatasource.capp.deployer.internal;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.wso2.carbon.application.deployer.handler.AppDeploymentHandler;
 import org.wso2.carbon.ndatasource.capp.deployer.DataSourceCappDeployer;
 
-import org.wso2.carbon.application.deployer.handler.AppDeploymentHandler;
-
-/**
- * @scr.component name="org.wso2.carbon.ndatasource.capp.deployer" immediate="true"
- */
+@Component(
+        name = "org.wso2.carbon.ndatasource.capp.deployer",
+        immediate = true)
 public class DataSourceCappDeployerServiceComponent {
 
     private static final Log log = LogFactory.getLog(DataSourceCappDeployerServiceComponent.class);
 
     private ComponentContext ctx;
 
+    @Activate
     protected synchronized void activate(ComponentContext ctx) {
+
         this.ctx = ctx;
         if (log.isDebugEnabled()) {
             log.debug("Data Source Capp deployer activated");
@@ -39,18 +43,18 @@ public class DataSourceCappDeployerServiceComponent {
         if (log.isDebugEnabled()) {
             log.debug("Data Source Capp deployer activated");
         }
-
         try {
-            //register data source deployer as an OSGi service
+            // register data source deployer as an OSGi service
             DataSourceCappDeployer dataSourceDeployer = new DataSourceCappDeployer();
-            this.ctx.getBundleContext().registerService(
-                    AppDeploymentHandler.class.getName(), dataSourceDeployer, null);
+            this.ctx.getBundleContext().registerService(AppDeploymentHandler.class.getName(), dataSourceDeployer, null);
         } catch (Throwable e) {
             log.error("Failed to activate Data Source Capp Deployer", e);
         }
     }
 
+    @Deactivate
     protected synchronized void deactivate(ComponentContext ctx) {
+
         this.ctx = null;
         if (log.isDebugEnabled()) {
             log.debug("Data Source Capp deployer deactivated");

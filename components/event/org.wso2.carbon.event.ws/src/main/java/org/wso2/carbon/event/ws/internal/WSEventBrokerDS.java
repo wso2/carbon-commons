@@ -13,31 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.wso2.carbon.event.ws.internal;
 
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.event.core.EventBroker;
-import org.wso2.carbon.event.core.internal.util.EventBrokerHolder;
 import org.wso2.carbon.utils.ConfigurationContextService;
 
-/**
- * @scr.component name="wsevent.component" immediate="true"
- * @scr.reference name="eventbroker.service"
- * interface="org.wso2.carbon.event.core.EventBroker" cardinality="1..1"
- * policy="dynamic" bind="setEventBroker" unbind="unSetEventBroker"
- * @scr.reference name="configurationcontext.service"
- * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="1..1"
- * policy="dynamic" bind="setConfigurationContextService" unbind="unsetConfigurationContextService"
- */
 @Deprecated
+@Component(
+        name = "wsevent.component",
+        immediate = true)
 public class WSEventBrokerDS {
 
+    @Activate
     protected void activate(ComponentContext context) {
+
         WSEventBrokerHolder.getInstance().registerWSEventDispatcher();
     }
 
+    @Reference(
+            name = "eventbroker.service",
+            service = org.wso2.carbon.event.core.EventBroker.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unSetEventBroker")
     protected void setEventBroker(EventBroker eventBroker) {
+
         WSEventBrokerHolder.getInstance().registerEventBroker(eventBroker);
     }
 
@@ -45,12 +51,18 @@ public class WSEventBrokerDS {
 
     }
 
+    @Reference(
+            name = "configurationcontext.service",
+            service = org.wso2.carbon.utils.ConfigurationContextService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetConfigurationContextService")
     protected void setConfigurationContextService(ConfigurationContextService configurationContextService) {
+
         WSEventBrokerHolder.getInstance().registerConfigurationContextService(configurationContextService);
     }
 
     protected void unsetConfigurationContextService(ConfigurationContextService configurationContextService) {
 
     }
-
 }

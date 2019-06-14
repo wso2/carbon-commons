@@ -16,7 +16,6 @@
 package org.wso2.carbon.ntask.core.internal;
 
 import com.hazelcast.core.HazelcastInstance;
-
 import org.apache.axis2.engine.ListenerManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -24,6 +23,12 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.quartz.Scheduler;
 import org.quartz.impl.StdSchedulerFactory;
 import org.wso2.carbon.core.ServerStartupObserver;
@@ -46,22 +51,10 @@ import java.util.concurrent.Executors;
 
 /**
  * This class represents the Tasks declarative service component.
- * @scr.component name="tasks.component" immediate="true"
- * @scr.reference name="registry.service" interface="org.wso2.carbon.registry.core.service.RegistryService"
- * cardinality="0..1" policy="dynamic"  bind="setRegistryService" unbind="unsetRegistryService"
- * @scr.reference name="user.realmservice.default"
- * interface="org.wso2.carbon.user.core.service.RealmService" cardinality="0..1" policy="dynamic"
- * bind="setRealmService" unbind="unsetRealmService"
- * @scr.reference name="config.context.service"
- * interface="org.wso2.carbon.utils.ConfigurationContextService" cardinality="1..1" policy="dynamic" 
- * bind="setConfigurationContextService" unbind="unsetConfigurationContextService"
- * @scr.reference name="secret.callback.handler.service"
- * interface="org.wso2.carbon.securevault.SecretCallbackHandlerService"
- * cardinality="1..1" policy="dynamic"
- * bind="setSecretCallbackHandlerService" unbind="unsetSecretCallbackHandlerService"
- * @scr.reference name="listener.manager.service" interface="org.apache.axis2.engine.ListenerManager"
- * cardinality="1..1" policy="dynamic"  bind="setListenerManager" unbind="unsetListenerManager"
  */
+@Component(
+        name = "tasks.component",
+        immediate = true)
 public class TasksDSComponent {
 
     private static final String QUARTZ_PROPERTIES_FILE_NAME = "quartz.properties";
@@ -79,16 +72,18 @@ public class TasksDSComponent {
     private static SecretCallbackHandlerService secretCallbackHandlerService;
 
     private static TaskService taskService;
-    
+
     private static ExecutorService executor = Executors.newCachedThreadPool();
 
+    @Activate
     protected void activate(ComponentContext ctx) {
+
         try {
             if (executor.isShutdown()) {
                 executor = Executors.newCachedThreadPool();
             }
-            String quartzConfigFilePath = CarbonUtils.getCarbonConfigDirPath() + File.separator
-                    + "etc" + File.separator + QUARTZ_PROPERTIES_FILE_NAME;
+            String quartzConfigFilePath = CarbonUtils.getCarbonConfigDirPath() + File.separator + "etc" + File
+                    .separator + QUARTZ_PROPERTIES_FILE_NAME;
             StdSchedulerFactory fac;
             if (new File(quartzConfigFilePath).exists()) {
                 fac = new StdSchedulerFactory(quartzConfigFilePath);
@@ -101,11 +96,11 @@ public class TasksDSComponent {
                 taskService = new TaskServiceImpl();
             }
             BundleContext bundleContext = ctx.getBundleContext();
-            bundleContext.registerService(ServerStartupObserver.class.getName(),
-                    new TaskStartupHandler(taskService), null);
+            bundleContext.registerService(ServerStartupObserver.class.getName(), new TaskStartupHandler(taskService),
+                    null);
             bundleContext.registerService(TaskService.class.getName(), getTaskService(), null);
-            bundleContext.registerService(Axis2ConfigurationContextObserver.class.getName(),
-                    new TaskAxis2ConfigurationContextObserver(getTaskService()), null);
+            bundleContext.registerService(Axis2ConfigurationContextObserver.class.getName(), new
+                    TaskAxis2ConfigurationContextObserver(getTaskService()), null);
             taskService.runAfterRegistrationActions();
         } catch (Throwable e) {
             log.error("Error in intializing Tasks component: " + e.getMessage(), e);
@@ -113,6 +108,7 @@ public class TasksDSComponent {
     }
 
     private Properties getStandardQuartzProps() {
+
         Properties result = new Properties();
         result.put("org.quartz.scheduler.skipUpdateCheck", "true");
         result.put("org.quartz.threadPool.class", QuartzCachedThreadPool.class.getName());
@@ -120,10 +116,13 @@ public class TasksDSComponent {
     }
 
     public static void executeTask(Runnable runnable) {
+
         executor.submit(runnable);
     }
 
+    @Deactivate
     protected void deactivate(ComponentContext ctx) {
+
         if (TasksDSComponent.getScheduler() != null) {
             try {
                 TasksDSComponent.getScheduler().shutdown();
@@ -136,65 +135,102 @@ public class TasksDSComponent {
     }
 
     public static TaskService getTaskService() {
+
         return taskService;
     }
 
     public static Scheduler getScheduler() {
+
         return scheduler;
     }
 
+    @Reference(
+            name = "registry.service",
+            service = org.wso2.carbon.registry.core.service.RegistryService.class,
+            cardinality = ReferenceCardinality.OPTIONAL,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRegistryService")
     protected void setRegistryService(RegistryService registryService) {
+
         TasksDSComponent.registryService = registryService;
     }
 
     protected void unsetRegistryService(RegistryService registryService) {
+
         TasksDSComponent.registryService = null;
     }
 
     public static RegistryService getRegistryService() {
+
         return TasksDSComponent.registryService;
     }
 
+    @Reference(
+            name = "user.realmservice.default",
+            service = org.wso2.carbon.user.core.service.RealmService.class,
+            cardinality = ReferenceCardinality.OPTIONAL,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRealmService")
     protected void setRealmService(RealmService realmService) {
+
         TasksDSComponent.realmService = realmService;
     }
 
     protected void unsetRealmService(RealmService realmService) {
+
         TasksDSComponent.realmService = null;
     }
 
     public static RealmService getRealmService() {
+
         return TasksDSComponent.realmService;
     }
 
+    @Reference(
+            name = "config.context.service",
+            service = org.wso2.carbon.utils.ConfigurationContextService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetConfigurationContextService")
     protected void setConfigurationContextService(ConfigurationContextService configCtxService) {
+
         TasksDSComponent.configCtxService = configCtxService;
     }
 
     protected void unsetConfigurationContextService(ConfigurationContextService configCtxService) {
+
         TasksDSComponent.configCtxService = null;
     }
 
     public static ConfigurationContextService getConfigurationContextService() {
+
         return TasksDSComponent.configCtxService;
     }
 
     public static SecretCallbackHandlerService getSecretCallbackHandlerService() {
+
         return TasksDSComponent.secretCallbackHandlerService;
     }
 
-    protected void setSecretCallbackHandlerService(
-            SecretCallbackHandlerService secretCallbackHandlerService) {
+    @Reference(
+            name = "secret.callback.handler.service",
+            service = org.wso2.carbon.securevault.SecretCallbackHandlerService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetSecretCallbackHandlerService")
+    protected void setSecretCallbackHandlerService(SecretCallbackHandlerService secretCallbackHandlerService) {
+
         TasksDSComponent.secretCallbackHandlerService = secretCallbackHandlerService;
     }
 
-    protected void unsetSecretCallbackHandlerService(
-            SecretCallbackHandlerService secretCallbackHandlerService) {
+    protected void unsetSecretCallbackHandlerService(SecretCallbackHandlerService secretCallbackHandlerService) {
+
         TasksDSComponent.secretCallbackHandlerService = null;
     }
-    
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static HazelcastInstance getHazelcastInstance() {
+
         BundleContext ctx = FrameworkUtil.getBundle(TasksDSComponent.class).getBundleContext();
         ServiceReference ref = ctx.getServiceReference(HazelcastInstance.class);
         if (ref == null) {
@@ -202,15 +238,20 @@ public class TasksDSComponent {
         }
         return (HazelcastInstance) ctx.getService(ref);
     }
-    
+
+    @Reference(
+            name = "listener.manager.service",
+            service = org.apache.axis2.engine.ListenerManager.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetListenerManager")
     protected void setListenerManager(ListenerManager lm) {
         /* we don't really need this, the listener manager service is acquired
-         * to make sure, as a workaround, that the task component is initialized 
+         * to make sure, as a workaround, that the task component is initialized
          * after the axis2 clustering agent is initialized */
     }
-    
+
     protected void unsetListenerManager(ListenerManager lm) {
         /* empty */
     }
-
 }

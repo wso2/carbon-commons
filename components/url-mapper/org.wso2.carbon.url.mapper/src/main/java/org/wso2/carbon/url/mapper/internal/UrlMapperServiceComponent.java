@@ -20,6 +20,12 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.tomcat.api.CarbonTomcatService;
 import org.wso2.carbon.tomcat.ext.utils.URLMappingHolder;
@@ -45,32 +51,26 @@ import java.util.List;
  * This is urlmapper component which retrieve virtual host from
  * registry and add to tomcat engine in its initialization.
  * adds the CarbonTomcatValve to TomcatContainer.
- *
- * @scr.component name="org.wso2.carbon.url.mapper.UrlMapperServiceComponent" immediate="true"
- * @scr.reference name="tomcat.service.provider"
- * interface="org.wso2.carbon.tomcat.api.CarbonTomcatService"
- * cardinality="1..1" policy="dynamic" bind="setCarbonTomcatService"
- * unbind="unsetCarbonTomcatService"
- * @scr.reference name="org.wso2.carbon.registry.service"
- * interface="org.wso2.carbon.registry.core.service.RegistryService"
- * cardinality="1..1" policy="dynamic" bind="setRegistryService"
- * unbind="unsetRegistryService"
- * @scr.reference name="user.realmservice.default"
- * interface="org.wso2.carbon.user.core.service.RealmService"
- * cardinality="1..1" policy="dynamic" bind="setRealmService"
- * unbind="unsetRealmService"
  */
+@Component(
+        name = "org.wso2.carbon.url.mapper.UrlMapperServiceComponent",
+        immediate = true)
 public class UrlMapperServiceComponent {
+
     private static Log log = LogFactory.getLog(UrlMapperServiceComponent.class);
+
     private ServiceRegistration serviceRegistration;
 
+    @Activate
     protected void activate(final ComponentContext componentContext) {
+
         final BundleContext bundleContext = componentContext.getBundleContext();
-        // If Carbon is running as a webapp within some other servlet container, then we should
         // uninstall this component
         if (!CarbonUtils.isRunningInStandaloneMode()) {
             Thread th = new Thread() {
+
                 public void run() {
+
                     try {
                         bundleContext.getBundle().uninstall();
                     } catch (Throwable e) {
@@ -84,62 +84,78 @@ public class UrlMapperServiceComponent {
             }
             th.start();
         }
-        serviceRegistration = bundleContext.
-                registerService(HotUpdateService.class.getName(), new HotUpdateManager(), null);
+        serviceRegistration = bundleContext.registerService(HotUpdateService.class.getName(), new HotUpdateManager(),
+                null);
         addMappingToInMemory();
-        //register the UrlMapperValve to the TomcatValveContainer to add to the tomcat engine
+        // register the UrlMapperValve to the TomcatValveContainer to add to the tomcat engine
         List<CarbonTomcatValve> carbonTomcatValves = new ArrayList<CarbonTomcatValve>();
         carbonTomcatValves.add(new UrlMapperValve());
         TomcatValveContainer.addValves(carbonTomcatValves);
-
-        //load configuration file
+        // load configuration file
         MappingConfig config = MappingConfigManager.loadMappingConfiguration();
         HostUtil.setUrlSuffix(config.getPrefix());
     }
-    
+
     protected void addMappingToInMemory() {
+
         MappingData[] urlMappings = new MappingData[0];
         try {
             urlMappings = HostUtil.getAllMappingsFromRegistry();
         } catch (UrlMapperException e) {
             log.error("error while getting all mappings from registry", e);
         }
-        if(urlMappings != null) {
-            for(MappingData mapping: urlMappings) {
-                if(mapping.getTenantDomain().
-                        equalsIgnoreCase(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
-                    if(mapping.isServiceMapping()) {
-                        URLMappingHolder.getInstance().
-                                putUrlMappingForApplication(mapping.getMappingName(), mapping.getUrl());
+        if (urlMappings != null) {
+            for (MappingData mapping : urlMappings) {
+                if (mapping.getTenantDomain().equalsIgnoreCase(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
+                    if (mapping.isServiceMapping()) {
+                        URLMappingHolder.getInstance().putUrlMappingForApplication(mapping.getMappingName(), mapping
+                                .getUrl());
                     }
                 }
-
             }
         }
     }
 
+    @Deactivate
     protected void deactivate(ComponentContext componentContext) {
+
         serviceRegistration.unregister();
     }
 
     protected void setConfigurationContextService(ConfigurationContextService contextService) {
+
         DataHolder.getInstance().setServerConfigContext(contextService.getServerConfigContext());
     }
 
     protected void unsetConfigurationContextService(ConfigurationContextService contextService) {
+
         DataHolder.getInstance().setServerConfigContext(null);
     }
 
+    @Reference(
+            name = "tomcat.service.provider",
+            service = org.wso2.carbon.tomcat.api.CarbonTomcatService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetCarbonTomcatService")
     protected void setCarbonTomcatService(CarbonTomcatService carbonTomcatService) {
-        //keeping the carbonTomcatService in UrlMapperAdminService class
+        // keeping the carbonTomcatService in UrlMapperAdminService class
         DataHolder.getInstance().setCarbonTomcatService(carbonTomcatService);
     }
 
     protected void unsetCarbonTomcatService(CarbonTomcatService carbonTomcatService) {
+
         DataHolder.getInstance().setCarbonTomcatService(null);
     }
 
+    @Reference(
+            name = "org.wso2.carbon.registry.service",
+            service = org.wso2.carbon.registry.core.service.RegistryService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRegistryService")
     protected void setRegistryService(RegistryService registryService) {
+
         try {
             DataHolder.getInstance().setRegistry(registryService.getGovernanceSystemRegistry());
         } catch (Exception e) {
@@ -148,15 +164,23 @@ public class UrlMapperServiceComponent {
     }
 
     protected void unsetRegistryService(RegistryService registryService) {
+
         DataHolder.getInstance().setRegistry(null);
     }
 
+    @Reference(
+            name = "user.realmservice.default",
+            service = org.wso2.carbon.user.core.service.RealmService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRealmService")
     protected void setRealmService(RealmService realmService) {
-        //keeping the realm service in the UrlMapperAdminService class
+        // keeping the realm service in the UrlMapperAdminService class
         DataHolder.getInstance().setRealmService(realmService);
     }
 
     protected void unsetRealmService(RealmService realmService) {
+
         DataHolder.getInstance().setRealmService(null);
     }
 }
