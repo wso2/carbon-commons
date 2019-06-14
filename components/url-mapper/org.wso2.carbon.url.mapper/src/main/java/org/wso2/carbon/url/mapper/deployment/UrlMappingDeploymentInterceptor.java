@@ -13,6 +13,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.url.mapper.internal.util.HostUtil;
@@ -26,55 +29,60 @@ import java.util.Hashtable;
 
 /**
  * The axis2 observer to observe the creating & terminating tenant configuration to delete service mapping of tenant
- * @scr.component name="org.wso2.carbon.url.mapper.deployment.UrlMappingDeploymentInterceptor"
- * immediate="true"
- *
  */
-
+@Component(
+        name = "org.wso2.carbon.url.mapper.deployment.UrlMappingDeploymentInterceptor",
+        immediate = true)
 public class UrlMappingDeploymentInterceptor implements AxisObserver {
+
     private static final Log log = LogFactory.getLog(UrlMappingDeploymentInterceptor.class);
 
+    @Activate
     protected void activate(ComponentContext ctxt) {
-        BundleContext bundleCtx = ctxt.getBundleContext();
 
+        BundleContext bundleCtx = ctxt.getBundleContext();
         // Publish the OSGi service
         Dictionary props = new Hashtable();
         props.put(CarbonConstants.AXIS2_CONFIG_SERVICE, AxisObserver.class.getName());
         bundleCtx.registerService(AxisObserver.class.getName(), this, props);
+        PreAxisConfigurationPopulationObserver preAxisConfigObserver = new PreAxisConfigurationPopulationObserver() {
 
-        PreAxisConfigurationPopulationObserver preAxisConfigObserver =
-                new PreAxisConfigurationPopulationObserver() {
-                    public void createdAxisConfiguration(AxisConfiguration axisConfiguration) {
-                        init(axisConfiguration);
-                        axisConfiguration.addObservers(UrlMappingDeploymentInterceptor.this);
-                    }
-                };
-        bundleCtx.registerService(PreAxisConfigurationPopulationObserver.class.getName(),
-                preAxisConfigObserver, null);
+            public void createdAxisConfiguration(AxisConfiguration axisConfiguration) {
 
+                init(axisConfiguration);
+                axisConfiguration.addObservers(UrlMappingDeploymentInterceptor.this);
+            }
+        };
+        bundleCtx.registerService(PreAxisConfigurationPopulationObserver.class.getName(), preAxisConfigObserver, null);
         // Publish an OSGi service to listen tenant configuration context creation events
         Dictionary properties = new Hashtable();
-        properties.put(CarbonConstants.AXIS2_CONFIG_SERVICE,
-                Axis2ConfigurationContextObserver.class.getName());
-        bundleCtx.registerService(Axis2ConfigurationContextObserver.class.getName(),
-                    new UrlMappingServiceListener(), properties);
+        properties.put(CarbonConstants.AXIS2_CONFIG_SERVICE, Axis2ConfigurationContextObserver.class.getName());
+        bundleCtx.registerService(Axis2ConfigurationContextObserver.class.getName(), new UrlMappingServiceListener(),
+                properties);
+    }
+
+    @Deactivate
+    protected void deactivate(ComponentContext ctxt) {
+
     }
 
     public void init(AxisConfiguration axisConfiguration) {
+
     }
 
     public void serviceUpdate(AxisEvent axisEvent, AxisService axisService) {
+
         Parameter mapping = axisService.getParameter("custom-mapping");
         int tenantId = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId();
-        if(mapping == null) {
+        if (mapping == null) {
             return;
         } else {
-            if (((String)mapping.getValue()).equalsIgnoreCase("true")) {
-                if(axisEvent.getEventType() == 1 || axisEvent.getEventType() == 3) {
-                    if(tenantId != MultitenantConstants.SUPER_TENANT_ID) {
+            if (((String) mapping.getValue()).equalsIgnoreCase("true")) {
+                if (axisEvent.getEventType() == 1 || axisEvent.getEventType() == 3) {
+                    if (tenantId != MultitenantConstants.SUPER_TENANT_ID) {
                         HostUtil.addServiceUrlMapping(tenantId, axisService.getName());
                     }
-                } else if(axisEvent.getEventType() == 0 || axisEvent.getEventType() == 2) {
+                } else if (axisEvent.getEventType() == 0 || axisEvent.getEventType() == 2) {
                     tenantId = PrivilegedCarbonContext.getThreadLocalCarbonContext().getTenantId();
                     HostUtil.removeUrlMappingFromMap(tenantId, axisService.getName());
                 }
@@ -82,32 +90,38 @@ public class UrlMappingDeploymentInterceptor implements AxisObserver {
         }
     }
 
-
     public void serviceGroupUpdate(AxisEvent axisEvent, AxisServiceGroup axisServiceGroup) {
 
     }
 
     public void moduleUpdate(AxisEvent axisEvent, AxisModule axisModule) {
+
     }
 
     public void addParameter(Parameter parameter) throws AxisFault {
+
     }
 
     public void removeParameter(Parameter parameter) throws AxisFault {
+
     }
 
     public void deserializeParameters(OMElement omElement) throws AxisFault {
+
     }
 
     public Parameter getParameter(String s) {
+
         return null;
     }
 
     public ArrayList<Parameter> getParameters() {
+
         return null;
     }
 
     public boolean isParameterLocked(String s) {
+
         return false;
     }
 }

@@ -22,6 +22,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.identity.authentication.AuthenticationService;
 import org.wso2.carbon.identity.authentication.AuthenticationServiceImpl;
 import org.wso2.carbon.identity.authentication.SharedKeyAccessService;
@@ -30,46 +36,52 @@ import org.wso2.carbon.user.core.service.RealmService;
 
 import java.util.UUID;
 
-/**
- * @scr.component name="org.wso2.carbon.identity.authentication.internal.AuthenticationServiceComponent" immediate="true"
- * @scr.reference name="user.realmservice.default" interface="org.wso2.carbon.user.core.service.RealmService"
- * cardinality="1..1" policy="dynamic" bind="setRealmService"  unbind="unsetRealmService"
- */
+@Component(
+        name = "org.wso2.carbon.identity.authentication.internal.AuthenticationServiceComponent",
+        immediate = true)
 public class AuthenticationServiceComponent {
 
     private static Log log = LogFactory.getLog(AuthenticationServiceComponent.class);
 
     private ServiceRegistration authenticationService;
+
     private ServiceRegistration sharedKeyAccessService;
+
     private RealmService realmService = null;
 
+    @Activate
     protected void activate(ComponentContext componentContext) {
-
         // Generate access key
         String accessKey = UUID.randomUUID().toString();
         SharedKeyAccessService keyAccessService = new SharedKeyAccessServiceImpl(accessKey);
         // Publish access key
-        sharedKeyAccessService = componentContext.getBundleContext().registerService(
-                SharedKeyAccessService.class.getName(),
-                keyAccessService, null);
-
+        sharedKeyAccessService = componentContext.getBundleContext().registerService(SharedKeyAccessService.class
+                .getName(), keyAccessService, null);
         // Publish the authentication service
-        authenticationService = componentContext.getBundleContext().registerService(
-                AuthenticationService.class.getName(),
-                new AuthenticationServiceImpl(keyAccessService, realmService), null);
-
+        authenticationService = componentContext.getBundleContext().registerService(AuthenticationService.class
+                .getName(), new AuthenticationServiceImpl(keyAccessService, realmService), null);
     }
 
+    @Deactivate
     protected void deactivate(ComponentContext componentContext) {
+
         componentContext.getBundleContext().ungetService(authenticationService.getReference());
         componentContext.getBundleContext().ungetService(sharedKeyAccessService.getReference());
     }
 
+    @Reference(
+            name = "user.realmservice.default",
+            service = org.wso2.carbon.user.core.service.RealmService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRealmService")
     protected void setRealmService(RealmService realmService) {
+
         this.realmService = realmService;
     }
 
     protected void unsetRealmService(RealmService realmService) {
+
         this.realmService = null;
     }
 }

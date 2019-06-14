@@ -13,12 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.wso2.carbon.logging.service.internal;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.logging.service.registry.RegistryManager;
 import org.wso2.carbon.logging.service.util.LoggingConstants;
 import org.wso2.carbon.logging.service.util.LoggingUtil;
@@ -31,24 +37,15 @@ import org.wso2.carbon.utils.ConfigurationContextService;
 
 import java.io.File;
 
-/**
- * @scr.component name="org.wso2.carbon.logging.services" immediate="true"
- * @scr.reference name="org.wso2.carbon.registry.service"
- * interface="org.wso2.carbon.registry.core.service.RegistryService"
- * cardinality="1..1" policy="dynamic" bind="setRegistryService"
- * unbind="unsetRegistryService"
- * @scr.reference name="user.realmservice.default"
- * interface="org.wso2.carbon.user.core.service.RealmService"
- * cardinality="1..1" policy="dynamic" bind="setRealmService"
- * unbind="unsetRealmService"
- * @scr.reference name="config.context.service"
- * interface="org.wso2.carbon.utils.ConfigurationContextService"
- * cardinality="1..1" policy="dynamic"  bind="setConfigurationContextService"
- * unbind="unsetConfigurationContextService"
- */
+@Component(
+         name = "org.wso2.carbon.logging.services", 
+         immediate = true)
 public class LoggingServiceComponent {
+
     private static Log log = LogFactory.getLog(LoggingServiceComponent.class);
+
     private static RealmService realmService;
+
     private RegistryService registryService;
 
     public static TenantManager getTenantManager() {
@@ -59,6 +56,7 @@ public class LoggingServiceComponent {
         return realmService.getBootstrapRealmConfiguration();
     }
 
+    @Activate
     protected void activate(ComponentContext ctxt) {
         try {
             initLoggingConfiguration();
@@ -72,6 +70,12 @@ public class LoggingServiceComponent {
         return realmService;
     }
 
+    @Reference(
+             name = "user.realmservice.default", 
+             service = org.wso2.carbon.user.core.service.RealmService.class, 
+             cardinality = ReferenceCardinality.MANDATORY, 
+             policy = ReferencePolicy.DYNAMIC, 
+             unbind = "unsetRealmService")
     protected void setRealmService(RealmService realmService) {
         LoggingServiceComponent.realmService = realmService;
     }
@@ -80,6 +84,12 @@ public class LoggingServiceComponent {
         setRealmService(null);
     }
 
+    @Reference(
+             name = "config.context.service", 
+             service = org.wso2.carbon.utils.ConfigurationContextService.class, 
+             cardinality = ReferenceCardinality.MANDATORY, 
+             policy = ReferencePolicy.DYNAMIC, 
+             unbind = "unsetConfigurationContextService")
     protected void setConfigurationContextService(ConfigurationContextService contextService) {
         DataHolder.getInstance().setServerConfigContext(contextService.getServerConfigContext());
     }
@@ -88,10 +98,16 @@ public class LoggingServiceComponent {
         DataHolder.getInstance().setServerConfigContext(null);
     }
 
+    @Deactivate
     protected void deactivate(ComponentContext ctxt) {
-
     }
 
+    @Reference(
+             name = "org.wso2.carbon.registry.service", 
+             service = org.wso2.carbon.registry.core.service.RegistryService.class, 
+             cardinality = ReferenceCardinality.MANDATORY, 
+             policy = ReferencePolicy.DYNAMIC, 
+             unbind = "unsetRegistryService")
     protected void setRegistryService(RegistryService registryService) {
         try {
             RegistryManager.setRegistry(registryService.getConfigSystemRegistry());
@@ -112,20 +128,16 @@ public class LoggingServiceComponent {
      * @throws Exception If an error occurs when loading loggin config
      */
     private void initLoggingConfiguration() throws Exception {
-
         // If it is a worker node, just read the configuration from the registry
         if (CarbonUtils.isWorkerNode()) {
             LoggingUtil.loadCustomConfiguration();
             return;
         }
-
-        //checking whether log4j.properies file is changed.
+        // checking whether log4j.properies file is changed.
         File confFolder = new File(CarbonUtils.getCarbonConfigDirPath());
-        String loggingPropFilePath = confFolder.getAbsolutePath() + File.separator +
-                "log4j.properties";
+        String loggingPropFilePath = confFolder.getAbsolutePath() + File.separator + "log4j.properties";
         // URL url = Thread.currentThread().getContextClassLoader().getResource("log4j.properties");
         File log4jFile = new File(loggingPropFilePath);
-
         if (!log4jFile.isFile()) {
             LoggingUtil.removeAllLoggersAndAppenders();
             LoggingUtil.updateConfigurationProperty(LoggingConstants.LOG4J_FILE_FOUND, "false");
@@ -133,19 +145,13 @@ public class LoggingServiceComponent {
         } else {
             LoggingUtil.updateConfigurationProperty(LoggingConstants.LOG4J_FILE_FOUND, "true");
         }
-
         long currentLastModified = log4jFile.lastModified();
-
-        String lmStr =
-                new RegistryManager().
-                        getConfigurationProperty(LoggingConstants.LOG4J_FILE_LAST_MODIFIED);
+        String lmStr = new RegistryManager().getConfigurationProperty(LoggingConstants.LOG4J_FILE_LAST_MODIFIED);
         long previousLastModified = (lmStr != null) ? Long.parseLong(lmStr) : 0;
-
         if (previousLastModified != currentLastModified) {
-            //log4j.properties file is changed..
-            LoggingUtil.updateConfigurationProperty(LoggingConstants.LOG4J_FILE_LAST_MODIFIED,
-                    Long.toString(currentLastModified));
-            //Remove all the entries in the registry
+            // log4j.properties file is changed..
+            LoggingUtil.updateConfigurationProperty(LoggingConstants.LOG4J_FILE_LAST_MODIFIED, Long.toString(currentLastModified));
+            // Remove all the entries in the registry
             LoggingUtil.removeAllLoggersAndAppenders();
         } else {
             LoggingUtil.loadCustomConfiguration();

@@ -4,12 +4,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
 
-
-/**
- * @scr.component name="org.wso2.carbon.deployment.synchronizer.git" immediate="true"
- */
+@Component(
+        name = "org.wso2.carbon.deployment.synchronizer.git",
+        immediate = true)
 public class GitDeploymentSynchronizerComponent {
 
     private static final Log log = LogFactory.getLog(GitDeploymentSynchronizerComponent.class);
@@ -21,12 +23,12 @@ public class GitDeploymentSynchronizerComponent {
      *
      * @param context ComponentContext instance to access osgi runtime
      */
+    @Activate
     protected void activate(ComponentContext context) {
 
         ArtifactRepository gitBasedArtifactRepository = new GitBasedArtifactRepository();
-        gitDepSyncServiceRegistration = context.getBundleContext().registerService(ArtifactRepository.class.getName(),
-                gitBasedArtifactRepository, null);
-
+        gitDepSyncServiceRegistration = context.getBundleContext().registerService(ArtifactRepository.class.getName()
+                , gitBasedArtifactRepository, null);
         /*ServerConfiguration serverConf = ServerConfiguration.getInstance();
         String depSyncEnabledParam = serverConf.getFirstProperty(GitDeploymentSynchronizerConstants.ENABLED);
 
@@ -38,12 +40,14 @@ public class GitDeploymentSynchronizerComponent {
             if (repoTypeParam != null && repoTypeParam.equals(DeploymentSynchronizerConstants.REPOSITORY_TYPE_GIT)) {
 
                 ArtifactRepository gitBasedArtifactRepository = new GitBasedArtifactRepository();
-                gitDepSyncServiceRegistration = context.getBundleContext().registerService(ArtifactRepository.class.getName(),
+                gitDepSyncServiceRegistration = context.getBundleContext().registerService(ArtifactRepository.class
+                .getName(),
                         gitBasedArtifactRepository, null);
             }
             else {
                 if(log.isDebugEnabled()) {
-                    log.debug("Git deployment synchronization disabled, GitBasedArtifactRepository instance not created");
+                    log.debug("Git deployment synchronization disabled, GitBasedArtifactRepository instance not
+                    created");
                 }
             }
         }
@@ -52,8 +56,7 @@ public class GitDeploymentSynchronizerComponent {
                 log.debug("Deployment synchronization disabled, GitBasedArtifactRepository instance not created");
             }
         }*/
-
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("Git based deployment synchronizer component activated");
         }
     }
@@ -63,16 +66,15 @@ public class GitDeploymentSynchronizerComponent {
      *
      * @param context ComponentContext instance to access osgi runtime
      */
+    @Deactivate
     protected void deactivate(ComponentContext context) {
 
-        if(gitDepSyncServiceRegistration != null){
+        if (gitDepSyncServiceRegistration != null) {
             gitDepSyncServiceRegistration.unregister();
             gitDepSyncServiceRegistration = null;
         }
-
-        if(log.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             log.debug("Git based deployment synchronizer component deactivated");
         }
     }
-
 }

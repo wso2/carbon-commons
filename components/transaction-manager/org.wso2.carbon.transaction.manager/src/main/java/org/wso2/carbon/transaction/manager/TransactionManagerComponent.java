@@ -15,7 +15,6 @@
 * specific language governing permissions and limitations
 * under the License.
 */
-
 package org.wso2.carbon.transaction.manager;
 
 import org.apache.commons.logging.Log;
@@ -29,24 +28,22 @@ import org.wso2.carbon.user.api.UserStoreException;
 import org.wso2.carbon.user.core.service.RealmService;
 import org.wso2.carbon.utils.Axis2ConfigurationContextObserver;
 import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
-
 import javax.naming.Context;
 import javax.naming.NameNotFoundException;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 import java.util.ArrayList;
 import java.util.List;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
-/**
- * @scr.component name="transactionmanager.component" immediate="true"
- * @scr.reference name="transactionmanager" interface="javax.transaction.TransactionManager"
- * cardinality="1..1" policy="dynamic" bind="setTransactionManager"  unbind="unsetTransactionManager"
- * @scr.reference name="usertransaction" interface="javax.transaction.UserTransaction"
- * cardinality="1..1" policy="dynamic" bind="setUserTransaction"  unbind="unsetUserTransaction"
- * @scr.reference name="user.realmservice.default"
- * interface="org.wso2.carbon.user.core.service.RealmService" cardinality="0..1" policy="dynamic"
- * bind="setRealmService" unbind="unsetRealmService"
- */
+@Component(
+         name = "transactionmanager.component", 
+         immediate = true)
 public class TransactionManagerComponent {
 
     private static Log log = LogFactory.getLog(TransactionManagerComponent.class);
@@ -60,12 +57,11 @@ public class TransactionManagerComponent {
     /* class level lock for controlling synchronized access to static variables */
     private static Object txManagerComponentLock = new Object();
 
+    @Activate
     protected void activate(ComponentContext ctxt) throws TransactionManagerException {
         BundleContext bundleContext = ctxt.getBundleContext();
-        bundleContext.registerService(Axis2ConfigurationContextObserver.class.getName(),
-                new TransactionManagerAxis2ConfigurationContextObserver(), null);
-
-        //Register transaction-manager with JNDI for all available tenants.
+        bundleContext.registerService(Axis2ConfigurationContextObserver.class.getName(), new TransactionManagerAxis2ConfigurationContextObserver(), null);
+        // Register transaction-manager with JNDI for all available tenants.
         List<Integer> tenants = this.getAllTenantIds();
         for (int tid : tenants) {
             bindTransactionManagerWithJNDIForTenant(tid);
@@ -73,16 +69,22 @@ public class TransactionManagerComponent {
         if (log.isDebugEnabled()) {
             log.debug("Transaction Manager bundle is activated ");
         }
-        bundleContext.registerService(TransactionManagerDummyService.class.getName(),
-                new TransactionManagerDummyService(), null);
+        bundleContext.registerService(TransactionManagerDummyService.class.getName(), new TransactionManagerDummyService(), null);
     }
 
+    @Deactivate
     protected void deactivate(ComponentContext ctxt) {
         if (log.isDebugEnabled()) {
             log.debug("Transaction Manager bundle is deactivated ");
         }
     }
 
+    @Reference(
+             name = "transactionmanager", 
+             service = javax.transaction.TransactionManager.class, 
+             cardinality = ReferenceCardinality.MANDATORY, 
+             policy = ReferencePolicy.DYNAMIC, 
+             unbind = "unsetTransactionManager")
     protected void setTransactionManager(TransactionManager txManager) {
         synchronized (txManagerComponentLock) {
             if (log.isDebugEnabled()) {
@@ -105,6 +107,12 @@ public class TransactionManagerComponent {
         return txManager;
     }
 
+    @Reference(
+             name = "usertransaction", 
+             service = javax.transaction.UserTransaction.class, 
+             cardinality = ReferenceCardinality.MANDATORY, 
+             policy = ReferencePolicy.DYNAMIC, 
+             unbind = "unsetUserTransaction")
     protected void setUserTransaction(UserTransaction userTransaction) {
         synchronized (txManagerComponentLock) {
             if (log.isDebugEnabled()) {
@@ -132,8 +140,7 @@ public class TransactionManagerComponent {
             List<Integer> tids = new ArrayList<Integer>();
             RealmService realmService = TransactionManagerComponent.getRealmService();
             if (realmService != null) {
-                Tenant[] tenants = TransactionManagerComponent.getRealmService().getTenantManager().
-                        getAllTenants();
+                Tenant[] tenants = TransactionManagerComponent.getRealmService().getTenantManager().getAllTenants();
                 for (Tenant tenant : tenants) {
                     tids.add(tenant.getId());
                 }
@@ -149,55 +156,59 @@ public class TransactionManagerComponent {
         }
     }
 
+    @Reference(
+             name = "user.realmservice.default", 
+             service = org.wso2.carbon.user.core.service.RealmService.class, 
+             cardinality = ReferenceCardinality.OPTIONAL, 
+             policy = ReferencePolicy.DYNAMIC, 
+             unbind = "unsetRealmService")
     protected void setRealmService(RealmService realmService) {
-    	TransactionManagerComponent.realmService = realmService;
+        TransactionManagerComponent.realmService = realmService;
     }
 
     protected void unsetRealmService(RealmService realmService) {
-    	TransactionManagerComponent.realmService = null;
+        TransactionManagerComponent.realmService = null;
     }
 
     public static RealmService getRealmService() {
-    	return TransactionManagerComponent.realmService;
+        return TransactionManagerComponent.realmService;
     }
-    
-    protected static void bindTransactionManagerWithJNDIForTenant(int tid) {
-    	PrivilegedCarbonContext.startTenantFlow();
-    	PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(tid);
 
+    protected static void bindTransactionManagerWithJNDIForTenant(int tid) {
+        PrivilegedCarbonContext.startTenantFlow();
+        PrivilegedCarbonContext.getThreadLocalCarbonContext().setTenantId(tid);
         try {
             Context currentCtx = PrivilegedCarbonContext.getThreadLocalCarbonContext().getJNDIContext();
             Context javaCtx = null;
             try {
                 javaCtx = (Context) currentCtx.lookup("java:comp");
             } catch (NameNotFoundException ignore) {
-                //ignore
+            // ignore
             }
             if (javaCtx == null) {
                 currentCtx = currentCtx.createSubcontext("java:comp");
             }
-
             Object txManager = null, userTx = null;
             try {
-             txManager = currentCtx.lookup("java:comp/TransactionManager");
+                txManager = currentCtx.lookup("java:comp/TransactionManager");
             } catch (NameNotFoundException ignore) {
-                //ignore
+            // ignore
             }
             try {
-             userTx = currentCtx.lookup("java:comp/UserTransaction");
+                userTx = currentCtx.lookup("java:comp/UserTransaction");
             } catch (NameNotFoundException ignore) {
-                //ignore
+            // ignore
             }
-            if(txManager == null) {
+            if (txManager == null) {
                 currentCtx.bind("TransactionManager", getTransactionManager());
             }
-            if(userTx == null) {
+            if (userTx == null) {
                 currentCtx.bind("UserTransaction", getUserTransaction());
             }
         } catch (Exception e) {
-           log.error("Error in binding transaction manager for tenant: " + tid, e);
+            log.error("Error in binding transaction manager for tenant: " + tid, e);
         } finally {
-        	PrivilegedCarbonContext.endTenantFlow();
+            PrivilegedCarbonContext.endTenantFlow();
         }
     }
 }

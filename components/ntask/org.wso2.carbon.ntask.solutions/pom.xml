@@ -38,10 +38,15 @@
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.ntask.core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr.ds-annotations</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
-        <plugins>            
+        <plugins>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-scr-plugin</artifactId>
@@ -58,7 +63,7 @@
                         <Export-Package>
                             org.wso2.carbon.ntask.solutions.*; version="${carbon.commons.exp.package.version}"
                         </Export-Package>
-                        <Import-Package />
+                        <Import-Package/>
                         <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
