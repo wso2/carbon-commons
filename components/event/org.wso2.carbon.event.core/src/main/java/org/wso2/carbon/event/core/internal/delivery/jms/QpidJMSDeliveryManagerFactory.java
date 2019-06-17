@@ -52,7 +52,6 @@ public class QpidJMSDeliveryManagerFactory implements DeliveryManagerFactory {
     public static final String EB_CLIENT_ID = "clientID";
     public static final String EB_VIRTUAL_HOST_NAME = "virtualHostName";
     public static final String EB_TYPE = "type";
-    public static final String EB_REMOTE_MESSAGE_BROKER_PASSWORD_ALIAS = "eventBrokerConfig.eventBroker.deliveryManager.remoteMessageBroker.password";
 
     public DeliveryManager getDeliveryManger(OMElement config)
             throws EventBrokerConfigurationException {
@@ -75,18 +74,13 @@ public class QpidJMSDeliveryManagerFactory implements DeliveryManagerFactory {
             }
 
             String userName = JavaUtil.getValue(remoteQpidAdminService, EB_USER_NAME);
-            String password = JavaUtil.getValue(remoteQpidAdminService, EB_PASSWORD);
+
             // resolve password if it is secured with secure vault
             SecretResolver secretResolver = SecretResolverFactory.create(remoteQpidAdminService, false);
-            if (secretResolver != null && secretResolver.isInitialized()) {
-                if (password != null) {
-                    if (secretResolver.isTokenProtected(EB_REMOTE_MESSAGE_BROKER_PASSWORD_ALIAS)) {
-                        password = secretResolver.resolve(EB_REMOTE_MESSAGE_BROKER_PASSWORD_ALIAS);
-                    } else {
-                        password = MiscellaneousUtil.resolve(password, secretResolver);
-                    }
-                }
-            }
+            OMElement passwordElement =
+                    remoteQpidAdminService.getFirstChildWithName(new QName(EventBrokerConstants.EB_CONF_NAMESPACE,
+                            EB_PASSWORD));
+            String password = MiscellaneousUtil.resolve(passwordElement, secretResolver);
 
             String qpidPort = JavaUtil.getValue(remoteQpidAdminService, EB_QPID_PORT);
             String clientID = JavaUtil.getValue(remoteQpidAdminService, EB_CLIENT_ID);
