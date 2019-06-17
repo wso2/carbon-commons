@@ -31,7 +31,9 @@ import org.tigris.subversion.svnclientadapter.commandline.CmdLineClientAdapterFa
 import org.tigris.subversion.svnclientadapter.javahl.JhlClientAdapterFactory;
 import org.tigris.subversion.svnclientadapter.svnkit.SvnKitClientAdapterFactory;
 import org.wso2.carbon.deployment.synchronizer.ArtifactRepository;
+import org.wso2.carbon.deployment.synchronizer.repository.CarbonRepositoryUtils;
 import org.wso2.carbon.deployment.synchronizer.subversion.util.SVNDataHolder;
+import org.wso2.carbon.deployment.synchronizer.util.DeploymentSynchronizerConfiguration;
 import org.wso2.carbon.tomcat.api.CarbonTomcatService;
 
 @Component(
@@ -46,39 +48,52 @@ public class SVNDeploymentSynchronizerComponent {
     @Activate
     protected void activate(ComponentContext context) {
 
-        boolean allClientsFailed = true;
-        try {
-            SvnKitClientAdapterFactory.setup();
-            allClientsFailed = false;
-            log.debug("SVN Kit client adapter initialized");
-        } catch (Throwable t) {
-            log.debug("Unable to initialize the SVN Kit client adapter - Required jars " + "may be missing");
-        }
-        try {
-            JhlClientAdapterFactory.setup();
-            allClientsFailed = false;
-            log.debug("Java HL client adapter initialized");
-        } catch (Throwable t) {
-            log.debug("Unable to initialize the Java HL client adapter - Required jars " + " or the native libraries " +
+        DeploymentSynchronizerConfiguration deploymentSyncConfigurationFromConf =
+                CarbonRepositoryUtils.getDeploymentSyncConfigurationFromConf();
+
+        if (deploymentSyncConfigurationFromConf.isEnabled()) {
+
+            boolean allClientsFailed = true;
+
+            try {
+                SvnKitClientAdapterFactory.setup();
+                allClientsFailed = false;
+                log.debug("SVN Kit client adapter initialized");
+            } catch (Throwable t) {
+                log.debug("Unable to initialize the SVN Kit client adapter - Required jars " +
+                        "may be missing");
+
+    }        try {
+                JhlClientAdapterFactory.setup();
+                allClientsFailed = false;
+                log.debug("Java HL client adapter initialized");
+            } catch (Throwable t) {
+                log.debug("Unable to initialize the Java HL client adapter - Required jars " +
+                        " or the native libraries " +
                     "may be missing");
-        }
-        try {
-            CmdLineClientAdapterFactory.setup();
-            allClientsFailed = false;
-            log.debug("Command line client adapter initialized");
-        } catch (Throwable t) {
-            log.debug("Unable to initialize the command line client adapter - SVN command " + "line tools may be " +
-                    "missing");
-        }
-        if (allClientsFailed) {
-            String error = "Could not initialize any of the SVN client adapters - " + "Required jars/libraries may be" +
+            }
+
+            try {
+                CmdLineClientAdapterFactory.setup();
+                allClientsFailed = false;
+                log.debug("Command line client adapter initialized");
+            } catch (Throwable t) {
+                log.debug("Unable to initialize the command line client adapter - SVN command " +
+                        "line tools may be " +
+            "missing");
+}
+            if (allClientsFailed) {
+                String error = "Could not initialize any of the SVN client adapters - " +
+                        "Required jars/libraries may be" +
                     " missing";
-            log.debug(error);
-            return;
+                log.debug(error);
+                return;
+            }
+            ArtifactRepository svnBasedArtifactRepository = new SVNBasedArtifactRepository();
+            svnDepSyncServiceRegistration =
+                    context.getBundleContext().registerService(ArtifactRepository.class.getName()
+                    ,svnBasedArtifactRepository, null);
         }
-        ArtifactRepository svnBasedArtifactRepository = new SVNBasedArtifactRepository();
-        svnDepSyncServiceRegistration = context.getBundleContext().registerService(ArtifactRepository.class.getName()
-                , svnBasedArtifactRepository, null);
         log.debug("SVN based deployment synchronizer component activated");
     }
 
