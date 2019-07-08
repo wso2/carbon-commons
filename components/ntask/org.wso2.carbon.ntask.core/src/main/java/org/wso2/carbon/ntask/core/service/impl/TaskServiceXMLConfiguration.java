@@ -45,7 +45,13 @@ public class TaskServiceXMLConfiguration {
 
     private DefaultLocationResolver defaultLocationResolver = new DefaultLocationResolver(DEFAULT_LOCATION_RESOLVER_CLASS);
 
+    private TaskServerAvailabilityCheck taskServerAvailabilityCheck = new TaskServerAvailabilityCheck();
+
     public static final String DEFAULT_LOCATION_RESOLVER_CLASS = "org.wso2.carbon.ntask.core.impl.RoundRobinTaskLocationResolver";
+
+    public static final int TASKSERVICE_AVAILABILITY_CHECK_RETRY_COUNT = 10;
+
+    public static final int TASKSERVICE_AVAILABILITY_CHECK_RETRY_INTERVAL = 1000;
 
     public TaskServerMode getTaskServerMode() {
         return taskServerMode;
@@ -125,6 +131,15 @@ public class TaskServiceXMLConfiguration {
 		}
 	}
 
+    @XmlElement(name = "taskServerAvailabilityCheck", nillable = true, required = false)
+    public TaskServerAvailabilityCheck getTaskServerAvailabilityCheck() {
+        return taskServerAvailabilityCheck;
+    }
+
+    public void setTaskServerAvailabilityCheck(TaskServerAvailabilityCheck taskServerAvailabilityCheck) {
+        this.taskServerAvailabilityCheck = taskServerAvailabilityCheck;
+    }
+
 	public static class DefaultLocationResolver {
     	
     	private String locationResolverClass;
@@ -187,6 +202,30 @@ public class TaskServiceXMLConfiguration {
 			
 		}
     	
+    }
+
+    public static class TaskServerAvailabilityCheck {
+
+        private int retryCount;
+        private long retryInterval;
+
+        @XmlElement(defaultValue = "10")
+        public int getRetryCount() {
+            return retryCount;
+        }
+
+        public void setRetryCount(int retryCount) {
+            this.retryCount = retryCount;
+        }
+
+        @XmlElement(defaultValue = "1000")
+        public long getRetryInterval() {
+            return retryInterval;
+        }
+
+        public void setRetryInterval(long retryInterval) {
+            this.retryInterval = retryInterval;
+        }
     }
 
 }

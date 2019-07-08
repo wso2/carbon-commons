@@ -33,6 +33,7 @@ import org.wso2.carbon.ntask.core.impl.standalone.StandaloneTaskManagerFactory;
 import org.wso2.carbon.ntask.core.service.TaskService;
 import org.wso2.carbon.ntask.core.service.impl.TaskServiceXMLConfiguration.DefaultLocationResolver;
 import org.wso2.carbon.ntask.core.service.impl.TaskServiceXMLConfiguration.DefaultLocationResolver.Property;
+import org.wso2.carbon.ntask.core.service.impl.TaskServiceXMLConfiguration.TaskServerAvailabilityCheck;
 import org.wso2.carbon.utils.CarbonUtils;
 
 import javax.xml.bind.JAXBContext;
@@ -206,6 +207,10 @@ public class TaskServiceImpl implements TaskService {
 
         private Map<String, String> locationResolverProperties;
 
+        private int retryCount = 10;
+
+        private long retryInterval = 1000;
+
         public TaskServiceConfigurationImpl(TaskServiceXMLConfiguration taskXMLConfig) {
             this.processXMLConfig(taskXMLConfig);
             this.processSystemProps();
@@ -225,6 +230,9 @@ public class TaskServiceImpl implements TaskService {
             DefaultLocationResolver locationResolver = taskXMLConfig.getDefaultLocationResolver();
             this.locationResolverClass = locationResolver.getLocationResolverClass();
             this.locationResolverProperties = this.extractLocationResolverProperties(locationResolver);
+            TaskServerAvailabilityCheck taskServerAvailabilityCheck = taskXMLConfig.getTaskServerAvailabilityCheck();
+            this.retryCount = taskServerAvailabilityCheck.getRetryCount();
+            this.retryInterval = taskServerAvailabilityCheck.getRetryInterval();
         }
 
         private Map<String, String> extractLocationResolverProperties(DefaultLocationResolver locationResolver) {
@@ -317,6 +325,22 @@ public class TaskServiceImpl implements TaskService {
         @Override
         public Map<String, String> getLocationResolverProperties() {
             return locationResolverProperties;
+        }
+
+        @Override
+        public int getRetryCount() {
+            if (retryCount == 0) {
+                retryCount = TaskServiceXMLConfiguration.TASKSERVICE_AVAILABILITY_CHECK_RETRY_COUNT;
+            }
+            return retryCount;
+        }
+
+        @Override
+        public long getRetryInterval() {
+            if (retryInterval == 0) {
+                retryInterval = TaskServiceXMLConfiguration.TASKSERVICE_AVAILABILITY_CHECK_RETRY_INTERVAL;
+            }
+            return retryInterval;
         }
 
     }
