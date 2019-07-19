@@ -71,7 +71,7 @@
                             !org.wso2.carbon.datasource.capp.deployer,
                             org.apache.axis2.deployment;version="${axis2.orbit.imp.pkg.version}",
                             org.apache.axis2.engine;version="${axis2.orbit.imp.pkg.version}",
-                            org.apache.commons.logging;version="${commons-logging.imp.pkg.version}",
+                            org.apache.commons.logging.*; version="${import.package.version.commons.logging}",
                             org.wso2.carbon.application.deployer;version="${carbon.kernel.imp.pkg.version}",
                             org.wso2.carbon.application.deployer.config;version="${carbon.kernel.imp.pkg.version}",
                             org.wso2.carbon.application.deployer.handler;version="${carbon.kernel.imp.pkg.version}",
