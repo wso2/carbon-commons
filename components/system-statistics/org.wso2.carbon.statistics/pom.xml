@@ -51,7 +51,7 @@
                             org.apache.axis2.*; version="${axis2.osgi.version.range}",
                             org.apache.neethi.*; version="${neethi.osgi.version.range}",
                             org.wso2.carbon.utils,
-                            org.apache.commons.logging,
+                            org.apache.commons.logging.*; version="${import.package.version.commons.logging}",
                             org.apache.log4j,
                             *;resolution:=optional,
                         </Import-Package>
