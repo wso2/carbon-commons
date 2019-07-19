@@ -34,9 +34,10 @@
             <groupId>rhino.wso2</groupId>
             <artifactId>js</artifactId>
         </dependency>
-		<dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging</artifactId>
+        <dependency>
+            <groupId>org.ops4j.pax.logging</groupId>
+            <artifactId>pax-logging-api</artifactId>
+            <version>${pax.logging.api.version}</version>
         </dependency>
         <dependency>
             <groupId>opensaml.wso2</groupId>
