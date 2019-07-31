@@ -13,7 +13,7 @@
     <parent>
         <groupId>org.wso2</groupId>
         <artifactId>wso2</artifactId>
-        <version>1</version>
+        <version>1.2</version>
     </parent>
 
     <modules>
@@ -28,7 +28,7 @@
         <module>service-stubs/org.wso2.carbon.email.verification.stub</module>
         <module>service-stubs/org.wso2.carbon.tenant.common.stub</module>
         <module>service-stubs/cluster-mgt</module>
-        <module>service-stubs/logging</module>
+        <!--<module>service-stubs/logging</module>-->
         <module>service-stubs/remote-tasks</module>
         <module>service-stubs/reporting</module>
         <module>service-stubs/url-mapper</module>
@@ -374,8 +374,8 @@
                 <version>${carbon.commons.version}</version>
             </dependency>
 
-<dependency>
-                <groupId>org.ops4j.pax.logging</groupId>
+            <dependency>
+            <groupId>org.ops4j.pax.logging</groupId>
                 <artifactId>pax-logging-api</artifactId>
                 <version>${pax.logging.api.version}</version>
             </dependency>
@@ -866,24 +866,12 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.service</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.mgt.server.feature</artifactId>
-                <type>zip</type>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.mgt.ui.feature</artifactId>
-                <version>${carbon.commons.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.tenant.common</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.logging.updater</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
@@ -1253,16 +1241,6 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.admin.stub</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.view.stub</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.statistics.stub</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
@@ -1434,16 +1412,6 @@
                 <version>${carbon.kernel.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.admin.ui</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.view.ui</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.feature.mgt.services</artifactId>
                 <version>${carbon.kernel.version}</version>
@@ -1537,6 +1505,11 @@
                 <artifactId>activation</artifactId>
                 <version>${version.org.wso2.orbit.javax.activation}</version>
             </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>cm</artifactId>
+                <version>${version.eclipse.equinox.cm}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1562,16 +1535,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.1</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <source>1.7</source>
-                    <target>1.7</target>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -1983,6 +1946,7 @@
         <jacoco.maven.plugin.version>0.8.2</jacoco.maven.plugin.version>
         <pax.logging.api.version>1.10.1</pax.logging.api.version>
         <import.package.version.commons.logging>[1.2.0,2.0.0)</import.package.version.commons.logging>
+        <version.eclipse.equinox.cm>3.2.0-v20070116</version.eclipse.equinox.cm>
     </properties>
 
     <repositories>
