@@ -126,9 +126,9 @@
             </exclusions>
         </dependency>
       <dependency>
-    <groupId>org.ops4j.pax.logging</groupId>
-    <artifactId>pax-logging-api</artifactId>
-</dependency>
+          <groupId>org.ops4j.pax.logging</groupId>
+          <artifactId>pax-logging-api</artifactId>
+      </dependency>
         <dependency>
             <groupId>org.apache.ws.commons.axiom.wso2</groupId>
             <artifactId>axiom</artifactId>
