@@ -31,9 +31,7 @@
     <url>http://wso2.org</url>
 
     <modules>
-        <module>org.wso2.carbon.logging.service</module>
-        <module>org.wso2.carbon.logging.admin.ui</module>
-        <module>org.wso2.carbon.logging.view.ui</module>
+        <module>org.wso2.carbon.logging.updater</module>
     </modules>
 
         <dependencies>
@@ -54,9 +52,9 @@
                 <artifactId>org.wso2.carbon.core</artifactId>
             </dependency>
             <dependency>
-  <groupId>org.ops4j.pax.logging</groupId>
-  <artifactId>pax-logging-api</artifactId>
-</dependency>
+                <groupId>org.ops4j.pax.logging</groupId>
+                <artifactId>pax-logging-api</artifactId>
+            </dependency>
             <dependency>
                 <groupId>org.wso2.orbit.commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>

@@ -31,9 +31,7 @@
     <url>http://wso2.org</url>
 
     <modules>
-        <module>org.wso2.carbon.logging.mgt.feature</module>
-        <module>org.wso2.carbon.logging.mgt.server.feature</module>
-        <module>org.wso2.carbon.logging.mgt.ui.feature</module>
+        <module>org.wso2.carbon.logging.updater.feature</module>
     </modules>
 
 
