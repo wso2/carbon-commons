@@ -61,7 +61,7 @@ public class LogConfigUpdater implements Runnable {
                     WatchEvent<Path> watchEvent = (WatchEvent<Path>) event;
                     Path fileName = watchEvent.context();
                     Path changedFile = carbonConfigDirectory.resolve(fileName);
-                    if (changedFile.toFile().equals(log4j2File)) {
+                    if (changedFile.toFile().getCanonicalFile().equals(log4j2File.getCanonicalFile())) {
                         updateLoggingConfiguration();
                     }
                 }
