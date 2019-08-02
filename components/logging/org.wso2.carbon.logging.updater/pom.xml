@@ -27,7 +27,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.logging.updater</artifactId>
     <packaging>bundle</packaging>
-    <name>WSO2 Carbon - logging config updater</name>
+    <name>WSO2 Carbon - Logging Config Updater</name>
     <url>http://wso2.org</url>
 
     <build>
@@ -47,7 +47,6 @@
                             org.osgi.service.cm.*,
                             *;resolution:=optional
                         </Import-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
             </plugin>

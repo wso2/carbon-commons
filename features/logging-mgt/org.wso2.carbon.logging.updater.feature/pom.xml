@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- ~ Copyright (c) 2010, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+ ~ Copyright (c) 2019, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  ~
  ~ Licensed under the Apache License, Version 2.0 (the "License");
  ~ you may not use this file except in compliance with the License.
@@ -15,24 +15,25 @@
  ~ limitations under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>logging-mgt-features</artifactId>
         <version>4.7.2-SNAPSHOT</version>
-	<relativePath>../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.logging.updater.feature</artifactId>
     <packaging>pom</packaging>
-    <name>WSO2 Carbon - SSO Hostobjects Feature</name>
+    <name>WSO2 Carbon - Logging Update Feature</name>
     <url>http://wso2.org</url>
-    <description>This feature contains the SSO hostobjects bundles required by WSO2 Products</description>
+    <description>This feature is to update logging configation by reading log config file</description>
 
-	<dependencies>	
-		<dependency>
+    <dependencies>
+        <dependency>
             <groupId>org.wso2.carbon.commons</groupId>
             <artifactId>org.wso2.carbon.logging.updater</artifactId>
         </dependency>
@@ -40,10 +41,10 @@
             <groupId>org.eclipse.equinox</groupId>
             <artifactId>cm</artifactId>
         </dependency>
-	</dependencies>
+    </dependencies>
 
     <build>
-	<plugins>
+        <plugins>
             <plugin>
                 <groupId>org.wso2.maven</groupId>
                 <artifactId>carbon-p2-plugin</artifactId>
@@ -72,7 +73,7 @@
                     </execution>
                 </executions>
             </plugin>
-    </plugins>
+        </plugins>
     </build>
 
 </project>

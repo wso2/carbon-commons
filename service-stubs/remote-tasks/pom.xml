@@ -73,9 +73,9 @@
             <groupId>org.apache.ws.commons.schema.wso2</groupId>
             <artifactId>XmlSchema</artifactId>
         </dependency>
-      <dependency>
-          <groupId>org.ops4j.pax.logging</groupId>
-          <artifactId>pax-logging-api</artifactId>
-      </dependency>
+        <dependency>
+            <groupId>org.ops4j.pax.logging</groupId>
+            <artifactId>pax-logging-api</artifactId>
+        </dependency>
     </dependencies>
 </project>
