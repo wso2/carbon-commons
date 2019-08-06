@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+  </head>
+
+  <body>
+    <div id="swagger-ui"></div>
+
+    <script>
+      function loadCssFromJs(path){
+        var element = document.createElement("link");
+        element.setAttribute("rel", "stylesheet");
+        element.setAttribute("type", "text/css");
+        element.setAttribute("href", path);
+        document.getElementsByTagName("head")[0].appendChild(element);
+      }
+
+      function loadJsFromJs(path){
+        var head = document.getElementsByTagName("head")[0];
+        var script = document.createElement("script");
+        script.src = path;
+        script.type = "text/javascript"
+        head.appendChild(script);
+      }
+
+      var API_URL =  window.location.origin + window.location.pathname;
+      var swaggeruicss = API_URL + "?wsdl2form&contentType=text/css&resource=css/swagger-ui.css";
+      loadCssFromJs(swaggeruicss);
+      var swaggeruiJs = API_URL + "?wsdl2form&contentType=text/javascript&resource=js/swagger-ui-bundle.js";
+      loadJsFromJs(swaggeruiJs);
+      var swaggeruiJsPreset = API_URL + "?wsdl2form&contentType=text/javascript&resource=js/swagger-ui-standalone-preset.js";
+      loadJsFromJs(swaggeruiJsPreset);
+      var jqueryJs = API_URL + "?wsdl2form&amp;contentType=text/javascript&amp;resource=js/jquery-1.5.2.min.js";
+      loadJsFromJs(jqueryJs);
+
+      window.onload = function() {
+        const ui = SwaggerUIBundle({
+          url: API_URL + "?swagger.json",
+          dom_id: '#swagger-ui',
+          presets: [
+            SwaggerUIBundle.presets.apis,
+            SwaggerUIStandalonePreset
+          ]
+        });
+        window.ui = ui
+      }
+
+    </script>
+
+  </body>
+
+</html>
