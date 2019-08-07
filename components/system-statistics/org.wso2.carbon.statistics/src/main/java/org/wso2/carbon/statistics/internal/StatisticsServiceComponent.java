@@ -119,15 +119,18 @@ public class StatisticsServiceComponent {
     protected void unsetConfigurationContextService(ConfigurationContextService contextService) {
 
         AxisConfiguration axisConf = configContext.getAxisConfiguration();
-        AxisModule statModule = axisConf.getModule(StatisticsConstants.STATISTISTICS_MODULE_NAME);
-        if (statModule != null) {
-            try {
-                axisConf.disengageModule(statModule);
-            } catch (AxisFault axisFault) {
-                log.error("Failed disengage module: " + StatisticsConstants.STATISTISTICS_MODULE_NAME);
+        if (axisConf != null) {
+            AxisModule statModule = axisConf.getModule(StatisticsConstants.STATISTISTICS_MODULE_NAME);
+            if (statModule != null) {
+                try {
+                    axisConf.disengageModule(statModule);
+                } catch (AxisFault axisFault) {
+                    log.error("Failed disengage module: " + StatisticsConstants.STATISTISTICS_MODULE_NAME);
+                }
             }
+            this.configContext = null;
         }
-        this.configContext = null;
+
     }
 
     @Reference(
