@@ -31,7 +31,6 @@
         <!--<module>service-stubs/logging</module>-->
         <module>service-stubs/remote-tasks</module>
         <module>service-stubs/reporting</module>
-        <module>service-stubs/url-mapper</module>
         <module>service-stubs/event</module>
         <module>service-stubs/ndatasource</module>
         <module>service-stubs/soap-tracer</module>
@@ -48,7 +47,6 @@
         <module>components/ganalytics</module>
         <module>components/caching-invalidator</module>
         <module>components/cluster-mgt</module>
-        <module>components/url-mapper</module>
         <module>components/transaction-manager</module>
         <module>components/hostobjects</module>
         <module>components/ntask</module>
@@ -79,7 +77,6 @@
         <module>features/reporting</module>
         <module>features/transaction-manager</module>
         <module>features/tryit</module>
-        <module>features/url-mapper</module>
         <module>features/event</module>
         <module>features/ndatasource</module>
         <module>features/ws-discovery-core</module>
@@ -237,13 +234,6 @@
                 <artifactId>commons-lang3</artifactId>
                 <version>${version.commons.lang3}</version>
             </dependency>
-
-            <dependency>
-                <groupId>org.apache.tomcat</groupId>
-                <artifactId>tomcat-servlet-api</artifactId>
-                <version>${version.tomcat}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.tomcat.ext</artifactId>
@@ -432,11 +422,6 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.event.common</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.url.mapper.clustermessage</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
 
@@ -665,28 +650,6 @@
                 <type>zip</type>
             </dependency>
             <!-- Feature related dependencies -->
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.url.mapper</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.url.mapper.ui</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.url.mapper.server.feature</artifactId>
-                <version>${carbon.commons.version}</version>
-                <type>zip</type>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.url.mapper.ui.feature</artifactId>
-                <version>${carbon.commons.version}</version>
-                <type>zip</type>
-            </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.tryit.server.feature</artifactId>
@@ -1226,11 +1189,6 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.url.mapper.stub</artifactId>
-                <version>${carbon.commons.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.discovery.stub</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
@@ -1733,7 +1691,7 @@
                 <module>components/ganalytics</module>
                 <module>components/caching-invalidator</module>
                 <module>components/cluster-mgt</module>
-                <module>components/url-mapper</module>
+                <!--<module>components/url-mapper</module>-->
                 <module>components/transaction-manager</module>
                 <module>components/hostobjects</module>
                 <module>components/ntask</module>
