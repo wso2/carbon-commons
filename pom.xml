@@ -1066,11 +1066,6 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
-                <groupId>org.wso2.tomcat</groupId>
-                <artifactId>tomcat-servlet-api</artifactId>
-                <version>${orbit.version.tomcat.servlet.api}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.batik.wso2</groupId>
                 <artifactId>batik</artifactId>
                 <version>1.7.0.wso2v1</version>
@@ -1714,7 +1709,7 @@
 
     <properties>
         <!-- Carbon kernel version -->
-        <carbon.kernel.version>4.5.0-m3</carbon.kernel.version>
+        <carbon.kernel.version>4.5.0-alpha</carbon.kernel.version>
         <carbon.kernel.imp.pkg.version>[4.5.0, 5.0.0)</carbon.kernel.imp.pkg.version>
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
 
@@ -1740,9 +1735,6 @@
 
         <!-- Stratos Version -->
         <stratos.version>2.2.0</stratos.version>
-
-        <version.tomcat>7.0.93</version.tomcat>
-        <orbit.version.tomcat.servlet.api>${version.tomcat}.wso2v1</orbit.version.tomcat.servlet.api>
 
         <!-- Axiom Version -->
         <axiom.wso2.version>1.2.11-wso2v16</axiom.wso2.version>
