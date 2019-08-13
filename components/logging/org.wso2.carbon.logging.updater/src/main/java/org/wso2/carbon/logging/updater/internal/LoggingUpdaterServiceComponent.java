@@ -22,22 +22,27 @@ package org.wso2.carbon.logging.updater.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventConstants;
+import org.osgi.service.event.EventHandler;
 import org.wso2.carbon.logging.updater.LogConfigUpdater;
+import org.wso2.carbon.logging.updater.LoggingUpdaterConstants;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@Component(name = "org.wso2.carbon.logging.updater", immediate = true)
-public class LoggingUpdaterServiceComponent {
+@Component(name = "org.wso2.carbon.logging.updater", immediate = true, property = EventConstants.EVENT_TOPIC
+        + "=" + LoggingUpdaterConstants.PAX_LOGGING_CONFIGURATION_TOPIC)
+public class LoggingUpdaterServiceComponent implements EventHandler {
 
     final static Log log = LogFactory.getLog(LoggingUpdaterServiceComponent.class);
     private ConfigurationAdmin configurationAdmin;
@@ -49,11 +54,11 @@ public class LoggingUpdaterServiceComponent {
             policy = ReferencePolicy.DYNAMIC)
     public void setConfigAdminService(ConfigurationAdmin configAdminService) {
 
-        ServiceReferenceHolder.getInstance().setConfigurationAdmin(configurationAdmin);
+        ServiceReferenceHolder.getInstance().setConfigurationAdmin(configAdminService);
     }
 
     @Activate
-    public void activate(BundleContext bundleContext) {
+    public void activate(ComponentContext bundleContext) {
 
         LogConfigUpdater logConfigUpdater =
                 new LogConfigUpdater(ServiceReferenceHolder.getInstance().getConfigurationAdmin());
@@ -73,4 +78,16 @@ public class LoggingUpdaterServiceComponent {
         ServiceReferenceHolder.getInstance().setConfigurationAdmin(null);
     }
 
+    @Override
+    public void handleEvent(Event event) {
+
+        if (event.containsProperty(LoggingUpdaterConstants.EXCEPTIONS_PROPERTY)) {
+            Object property = event.getProperty(LoggingUpdaterConstants.EXCEPTIONS_PROPERTY);
+            Exception exception = (Exception) property;
+            log.error("Logging Configuration issue " + exception.getMessage());
+            log.error("Using the previous successful configuration to setup the logs");
+        } else {
+            log.info("Logging configuration applied successfully");
+        }
+    }
 }
