@@ -45,6 +45,7 @@
                             !org.wso2.carbon.logging.updater.*,
                             org.wso2.carbon.utils.*;version="${carbon.kernel.imp.pkg.version}",
                             org.osgi.service.cm.*,
+                            org.osgi.service.component.*;version="${osgi.service.imp.pkg.version}",
                             *;resolution:=optional
                         </Import-Package>
                     </instructions>

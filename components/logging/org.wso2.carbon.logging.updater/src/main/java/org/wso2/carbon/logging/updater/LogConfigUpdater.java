@@ -36,6 +36,7 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 import java.io.File;
 
+
 public class LogConfigUpdater implements Runnable {
 
     static final Log LOG = LogFactory.getLog(LogConfigUpdater.class);
@@ -55,8 +56,8 @@ public class LogConfigUpdater implements Runnable {
         try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
             Path carbonConfigDirectory = Paths.get(carbonConfigDirPath);
             carbonConfigDirectory.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
-            WatchKey key;
-            while ((key = watchService.take()) != null) {
+            while (true) {
+                final WatchKey key = watchService.take();
                 for (WatchEvent<?> event : key.pollEvents()) {
                     WatchEvent<Path> watchEvent = (WatchEvent<Path>) event;
                     Path fileName = watchEvent.context();
@@ -71,12 +72,16 @@ public class LogConfigUpdater implements Runnable {
             LOG.error("Error while retrieving watch events", e);
         } catch (InterruptedException e) {
             LOG.error("Error while waiting to watch events", e);
+        } catch (Exception e) {
+            LOG.error("Error while updating logger", e);
         }
 
     }
 
-    private void updateLoggingConfiguration() throws IOException {
-        Configuration configuration = configurationAdmin.getConfiguration("org.ops4j.pax.logging");
+    public void updateLoggingConfiguration() throws IOException {
+
+        Configuration configuration =
+                configurationAdmin.getConfiguration(LoggingUpdaterConstants.PAX_LOGGING_CONFIGURATION_PID, "?");
         configuration.update();
 
     }

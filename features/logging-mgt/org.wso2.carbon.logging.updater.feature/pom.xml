@@ -37,8 +37,12 @@
             <artifactId>org.wso2.carbon.logging.updater</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.equinox</groupId>
-            <artifactId>cm</artifactId>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.cm</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.equinox.event</artifactId>
         </dependency>
     </dependencies>
 
@@ -66,7 +70,8 @@
                             </adviceFile>
                             <bundles>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.updater</bundleDef>
-                                <bundleDef>org.eclipse.equinox:cm</bundleDef>
+                                <bundleDef>org.eclipse.platform:org.eclipse.equinox.cm</bundleDef>
+                                <bundleDef>org.eclipse.platform:org.eclipse.equinox.event</bundleDef>
                             </bundles>
                         </configuration>
                     </execution>
