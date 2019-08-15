@@ -1,0 +1,125 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://services.view.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:ax2508="http://data.view.logging.carbon.wso2.org/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://services.view.logging.carbon.wso2.org">
+    <wsdl:documentation>LogViewer</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema xmlns:ax2509="http://data.view.logging.carbon.wso2.org/xsd" xmlns:ns="http://org.apache.axis2/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
+            <xs:import namespace="http://data.view.logging.carbon.wso2.org/xsd"/>
+            <xs:element name="clearLogs">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllSystemLogs">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getAllSystemLogsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax2508:LogEvent"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://data.view.logging.carbon.wso2.org/xsd">
+            <xs:complexType name="LogEvent">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="appName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="instance" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="ip" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="key" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="logTime" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="logger" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="message" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="priority" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="serverName" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="stacktrace" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="tenantId" nillable="true" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="clearLogsRequest">
+        <wsdl:part name="parameters" element="ns1:clearLogs"/>
+    </wsdl:message>
+    <wsdl:message name="getAllSystemLogsRequest">
+        <wsdl:part name="parameters" element="ns1:getAllSystemLogs"/>
+    </wsdl:message>
+    <wsdl:message name="getAllSystemLogsResponse">
+        <wsdl:part name="parameters" element="ns1:getAllSystemLogsResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="LogViewerPortType">
+        <wsdl:operation name="clearLogs">
+            <wsdl:input message="tns:clearLogsRequest" wsaw:Action="urn:clearLogs"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAllSystemLogs">
+            <wsdl:input message="tns:getAllSystemLogsRequest" wsaw:Action="urn:getAllSystemLogs"/>
+            <wsdl:output message="tns:getAllSystemLogsResponse" wsaw:Action="urn:getAllSystemLogsResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="LogViewerSoap11Binding" type="tns:LogViewerPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="clearLogs">
+            <soap:operation soapAction="urn:clearLogs" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getAllSystemLogs">
+            <soap:operation soapAction="urn:getAllSystemLogs" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="LogViewerSoap12Binding" type="tns:LogViewerPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="clearLogs">
+            <soap12:operation soapAction="urn:clearLogs" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getAllSystemLogs">
+            <soap12:operation soapAction="urn:getAllSystemLogs" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="LogViewerHttpBinding" type="tns:LogViewerPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="clearLogs">
+            <http:operation location="clearLogs"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getAllSystemLogs">
+            <http:operation location="getAllSystemLogs"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="LogViewer">
+        <wsdl:port name="LogViewerHttpsSoap11Endpoint" binding="tns:LogViewerSoap11Binding">
+            <soap:address location="https://localhost:9443/services/LogViewer.LogViewerHttpsSoap11Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="LogViewerHttpsSoap12Endpoint" binding="tns:LogViewerSoap12Binding">
+            <soap12:address location="https://localhost:9443/services/LogViewer.LogViewerHttpsSoap12Endpoint/"/>
+        </wsdl:port>
+        <wsdl:port name="LogViewerHttpsEndpoint" binding="tns:LogViewerHttpBinding">
+            <http:address location="https://localhost:9443/services/LogViewer.LogViewerHttpsEndpoint/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
