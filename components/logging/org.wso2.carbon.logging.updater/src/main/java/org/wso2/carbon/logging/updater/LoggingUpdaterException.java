@@ -19,12 +19,10 @@
 
 package org.wso2.carbon.logging.updater;
 
-/**
- * Constants on pax-logging
- */
-public interface LoggingUpdaterConstants {
+public class LoggingUpdaterException extends Exception {
 
-    String PAX_LOGGING_CONFIGURATION_PID = "org.ops4j.pax.logging";
-    String PAX_LOGGING_CONFIGURATION_TOPIC = "org/ops4j/pax/logging/Configuration";
-    String EXCEPTIONS_PROPERTY = "exceptions";
+    public LoggingUpdaterException(String message, Throwable cause) {
+
+        super(message, cause);
+    }
 }

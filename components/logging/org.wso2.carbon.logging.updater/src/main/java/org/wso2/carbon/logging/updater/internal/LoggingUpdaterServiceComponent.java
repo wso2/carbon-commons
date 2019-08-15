@@ -35,11 +35,17 @@ import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.wso2.carbon.logging.updater.LogConfigUpdater;
 import org.wso2.carbon.logging.updater.LoggingUpdaterConstants;
+import org.wso2.carbon.logging.updater.LoggingUpdaterException;
+import org.wso2.carbon.logging.updater.LoggingUpdaterUtil;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *
+ * Logging updater service component
+ */
 @Component(name = "org.wso2.carbon.logging.updater", immediate = true, property = EventConstants.EVENT_TOPIC
         + "=" + LoggingUpdaterConstants.PAX_LOGGING_CONFIGURATION_TOPIC)
 public class LoggingUpdaterServiceComponent implements EventHandler {
@@ -54,28 +60,33 @@ public class LoggingUpdaterServiceComponent implements EventHandler {
             policy = ReferencePolicy.DYNAMIC)
     public void setConfigAdminService(ConfigurationAdmin configAdminService) {
 
-        ServiceReferenceHolder.getInstance().setConfigurationAdmin(configAdminService);
+        DataHolder.getInstance().setConfigurationAdmin(configAdminService);
     }
 
     @Activate
-    public void activate(ComponentContext bundleContext) {
+    public void activate(ComponentContext componentContext) {
 
-        LogConfigUpdater logConfigUpdater =
-                new LogConfigUpdater(ServiceReferenceHolder.getInstance().getConfigurationAdmin());
-        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
-        ServiceReferenceHolder.getInstance().setScheduledExecutorService(scheduledExecutorService);
-        scheduledExecutorService.schedule(logConfigUpdater, 5000L, TimeUnit.MILLISECONDS);
+        try {
+            DataHolder.getInstance().setModifiedTime(LoggingUpdaterUtil.readModifiedTime());
+            LogConfigUpdater logConfigUpdater =
+                    new LogConfigUpdater(DataHolder.getInstance().getConfigurationAdmin());
+            ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+            DataHolder.getInstance().setScheduledExecutorService(scheduledExecutorService);
+            scheduledExecutorService.scheduleAtFixedRate(logConfigUpdater, 5000L, 5000L, TimeUnit.MILLISECONDS);
+        } catch (LoggingUpdaterException e) {
+            log.error("Error while Activating LoggingUpdater component", e);
+        }
     }
 
     @Deactivate
     public void deactivate() {
 
-        ServiceReferenceHolder.getInstance().getScheduledExecutorService().shutdown();
+        DataHolder.getInstance().getScheduledExecutorService().shutdown();
     }
 
     public void unsetConfigAdminService(ConfigurationAdmin configurationAdmin) {
 
-        ServiceReferenceHolder.getInstance().setConfigurationAdmin(null);
+        DataHolder.getInstance().setConfigurationAdmin(null);
     }
 
     @Override
@@ -84,8 +95,8 @@ public class LoggingUpdaterServiceComponent implements EventHandler {
         if (event.containsProperty(LoggingUpdaterConstants.EXCEPTIONS_PROPERTY)) {
             Object property = event.getProperty(LoggingUpdaterConstants.EXCEPTIONS_PROPERTY);
             Exception exception = (Exception) property;
-            log.error("Logging Configuration issue " + exception.getMessage());
-            log.error("Using the previous successful configuration to setup the logs");
+            log.error("Unable to apply logging configuration " + exception.getMessage());
+            log.error("Continuing with previous logging configuration");
         } else {
             log.info("Logging configuration applied successfully");
         }

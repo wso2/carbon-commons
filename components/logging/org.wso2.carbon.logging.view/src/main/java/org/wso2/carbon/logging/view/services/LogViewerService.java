@@ -17,14 +17,32 @@
  *
  */
 
-package org.wso2.carbon.logging.updater;
+package org.wso2.carbon.logging.view.services;
+
+import org.wso2.carbon.logging.view.data.LogEvent;
+import org.wso2.carbon.logging.view.internal.DataHolder;
+
+import java.util.List;
 
 /**
- * Constants on pax-logging
+ * Log Viewer Service
  */
-public interface LoggingUpdaterConstants {
+public class LogViewerService {
 
-    String PAX_LOGGING_CONFIGURATION_PID = "org.ops4j.pax.logging";
-    String PAX_LOGGING_CONFIGURATION_TOPIC = "org/ops4j/pax/logging/Configuration";
-    String EXCEPTIONS_PROPERTY = "exceptions";
+    /**
+     *  Return all logs in system
+     * @return array of {@link LogEvent}
+     */
+    public LogEvent[] getAllSystemLogs() {
+
+        List<LogEvent> logEventList = DataHolder.getInstance().getLogBuffer().get(2000);
+        return logEventList.toArray(new LogEvent[logEventList.size()]);
+    }
+
+    public void clearLogs() {
+
+        DataHolder.getInstance().getLogBuffer().clear();
+    }
+
+
 }

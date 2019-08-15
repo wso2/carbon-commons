@@ -17,14 +17,31 @@
  *
  */
 
-package org.wso2.carbon.logging.updater;
+package org.wso2.carbon.logging.view.internal;
+
+import org.wso2.carbon.logging.view.data.LogEvent;
+import org.wso2.carbon.utils.logging.CircularBuffer;
 
 /**
- * Constants on pax-logging
+ * Holder to keep References
  */
-public interface LoggingUpdaterConstants {
+public class DataHolder {
 
-    String PAX_LOGGING_CONFIGURATION_PID = "org.ops4j.pax.logging";
-    String PAX_LOGGING_CONFIGURATION_TOPIC = "org/ops4j/pax/logging/Configuration";
-    String EXCEPTIONS_PROPERTY = "exceptions";
+    private CircularBuffer<LogEvent> logBuffer = new CircularBuffer<>(2000);
+
+    private static final DataHolder instance = new DataHolder();
+
+    private DataHolder() {
+
+    }
+
+    public CircularBuffer<LogEvent> getLogBuffer() {
+
+        return logBuffer;
+    }
+
+    public static DataHolder getInstance() {
+
+        return instance;
+    }
 }

@@ -21,40 +21,52 @@ package org.wso2.carbon.logging.updater.internal;
 
 import org.osgi.service.cm.ConfigurationAdmin;
 
+import java.nio.file.attribute.FileTime;
 import java.util.concurrent.ScheduledExecutorService;
 
-public class ServiceReferenceHolder {
-    private static ConfigurationAdmin configurationAdmin;
-    private static ScheduledExecutorService scheduledExecutorService;
-    private static final ServiceReferenceHolder instance = new ServiceReferenceHolder();
+public class DataHolder {
 
+    private  ConfigurationAdmin configurationAdmin;
+    private  ScheduledExecutorService scheduledExecutorService;
+    private static final DataHolder instance = new DataHolder();
+    private  FileTime modifiedTime;
 
-    private ServiceReferenceHolder(){
+    private DataHolder() {
 
     }
 
-    public  ConfigurationAdmin getConfigurationAdmin() {
+    public ConfigurationAdmin getConfigurationAdmin() {
 
         return configurationAdmin;
     }
 
-    public static ServiceReferenceHolder getInstance() {
+    public static DataHolder getInstance() {
 
         return instance;
     }
 
-    public  void setConfigurationAdmin(ConfigurationAdmin configurationAdmin) {
+    public void setConfigurationAdmin(ConfigurationAdmin configurationAdmin) {
 
-        ServiceReferenceHolder.configurationAdmin = configurationAdmin;
+        this.configurationAdmin = configurationAdmin;
     }
 
-    public  void setScheduledExecutorService(ScheduledExecutorService scheduledExecutorService) {
+    public void setScheduledExecutorService(ScheduledExecutorService scheduledExecutorService) {
 
-        ServiceReferenceHolder.scheduledExecutorService = scheduledExecutorService;
+        this.scheduledExecutorService = scheduledExecutorService;
     }
 
-    public  ScheduledExecutorService getScheduledExecutorService() {
+    public ScheduledExecutorService getScheduledExecutorService() {
 
         return scheduledExecutorService;
+    }
+
+    public FileTime getModifiedTime() {
+
+        return modifiedTime;
+    }
+
+    public void setModifiedTime(FileTime modifiedTime) {
+
+        this.modifiedTime = modifiedTime;
     }
 }

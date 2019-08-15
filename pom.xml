@@ -85,6 +85,7 @@
         <module>features/soap-tracer</module>
         <module>features/message-flows</module>
         <module>features/tenant-mgt-common</module>
+        <module>service-stubs/logging</module>
     </modules>
 
     <scm>
@@ -835,6 +836,11 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.logging.updater</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.logging.view</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
@@ -1918,7 +1924,8 @@
         <maven.scr.plugin.version>1.26.0</maven.scr.plugin.version>
         <version.org.wso2.orbit.javax.activation>1.1.1.wso2v2</version.org.wso2.orbit.javax.activation>
         <jacoco.maven.plugin.version>0.8.2</jacoco.maven.plugin.version>
-        <pax.logging.api.version>1.10.1</pax.logging.api.version>
+        <pax.logging.api.version>1.11.0</pax.logging.api.version>
+        <pax.logging.api.version.range>[1.11.0,2.0.0)</pax.logging.api.version.range>
         <import.package.version.commons.logging>[1.2.0,2.0.0)</import.package.version.commons.logging>
         <version.eclipse.equinox.cm>1.3.100</version.eclipse.equinox.cm>
         <version.eclipse.equinox.event>1.5.100</version.eclipse.equinox.event>

@@ -24,19 +24,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.wso2.carbon.utils.CarbonUtils;
+import org.wso2.carbon.logging.updater.internal.DataHolder;
 
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
-import java.io.File;
+import java.nio.file.attribute.FileTime;
 
-
+/**
+ * Logging configuration updater implementation to check and update pax-logging configuration realtime.
+ */
 public class LogConfigUpdater implements Runnable {
 
     static final Log LOG = LogFactory.getLog(LogConfigUpdater.class);
@@ -51,34 +46,23 @@ public class LogConfigUpdater implements Runnable {
     @Override
     public void run() {
 
-        String carbonConfigDirPath = CarbonUtils.getCarbonConfigDirPath();
-        File log4j2File = new File(carbonConfigDirPath + File.separator + "log4j2.properties");
-        try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
-            Path carbonConfigDirectory = Paths.get(carbonConfigDirPath);
-            carbonConfigDirectory.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
-            while (true) {
-                final WatchKey key = watchService.take();
-                for (WatchEvent<?> event : key.pollEvents()) {
-                    WatchEvent<Path> watchEvent = (WatchEvent<Path>) event;
-                    Path fileName = watchEvent.context();
-                    Path changedFile = carbonConfigDirectory.resolve(fileName);
-                    if (changedFile.toFile().getCanonicalFile().equals(log4j2File.getCanonicalFile())) {
-                        updateLoggingConfiguration();
-                    }
+        try {
+            FileTime modifiedTime = LoggingUpdaterUtil.readModifiedTime();
+            FileTime lastModifiedTime = DataHolder.getInstance().getModifiedTime();
+            if (lastModifiedTime != null) {
+                if (modifiedTime.compareTo(lastModifiedTime) > 0) {
+                    DataHolder.getInstance().setModifiedTime(modifiedTime);
+                    updateLoggingConfiguration();
                 }
-                key.reset();
             }
+        } catch (LoggingUpdaterException e) {
+            LOG.error("Error while reading modified Time", e);
         } catch (IOException e) {
-            LOG.error("Error while retrieving watch events", e);
-        } catch (InterruptedException e) {
-            LOG.error("Error while waiting to watch events", e);
-        } catch (Exception e) {
-            LOG.error("Error while updating logger", e);
+            LOG.error("Error while updating logging configuration", e);
         }
-
     }
 
-    public void updateLoggingConfiguration() throws IOException {
+    private void updateLoggingConfiguration() throws IOException {
 
         Configuration configuration =
                 configurationAdmin.getConfiguration(LoggingUpdaterConstants.PAX_LOGGING_CONFIGURATION_PID, "?");
