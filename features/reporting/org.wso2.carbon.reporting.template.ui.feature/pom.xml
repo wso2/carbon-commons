@@ -94,7 +94,7 @@
 				 <importBundleDef>xalan.wso2:xalan</importBundleDef>
                             </importBundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.ui:${carbon.kernel.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.core.ui:${carbon.kernel.feature.version}</importFeatureDef>
                                 <importFeatureDef>org.wso2.carbon.ndatasource.ui:${carbon.commons.version}</importFeatureDef>
                             </importFeatures>
                         </configuration>
