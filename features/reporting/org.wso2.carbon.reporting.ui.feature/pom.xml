@@ -117,7 +117,7 @@
                                 </bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.stub:${carbon.commons.version}
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon:org.wso2.carbon.ui.menu.tools:${carbon.kernel.feature.version}
+                                <bundleDef>org.wso2.carbon:org.wso2.carbon.ui.menu.tools:${carbon.kernel.version}
                                 </bundleDef>
 
                             </bundles>
