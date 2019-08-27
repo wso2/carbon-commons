@@ -1518,6 +1518,11 @@
                 <artifactId>org.wso2.carbon.logging.view.ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${version.jaxb.api}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1974,6 +1979,7 @@
         <version.eclipse.equinox.cm>1.3.100</version.eclipse.equinox.cm>
         <version.eclipse.equinox.event>1.5.100</version.eclipse.equinox.event>
         <commons.configuration.version>1.10</commons.configuration.version>
+        <version.jaxb.api>2.4.0-b180830.0359</version.jaxb.api>
     </properties>
 
     <repositories>
