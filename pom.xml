@@ -1720,7 +1720,7 @@
 
     <properties>
         <!-- Carbon kernel version -->
-        <carbon.kernel.version>4.5.0-alpha3</carbon.kernel.version>
+        <carbon.kernel.version>4.5.0</carbon.kernel.version>
         <carbon.kernel.feature.version>4.5.0</carbon.kernel.feature.version>
         <carbon.kernel.imp.pkg.version>[4.5.0, 5.0.0)</carbon.kernel.imp.pkg.version>
         <carbon.kernel.registry.imp.pkg.version>[1.0.1, 2.0.0)</carbon.kernel.registry.imp.pkg.version>
@@ -1755,7 +1755,7 @@
         <orbit.version.axiom>1.2.11-wso2v16</orbit.version.axiom>
 
         <!-- Axis2 Version -->
-        <axis2.wso2.version>1.6.1-wso2v37</axis2.wso2.version>
+        <axis2.wso2.version>1.6.1-wso2v38</axis2.wso2.version>
         <axis2.osgi.version.range>[1.6.1, 2.0.0)</axis2.osgi.version.range>
         <axis2.orbit.imp.pkg.version>[1.6, 2.0)</axis2.orbit.imp.pkg.version>
         <orbit.version.axis2>1.6.1-wso2v37</orbit.version.axis2>
@@ -1922,7 +1922,6 @@
         <orbit.version.httpcomponents.httpclient>4.3.6.wso2v1</orbit.version.httpcomponents.httpclient>
         <fasterxml.jackson.core.orbit.version>2.9.8.wso2v1</fasterxml.jackson.core.orbit.version>
         <apache.felix.scr.ds.annotations.version>1.2.4</apache.felix.scr.ds.annotations.version>
-        <maven.scr.plugin.version>1.26.0</maven.scr.plugin.version>
         <version.org.wso2.orbit.javax.activation>1.1.1.wso2v2</version.org.wso2.orbit.javax.activation>
         <jacoco.maven.plugin.version>0.8.2</jacoco.maven.plugin.version>
         <pax.logging.api.version>1.11.0</pax.logging.api.version>
