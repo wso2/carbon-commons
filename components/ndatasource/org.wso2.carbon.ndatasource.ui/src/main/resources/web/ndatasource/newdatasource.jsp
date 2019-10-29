@@ -1327,12 +1327,10 @@ function displayPasswordField() {
     		var editMode = document.getElementById("editMode").value;
 			if (editMode == null || editMode == "false") {
 				password = document.getElementById('password').value;
-                password = encodeURIComponent(password);
 				jQuery.post(url, ({username : username, password : password}), displayMsg);
 			} else {
 				var changePassword = "false";
 				password = document.getElementById('newPassword').value;
-                password = encodeURIComponent(password);
 				if (document.getElementById('changePassword') != null) {
 					changePassword = document.getElementById('changePassword').checked;
 				}
