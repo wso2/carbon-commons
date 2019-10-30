@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import org.quartz.*;
 import org.quartz.Trigger.TriggerState;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.quartz.impl.triggers.CronTriggerImpl;
 import org.quartz.spi.OperableTrigger;
 import org.wso2.carbon.context.PrivilegedCarbonContext;
 import org.wso2.carbon.ntask.common.TaskConstants;
@@ -32,7 +33,12 @@ import org.wso2.carbon.ntask.core.TaskRepository;
 import org.wso2.carbon.ntask.core.TaskUtils;
 import org.wso2.carbon.ntask.core.internal.TasksDSComponent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This class represents an abstract class implementation of TaskManager based on Quartz Scheduler.
@@ -217,12 +223,32 @@ public abstract class AbstractQuartzTaskManager implements TaskManager {
                 this.getJobDataMapFromTaskInfo(taskInfo)).build();
         Trigger trigger = this.getTriggerFromInfo(taskName, taskGroup, taskInfo.getTriggerInfo());
         try {
-            this.getScheduler().scheduleJob(job, trigger);
-            if (paused) {
-                this.getScheduler().pauseJob(job.getKey());
+            if (trigger instanceof CronTriggerImpl) {
+                OperableTrigger trig = (OperableTrigger) trigger;
+                Calendar cal = null;
+                if (trigger.getCalendarName() != null) {
+                    scheduler.getCalendar(trigger.getCalendarName());
+                }
+                Date ft = trig.computeFirstFireTime(cal);
+                if (ft == null) {
+                    log.info("Task [" + this.getTenantId() + "][" +
+                            this.getTaskType() + "][" + taskName + "] not scheduled as given trigger will never fire");
+                } else {
+                    this.getScheduler().scheduleJob(job, trigger);
+                    if (paused) {
+                        this.getScheduler().pauseJob(job.getKey());
+                    }
+                    log.info("Task scheduled: [" + this.getTenantId() +
+                            "][" + this.getTaskType() + "][" + taskName + "]" + (paused ? "[Paused]" : ""));
+                }
+            } else {
+                this.getScheduler().scheduleJob(job, trigger);
+                if (paused) {
+                    this.getScheduler().pauseJob(job.getKey());
+                }
+                log.info("Task scheduled: [" + this.getTenantId() +
+                        "][" + this.getTaskType() + "][" + taskName + "]" + (paused ? "[Paused]" : ""));
             }
-            log.info("Task scheduled: [" + this.getTenantId() +
-                    "][" + this.getTaskType() + "][" + taskName + "]" + (paused ? "[Paused]" : ""));
         } catch (SchedulerException e) {
             throw new TaskException("Error in scheduling task with name: " + taskName,
                     Code.UNKNOWN, e);
