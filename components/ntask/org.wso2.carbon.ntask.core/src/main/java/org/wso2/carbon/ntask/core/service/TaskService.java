@@ -100,6 +100,10 @@ public interface TaskService {
         
         Map<String, String> getLocationResolverProperties();
 
+        int getRetryCount();
+
+        long getRetryInterval();
+
     }
 
     public static enum TaskServerMode {

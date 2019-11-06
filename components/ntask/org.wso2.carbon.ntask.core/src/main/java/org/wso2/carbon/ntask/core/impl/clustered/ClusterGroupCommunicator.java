@@ -212,23 +212,38 @@ public class ClusterGroupCommunicator implements MembershipListener {
 
     @Override
     public void memberAdded(MembershipEvent event) {
-        /* ignored; the member addition for this group is handled in 
-         * the initialization of the cluster group communicator */
-    }
-
-    private void scheduleAllMissingTasks() throws TaskException {
-        for (TaskManager tm : getTaskService().getAllTenantTaskManagersForType(this.getTaskType())) {
-            if (tm instanceof ClusteredTaskManager) {
-                this.scheduleMissingTasksWithRetryOnError((ClusteredTaskManager) tm);
+        if (this.getHazelcast().getLifecycleService().isRunning()) {
+            String id = this.getIdFromMember(event.getMember());
+            this.membersMap.put(id, event.getMember());
+            try {
+                if (this.isLeader()) {
+                    log.info("Task [" + this.getTaskType() + "] member joined [" + event.getMember().toString()
+                            + "], rescheduling missing tasks...");
+                    this.scheduleAllMissingTasks(id);
+                }
+            } catch (TaskException e) {
+                log.error("Error in scheduling missing tasks [" + this.getTaskType() + "]: " + e.getMessage(), e);
             }
         }
     }
 
-    private void scheduleMissingTasksWithRetryOnError(ClusteredTaskManager tm) {
+    private void scheduleAllMissingTasks(String memberId) throws TaskException {
+        for (TaskManager tm : getTaskService().getAllTenantTaskManagersForType(this.getTaskType())) {
+            if (tm instanceof ClusteredTaskManager) {
+                this.scheduleMissingTasksWithRetryOnError((ClusteredTaskManager) tm, memberId);
+            }
+        }
+    }
+
+    private void scheduleMissingTasksWithRetryOnError(ClusteredTaskManager tm, String memberId) {
         int count = MISSING_TASKS_ON_ERROR_RETRY_COUNT;
         while (count > 0) {
             try {
-            	tm.scheduleMissingTasks();
+                if (memberId == null) {
+                    tm.scheduleMissingTasks();
+                } else {
+                    tm.scheduleMissingTasks(memberId);
+                }
                 break;
             } catch (TaskException e) {
             	boolean retry = (count > 1);
@@ -262,7 +277,7 @@ public class ClusterGroupCommunicator implements MembershipListener {
                 if (this.isLeader()) {
                     log.info("Task [" + this.getTaskType() + "] member departed [" + event.getMember().toString()
                             + "], rescheduling missing tasks...");
-                    this.scheduleAllMissingTasks();
+                    this.scheduleAllMissingTasks(null);
                 }
             } catch (TaskException e) {
                 log.error("Error in scheduling missing tasks [" + this.getTaskType() + "]: " + e.getMessage(), e);

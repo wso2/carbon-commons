@@ -54,4 +54,11 @@
     <!-- Below contain a sample to be used when using with secure vault -->
     <!--remoteServerPassword svns:secretAlias="remote.task.server.password"></remoteServerPassword-->
 
+     <!-- The task service availability of remote task server-->
+     <taskServerAvailabilityCheck>
+         <retryCount>10</retryCount>
+         <!--time interval(milliseconds) between availability check -->
+         <retryInterval>1000</retryInterval>
+     </taskServerAvailabilityCheck>
+
 </tasks-configuration>
