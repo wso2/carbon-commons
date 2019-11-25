@@ -3,7 +3,7 @@
   <parent>
     <artifactId>carbon-commons</artifactId>
     <groupId>org.wso2.carbon.commons</groupId>
-    <version>4.7.18</version>
+    <version>4.7.19-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
   
