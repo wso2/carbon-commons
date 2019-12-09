@@ -69,7 +69,9 @@
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.messageflows.stub</bundleDef>
                             </bundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.core.ui:${carbon.kernel.feature.version}</importFeatureDef>
+                                <importFeatureDef>
+                                    org.wso2.carbon.core.ui:compatible:${carbon.kernel.feature.version}
+                                </importFeatureDef>
                             </importFeatures>
                         </configuration>
                     </execution>
