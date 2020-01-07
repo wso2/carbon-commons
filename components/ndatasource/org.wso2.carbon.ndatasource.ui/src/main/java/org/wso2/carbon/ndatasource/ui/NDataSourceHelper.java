@@ -506,7 +506,7 @@ public class NDataSourceHelper {
     public static String elementToString(Element element) {
         try (StringWriter buff = new StringWriter()) {
             if (element == null) {
-                return null;
+                return "";
             }
             TransformerFactory factory = TransformerFactory.newInstance();
             factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
@@ -517,10 +517,10 @@ public class NDataSourceHelper {
             return buff.toString();
         } catch (TransformerException e) {
             log.error("Error while converting element to string: " + e.getMessage(), e);
-            return null;
+            return "";
         } catch (IOException e) {
             log.error("Error while closing StringWriter " + e.getMessage(), e);
-            return null;
+            return "";
         }
     }
 	
