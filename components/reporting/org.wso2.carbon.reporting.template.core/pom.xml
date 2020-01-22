@@ -4,7 +4,7 @@
     <parent>
         <artifactId>reporting</artifactId>
         <groupId>org.wso2.carbon.commons</groupId>
-        <version>4.7.23</version>
+        <version>4.7.24-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
