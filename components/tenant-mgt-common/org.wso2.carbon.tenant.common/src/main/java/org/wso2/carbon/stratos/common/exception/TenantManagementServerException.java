@@ -17,9 +17,20 @@
  */
 package org.wso2.carbon.stratos.common.exception;
 
-public class TenantServerException extends Exception {
+public class TenantManagementServerException extends TenantMgtException {
 
-    public TenantServerException(String msg, Exception e) {
+    public TenantManagementServerException(String errorCode, String errorDescription) {
+
+        super(errorCode, errorDescription);
+    }
+
+    public TenantManagementServerException(String msg) {
+
+        super(msg);
+    }
+
+    public TenantManagementServerException(String msg, Exception e) {
+
         super(msg, e);
     }
 }

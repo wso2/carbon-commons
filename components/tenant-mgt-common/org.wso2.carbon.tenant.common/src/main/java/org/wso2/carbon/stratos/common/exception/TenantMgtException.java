@@ -17,28 +17,33 @@
  */
 package org.wso2.carbon.stratos.common.exception;
 
-import org.wso2.carbon.stratos.common.constants.TenantConstants;
-
-public class TenantClientException extends Exception {
+public class TenantMgtException extends Exception {
 
     private String errorCode = null;
 
-    public TenantClientException(String errorCode, String message) {
+    public TenantMgtException(String msg, Exception e) {
+
+        super(msg, e);
+    }
+
+    public TenantMgtException(String msg) {
+
+        super(msg);
+    }
+
+    public TenantMgtException(String errorCode, String message) {
+
         super(message);
         this.errorCode = errorCode;
     }
 
-    public TenantClientException(TenantConstants.ErrorMessage error) {
-
-        super(error.getMessage());
-        this.errorCode = error.getCode();
-    }
-
     public String getErrorCode() {
+
         return errorCode;
     }
 
     public void setErrorCode(String errorCode) {
+
         this.errorCode = errorCode;
     }
 }

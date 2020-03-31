@@ -22,8 +22,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.stratos.common.constants.StratosConstants;
-import org.wso2.carbon.stratos.common.exception.TenantClientException;
-import org.wso2.carbon.stratos.common.exception.TenantServerException;
+import org.wso2.carbon.stratos.common.exception.TenantManagementClientException;
+import org.wso2.carbon.stratos.common.exception.TenantManagementServerException;
 import org.wso2.carbon.stratos.common.internal.CloudCommonServiceComponent;
 import org.wso2.carbon.registry.core.ActionConstants;
 import org.wso2.carbon.registry.core.RegistryConstants;
@@ -293,13 +293,13 @@ public class CommonUtil {
     public static void validateEmail(String email) throws Exception {
 
         if (StringUtils.isBlank(email)) {
-            throw new TenantClientException(ERROR_CODE_EMPTY_EMAIL);
+            throw new TenantManagementClientException(ERROR_CODE_EMPTY_EMAIL);
         }
         if (illegalCharactersPatternForEmail.matcher(email).matches()) {
-            throw new TenantClientException(ERROR_CODE_ILLEGAL_EMAIL);
+            throw new TenantManagementClientException(ERROR_CODE_ILLEGAL_EMAIL);
         }
         if (!emailFilterPattern.matcher(email).matches()) {
-            throw new TenantClientException(ERROR_CODE_INVALID_EMAIL);
+            throw new TenantManagementClientException(ERROR_CODE_INVALID_EMAIL);
         }
     }
 
@@ -585,7 +585,7 @@ public class CommonUtil {
           // The registry reserved words are checked first.
           if (tenantDomain.equals("atom") || tenantDomain.equals("registry")
                   || tenantDomain.equals("resource")) {
-              throw new TenantClientException(ERROR_CODE_UNAVAILABLE_DOMAIN);
+              throw new TenantManagementClientException(ERROR_CODE_UNAVAILABLE_DOMAIN);
           }
 
           int tenantId;
@@ -593,7 +593,7 @@ public class CommonUtil {
               tenantId = tenantManager.getTenantId(tenantDomain);
           } catch (UserStoreException e) {
               String msg = "Error in getting the tenant id for the given domain  " + tenantDomain + ".";
-              throw new TenantServerException(msg, e);
+              throw new TenantManagementServerException(msg, e);
           }
 
           // check a tenant with same domain exist.

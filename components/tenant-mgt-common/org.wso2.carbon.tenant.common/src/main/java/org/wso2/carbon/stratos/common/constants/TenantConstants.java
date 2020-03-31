@@ -31,7 +31,20 @@ public class TenantConstants {
         ERROR_CODE_INVALID_EMAIL("100003",
                 "Invalid email address is provided."),
         ERROR_CODE_UNAVAILABLE_DOMAIN("100004", "You can not use a registry reserved word: %s as a tenant domain. " +
-                "Please choose a different one.");
+                "Please choose a different one."),
+        ERROR_CODE_EMPTY_DOMAIN_NAME("100004",
+                "Provided domain name is empty."),
+        ERROR_CODE_EMPTY_EXTENSION("100005",
+                "You should have an extension to your domain."),
+        ERROR_CODE_INVALID_DOMAIN("100006",
+                "Invalid domain. Domain should not start with '.'"),
+        ERROR_CODE_ILLEGAL_CHARACTERS_IN_DOMAIN("100007",
+                "The tenant domain %s contains one or more illegal characters. The valid characters are lowercase " +
+                        "letters, numbers, '.', '-' and '_'."),
+        ERROR_CODE_EXISTING_USER_NAME("100008",
+                "User name : %s exists in the system. Please pick another user name for tenant Administrator."),
+        ERROR_CODE_EXISTING_DOMAIN("100009",
+                "A tenant with same domain %s already exist. Please use a different domain name.");
 
         private final String code;
         private final String message;
