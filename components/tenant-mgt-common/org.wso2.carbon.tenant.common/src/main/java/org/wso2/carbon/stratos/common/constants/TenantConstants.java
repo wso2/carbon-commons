@@ -24,26 +24,26 @@ public class TenantConstants {
      */
     public enum ErrorMessage {
 
-        ERROR_CODE_EMPTY_EMAIL("100001",
+        ERROR_CODE_EMPTY_EMAIL("TM-60000",
                 "Provided email is empty."),
-        ERROR_CODE_ILLEGAL_EMAIL("100002",
+        ERROR_CODE_ILLEGAL_EMAIL("TM-60001",
                 "Wrong characters in the email."),
-        ERROR_CODE_INVALID_EMAIL("100003",
+        ERROR_CODE_INVALID_EMAIL("TM-60002",
                 "Invalid email address is provided."),
-        ERROR_CODE_UNAVAILABLE_DOMAIN("100004", "You can not use a registry reserved word: %s as a tenant domain. " +
+        ERROR_CODE_UNAVAILABLE_DOMAIN("TM-60003", "You can not use a registry reserved word as a tenant domain. " +
                 "Please choose a different one."),
-        ERROR_CODE_EMPTY_DOMAIN_NAME("100004",
+        ERROR_CODE_EMPTY_DOMAIN_NAME("TM-60004",
                 "Provided domain name is empty."),
-        ERROR_CODE_EMPTY_EXTENSION("100005",
+        ERROR_CODE_EMPTY_EXTENSION("TM-60005",
                 "You should have an extension to your domain."),
-        ERROR_CODE_INVALID_DOMAIN("100006",
+        ERROR_CODE_INVALID_DOMAIN("TM-60006",
                 "Invalid domain. Domain should not start with '.'"),
-        ERROR_CODE_ILLEGAL_CHARACTERS_IN_DOMAIN("100007",
+        ERROR_CODE_ILLEGAL_CHARACTERS_IN_DOMAIN("TM-60007",
                 "The tenant domain %s contains one or more illegal characters. The valid characters are lowercase " +
                         "letters, numbers, '.', '-' and '_'."),
-        ERROR_CODE_EXISTING_USER_NAME("100008",
+        ERROR_CODE_EXISTING_USER_NAME("TM-60008",
                 "User name : %s exists in the system. Please pick another user name for tenant Administrator."),
-        ERROR_CODE_EXISTING_DOMAIN("100009",
+        ERROR_CODE_EXISTING_DOMAIN("TM-60009",
                 "A tenant with same domain %s already exist. Please use a different domain name.");
 
         private final String code;
