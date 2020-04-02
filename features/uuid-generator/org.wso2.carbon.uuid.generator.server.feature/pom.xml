@@ -23,6 +23,7 @@
         <artifactId>uuid-generator-feature</artifactId>
         <groupId>org.wso2.carbon.commons</groupId>
         <version>4.7.25-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
