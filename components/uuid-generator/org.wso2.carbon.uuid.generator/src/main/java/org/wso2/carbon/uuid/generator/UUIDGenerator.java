@@ -19,10 +19,16 @@ package org.wso2.carbon.uuid.generator;
 
 import java.util.UUID;
 
+/**
+ * Abstract class for Creating UUID generators.
+ */
 public abstract class UUIDGenerator {
 
+    /**
+     * Method to include the logic to generate a specified uuid.
+     *
+     * @return UUID
+     */
     public abstract UUID generate();
-
-
 
 }

@@ -14,6 +14,9 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ * NOTE: The logic in this class is copied from https://github.com/cowtowncoder/java-uuid-generator/, all credits
+ * goes to the original authors of the project  https://github.com/cowtowncoder/java-uuid-generator/.
  */
 package org.wso2.carbon.uuid.generator;
 
@@ -24,9 +27,12 @@ import java.security.SecureRandom;
 import java.util.Random;
 import java.util.UUID;
 
-public class TimeBasedUUIDGenerator extends UUIDGenerator{
+/**
+ * Class responsible for constructing and generating a time based UUID.
+ */
+public class TimeBasedUUIDGenerator extends UUIDGenerator {
 
-    long _address;
+    long address;
     //Last 8 bytes of the UUID (node id + clock sequence)
     protected final long uuidSecondHalf;
 
@@ -49,8 +55,8 @@ public class TimeBasedUUIDGenerator extends UUIDGenerator{
     }
 
     @Override
-    public UUID generate()
-    {
+    public UUID generate() {
+
         final long rawTimestamp = uuidTimeStamp.getTimestamp();
         // Time field components are kind of shuffled, need to slice:
         int clockHi = (int) (rawTimestamp >>> 32);
@@ -68,7 +74,7 @@ public class TimeBasedUUIDGenerator extends UUIDGenerator{
         return new UUID(l1, uuidSecondHalf);
     }
 
-    private byte[] constructNodeId(){
+    private byte[] constructNodeId() {
 
         Random random = new SecureRandom();
         byte[] nodeIdByteArray = new byte[6];
@@ -80,26 +86,27 @@ public class TimeBasedUUIDGenerator extends UUIDGenerator{
         return nodeIdByteArray;
     }
 
-    private void createBinaryAddress(byte[] nodeIdByteArray){
+    private void createBinaryAddress(byte[] nodeIdByteArray) {
+
         if (nodeIdByteArray.length != 6) {
-            throw new NumberFormatException("Ethernet address has to consist of 6 bytes");
+            throw new NumberFormatException("Node ID address has to consist of 6 bytes");
         }
         long l = nodeIdByteArray[0] & 0xFF;
         for (int i = 1; i < 6; ++i) {
             l = (l << 8) | (nodeIdByteArray[i] & 0xFF);
         }
-        _address = l;
+        address = l;
     }
 
-    private void insertToByteArray(byte[] array, int pos)
-    {
+    private void insertToByteArray(byte[] array, int pos) {
+
         if (pos < 0 || (pos + 6) > array.length) {
-            throw new IllegalArgumentException("Illegal offset ("+pos+"), need room for 6 bytes");
+            throw new IllegalArgumentException("Illegal offset (" + pos + "), need room for 6 bytes");
         }
-        int i = (int) (_address >> 32);
+        int i = (int) (address >> 32);
         array[pos++] = (byte) (i >> 8);
         array[pos++] = (byte) i;
-        i = (int) _address;
+        i = (int) address;
         array[pos++] = (byte) (i >> 24);
         array[pos++] = (byte) (i >> 16);
         array[pos++] = (byte) (i >> 8);

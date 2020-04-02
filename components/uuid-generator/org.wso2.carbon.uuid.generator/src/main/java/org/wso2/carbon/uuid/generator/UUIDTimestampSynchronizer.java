@@ -14,29 +14,29 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ * NOTE: The logic in this class is copied from https://github.com/cowtowncoder/java-uuid-generator/, all credits
+ * goes to the original authors of the project  https://github.com/cowtowncoder/java-uuid-generator/.
  */
 package org.wso2.carbon.uuid.generator;
 
 import java.io.IOException;
 
 /**
- * This is the API for utility classes optionally used by {@link UUIDTimer} to
+ * This is the API for utility classes optionally used by {@link UUIDTimeStamp} to
  * ensure that timestamp values used for generating time/location-based UUIDs
  * are monotonically increasing, as well as that only one such generator
  * is ever used on a single system, even in presence of multiple JVMs.
- * <p>
- * The default implementation used by JUG is
- * {@link com.fasterxml.uuid.ext.FileBasedTimestampSynchronizer}.
  */
-public abstract class TimestampSynchronizer {
+public abstract class UUIDTimestampSynchronizer {
 
-    protected TimestampSynchronizer() {
+    protected UUIDTimestampSynchronizer() {
 
     }
 
     /**
      * Initialization method is will be called on an instance by
-     * {@link UUIDTimer} right after it's been configured with one.
+     * {@link UUIDTimeStamp} right after it's been configured with one.
      * At this point the implementation instance should have been properly
      * configured, and should be able to determine the first legal timestamp
      * value (return value). Method should also initialize any locking that
@@ -61,7 +61,7 @@ public abstract class TimestampSynchronizer {
             throws IOException;
 
     /**
-     * Method {@link UUIDTimer} will call if this synchronizer object is
+     * Method {@link UUIDTimeStamp} will call if this synchronizer object is
      * being replaced by another synchronizer (or removed, that is, no
      * more synchronization is to be done). It will not be called if JVM
      * terminates.
@@ -70,7 +70,7 @@ public abstract class TimestampSynchronizer {
             throws IOException;
 
     /**
-     * Method called by {@link UUIDTimer} to indicate that it has generated
+     * Method called by {@link UUIDTimeStamp} to indicate that it has generated
      * a timestamp value that is beyond last legal timestamp value.
      * The method should only return once it has "locked" specified timestamp
      * value (and possible additional ones).

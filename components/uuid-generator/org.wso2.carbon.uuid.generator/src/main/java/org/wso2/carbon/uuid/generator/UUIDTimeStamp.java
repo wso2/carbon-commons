@@ -14,11 +14,14 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
+ *
+ * NOTE: The logic in this class is copied from https://github.com/cowtowncoder/java-uuid-generator/, all credits
+ * goes to the original authors of the project  https://github.com/cowtowncoder/java-uuid-generator/.
  */
 package org.wso2.carbon.uuid.generator;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Random;
 
 public final class UUIDTimeStamp {
 
@@ -48,7 +51,7 @@ public final class UUIDTimeStamp {
 
     private long lastUsedTimestamp = 0L;
 
-    protected final TimestampSynchronizer timestampSynchronizer;
+    protected final UUIDTimestampSynchronizer timestampSynchronizer;
 
     private long firstTimestamp = Long.MAX_VALUE;
 
@@ -56,7 +59,7 @@ public final class UUIDTimeStamp {
 
     private final static int MAX_WAIT_COUNT = 50;
 
-    public UUIDTimeStamp(Random rnd, TimestampSynchronizer sync) throws IOException {
+    public UUIDTimeStamp(Random rnd, UUIDTimestampSynchronizer sync) throws IOException {
 
         random = rnd;
         timestampSynchronizer = sync;
