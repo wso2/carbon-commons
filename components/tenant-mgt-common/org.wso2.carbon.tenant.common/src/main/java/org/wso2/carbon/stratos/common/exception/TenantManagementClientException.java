@@ -20,7 +20,7 @@ package org.wso2.carbon.stratos.common.exception;
 import org.wso2.carbon.stratos.common.constants.TenantConstants;
 
 /**
- * A custom Java {@code Exception} class used for the tenant management client error handling.
+ * A custom Java {@code TenantManagementClientException} class used for the tenant management client error handling.
  */
 public class TenantManagementClientException extends TenantMgtException {
 

@@ -44,7 +44,11 @@ public class TenantConstants {
         ERROR_CODE_EXISTING_USER_NAME("TM-60008",
                 "User name : %s exists in the system. Please pick another user name for tenant Administrator."),
         ERROR_CODE_EXISTING_DOMAIN("TM-60009",
-                "A tenant with same domain %s already exist. Please use a different domain name.");
+                "A tenant with same domain %s already exist. Please use a different domain name."),
+        ERROR_CODE_INVALID_LIMIT("TM-60010", "Limit should not be negative."),
+        ERROR_CODE_INVALID_OFFSET("TM-60011", "Offset should not be negative."),
+        ERROR_CODE_OWNER_REQUIRED("TM-60012", "Required parameter owner is not specified."),
+        ERROR_CODE_MISSING_REQUIRED_PARAMETER("TM-60013", "Required parameter %s is not specified.");
 
         private final String code;
         private final String message;
