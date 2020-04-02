@@ -63,6 +63,7 @@
         <module>components/system-statistics</module>
         <module>components/message-flows</module>
         <module>components/email-verification</module>
+        <module>components/uuid-generator</module>
 
 
         <!-- Features -->
@@ -85,6 +86,7 @@
         <module>features/soap-tracer</module>
         <module>features/message-flows</module>
         <module>features/tenant-mgt-common</module>
+        <module>features/uuid-generator</module>
         <module>service-stubs/logging</module>
     </modules>
 
@@ -835,6 +837,11 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.uuid.generator</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.logging.updater</artifactId>
                 <version>${carbon.commons.version}</version>
             </dependency>
@@ -857,6 +864,12 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.tenant.mgt.common.ui.feature</artifactId>
+                <version>${carbon.commons.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.uuid.generator.server.feature</artifactId>
                 <version>${carbon.commons.version}</version>
                 <type>zip</type>
             </dependency>
