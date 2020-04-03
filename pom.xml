@@ -1487,6 +1487,16 @@
                 <artifactId>org.eclipse.equinox.event</artifactId>
                 <version>${version.eclipse.equinox.event}</version>
             </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.logging.view.stub</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.wso2.carbon.commons</groupId>
+                <artifactId>org.wso2.carbon.logging.view.ui</artifactId>
+                <version>${carbon.commons.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
