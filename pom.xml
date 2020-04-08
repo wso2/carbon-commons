@@ -1487,6 +1487,11 @@
                 <artifactId>org.eclipse.equinox.event</artifactId>
                 <version>${version.eclipse.equinox.event}</version>
             </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${version.jaxb.api}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -1942,6 +1947,7 @@
         <import.package.version.commons.logging>[1.2.0,2.0.0)</import.package.version.commons.logging>
         <version.eclipse.equinox.cm>1.3.100</version.eclipse.equinox.cm>
         <version.eclipse.equinox.event>1.5.100</version.eclipse.equinox.event>
+        <version.jaxb.api>2.4.0-b180830.0359</version.jaxb.api>
     </properties>
 
     <repositories>
