@@ -17,10 +17,13 @@ package org.wso2.carbon.stratos.common.util;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.axiom.om.impl.builder.StAXOMBuilder;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.stratos.common.constants.StratosConstants;
+import org.wso2.carbon.stratos.common.exception.TenantManagementClientException;
+import org.wso2.carbon.stratos.common.exception.TenantManagementServerException;
 import org.wso2.carbon.stratos.common.internal.CloudCommonServiceComponent;
 import org.wso2.carbon.registry.core.ActionConstants;
 import org.wso2.carbon.registry.core.RegistryConstants;
@@ -52,6 +55,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.regex.Pattern;
+
+import static org.wso2.carbon.stratos.common.constants.TenantConstants.ErrorMessage.ERROR_CODE_EMPTY_EMAIL;
+import static org.wso2.carbon.stratos.common.constants.TenantConstants.ErrorMessage.ERROR_CODE_ILLEGAL_EMAIL;
+import static org.wso2.carbon.stratos.common.constants.TenantConstants.ErrorMessage.ERROR_CODE_INVALID_EMAIL;
+import static org.wso2.carbon.stratos.common.constants.TenantConstants.ErrorMessage.ERROR_CODE_UNAVAILABLE_DOMAIN;
 
 /**
  * Common Utility methods for Stratos.
@@ -277,32 +285,21 @@ public class CommonUtil {
 
 
     /**
-     * validates the email
+     * validates the email.
      *
-     * @param email - email address
-     * @throws Exception, if validation failed
+     * @param email email address
+     * @throws Exception if validation failed.
      */
     public static void validateEmail(String email) throws Exception {
-        if (email == null) {
-            String msg = "Provided email value is null.";
-            log.warn(msg);
-            throw new Exception(msg);
-        }
-        email = email.trim();
-        if ("".equals(email)) {
-            String msg = "Provided email value is empty.";
-            log.warn(msg);
-            throw new Exception(msg);
+
+        if (StringUtils.isBlank(email)) {
+            throw new TenantManagementClientException(ERROR_CODE_EMPTY_EMAIL);
         }
         if (illegalCharactersPatternForEmail.matcher(email).matches()) {
-            String msg = "Wrong characters in the email.";
-            log.error(msg);
-            throw new Exception(msg);
+            throw new TenantManagementClientException(ERROR_CODE_ILLEGAL_EMAIL);
         }
         if (!emailFilterPattern.matcher(email).matches()) {
-            String msg = "Invalid email address is provided.";
-            log.error(msg);
-            throw new Exception(msg);
+            throw new TenantManagementClientException(ERROR_CODE_INVALID_EMAIL);
         }
     }
 
@@ -588,29 +585,22 @@ public class CommonUtil {
           // The registry reserved words are checked first.
           if (tenantDomain.equals("atom") || tenantDomain.equals("registry")
                   || tenantDomain.equals("resource")) {
-              String msg = "You can not use a registry reserved word:" + tenantDomain +
-                           ":as a tenant domain. Please choose a different one.";
-              log.error(msg);
-              throw new Exception(msg);
+              throw new TenantManagementClientException(ERROR_CODE_UNAVAILABLE_DOMAIN);
           }
 
           int tenantId;
           try {
               tenantId = tenantManager.getTenantId(tenantDomain);
           } catch (UserStoreException e) {
-              String msg = "Error in getting the tenant id for the given domain  " +
-                           tenantDomain + ".";
-              log.error(msg);
-              throw new Exception(msg, e);
+              String msg = "Error in getting the tenant id for the given domain  " + tenantDomain + ".";
+              throw new TenantManagementServerException(msg, e);
           }
 
           // check a tenant with same domain exist.
           if ((tenantId != MultitenantConstants.INVALID_TENANT_ID && tenantId != MultitenantConstants.SUPER_TENANT_ID) ||
                   tenantDomain.equals(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME)) {
-              String msg =
-                           "A tenant with same domain already exist. " +
-                                   "Please use a different domain name. tenant domain: " +
-                                   tenantDomain + ".";
+              String msg = "A tenant with same domain already exist. " +
+                                   "Please use a different domain name. tenant domain: " + tenantDomain + ".";
               log.info(msg);
               return false;
           }
