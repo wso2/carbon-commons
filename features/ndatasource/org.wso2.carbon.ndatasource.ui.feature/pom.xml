@@ -3,7 +3,7 @@
  	 <parent>
 		<artifactId>ndatasource-feature</artifactId>
 		<groupId>org.wso2.carbon.commons</groupId>
-		<version>4.7.28</version>
+		<version>4.7.29-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
 	</parent>
   
