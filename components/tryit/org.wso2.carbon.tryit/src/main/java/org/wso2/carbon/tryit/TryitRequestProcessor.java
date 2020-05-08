@@ -33,6 +33,7 @@ import java.io.OutputStream;
 public class TryitRequestProcessor implements HttpGetRequestProcessor {
 
     private static Log log = LogFactory.getLog(TryitRequestProcessor.class);
+    private static final String TRY_IT_FUNCTIONALITY_DISABLED = "tryItFunctionalityDisabled";
 
     public void process(CarbonHttpRequest request, CarbonHttpResponse response,
                         ConfigurationContext configurationContext) throws Exception {
@@ -43,6 +44,22 @@ public class TryitRequestProcessor implements HttpGetRequestProcessor {
         String operationParameter = request.getParameter(WSDL2FormGenerator.OPERATION_PARAM);
 
         response.addHeader(HTTP.CONTENT_TYPE, "text/html; charset=utf-8");
+
+        String tryItFunctionalityDisabled = System.getProperty(TRY_IT_FUNCTIONALITY_DISABLED);
+        if (tryItFunctionalityDisabled != null && tryItFunctionalityDisabled.equalsIgnoreCase("true")) {
+            response.setStatus(HttpServletResponse.SC_SERVICE_UNAVAILABLE);
+            outputStream.write(
+                    ("<h4>Try-it functionality is disabled. Please unset the property '" + TRY_IT_FUNCTIONALITY_DISABLED
+                            + "' in conf/carbon.properties file to enable.</h4>").getBytes());
+            outputStream.flush();
+            return;
+        }
+
+        String isAuthenticated = request.getParameter("authenticated");
+        if ("false".equalsIgnoreCase(isAuthenticated)) {
+            response.setRedirect("/carbon/admin/login.jsp");
+            return;
+        }
 
         try {
             Result result = new StreamResult(outputStream);
