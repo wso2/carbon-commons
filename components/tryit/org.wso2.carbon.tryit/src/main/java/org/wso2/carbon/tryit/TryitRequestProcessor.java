@@ -56,7 +56,7 @@ public class TryitRequestProcessor implements HttpGetRequestProcessor {
         }
 
         String isAuthenticated = request.getParameter("authenticated");
-        if ("false".equalsIgnoreCase(isAuthenticated)) {
+        if (!"true".equalsIgnoreCase(isAuthenticated)) {
             response.setRedirect("/carbon/admin/login.jsp");
             return;
         }
