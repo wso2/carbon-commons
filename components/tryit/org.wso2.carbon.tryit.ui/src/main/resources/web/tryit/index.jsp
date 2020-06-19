@@ -72,6 +72,13 @@
 		request="<%=request%>" />
 		
     <div id="middle">
+        <%
+            if ("true".equalsIgnoreCase(System.getProperty("tryItFunctionalityDisabled"))) {
+        %>
+        <h3><fmt:message key="tryit.disabled.text"/></h3>
+        <%
+        } else {
+        %>
         <h2><fmt:message key="tryit.headertext"/></h2>
 
         <div id="workArea">
@@ -113,6 +120,9 @@
         <div style="padding-top:20px">
             <fmt:message key="limitation.message"/>
         </div>
+        <%
+                }
+        %>
     </div>
     <script type="text/javascript">
         wso2.wsf.XSLTHelper.init();
