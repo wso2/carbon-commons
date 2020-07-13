@@ -33,6 +33,7 @@
 
     <modules>
         <module>org.wso2.carbon.logging.view.stub</module>
+        <module>org.wso2.carbon.logging.admin.stub</module>
     </modules>
 
     <build>

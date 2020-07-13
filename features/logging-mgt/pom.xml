@@ -34,6 +34,7 @@
         <module>org.wso2.carbon.logging.updater.feature</module>
         <module>org.wso2.carbon.logging.viewer.feature</module>
         <module>org.wso2.carbon.logging.mgt.ui.feature</module>
+        <module>org.wso2.carbon.logging.mgt.feature</module>
     </modules>
 
 
