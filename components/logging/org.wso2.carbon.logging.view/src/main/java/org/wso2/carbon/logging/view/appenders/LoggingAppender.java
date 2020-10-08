@@ -38,6 +38,16 @@ import java.text.SimpleDateFormat;
 public class LoggingAppender implements PaxAppender {
 
     private CircularBuffer<LogEvent> circularBuffer;
+    private static String ip;
+
+    static {
+        try {
+            InetAddress localHost = InetAddress.getLocalHost();
+            ip = localHost.getHostAddress();
+        } catch (UnknownHostException var3) {
+            ip = "127.0.0.1";
+        }
+    }
 
     public LoggingAppender(CircularBuffer<LogEvent> logBuffer) {
 
@@ -54,7 +64,7 @@ public class LoggingAppender implements PaxAppender {
         logEvent.setLogTime(simpleDateFormat.format(paxLoggingEvent.getTimeStamp()));
         logEvent.setServerName(getServerName());
         logEvent.setTenantId(getTenantId());
-        logEvent.setIp(getIp());
+        logEvent.setIp(ip);
         logEvent.setAppName(getAppName());
         if (paxLoggingEvent.getThrowableStrRep() != null) {
             logEvent.setStacktrace(String.join("\n", paxLoggingEvent.getThrowableStrRep()));
