@@ -26,5 +26,5 @@ public interface LoggingUpdaterConstants {
 
     String PAX_LOGGING_CONFIGURATION_PID = "org.ops4j.pax.logging";
     String PAX_LOGGING_CONFIGURATION_TOPIC = "org/ops4j/pax/logging/Configuration";
-    String EXCEPTIONS_PROPERTY = "exceptions";
+    String EXCEPTIONS_PROPERTY = "exception";
 }
