@@ -20,7 +20,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>statistics-feature</artifactId>
-        <version>4.7.34</version>
+        <version>4.7.35-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
