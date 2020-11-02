@@ -49,7 +49,8 @@ public class TenantConstants {
         ERROR_CODE_INVALID_OFFSET("TM-60011", "Offset should not be negative."),
         ERROR_CODE_OWNER_REQUIRED("TM-60012", "Required parameter owner is not specified."),
         ERROR_CODE_MISSING_REQUIRED_PARAMETER("TM-60013", "Required parameter %s is not specified."),
-        ERROR_CODE_RESOURCE_NOT_FOUND("TM-60014", "Tenant cannot be found for the provided id: %s.");
+        ERROR_CODE_RESOURCE_NOT_FOUND("TM-60014", "Tenant cannot be found for the provided id: %s."),
+        ERROR_CODE_DOMAIN_NOT_FOUND("TM-60015", "Tenant cannot be found for the provided domain: %s.");
 
         private final String code;
         private final String message;
