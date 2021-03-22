@@ -43,7 +43,6 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
 
     private static final Log log = LogFactory.getLog(ClusteredTaskManager.class);
 
-
     public ClusteredTaskManager(TaskRepository taskRepository) throws TaskException {
         super(taskRepository);
         this.taskService = TasksDSComponent.getTaskService();
@@ -212,27 +211,34 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
     public boolean deleteTask(String taskName) throws TaskException {
         boolean result = true;
         String memberId = null;
+        String taskLockId = this.getTaskType() + "_" + this.getTenantId() + "_" + taskName;
+        Lock lock = this.getClusterComm().getHazelcast().getLock(taskLockId);
         try {
+            lock.lock();
             memberId = this.getMemberIdFromTaskName(taskName, false);
+            String localMemberId = getMemberId();
+            // deletion of tasks which are scheduled in other nodes are skipped
+            if (localMemberId.equals(memberId)) {
+                result = this.deleteTask(memberId, taskName);
+                // delete from repository has to be done here, because, this would be the local node
+                // with read/write registry access, and the remote node will not have write access
+                result &= this.getTaskRepository().deleteTask(taskName);
+            } else {
+                result = false;
+                log.info("The task " + taskName + " is not scheduled in this node, hence deletion is skipped.");
+            }
         } catch (TaskException e) {
             /* if the task is not scheduled anywhere, we can ignore this delete request to the
              * remote server */
             if (!Code.NO_TASK_EXISTS.equals(e.getCode())) {
                 throw e;
             }
-        }
-        try {
-            /* only if the task is running somewhere, send a delete task call */
-            if (memberId != null) {
-                result = this.deleteTask(memberId, taskName);
-            }
         } catch (Exception e) {
             throw new TaskException("Error in deleting task: " + taskName + " : " + e.getMessage(),
-                        Code.UNKNOWN, e);
+                                    Code.UNKNOWN, e);
+        } finally {
+            lock.unlock();
         }
-        /* the delete from repository has to be done here, because, this would be the admin node
-         * with read/write registry access, and the target slave will not have write access */
-        result &= this.getTaskRepository().deleteTask(taskName);
         return result;        
     }
 
