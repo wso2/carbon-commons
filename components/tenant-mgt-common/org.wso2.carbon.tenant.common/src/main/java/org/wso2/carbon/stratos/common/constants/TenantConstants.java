@@ -52,7 +52,9 @@ public class TenantConstants {
         ERROR_CODE_RESOURCE_NOT_FOUND("TM-60014", "Tenant cannot be found for the provided id: %s."),
         ERROR_CODE_DOMAIN_NOT_FOUND("TM-60015", "Tenant cannot be found for the provided domain: %s."),
         ERROR_CODE_TENANT_DELETION_NOT_ENABLED("TM-60016", "Tenant deletion property Tenant.TenantDelete is not " +
-                "enabled in carbon.xml file.");
+                "enabled in carbon.xml file."),
+        ERROR_CODE_TENANT_DOES_NOT_MATCH_REGEX_PATTERN("TM-60017", "Invalid tenant domain: %s. " +
+                "Domain should match the regex pattern %s.");
 
         private final String code;
         private final String message;

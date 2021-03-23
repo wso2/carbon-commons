@@ -154,6 +154,15 @@ public class CommonUtil {
         return isPublicCloudSetup;
     }
 
+    public static String getTenantDomainRegexPattern() {
+
+        String tenantDomainRegexPattern = null;
+        if (stratosConfig != null) {
+            tenantDomainRegexPattern = stratosConfig.getTenantDomainRegexPattern();
+        }
+        return tenantDomainRegexPattern;
+    }
+
     /**
      * Gets the notification email address of the admin upon the tenant creation.
      *
@@ -477,6 +486,8 @@ public class CommonUtil {
                         config.setAdminPassword(element.getText());
                     } else if("SSOLoadingMessage".equals(element.getLocalName())){
                         config.setSsoLoadingMessage(element.getText());
+                    } else if ("TenantDomainRegexPattern".equals(element.getLocalName())) {
+                        config.setTenantDomainRegexPattern(element.getText());
                     }
                 }
                 return config;
