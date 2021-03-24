@@ -56,6 +56,7 @@ public class StratosConfiguration {
     private String adminUserName = "";
     private String adminPassword = "";
     private String ssoLoadingMessage="";
+    private String tenantDomainRegexPattern = "";
 
     /**
      * @return Stratos Manager service url
@@ -149,6 +150,16 @@ public class StratosConfiguration {
 
     public boolean isPublicCloudSetup() {
         return isPublicCloudSetup;
+    }
+
+    public String getTenantDomainRegexPattern() {
+
+        return tenantDomainRegexPattern;
+    }
+
+    public void setTenantDomainRegexPattern(String tenantDomainRegexPattern) {
+
+        this.tenantDomainRegexPattern = tenantDomainRegexPattern;
     }
 
     public void setPublicCloudSetup(boolean publicCloudSetup) {
