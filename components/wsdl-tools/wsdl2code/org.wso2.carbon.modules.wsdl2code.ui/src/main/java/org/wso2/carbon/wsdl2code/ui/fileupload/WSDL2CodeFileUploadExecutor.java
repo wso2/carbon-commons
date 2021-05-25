@@ -113,6 +113,14 @@ public class WSDL2CodeFileUploadExecutor extends AbstractFileUploadExecutor {
                         ZipEntry ze;
                         while ((ze = zipInputStream.getNextEntry()) != null) {
                             File destinationFilePath = new File(zipPath, ze.getName());
+                            // Handing for the Zip Slip Vulnerability
+                            String canonicalizedDestinationFilePath = destinationFilePath.getCanonicalPath();
+                            if (!canonicalizedDestinationFilePath.startsWith(new File(zipPath).getCanonicalPath())) {
+                                String errorMessage = "Attempt to upload invalid zip archive with file at " + ze.getName() +
+                                        ". File path is outside target directory";
+                                log.error(errorMessage);
+                                throw new Exception(errorMessage);
+                            }
                             //create directories if required.
                             destinationFilePath.getParentFile().mkdirs();
 
