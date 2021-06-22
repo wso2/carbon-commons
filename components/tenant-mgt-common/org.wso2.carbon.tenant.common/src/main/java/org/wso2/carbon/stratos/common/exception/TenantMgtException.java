@@ -37,6 +37,12 @@ public class TenantMgtException extends Exception {
         this.errorCode = errorCode;
     }
 
+    public TenantMgtException(String errorCode, String message, Exception e) {
+
+        super(message, e);
+        this.errorCode = errorCode;
+    }
+
     public String getErrorCode() {
 
         return errorCode;

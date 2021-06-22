@@ -33,4 +33,9 @@ public class TenantManagementClientException extends TenantMgtException {
 
         super(error.getCode(), error.getMessage());
     }
+
+    public TenantManagementClientException(String errorCode, String errorDescription, Exception e) {
+
+        super(errorCode, errorDescription, e);
+    }
 }
