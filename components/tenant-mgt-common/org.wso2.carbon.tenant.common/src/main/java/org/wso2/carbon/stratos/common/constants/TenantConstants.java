@@ -54,7 +54,8 @@ public class TenantConstants {
         ERROR_CODE_TENANT_DELETION_NOT_ENABLED("TM-60016", "Tenant deletion property Tenant.TenantDelete is not " +
                 "enabled in carbon.xml file."),
         ERROR_CODE_TENANT_DOES_NOT_MATCH_REGEX_PATTERN("TM-60017", "Invalid tenant domain: %s. " +
-                "Domain should match the regex pattern %s.");
+                "Domain should match the regex pattern %s."),
+        ERROR_CODE_PRE_TENANT_CREATION_FAILED("TM-60018", "Error occurred in tenant pre creation.");
 
         private final String code;
         private final String message;

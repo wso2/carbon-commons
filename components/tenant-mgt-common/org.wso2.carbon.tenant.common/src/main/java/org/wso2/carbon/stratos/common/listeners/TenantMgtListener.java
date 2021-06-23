@@ -46,4 +46,15 @@ public interface TenantMgtListener {
      * @throws StratosException
      */
     public void onPreDelete(int tenantId) throws StratosException;
+
+    /**
+     * This method will be called before a tenant creation.
+     *
+     * @param tenantInfoBean TenantInfoBean
+     * @throws StratosException
+     */
+    default void onPreTenantCreate(TenantInfoBean tenantInfoBean) throws StratosException {
+
+        // Not Implemented.
+    }
 }
