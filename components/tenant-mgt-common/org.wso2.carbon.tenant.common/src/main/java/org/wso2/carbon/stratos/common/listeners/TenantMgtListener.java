@@ -57,4 +57,16 @@ public interface TenantMgtListener {
 
         // Not Implemented.
     }
+
+    /**
+     * On Post delete method will delete product specific data.
+     *
+     * @param tenantId   Tenant id.
+     * @param tenantUuid Tenant unique identifier.
+     * @param adminUserUuid   Tenant admin User unique identifier.
+     * @throws StratosException If any error occurred while deleting data.
+     */
+    default void onPostDelete(int tenantId, String tenantUuid, String adminUserUuid) throws StratosException {
+        // Not Implemented
+    }
 }
