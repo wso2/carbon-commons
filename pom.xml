@@ -1841,7 +1841,7 @@
         <orbit.version.commons.httpclient>3.1.0.wso2v6</orbit.version.commons.httpclient>
         <commons-collections.version>3.2.1</commons-collections.version>
         <orbit.version.commons.codec>1.4.0.wso2v1</orbit.version.commons.codec>
-        <commons-beanutils.version>1.8.3</commons-beanutils.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-digester.version>1.8</commons-digester.version>
         <orbit.version.backport.util>3.1.0.wso2v1</orbit.version.backport.util>
         <version.commons.lang3>3.1</version.commons.lang3>
