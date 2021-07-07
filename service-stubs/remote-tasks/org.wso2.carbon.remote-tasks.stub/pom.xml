@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>remote-tasks-stubs</artifactId>
-        <version>4.7.39-SNAPSHOT</version>
+        <version>4.7.39</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
