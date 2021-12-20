@@ -72,17 +72,33 @@ public class GoogleAnalyticsDataPublisher {
     }
 
     /**
-     * Use this method to publish using GET.
-     * @param payload - use the buildPayloadString method to retrieve query param string to pass as payload here.
-     * @param userAgent - set the userAgent - this can be overridden by using
-     * @param useSSL - to publish using HTTPS, set this value to true.
+     * Use this method to publish using GET for GoogleAnalytics with default HttpClient .
      * @return
      */
     public static boolean publishGET(String payload, String userAgent, boolean useSSL) {
         HttpClient client = new DefaultHttpClient();
+        return processGET(payload, userAgent, useSSL, client);
+    }
+
+    /**
+     * Use this method to publish using GET for GoogleAnalytics with custom HttpClient.
+     * @return
+     */
+    public static boolean publishGET(String payload, String userAgent, boolean useSSL, HttpClient client) {
+        return processGET(payload, userAgent, useSSL, client);
+    }
+
+    /**
+     * Use this method to publish using GET for GoogleAnalytics.
+     * @param payload - use the buildPayloadString method to retrieve query param string to pass as payload here.
+     * @param userAgent - set the userAgent - this can be overridden by using
+     * @param useSSL - to publish using HTTPS, set this value to true.
+     * @param client - Client to send HTTP requests.
+     * @return
+     */
+    private static boolean processGET(String payload, String userAgent, boolean useSSL, HttpClient client) {
         HttpGet get = new HttpGet(getURI(useSSL) + "?" + payload);
         get.setHeader(GoogleAnalyticsConstants.HTTP_HEADER_USER_AGENT, userAgent);
-
         try {
             HttpResponse response = client.execute(get);
             if((response.getStatusLine().getStatusCode() == 200)
