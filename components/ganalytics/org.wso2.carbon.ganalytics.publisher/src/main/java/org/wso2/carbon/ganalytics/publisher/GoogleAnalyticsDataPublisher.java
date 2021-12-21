@@ -49,7 +49,7 @@ public class GoogleAnalyticsDataPublisher {
      * @param payload - use the buildPayload method to retrieve NameValuePair to use as payload here.
      * @param userAgent - set the userAgent - this can be overridden if userAgentOverride (ua) is set in payload
      * @param useSSL - to publish using HTTPS, set this value to true.
-     * @return true if request is successful, else false
+     * @return true if request is successful, else false.
      */
     public static boolean publishPOST(List<NameValuePair> payload, String userAgent, boolean useSSL) {
         HttpClient client = new DefaultHttpClient();
@@ -76,7 +76,7 @@ public class GoogleAnalyticsDataPublisher {
      * @param payload - use the buildPayloadString method to retrieve query param string to pass as payload here.
      * @param userAgent - set the userAgent - this can be overridden by using
      * @param useSSL - to publish using HTTPS, set this value to true.
-     * @return true if request is successful, else false
+     * @return true if request is successful, else false.
      */
     public static boolean publishGET(String payload, String userAgent, boolean useSSL) {
         HttpClient client = new DefaultHttpClient();
@@ -89,7 +89,7 @@ public class GoogleAnalyticsDataPublisher {
      * @param userAgent - set the userAgent - this can be overridden by using
      * @param useSSL - to publish using HTTPS, set this value to true.
      * @param client - Client to send HTTP requests.
-     * @return true if request is successful, else false
+     * @return true if request is successful, else false.
      */
     public static boolean publishGET(String payload, String userAgent, boolean useSSL, HttpClient client) {
         return processGET(payload, userAgent, useSSL, client);
