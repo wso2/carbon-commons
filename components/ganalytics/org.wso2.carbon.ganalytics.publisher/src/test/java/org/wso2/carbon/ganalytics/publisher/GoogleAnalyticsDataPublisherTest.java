@@ -21,6 +21,8 @@ package org.wso2.carbon.ganalytics.publisher;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.junit.Test;
 
 import java.util.List;
@@ -67,6 +69,35 @@ public class GoogleAnalyticsDataPublisherTest extends TestCase {
 
         String payload = GoogleAnalyticsDataPublisher.buildPayloadString(data);
         Assert.assertTrue(GoogleAnalyticsDataPublisher.publishGET(payload, "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0", true));
+    }
+
+    @Test
+    public void testPublishGETHTTPForGoogleAnalyticsPublisher() throws Exception {
+        GoogleAnalyticsData data = new GoogleAnalyticsData
+                .DataBuilder("UA-50303033-1", "1", "35009a79-1a05-49d7-b876-2b884d0fsadfa", GoogleAnalyticsConstants.HIT_TYPE_PAGEVIEW)
+                .setDocumentPath("/testpageGET")
+                .setDocumentHostName("localhost.com")
+                .setDocumentTitle("HTTP GET")
+                .build();
+
+        HttpClient client = new DefaultHttpClient();
+        String payload = GoogleAnalyticsDataPublisher.buildPayloadString(data);
+        Assert.assertTrue(GoogleAnalyticsDataPublisher.publishGET(payload, "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0", false, client));
+    }
+
+
+    @Test
+    public void testPublishGETHTTPSForGoogleAnalyticsPublisher() throws Exception {
+        GoogleAnalyticsData data = new GoogleAnalyticsData
+                .DataBuilder("UA-50303033-1", "1", "35009a79-1a05-49d7-b876-2b884d0fsadfa", GoogleAnalyticsConstants.HIT_TYPE_PAGEVIEW)
+                .setDocumentPath("/testpageGET")
+                .setDocumentHostName("localhost.com")
+                .setDocumentTitle("HTTPS GET")
+                .build();
+
+        HttpClient client = new DefaultHttpClient();
+        String payload = GoogleAnalyticsDataPublisher.buildPayloadString(data);
+        Assert.assertTrue(GoogleAnalyticsDataPublisher.publishGET(payload, "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0", true, client));
     }
 
     @Test
