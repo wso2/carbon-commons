@@ -85,7 +85,6 @@ public class GoogleAnalyticsDataPublisherTest extends TestCase {
         Assert.assertTrue(GoogleAnalyticsDataPublisher.publishGET(payload, "Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0", false, client));
     }
 
-
     @Test
     public void testPublishGETHTTPSForGoogleAnalyticsPublisher() throws Exception {
         GoogleAnalyticsData data = new GoogleAnalyticsData

@@ -75,7 +75,7 @@ public class GoogleAnalyticsDataPublisher {
      * Use this method to publish using GET for GoogleAnalytics with default HttpClient.
      * @param payload - use the buildPayloadString method to retrieve query param string to pass as payload here.
      * @param userAgent - set the userAgent - this can be overridden by using
-     * @param useSSL - to publish using HTTPS, set this value to true.
+     * @param useSSL - To publish using HTTPS, set this value to true.
      * @return true if request is successful, else false.
      */
     public static boolean publishGET(String payload, String userAgent, boolean useSSL) {
@@ -87,7 +87,7 @@ public class GoogleAnalyticsDataPublisher {
      * Use this method to publish using GET for GoogleAnalytics with custom HttpClient.
      * @param payload - use the buildPayloadString method to retrieve query param string to pass as payload here.
      * @param userAgent - set the userAgent - this can be overridden by using
-     * @param useSSL - to publish using HTTPS, set this value to true.
+     * @param useSSL - To publish using HTTPS, set this value to true.
      * @param client - Client to send HTTP requests.
      * @return true if request is successful, else false.
      */
@@ -99,7 +99,7 @@ public class GoogleAnalyticsDataPublisher {
      * Use this method to publish using GET for GoogleAnalytics.
      * @param payload - use the buildPayloadString method to retrieve query param string to pass as payload here.
      * @param userAgent - set the userAgent - this can be overridden by using
-     * @param useSSL - to publish using HTTPS, set this value to true.
+     * @param useSSL - To publish using HTTPS, set this value to true.
      * @param client - Client to send HTTP requests.
      * @return true if request is successful, else false
      */
