@@ -3,6 +3,7 @@
 <%@ page import="org.wso2.carbon.ndatasource.ui.stub.core.services.xsd.WSDataSourceMetaInfo"%>
 <%@ page import="org.owasp.encoder.Encode" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page import="org.owasp.encoder.Encode" %>
 <%
     String dsName = request.getParameter("dsName");
 	
