@@ -128,9 +128,9 @@
                 </dependency>
 
                 <dependency>
-                    <groupId>log4j</groupId>
-                    <artifactId>log4j</artifactId>
-                    <version>1.2.13</version>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-core</artifactId>
+                    <version>2.17.1</version>
                 </dependency>
 
                 <dependency>
