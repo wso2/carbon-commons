@@ -44,7 +44,7 @@
                         <Import-Package>
                             !org.wso2.carbon.logging.updater.*,
                             org.wso2.carbon.utils.*;version="${carbon.kernel.imp.pkg.version}",
-                            org.osgi.service.cm.*;version="[1.0.0,2.0.0)",
+                            org.osgi.service.cm.*,
                             org.osgi.service.component.*;version="${osgi.service.imp.pkg.version}",
                             *;resolution:=optional
                         </Import-Package>
@@ -60,7 +60,7 @@
             <artifactId>org.wso2.carbon.utils</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.org.ops4j.pax.logging</groupId>
+            <groupId>org.ops4j.pax.logging</groupId>
             <artifactId>pax-logging-api</artifactId>
         </dependency>
         <dependency>
