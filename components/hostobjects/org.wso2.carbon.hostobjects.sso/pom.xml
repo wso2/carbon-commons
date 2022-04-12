@@ -35,7 +35,7 @@
             <artifactId>js</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.wso2.org.ops4j.pax.logging</groupId>
+            <groupId>org.ops4j.pax.logging</groupId>
             <artifactId>pax-logging-api</artifactId>
             <version>${pax.logging.api.version}</version>
         </dependency>
