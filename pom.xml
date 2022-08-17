@@ -49,6 +49,7 @@
         <module>components/cluster-mgt</module>
         <module>components/transaction-manager</module>
         <module>components/hostobjects</module>
+        <module>components/ntask</module>
         <module>components/reporting</module>
         <module>components/doc-request-processor</module>
         <module>components/tryit</module>
