@@ -129,12 +129,6 @@
                 <groupId>org.wso2.carbon</groupId>
                 <artifactId>org.wso2.carbon.core</artifactId>
                 <version>${carbon.kernel.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.wso2.orbit.com.hazelcast</groupId>
-                        <artifactId>hazelcast</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon</groupId>
