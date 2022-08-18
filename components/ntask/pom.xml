@@ -32,6 +32,7 @@
 
     <modules>
         <module>org.wso2.carbon.ntask.common</module>
+        <module>org.wso2.carbon.ntask.core</module>
         <module>org.wso2.carbon.ntask.solutions</module>
     </modules>
 
