@@ -161,15 +161,11 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
 
     public void scheduleTask(String taskName) throws TaskException {
         String taskLockId = this.getTaskType() + "_" + this.getTenantId() + "_" + taskName;
-        Lock lock = this.getClusterComm().getHazelcast().getLock(taskLockId);
-        try {
-            lock.lock();
-            String memberId = this.getMemberIdFromTaskName(taskName, true);
-            this.setServerLocationOfTask(taskName, memberId);
-            this.scheduleTask(memberId, taskName);
-        } finally {
-            lock.unlock();
-        }
+        // remove hazelcast
+        String memberId = this.getMemberIdFromTaskName(taskName, true);
+        this.setServerLocationOfTask(taskName, memberId);
+        this.scheduleTask(memberId, taskName);
+
     }
 
     public void rescheduleTask(String taskName) throws TaskException {
@@ -212,9 +208,8 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
         boolean result = true;
         String memberId = null;
         String taskLockId = this.getTaskType() + "_" + this.getTenantId() + "_" + taskName;
-        Lock lock = this.getClusterComm().getHazelcast().getLock(taskLockId);
         try {
-            lock.lock();
+            // removed hazelcast
             memberId = this.getMemberIdFromTaskName(taskName, false);
             String localMemberId = getMemberId();
             // deletion of tasks which are scheduled in other nodes are skipped
@@ -236,8 +231,6 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
         } catch (Exception e) {
             throw new TaskException("Error in deleting task: " + taskName + " : " + e.getMessage(),
                                     Code.UNKNOWN, e);
-        } finally {
-            lock.unlock();
         }
         return result;        
     }
@@ -260,19 +253,15 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
          * of the task, since this is a task registration update, we will want to schedule the task
          * in the same server as earlier */
         String taskLockId = this.getTaskType() + "_" + this.getTenantId() + "_" + taskInfo.getName();
-        Lock lock = this.getClusterComm().getHazelcast().getLock(taskLockId);
-        try {
-            lock.lock();
-            String locationId = this.getTaskRepository().getTaskMetadataProp(
-                    taskInfo.getName(), TASK_MEMBER_LOCATION_META_PROP_ID);
-            this.registerLocalTask(taskInfo);
-            if (locationId != null) {
-                this.getTaskRepository().setTaskMetadataProp(taskInfo.getName(),
-                        TASK_MEMBER_LOCATION_META_PROP_ID, locationId);
-            }
-        } finally {
-            lock.unlock();
+        // removed hazelcast
+        String locationId = this.getTaskRepository().getTaskMetadataProp(
+                taskInfo.getName(), TASK_MEMBER_LOCATION_META_PROP_ID);
+        this.registerLocalTask(taskInfo);
+        if (locationId != null) {
+            this.getTaskRepository().setTaskMetadataProp(taskInfo.getName(),
+                    TASK_MEMBER_LOCATION_META_PROP_ID, locationId);
         }
+
     }
 
     @Override
@@ -290,9 +279,8 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
     }
 
     private TaskServiceContext getTaskServiceContext() throws TaskException {
-        TaskServiceContext context = new TaskServiceContext(this.getTaskRepository(),
-                this.getMemberIds(), this.getClusterComm().getMemberMap());
-        return context;
+        // removed hazelcast
+        return null;
     }
 
     private String locateMemberForTask(String taskName) throws TaskException {
@@ -376,7 +364,8 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
     }
 
     public String getMemberId() throws TaskException {
-        return this.getClusterComm().getMemberId();
+        // removed hazelcast
+        return null;
     }
 
     public boolean isLeader() throws TaskException {
