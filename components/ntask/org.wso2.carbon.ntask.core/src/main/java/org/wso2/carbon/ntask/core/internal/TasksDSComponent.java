@@ -15,7 +15,6 @@
  */
 package org.wso2.carbon.ntask.core.internal;
 
-import com.hazelcast.core.HazelcastInstance;
 import org.apache.axis2.engine.ListenerManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -226,17 +225,6 @@ public class TasksDSComponent {
     protected void unsetSecretCallbackHandlerService(SecretCallbackHandlerService secretCallbackHandlerService) {
 
         TasksDSComponent.secretCallbackHandlerService = null;
-    }
-
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    public static HazelcastInstance getHazelcastInstance() {
-
-        BundleContext ctx = FrameworkUtil.getBundle(TasksDSComponent.class).getBundleContext();
-        ServiceReference ref = ctx.getServiceReference(HazelcastInstance.class);
-        if (ref == null) {
-            return null;
-        }
-        return (HazelcastInstance) ctx.getService(ref);
     }
 
     @Reference(
