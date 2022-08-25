@@ -17,8 +17,6 @@ package org.wso2.carbon.ntask.core.impl;
 
 import java.util.Map;
 
-import com.hazelcast.core.HazelcastInstance;
-
 import org.wso2.carbon.ntask.common.TaskException;
 import org.wso2.carbon.ntask.core.TaskInfo;
 import org.wso2.carbon.ntask.core.TaskLocationResolver;
@@ -39,12 +37,8 @@ public class RoundRobinTaskLocationResolver implements TaskLocationResolver {
     
     @Override
     public int getLocation(TaskServiceContext ctx, TaskInfo taskInfo) throws TaskException {
-        HazelcastInstance hz = TasksDSComponent.getHazelcastInstance();
-        if (hz == null) {
-            /* this cannot happen, because the task location resolvers are used in clustered mode */
-            return 0;
-        }
-        return (int) Math.abs(hz.getAtomicLong(ROUND_ROBIN_TASK_RESOLVER_ID + ctx.getTaskType()).incrementAndGet());
+        // removed hazelcast
+        return 0;
     }
 
 }
