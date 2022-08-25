@@ -31,8 +31,6 @@ import org.wso2.carbon.ntask.core.TaskLocationResolver;
 import org.wso2.carbon.ntask.core.TaskServiceContext;
 import org.wso2.carbon.ntask.core.internal.TasksDSComponent;
 
-import com.hazelcast.core.HazelcastInstance;
-
 /**
  * This class represents a task location resolver, which assigns the locations
  * according to a filtering rules given as parameters. 
@@ -105,16 +103,8 @@ public class RuleBasedLocationResolver implements TaskLocationResolver {
 		if (log.isDebugEnabled()) {
 			log.debug("Performing RoundRobin for " + rule);
 		}
-		HazelcastInstance hz = TasksDSComponent.getHazelcastInstance();
-        if (hz == null) {
-            return 0;
-        }
-        int result = (int) Math.abs(hz.getAtomicLong(RULE_BASED_TASK_RESOLVER_ID + rule.hashCode()).incrementAndGet());
-        result = locations.get(result % locations.size());
-		if (log.isDebugEnabled()) {
-			log.debug("Selected Node for " + rule + " is " + result);
-		}
-		return result;
+		// removed hazelcast
+		return 0;
 	}
 	
 	private class Rule implements Comparable<Rule> {
