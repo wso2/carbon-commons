@@ -15,8 +15,6 @@
  */
 package org.wso2.carbon.ntask.core.impl.clustered;
 
-import com.hazelcast.core.*;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.ntask.common.TaskException;
@@ -38,7 +36,7 @@ import java.util.concurrent.Future;
  * This class represents the cluster group communicator used by clustered task
  * managers.
  */
-public class ClusterGroupCommunicator implements MembershipListener {
+public class ClusterGroupCommunicator {
 
     public static final String NTASK_P2P_COMM_EXECUTOR = "__NTASK_P2P_COMM_EXECUTOR__";
 
@@ -54,11 +52,7 @@ public class ClusterGroupCommunicator implements MembershipListener {
 
     private TaskService taskService;
 
-    private HazelcastInstance hazelcast;
-
     private static Map<String, ClusterGroupCommunicator> communicatorMap = new HashMap<String, ClusterGroupCommunicator>();
-
-    private Map<String, Member> membersMap;
 
     private String taskType;
 
@@ -78,28 +72,17 @@ public class ClusterGroupCommunicator implements MembershipListener {
     private ClusterGroupCommunicator(String taskType) throws TaskException {
         this.taskType = taskType;
         this.taskService = TasksDSComponent.getTaskService();
-        this.hazelcast = TasksDSComponent.getHazelcastInstance();
-        if (this.getHazelcast() == null) {
-            throw new TaskException("ClusterGroupCommunicator cannot initialize, " +
+        throw new TaskException("ClusterGroupCommunicator cannot initialize, " +
             		"Hazelcast is not initialized", Code.CONFIG_ERROR);
-        }
-        this.getHazelcast().getCluster().addMembershipListener(this);
-        this.refreshMembers();
     }
     
     private void refreshMembers() {
-    	/* create a distributed map to track the members in the current group */
-        this.membersMap = this.getHazelcast().getMap(CARBON_TASKS_MEMBER_ID_MAP + "#" + taskType);
-        /* check and remove expired members */
+    	// removed hazelcast
         this.checkAndRemoveExpiredMembers();
     }
     
     public void addMyselfToGroup() {
-    	Member member = this.getHazelcast().getCluster().getLocalMember();
-        /* add myself to the queue */
-        this.membersMap.put(this.getIdFromMember(member), member);
-        /* increment the task server count */
-        this.getHazelcast().getAtomicLong(this.getStartupCounterName()).incrementAndGet();
+    	// removed hazelcast
     }
     
     /**
@@ -111,19 +94,7 @@ public class ClusterGroupCommunicator implements MembershipListener {
      * list of active members.
      */
     private void checkAndRemoveExpiredMembers() {
-        Set<Member> existingMembers = this.getHazelcast().getCluster().getMembers();
-        Iterator<Map.Entry<String, Member>> itr = this.membersMap.entrySet().iterator();
-        List<String> removeList = new ArrayList<>();
-        Map.Entry<String, Member> currentEntry;
-        while (itr.hasNext()) {
-            currentEntry = itr.next();
-            if (!existingMembers.contains(currentEntry.getValue())) {
-                removeList.add(currentEntry.getKey());
-            }
-        }
-        for (String key : removeList) {
-            this.membersMap.remove(key);
-        }
+        // removed hazelcast
     }
 
     public String getStartupCounterName() {
@@ -134,37 +105,11 @@ public class ClusterGroupCommunicator implements MembershipListener {
         return taskType;
     }
 
-    private String getIdFromMember(Member member) {
-        return member.getUuid();
-    }
-
-    private Member getMemberFromId(String id) throws TaskException {
-        Member member = this.membersMap.get(id);
-        if (member == null) {
-            /* this is probably because of an edge case, where a member has just gone away when we
-             * trying to access this member, this must be handled in the upper layers by retrying
-             * the root operation */
-            throw new TaskException("The member with id: " + id + " does not exist", Code.UNKNOWN);
-        }
-        return member;
-    }
-
     public void checkServers() throws TaskException {
         int serverCount = this.getTaskService().getServerConfiguration().getTaskServerCount();
         if (serverCount != -1) {
             log.info("Waiting for " + serverCount + " [" + this.getTaskType() + "] task executor nodes...");
-            try {
-                /* with this approach, lets say the server count is 3, and after all 3 server comes up, 
-                 * and tasks scheduled, if two nodes go away, and one comes up, it will be allowed to start,
-                 * even though there aren't 3 live nodes, which would be the correct approach, if the whole
-                 * cluster goes down, then, you need again for all 3 of them to come up */
-                while (this.getHazelcast().getAtomicLong(this.getStartupCounterName()).get() < serverCount) {
-                    Thread.sleep(1000);
-                }
-            } catch (Exception e) {
-                throw new TaskException("Error in waiting for task [" + this.getTaskType() + "] executor nodes: " +
-                        e.getMessage(), Code.UNKNOWN, e);
-            }
+            // removed hazelcast
             log.info("All task servers activated for [" + this.getTaskType() + "].");
         }
     }
@@ -173,58 +118,19 @@ public class ClusterGroupCommunicator implements MembershipListener {
         return taskService;
     }
 
-    public HazelcastInstance getHazelcast() {
-        return hazelcast;
-    }
-
     public synchronized List<String> getMemberIds() throws TaskException {
-        return new ArrayList<String>(this.membersMap.keySet());
-    }
-
-    public String getMemberId() {
-        return this.getIdFromMember(this.getHazelcast().getCluster().getLocalMember());
+        // removed hazelcast
+        return null;
     }
 
     public boolean isLeader() {
-        if (this.getHazelcast().getLifecycleService().isRunning()) {
-        	String id;
-        	/* as per documentation, getMembers return the oldest member first */
-            for (Member member : this.getHazelcast().getCluster().getMembers()) {
-            	id = this.getIdFromMember(member);
-            	if (this.membersMap.containsKey(id)) {
-            		return this.getMemberId().equals(id);
-            	}
-            }
-        }
+        // removed hazelcast
         return false;
     }
 
     public <V> V sendReceive(String memberId, TaskCall<V> taskCall) throws TaskException {
-        IExecutorService es = this.getHazelcast().getExecutorService(NTASK_P2P_COMM_EXECUTOR);
-        Future<V> taskExec = es.submitToMember(taskCall, this.getMemberFromId(memberId));
-        try {
-            return taskExec.get();
-        } catch (Exception e) {
-            throw new TaskException("Error in cluster message send-receive: " + e.getMessage(),
-                    Code.UNKNOWN, e);
-        }
-    }
-
-    @Override
-    public void memberAdded(MembershipEvent event) {
-        if (this.getHazelcast().getLifecycleService().isRunning()) {
-            String id = this.getIdFromMember(event.getMember());
-            this.membersMap.put(id, event.getMember());
-            try {
-                if (this.isLeader()) {
-                    log.info("Task [" + this.getTaskType() + "] member joined [" + event.getMember().toString()
-                            + "], rescheduling missing tasks...");
-                    this.scheduleAllMissingTasks(id);
-                }
-            } catch (TaskException e) {
-                log.error("Error in scheduling missing tasks [" + this.getTaskType() + "]: " + e.getMessage(), e);
-            }
-        }
+        // removed hazelcast
+        return null;
     }
 
     private void scheduleAllMissingTasks(String memberId) throws TaskException {
@@ -267,31 +173,4 @@ public class ClusterGroupCommunicator implements MembershipListener {
     private void cleanupTaskCluster() {
     	this.refreshMembers();
     }
-
-    @Override
-    public void memberRemoved(MembershipEvent event) {
-        if (this.getHazelcast().getLifecycleService().isRunning()) {
-            String id = this.getIdFromMember(event.getMember());
-            this.membersMap.remove(id);
-            try {
-                if (this.isLeader()) {
-                    log.info("Task [" + this.getTaskType() + "] member departed [" + event.getMember().toString()
-                            + "], rescheduling missing tasks...");
-                    this.scheduleAllMissingTasks(null);
-                }
-            } catch (TaskException e) {
-                log.error("Error in scheduling missing tasks [" + this.getTaskType() + "]: " + e.getMessage(), e);
-            }
-        }
-    }
-
-    @Override
-    public void memberAttributeChanged(MemberAttributeEvent memberAttributeEvent) {
-    	/* ignored */
-    }
-
-    public Map<String, Member> getMemberMap() {
-        return membersMap;
-    }
-
 }
