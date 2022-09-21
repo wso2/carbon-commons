@@ -72,10 +72,10 @@
                             </importFeatures>
                             <includedFeatures>
                                 <includedFeatureDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.tryit.server.feature:${carbon.commons.version}
+                                    org.wso2.carbon.commons:org.wso2.carbon.tryit.server.feature:${project.version}
                                 </includedFeatureDef>
                                 <includedFeatureDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.tryit.ui.feature:${carbon.commons.version}
+                                    org.wso2.carbon.commons:org.wso2.carbon.tryit.ui.feature:${project.version}
                                 </includedFeatureDef>
                             </includedFeatures>
                         </configuration>

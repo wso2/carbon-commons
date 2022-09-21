@@ -66,7 +66,7 @@
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.deployment.synchronizer</bundleDef>
                             </bundles>
                             <importFeatures>
-                                <importFeatureDef>org.wso2.carbon.event.server:${carbon.commons.version}
+                                <importFeatureDef>org.wso2.carbon.event.server:${project.version}
                                 </importFeatureDef>
                             </importFeatures>
                         </configuration>

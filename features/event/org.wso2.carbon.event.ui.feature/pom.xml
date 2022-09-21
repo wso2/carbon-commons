@@ -81,13 +81,13 @@
                                 <importFeatureDef>
                                     org.wso2.carbon.core.ui:compatible:${carbon.kernel.feature.version}
                                 </importFeatureDef>
-                                <importFeatureDef>org.wso2.carbon.event.common:${carbon.commons.version}</importFeatureDef>
+                                <importFeatureDef>org.wso2.carbon.event.common:${project.version}</importFeatureDef>
 <!--
                                 <importFeatureDef>org.wso2.carbon.registry.core.ui:${carbon.registry.version}</importFeatureDef>
 -->
                             </importFeatures>
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.common.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.event.common.feature:${project.version}</includedFeatureDef>
                             </includedFeatures>
                         </configuration>
                     </execution>
