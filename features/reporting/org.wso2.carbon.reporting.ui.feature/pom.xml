@@ -111,11 +111,11 @@
                             <bundles>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.ui
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.util:${carbon.commons.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.util:${project.version}
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.api:${carbon.commons.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.api:${project.version}
                                 </bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.stub:${carbon.commons.version}
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.reporting.stub:${project.version}
                                 </bundleDef>
                                 <bundleDef>org.wso2.carbon:org.wso2.carbon.ui.menu.tools:${carbon.kernel.version}
                                 </bundleDef>

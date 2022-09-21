@@ -50,9 +50,9 @@
 								<importFeatureDef>org.wso2.carbon.core:compatible:${carbon.kernel.feature.version}</importFeatureDef>
 							</importFeatures>
 							<includedFeatures>
-								<includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.ui.feature:${carbon.commons.version}</includedFeatureDef>
-								<includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.datasources.feature:${carbon.commons.version}</includedFeatureDef>
-								<includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.capp.deployer.server.feature:${carbon.commons.version}</includedFeatureDef>
+								<includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.ui.feature:${project.version}</includedFeatureDef>
+								<includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.datasources.feature:${project.version}</includedFeatureDef>
+								<includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ndatasource.capp.deployer.server.feature:${project.version}</includedFeatureDef>
 							</includedFeatures>
 						</configuration>
 					</execution>

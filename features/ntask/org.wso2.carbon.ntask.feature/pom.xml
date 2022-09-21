@@ -56,7 +56,7 @@
                             <id>org.wso2.carbon.ntask</id>
                             <propertiesFile>../../../etc/feature.properties</propertiesFile>
                             <includedFeatures>
-                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ntask.core.feature:${carbon.commons.version}</includedFeatureDef>
+                                <includedFeatureDef>org.wso2.carbon.commons:org.wso2.carbon.ntask.core.feature:${project.version}</includedFeatureDef>
                             </includedFeatures>
                         </configuration>
                     </execution>
