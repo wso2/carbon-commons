@@ -22,7 +22,7 @@
                         <Private-Package>org.wso2.carbon.logging.view.internal</Private-Package>
                         <Import-Package>
                             !org.wso2.carbon.logging.view.*,
-                            org.ops4j.pax.logging.spi.*;version="${pax.logging.api.version.range}",
+                            org.wso2.org.ops4j.pax.logging.spi.*;version="${pax.logging.api.version.range}",
                             org.wso2.carbon.utils.logging.*;version="${carbon.kernel.imp.pkg.version}",
                             org.osgi.service.component.*;version="${osgi.service.imp.pkg.version}",
                             *;resolution:=optional
@@ -43,7 +43,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.ops4j.pax.logging</groupId>
+            <groupId>org.wso2.org.ops4j.pax.logging</groupId>
             <artifactId>pax-logging-api</artifactId>
         </dependency>
         <dependency>
