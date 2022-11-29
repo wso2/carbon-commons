@@ -208,9 +208,7 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
         boolean result = true;
         String memberId = null;
         String taskLockId = this.getTaskType() + "_" + this.getTenantId() + "_" + taskName;
-        Lock lock = this.getClusterComm().getHazelcast().getLock(taskLockId);
         try {
-            lock.lock();
             memberId = this.getMemberIdFromTaskName(taskName, false);
             String localMemberId = getMemberId();
             // deletion of tasks which are scheduled in other nodes are skipped
@@ -232,8 +230,6 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
         } catch (Exception e) {
             throw new TaskException("Error in deleting task: " + taskName + " : " + e.getMessage(),
                                     Code.UNKNOWN, e);
-        } finally {
-            lock.unlock();
         }
         return result;        
     }
