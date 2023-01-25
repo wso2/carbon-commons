@@ -37,7 +37,8 @@ public class RoundRobinTaskLocationResolver implements TaskLocationResolver {
     
     @Override
     public int getLocation(TaskServiceContext ctx, TaskInfo taskInfo) throws TaskException {
-        // removed hazelcast
+        // Converting to an empty method with the Hazelcast removal effort. 
+        // Need to remove these empty methods later in another effort after analysing unused methods and modules in project repositories.
         return 0;
     }
 

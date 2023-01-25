@@ -252,7 +252,6 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
          * of the task, since this is a task registration update, we will want to schedule the task
          * in the same server as earlier */
         String taskLockId = this.getTaskType() + "_" + this.getTenantId() + "_" + taskInfo.getName();
-        // removed hazelcast
         String locationId = this.getTaskRepository().getTaskMetadataProp(
                 taskInfo.getName(), TASK_MEMBER_LOCATION_META_PROP_ID);
         this.registerLocalTask(taskInfo);
@@ -278,7 +277,8 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
     }
 
     private TaskServiceContext getTaskServiceContext() throws TaskException {
-        // removed hazelcast
+        // Converting to an empty method with the Hazelcast removal effort. 
+        // Need to remove these empty methods later in another effort after analysing unused methods and modules in project repositories.
         return null;
     }
 
@@ -363,7 +363,8 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
     }
 
     public String getMemberId() throws TaskException {
-        // removed hazelcast
+        // Converting to an empty method with the Hazelcast removal effort. 
+        // Need to remove these empty methods later in another effort after analysing unused methods and modules in project repositories.
         return null;
     }
 

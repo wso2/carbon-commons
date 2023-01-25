@@ -77,12 +77,12 @@ public class ClusterGroupCommunicator {
     }
     
     private void refreshMembers() {
-    	// removed hazelcast
         this.checkAndRemoveExpiredMembers();
     }
     
     public void addMyselfToGroup() {
-    	// removed hazelcast
+    	// Converting to an empty method with the Hazelcast removal effort. 
+        // Need to remove these empty methods later in another effort after analysing unused methods and modules in project repositories.
     }
     
     /**
@@ -94,7 +94,8 @@ public class ClusterGroupCommunicator {
      * list of active members.
      */
     private void checkAndRemoveExpiredMembers() {
-        // removed hazelcast
+        // Converting to an empty method with the Hazelcast removal effort. 
+        // Need to remove these empty methods later in another effort after analysing unused methods and modules in project repositories.
     }
 
     public String getStartupCounterName() {
@@ -109,7 +110,6 @@ public class ClusterGroupCommunicator {
         int serverCount = this.getTaskService().getServerConfiguration().getTaskServerCount();
         if (serverCount != -1) {
             log.info("Waiting for " + serverCount + " [" + this.getTaskType() + "] task executor nodes...");
-            // removed hazelcast
             log.info("All task servers activated for [" + this.getTaskType() + "].");
         }
     }
@@ -119,17 +119,18 @@ public class ClusterGroupCommunicator {
     }
 
     public synchronized List<String> getMemberIds() throws TaskException {
-        // removed hazelcast
+        // Converting to an empty method with the Hazelcast removal effort. 
+        // Need to remove these empty methods later in another effort after analysing unused methods and modules in project repositories.
         return null;
     }
 
     public boolean isLeader() {
-        // removed hazelcast
         return false;
     }
 
     public <V> V sendReceive(String memberId, TaskCall<V> taskCall) throws TaskException {
-        // removed hazelcast
+        // Converting to an empty method with the Hazelcast removal effort. 
+        // Need to remove these empty methods later in another effort after analysing unused methods and modules in project repositories.
         return null;
     }
 
