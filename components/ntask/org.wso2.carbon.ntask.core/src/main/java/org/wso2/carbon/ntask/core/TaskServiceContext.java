@@ -49,12 +49,14 @@ public class TaskServiceContext {
     }
     
     public InetSocketAddress getServerAddress(int index) {
-        String memberId = this.memberIds.get(index);
+        // Converting to an empty method with the Hazelcast removal effort. 
+        // Need to remove these empty methods later in another effort after analysing unused methods and modules in project repositories.
         return null;
     }
 
     public String getServerIdentifier(int index) {
-        String memberId = this.memberIds.get(index);
+        // Converting to an empty method with the Hazelcast removal effort. 
+        // Need to remove these empty methods later in another effort after analysing unused methods and modules in project repositories.
         return null;
     }
 }
