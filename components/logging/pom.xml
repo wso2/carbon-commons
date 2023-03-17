@@ -32,6 +32,7 @@
 
     <modules>
         <module>org.wso2.carbon.logging.admin.ui</module>
+        <module>org.wso2.carbon.logging.config.ui</module>
         <module>org.wso2.carbon.logging.service</module>
         <module>org.wso2.carbon.logging.updater</module>
         <module>org.wso2.carbon.logging.view</module>

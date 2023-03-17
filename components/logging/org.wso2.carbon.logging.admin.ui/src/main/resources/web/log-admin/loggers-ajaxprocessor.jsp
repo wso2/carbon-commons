@@ -45,7 +45,11 @@
     LoggerData[] allLoggerData;
     try {
         client = new LoggingAdminClient(cookie, backendServerURL, configContext);
+        System.out.println("New Object created");
+        System.out.println("Filter String : " + filterStr);
+        System.out.println("Begins with : " + beginsWith);
         allLoggerData = client.getAllLoggerData(beginsWith, filterStr);
+        System.out.println("Logger Data retrieved");
         if (allLoggerData == null || allLoggerData.length == 0) {
 %>
     <fmt:bundle basename="org.wso2.carbon.logging.admin.ui.i18n.Resources">
