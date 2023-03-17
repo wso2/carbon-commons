@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+~ Copyright (c) 2020, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
+~
+~ WSO2 Inc. licenses this file to you under the Apache License,
+~ Version 2.0 (the "License"); you may not use this file except
+~ in compliance with the License.
+~ You may obtain a copy of the License at
+~
+~ http://www.apache.org/licenses/LICENSE-2.0
+~
+~ Unless required by applicable law or agreed to in writing,
+~ software distributed under the License is distributed on an
+~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~ KIND, either express or implied. See the License for the
+~ specific language governing permissions and limitations
+~ under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+<title>Logging Management - User Guide</title>
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1" /><title>Logging Management</title>
+<link href="../../admin/css/documentation.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+
+<body>
+<div id="middle">
+<h1>Configure Logging</h1>
+<p>
+    This page shows the existing Log4j2 configuration. It also allows you to modify existing configuration. You can either modify the log level of existing logger or add a new logger.
+</p>
+
+<h2>Configuring Log4J2 Loggers</h2>
+<p>Configuring properties related to Log4J2 loggers.<span style="color: red;"></span></p>
+		<ol>
+			<li>In the <span style="font-weight: bold;">loggers</span> list,
+				you can check available loggers and the corresponding log level. The available
+				categories of log levels are,</li>
+			<p style="margin-left: 40px;">INFO - Information messages WARN -
+				Warning messages ERROR - Error messages DEBUG - Debug messages TRACE
+				- Trace messages FATAL - Fatal error messages</p>
+
+			<li>Select a Log Level (only the messages at that level and
+				below will be logged).
+				<ul>
+					<li>For example, if you select Log Level ERROR, then all ERROR
+						and FATAL messages will be logged.</li>
+				</ul></li>
+			<p></p>
+			<li>You can also filter logs according to the logger name.</li>
+			<p>
+				<img alt="" src="images/loggers.JPG" width="1500" />
+			</p>
+			<p style="text-align: center;">Figure 1: Monitor Logs</p>
+
+			<h2>Configuring Log4J2 logger</h2>
+			<p>Log4J2 logger consist of the logger name, logger class and log level.</p>
+			<p>
+				To add a new logger you need to provide the following,
+			</p>
+			<ol>
+				<li>Logger name</li>
+				<li>Logger class</li>
+				<li>Log level</li>
+				<li>Click <strong>Update</strong>.</li>
+			</ol>
+			<p>
+				<img alt="" src="images/addLogger.JPG" width="1500" />
+			</p>
+			<p style="text-align: center;">Figure 2: Configure Log4J2 logger</p>
+			<p></p>
+		</ol>
+		<p>
+There are two ways of configuring Log4J2 in WSO2 Carbon. Either by manually editing the log4j2.properties file
+or through the management console. Changes you made to Log4j2 configuration through the management console are written to log4j2.properties file, therefore those changes will be available after server restarts.
+</p>
+</div>
+</body></html>
