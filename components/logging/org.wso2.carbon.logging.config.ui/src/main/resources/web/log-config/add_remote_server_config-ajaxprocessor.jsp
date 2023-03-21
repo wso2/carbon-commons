@@ -16,23 +16,19 @@
 ~ under the License.
 --%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-<%@ page import="org.wso2.carbon.logging.config.ui.LoggingConfigClient" %>
-<%@ page import="org.wso2.carbon.utils.ServerConstants" %>
-<%@ page import="org.apache.axis2.context.ConfigurationContext" %>
-<%@ page import="org.wso2.carbon.CarbonConstants" %>
-<%@ page import="org.wso2.carbon.ui.CarbonUIUtil" %>
-<%
-	response.setHeader("Cache-Control", "no-cache");
-	String backendServerURL = CarbonUIUtil
-			.getServerURL(config.getServletContext(), session);
-	ConfigurationContext configContext = (ConfigurationContext) config.getServletContext()
-			.getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
-
-	String cookie = (String) session.getAttribute(ServerConstants.ADMIN_SERVICE_COOKIE);
-    LoggingConfigClient client = new LoggingConfigClient(cookie, backendServerURL, configContext);
-    String[] logLevels = client.getLogLevels();
-%>
+<style>
+    .labelField {
+        margin-top: 2px;
+        display: inline-block;
+    }
+    .sectionHelp {
+        margin-top: 1px;
+        color: #555;
+    }
+    .sectionTop {
+        margin-top: 5px;
+    }
+</style>
 
 <script type="text/javascript" src="js/loggingconfig.js"></script>
 <fmt:bundle basename="org.wso2.carbon.logging.config.ui.i18n.Resources">
@@ -45,21 +41,27 @@
         </thead>
         <tr>
             <td class="formRow">
-                <table class="normal">
+                <table class="normal sectionTop">
                     <tr>
-                        <td width="40%"><fmt:message key="remote.server.url"/></td>
+                        <td width="40%" class="leftCol-med labelField"><fmt:message key="remote.server.url"/><span class="required">*</span></td>
                         <td>
                             <input value="" size="50"
                                    id="remoteServerUrl"
-                                   tabindex="6" type="url"/>
+                                   tabindex="6" type="url" autofocus/>
+                           <div class="sectionHelp">
+                               <fmt:message key='help.remoteServerUrl'/>
+                           </div>
                         </td>
                     </tr>
                     <tr>
-                        <td width="40%"><fmt:message key="remote.server.timeout"/></td>
+                        <td width="40%" class="leftCol-med labelField"><fmt:message key="remote.server.timeout"/></td>
                         <td>
-                            <input value="" size="50"
+                            <input value="" size="25"
                                    id="connectTimeoutMillis"
-                                   tabindex="6" type="url"/>
+                                   tabindex="6" type="text" white-list-patterns="^0*[1-9][0-9]*$"/>
+                            <div class="sectionHelp">
+                               <fmt:message key='help.remoteServerTimeout'/>
+                            </div>
                         </td>
                     </tr>
                 </table>
