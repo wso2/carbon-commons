@@ -24,12 +24,9 @@ import org.apache.axis2.context.ConfigurationContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.logging.config.stub.LoggingConfigStub;
-import org.wso2.carbon.logging.config.stub.types.carbon.LoggerData;
-
-import java.rmi.RemoteException;
 
 /**
- * This is the Admin client used for retrieving and updating Log4J2 loggers.
+ * This is the Admin client used for updating Log4J2 appenders related to remote server configuration.
  */
 public class LoggingConfigClient {
     private static final Log log = LogFactory.getLog(LoggingConfigClient.class);
@@ -47,45 +44,11 @@ public class LoggingConfigClient {
         option.setProperty(org.apache.axis2.transport.http.HTTPConstants.COOKIE_STRING, cookie);
     }
 
-    public LoggerData[] getAllLoggerData(boolean beginsWith, String logNameFilter) throws Exception {
-        try {
-            return stub.getAllLoggerData(beginsWith, logNameFilter);
-        } catch (RemoteException e) {
-            String msg = "Error occurred while getting logger data. Backend service may be unavailable";
-            log.error(msg, e);
-            throw e;
-        }
-    }
-
-    public String[] getLogLevels() {
-        return new String[]{"OFF", "TRACE", "DEBUG", "INFO", "WARN", "ERROR", "FATAL"};
-    }
-
-    public void addLogger(String loggerName, String loggerClass, String logLevel) throws Exception {
-        try {
-            stub.addLogger(loggerName, loggerClass, logLevel);
-        } catch (Exception e) {
-            String msg = "Error occurred while adding logger configuration.";
-            log.error(msg, e);
-            throw e;
-        }
-    }
-
     public void addRemoteServerConfig(String url, String connectTimeoutMillis) throws Exception {
         try {
             stub.addRemoteServerConfig(url, connectTimeoutMillis);
         } catch (Exception e) {
             String msg = "Error occurred while adding remote server configuration.";
-            log.error(msg, e);
-            throw e;
-        }
-    }
-
-    public boolean isLoggerExist(String loggerName) throws Exception {
-        try {
-            return stub.isLoggerExist(loggerName);
-        } catch (Exception e) {
-            String msg = "Error occurred while getting logger.";
             log.error(msg, e);
             throw e;
         }
