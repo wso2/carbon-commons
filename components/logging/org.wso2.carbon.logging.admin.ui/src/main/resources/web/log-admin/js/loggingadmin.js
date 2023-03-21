@@ -38,23 +38,6 @@ function updateLogger(loggerName, logLevelId) {
     });
 }
 
-function updateAuditServerUrlConfig(loggerName, logLevelId) {
-    sessionAwareFunction(function() {
-        jQuery.noConflict();
-
-        var logLevelWidget = document.getElementById(logLevelId);
-        var logLevel = logLevelWidget[logLevelWidget.selectedIndex].value;
-
-        jQuery.post('update_logger-ajaxprocessor.jsp',
-                    {loggerName: loggerName,
-                     logLevel:logLevel
-                    },
-                    function(data){
-                         CARBON.showInfoDialog(data);
-                    });
-    });
-}
-
 function showLoggers(beginsWith) {
     sessionAwareFunction(function() {
         jQuery.noConflict();
