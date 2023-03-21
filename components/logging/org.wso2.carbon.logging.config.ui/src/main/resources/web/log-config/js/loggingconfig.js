@@ -31,9 +31,10 @@ function addRemoteServerConfig(url, ) {
         }
 
         jQuery.post('process_add_remote_server_config-ajaxprocessor.jsp',
-            {url: serverUrl,
-             connectTimeoutMillis: timeout
-            }, function(data){
+            {
+                url: serverUrl,
+                connectTimeoutMillis: timeout
+            }, function(data) {
                 CARBON.showInfoDialog(data);
             });
     });

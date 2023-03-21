@@ -19,22 +19,9 @@
 
 package org.wso2.carbon.logging.service.util;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.appender.HttpAppender;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.config.builder.api.AppenderComponentBuilder;
-import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilder;
-import org.apache.logging.log4j.core.config.builder.api.ConfigurationBuilderFactory;
-import org.apache.logging.log4j.core.config.builder.impl.BuiltConfiguration;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -61,24 +48,4 @@ public class Utils {
         }
         return value;
     }
-
-//    public static boolean setLogAppender(String url, int timeout) throws MalformedURLException {
-//        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-//        ConfigurationBuilder<BuiltConfiguration> builder
-//                = ConfigurationBuilderFactory.newConfigurationBuilder();
-//        AppenderComponentBuilder appender = builder.newAppender()
-//        Configuration config = ctx.getConfiguration();
-//        LoggerConfig loggerConfig = config.getLoggerConfig("rootLogger");
-//        //loggerConfig.removeAppender("");
-//        config.getRootLogger().removeAppender("AUDIT_LOGFILE");
-//        Appender appender = HttpAppender.newBuilder()
-//                .setConfiguration(config)
-//                .setName("AUDIT_LOGFILE")
-//                .setUrl(new URL(url))
-//                .setConnectTimeoutMillis(timeout)
-//                .build();
-//        appender.start();
-//        config.addAppender(appender);
-//        return true;
-//    }
 }
