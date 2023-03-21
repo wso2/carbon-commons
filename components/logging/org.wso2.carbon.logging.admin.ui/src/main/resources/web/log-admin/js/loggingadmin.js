@@ -102,6 +102,5 @@ function loadPage() {
         jQuery.noConflict()
         jQuery("#addLoggerSettings").load('add_loggers-ajaxprocessor.jsp');
         jQuery("#loggers").load('loggers-ajaxprocessor.jsp');
-        jQuery("#addAuditServerUrl").load('add_audit_server_url-ajaxprocessor.jsp');
     });
 }

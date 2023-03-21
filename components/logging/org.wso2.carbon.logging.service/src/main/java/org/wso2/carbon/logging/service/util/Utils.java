@@ -62,23 +62,23 @@ public class Utils {
         return value;
     }
 
-    public static boolean setLogAppender(String url, int timeout) throws MalformedURLException {
-        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-        ConfigurationBuilder<BuiltConfiguration> builder
-                = ConfigurationBuilderFactory.newConfigurationBuilder();
-        AppenderComponentBuilder appender = builder.newAppender()
-        Configuration config = ctx.getConfiguration();
-        LoggerConfig loggerConfig = config.getLoggerConfig("rootLogger");
-        //loggerConfig.removeAppender("");
-        config.getRootLogger().removeAppender("AUDIT_LOGFILE");
-        Appender appender = HttpAppender.newBuilder()
-                .setConfiguration(config)
-                .setName("AUDIT_LOGFILE")
-                .setUrl(new URL(url))
-                .setConnectTimeoutMillis(timeout)
-                .build();
-        appender.start();
-        config.addAppender(appender);
-        return true;
-    }
+//    public static boolean setLogAppender(String url, int timeout) throws MalformedURLException {
+//        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+//        ConfigurationBuilder<BuiltConfiguration> builder
+//                = ConfigurationBuilderFactory.newConfigurationBuilder();
+//        AppenderComponentBuilder appender = builder.newAppender()
+//        Configuration config = ctx.getConfiguration();
+//        LoggerConfig loggerConfig = config.getLoggerConfig("rootLogger");
+//        //loggerConfig.removeAppender("");
+//        config.getRootLogger().removeAppender("AUDIT_LOGFILE");
+//        Appender appender = HttpAppender.newBuilder()
+//                .setConfiguration(config)
+//                .setName("AUDIT_LOGFILE")
+//                .setUrl(new URL(url))
+//                .setConnectTimeoutMillis(timeout)
+//                .build();
+//        appender.start();
+//        config.addAppender(appender);
+//        return true;
+//    }
 }

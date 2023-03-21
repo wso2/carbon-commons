@@ -60,6 +60,19 @@ public class LoggingConfig {
     private static final String LOGGER_NAME_SUFFIX = ".name";
     private static final String LOGGERS_PROPERTY = "loggers";
     private static final String AUDIT_SERVER_URL = "appender.AUDIT_LOGFILE.url";
+    private static final String AUDIT_SERVER_URL_TYPE = "appender.AUDIT_LOGFILE.type";
+    private static final String AUDIT_SERVER_CONN_TIMEOUT = "appender.AUDIT_LOGFILE.connectTimeoutMillis";
+    private static final String AUDIT_SERVER_FILENAME = "appender.AUDIT_LOGFILE.fileName";
+    private static final String AUDIT_SERVER_FILE_PATTERN = "appender.AUDIT_LOGFILE.filePattern";
+    private static final String AUDIT_SERVER_POLICIES_TYPE= "appender.AUDIT_LOGFILE.policies.type";
+    private static final String AUDIT_SERVER_POLICIES_TIME_TYPE = "appender.AUDIT_LOGFILE.policies.time.type";
+    private static final String AUDIT_SERVER_POLICIES_TIME_INTERVAL = "appender.AUDIT_LOGFILE.policies.time.interval";
+    private static final String AUDIT_SERVER_POLICIES_TIME_MODULATE = "appender.AUDIT_LOGFILE.policies.time.modulate";
+    private static final String AUDIT_SERVER_POLICIES_SIZE_TYPE = "appender.AUDIT_LOGFILE.policies.size.type";
+    private static final String AUDIT_SERVER_POLICIES_SIZE_SIZE = "appender.AUDIT_LOGFILE.policies.size.size";
+    private static final String AUDIT_SERVER_STRATEGY_TYPE = "appender.AUDIT_LOGFILE.strategy.type";
+    private static final String AUDIT_SERVER_STRATEGY_MAX = "appender.AUDIT_LOGFILE.strategy.max";
+    private static final String AUDIT_SERVER_STRATEGY_TAX = "appender.AUDIT_LOGFILE.strategy.tax";
     private static final String ROOT_LOGGER = "rootLogger";
 
     public String getLoggers() throws IOException {
@@ -112,7 +125,6 @@ public class LoggingConfig {
         return list.toArray(new LoggerData[list.size()]);
     }
 
-
     public void addLogger(String loggerName, String loggerClass, String logLevel) throws IOException, ConfigurationException {
         loadConfigs();
         String modifiedLogger = getLoggers().concat(", ").concat(loggerName);
@@ -131,12 +143,22 @@ public class LoggingConfig {
     public void addRemoteServerConfig(String url, String connectTimeoutMillis) throws IOException,
             ConfigurationException {
         loadConfigs();
-        //String modifiedLogger = getLoggers().concat(", ").concat(AUDIT_SERVER_URL);
-        Utils.setLogAppender(url, Integer.parseInt(connectTimeoutMillis));
+        getLoggerData("synapse-wire");
+        config.setProperty(AUDIT_SERVER_URL_TYPE, "http");
+        config.clearProperty(AUDIT_SERVER_FILENAME);
+        config.clearProperty(AUDIT_SERVER_FILE_PATTERN);
+        config.clearProperty(AUDIT_SERVER_POLICIES_TYPE);
+        config.clearProperty(AUDIT_SERVER_POLICIES_TIME_TYPE);
+        config.clearProperty(AUDIT_SERVER_POLICIES_TIME_INTERVAL);
+        config.clearProperty(AUDIT_SERVER_POLICIES_TIME_MODULATE);
+        config.clearProperty(AUDIT_SERVER_POLICIES_SIZE_TYPE);
+        config.clearProperty(AUDIT_SERVER_POLICIES_SIZE_SIZE);
+        config.clearProperty(AUDIT_SERVER_STRATEGY_TYPE);
+        config.clearProperty(AUDIT_SERVER_STRATEGY_MAX);
         config.setProperty(AUDIT_SERVER_URL, url);
-        //config.clearProperty();
+        config.setProperty(AUDIT_SERVER_CONN_TIMEOUT, connectTimeoutMillis);
+        config.clearProperty(AUDIT_SERVER_STRATEGY_TAX);
         applyConfigs();
-        //log an audit log
     }
 
 //    public void removeRemoteServerConfig(String loggerName, String loggerClass, String url) throws IOException, ConfigurationException {
