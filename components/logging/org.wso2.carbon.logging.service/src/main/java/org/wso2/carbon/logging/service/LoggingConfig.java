@@ -97,9 +97,15 @@ public class LoggingConfig {
         config.setProperty(
                 LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
                         + LoggingConstants.URL_SUFFIX, url);
-        config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, connectTimeoutMillis);
+        if (connectTimeoutMillis != null && !connectTimeoutMillis.isEmpty()) {
+            config.setProperty(
+                    LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
+                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, connectTimeoutMillis);
+        } else {
+            config.clearProperty(
+                    LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
+                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX);
+        }
         applyConfigs();
     }
 
