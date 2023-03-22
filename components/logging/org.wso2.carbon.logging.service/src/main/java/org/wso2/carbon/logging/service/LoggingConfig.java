@@ -25,6 +25,8 @@ import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.CarbonConstants;
+import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.logging.service.util.Utils;
 import org.wso2.carbon.utils.ServerConstants;
 
@@ -34,13 +36,17 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * This is the Admin service used for configuring the remote server logging configurations
  */
 public class LoggingConfig {
     private static final Log log = LogFactory.getLog(LoggingConfig.class);
+    private static final Log auditLog = CarbonConstants.AUDIT_LOG;
 
     private String filePath = System.getProperty(ServerConstants.CARBON_CONFIG_DIR_PATH) + File.separator
             + "log4j2.properties";
@@ -112,6 +118,13 @@ public class LoggingConfig {
                         + LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX,
                 LoggingConstants.THRESHOLD_FILTER_LEVEL);
         applyConfigs();
+        //Audit log for remote audit server logging configuration update
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat date = new SimpleDateFormat("'['yyyy-MM-dd HH:mm:ss,SSSZ']'");
+        auditLog.info("Remote audit server logging configuration updated successfully with url: " + url
+                + ((connectTimeoutMillis != null) && !(connectTimeoutMillis.isEmpty()) ? " and connection timeout: "
+                + connectTimeoutMillis + "ms" : "") + " by user: "
+                + CarbonContext.getThreadLocalCarbonContext().getUsername() + " at: " + date.format(currentTime));
     }
 
     private void applyConfigs() throws IOException, ConfigurationException {
