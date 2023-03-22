@@ -22,6 +22,9 @@
 <%@ page import="org.wso2.carbon.utils.ServerConstants" %>
 <%@ page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%@ page import="org.wso2.carbon.CarbonConstants" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="java.util.regex.Pattern" %>
 <fmt:bundle basename="org.wso2.carbon.logging.config.ui.i18n.Resources">
     <%
         response.setHeader("Cache-Control", "no-cache");
@@ -40,11 +43,27 @@
     %>
     <fmt:message key="remote.server.url.empty"/>
     <%
-            } else {
+            } else if (!Pattern.matches("^(http|https)://.*$", url)) {
+    %>
+    <fmt:message key="remote.server.url.invalid"/>
+    <%
+            } else if (connectTimeoutMillis == null || connectTimeoutMillis.isEmpty()) {
                 client.addRemoteServerConfig(url, connectTimeoutMillis);
     %>
     <fmt:message key="successfully.added.remote.server.configuration"/>
     <%
+            } else {
+                try {
+                    Integer.parseInt(connectTimeoutMillis);
+                    client.addRemoteServerConfig(url, connectTimeoutMillis);
+    %>
+    <fmt:message key="successfully.added.remote.server.configuration"/>
+    <%
+                } catch (NumberFormatException e) {
+    %>
+    <fmt:message key="remote.server.timeout.invalid"/>
+    <%
+                }
             }
         } catch (Exception e) {
     %>
