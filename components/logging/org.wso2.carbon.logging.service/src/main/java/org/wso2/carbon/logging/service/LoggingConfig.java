@@ -25,6 +25,7 @@ import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.wso2.carbon.logging.service.util.Utils;
 import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
@@ -33,6 +34,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 /**
  * This is the Admin service used for configuring the remote server logging configurations
@@ -56,47 +58,42 @@ public class LoggingConfig {
     public void addRemoteServerConfig(String url, String connectTimeoutMillis)
             throws IOException, ConfigurationException {
         loadConfigs();
+        ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, LoggingConstants.AUDIT_LOGFILE);
+        String layoutTypeKey = LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
+                + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX;
+        String layoutTypePatternKey = LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
+                + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX;
+        String layoutTypePatternDefaultValue = LoggingConstants.DEFAULT_LAYOUT_PATTERN;
+        String layoutTypePatternValue = null;
+        for (String key : list) {
+            if (layoutTypeKey.equals(key)) {
+                String layoutTypeValue = Utils.getProperty(logPropFile, key);
+                if (LoggingConstants.PATTERN_LAYOUT_TYPE.equals(layoutTypeValue)) {
+                    layoutTypePatternValue = Utils.getProperty(logPropFile, layoutTypePatternKey);
+                }
+            }
+            config.clearProperty(key);
+        }
         config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.TYPE_SUFFIX, "http");
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.FILENAME_SUFFIX);
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.FILE_PATTERN_SUFFIX);
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TYPE_SUFFIX);
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX
-                        + LoggingConstants.TYPE_SUFFIX);
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX
-                        + LoggingConstants.INTERVAL_SUFFIX);
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX
-                        + LoggingConstants.MODULATE_SUFFIX);
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX
-                        + LoggingConstants.TYPE_SUFFIX);
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX
-                        + LoggingConstants.SIZE_SUFFIX);
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.TYPE_SUFFIX);
-        config.clearProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.MAX_SUFFIX);
+                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.HTTP_APPENDER_TYPE);
         config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                        + LoggingConstants.URL_SUFFIX, url);
+                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.NAME_SUFFIX,
+                LoggingConstants.AUDIT_LOGFILE);
+        config.setProperty(
+                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.LAYOUT_SUFFIX
+                        + LoggingConstants.TYPE_SUFFIX, LoggingConstants.PATTERN_LAYOUT_TYPE);
+        if (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) {
+            config.setProperty(
+                    LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.LAYOUT_SUFFIX
+                            + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternValue);
+        } else {
+            config.setProperty(
+                    LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.LAYOUT_SUFFIX
+                            + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternDefaultValue);
+        }
+        config.setProperty(
+                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.URL_SUFFIX, url);
         if (connectTimeoutMillis != null && !connectTimeoutMillis.isEmpty()) {
             config.setProperty(
                     LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
@@ -106,6 +103,14 @@ public class LoggingConfig {
                     LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
                             + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX);
         }
+        config.setProperty(
+                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.FILTER_SUFFIX
+                        + LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.THRESHOLD_FILTER_TYPE);
+        config.setProperty(
+                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.FILTER_SUFFIX
+                        + LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX,
+                LoggingConstants.THRESHOLD_FILTER_LEVEL);
         applyConfigs();
     }
 

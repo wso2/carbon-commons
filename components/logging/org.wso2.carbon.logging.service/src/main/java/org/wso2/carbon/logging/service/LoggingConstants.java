@@ -22,17 +22,19 @@ package org.wso2.carbon.logging.service;
 public final class LoggingConstants {
 
     public static final String AUDIT_LOGFILE = "AUDIT_LOGFILE";
+    public static final String NAME_SUFFIX = ".name";
     public static final String APPENDER_PREFIX = "appender.";
     public static final String URL_SUFFIX = ".url";
     public static final String TYPE_SUFFIX = ".type";
+    public static final String LAYOUT_SUFFIX = ".layout";
+    public static final String PATTERN_SUFFIX = ".pattern";
+    public static final String FILTER_SUFFIX = ".filter";
+    public static final String THRESHOLD_SUFFIX = ".threshold";
+    public static final String LEVEL_SUFFIX = ".level";
     public static final String CONNECTION_TIMEOUT_SUFFIX = ".connectTimeoutMillis";
-    public static final String FILENAME_SUFFIX = ".fileName";
-    public static final String FILE_PATTERN_SUFFIX = ".filePattern";
-    public static final String POLICIES_SUFFIX= ".policies";
-    public static final String TIME_SUFFIX = ".time";
-    public static final String INTERVAL_SUFFIX = ".interval";
-    public static final String MODULATE_SUFFIX = ".modulate";
-    public static final String SIZE_SUFFIX = ".size";
-    public static final String STRATEGY_SUFFIX = ".strategy";
-    public static final String MAX_SUFFIX = ".max";
+    public static final String PATTERN_LAYOUT_TYPE = "PatternLayout";
+    public static final String THRESHOLD_FILTER_TYPE = "ThresholdFilter";
+    public static final String THRESHOLD_FILTER_LEVEL = "INFO";
+    public static final String HTTP_APPENDER_TYPE = "http";
+    public static final String DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%d] %5p {%c} - %m%ex%n";
 }
