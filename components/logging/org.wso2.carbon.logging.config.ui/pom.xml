@@ -21,14 +21,14 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>logging</artifactId>
-        <version>4.9.2</version>
+        <version>4.9.4-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.wso2.carbon.logging.config.ui</artifactId>
     <packaging>bundle</packaging>
-    <name>WSO2 Carbon - Logging Configuration UI</name>
+    <name>WSO2 Carbon - Logging Config UI</name>
     <url>http://wso2.org</url>
 
     <build>
