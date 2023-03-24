@@ -22,7 +22,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>logging-mgt-features</artifactId>
-        <version>4.9.4-SNAPSHOT</version>
+        <version>4.10.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -57,8 +57,8 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.config.ui:${carbon.commons.version}</bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.config.stub:${carbon.commons.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.config.ui:${project.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.config.stub:${project.version}</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.ui:compatible:${carbon.kernel.feature.version}</importFeatureDef>
