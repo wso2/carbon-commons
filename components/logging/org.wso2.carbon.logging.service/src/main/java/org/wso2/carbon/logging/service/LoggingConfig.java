@@ -65,27 +65,24 @@ public class LoggingConfig {
         logTypeStatusMap.put(LoggingConstants.AUDIT_LOGFILE, auditLogTypeStatus);
         logTypeStatusMap.put(LoggingConstants.API_LOGFILE, apiLogTypeStatus);
         logTypeStatusMap.put(LoggingConstants.CARBON_LOGFILE, carbonLogTypeStatus);
-        ArrayList<String> appenderNameList = new ArrayList<>();
         for (Map.Entry<String,Boolean> entry : logTypeStatusMap.entrySet()) {
             String appenderName = entry.getKey();
-            Boolean status = entry.getValue();
-            if (status) {
-                appenderNameList.add(appenderName);
+            if (entry.getValue()) {
                 loadConfigs();
                 ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
-                configureRemoteServer(url, connectTimeoutMillis, list, appenderName);
+                applyRemoteConfigurations(url, connectTimeoutMillis, list, appenderName);
                 applyConfigs();
+                //Audit log for remote server logging configuration update
+                Date currentTime = Calendar.getInstance().getTime();
+                SimpleDateFormat date = new SimpleDateFormat("'['yyyy-MM-dd HH:mm:ss,SSSZ']'");
+                auditLog.info("Remote audit server logging configuration updated successfully with url: " + url
+                        + " by user: " + CarbonContext.getThreadLocalCarbonContext().getUsername() + " for appender: "
+                        + appenderName + " at: " + date.format(currentTime));
             }
         }
-        //Audit log for remote server logging configuration update
-        Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat date = new SimpleDateFormat("'['yyyy-MM-dd HH:mm:ss,SSSZ']'");
-        auditLog.info("Remote audit server logging configuration updated successfully with url: " + url
-                + " by user: " + CarbonContext.getThreadLocalCarbonContext().getUsername() + " for appender(s): "
-                + appenderNameList + " at: " + date.format(currentTime));
     }
 
-    private void configureRemoteServer(String url, String connectTimeoutMillis,
+    private void applyRemoteConfigurations(String url, String connectTimeoutMillis,
             ArrayList<String> appenderPropertiesList, String appenderName) throws IOException {
         String layoutTypeKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
                 + LoggingConstants.TYPE_SUFFIX;
@@ -108,25 +105,20 @@ public class LoggingConfig {
                 appenderName);
         config.setProperty(
                 LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
-                        + LoggingConstants.TYPE_SUFFIX,
-                LoggingConstants.PATTERN_LAYOUT_TYPE);
+                        + LoggingConstants.TYPE_SUFFIX, LoggingConstants.PATTERN_LAYOUT_TYPE);
         if (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) {
             config.setProperty(
                     LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
-                            + LoggingConstants.PATTERN_SUFFIX,
-                    layoutTypePatternValue);
+                            + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternValue);
         } else {
             config.setProperty(
                     LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
-                            + LoggingConstants.PATTERN_SUFFIX,
-                    layoutTypePatternDefaultValue);
+                            + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternDefaultValue);
         }
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.URL_SUFFIX,
-                url);
+        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.URL_SUFFIX, url);
         if (connectTimeoutMillis != null && !connectTimeoutMillis.isEmpty()) {
             config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
-                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX,
-                    connectTimeoutMillis);
+                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, connectTimeoutMillis);
         } else {
             config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName
                     + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX);
