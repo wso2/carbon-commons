@@ -25,6 +25,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.logging.config.stub.LoggingConfigStub;
 
+import java.util.HashMap;
+
 /**
  * This is the Admin client used for updating Log4J2 appenders related to remote server configuration.
  */
@@ -44,9 +46,11 @@ public class LoggingConfigClient {
         option.setProperty(org.apache.axis2.transport.http.HTTPConstants.COOKIE_STRING, cookie);
     }
 
-    public void addRemoteServerConfig(String url, String connectTimeoutMillis) throws Exception {
+    public void addRemoteServerConfig(String url, String connectTimeoutMillis, boolean auditLogTypeStatus,
+            boolean apiLogTypeStatus, boolean carbonLogTypeStatus) throws Exception {
         try {
-            stub.addRemoteServerConfig(url, connectTimeoutMillis);
+            stub.addRemoteServerConfig(url, connectTimeoutMillis, auditLogTypeStatus, apiLogTypeStatus,
+                    carbonLogTypeStatus);
         } catch (Exception e) {
             String msg = "Error occurred while adding remote server configuration.";
             log.error(msg, e);

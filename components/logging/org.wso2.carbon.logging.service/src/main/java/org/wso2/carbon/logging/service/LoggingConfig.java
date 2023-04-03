@@ -37,9 +37,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * This is the Admin service used for configuring the remote server logging configurations
@@ -61,17 +59,41 @@ public class LoggingConfig {
         layout.load(new InputStreamReader(new FileInputStream(logPropFile)));
     }
 
-    public void addRemoteServerConfig(String url, String connectTimeoutMillis)
-            throws IOException, ConfigurationException {
-        loadConfigs();
-        ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, LoggingConstants.AUDIT_LOGFILE);
-        String layoutTypeKey = LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX;
-        String layoutTypePatternKey = LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX;
+    public void addRemoteServerConfig(String url, String connectTimeoutMillis, boolean auditLogTypeStatus,
+            boolean apiLogTypeStatus, boolean carbonLogTypeStatus) throws IOException, ConfigurationException {
+        HashMap<String, Boolean> logTypeStatusMap = new HashMap<>();
+        logTypeStatusMap.put(LoggingConstants.AUDIT_LOGFILE, auditLogTypeStatus);
+        logTypeStatusMap.put(LoggingConstants.API_LOGFILE, apiLogTypeStatus);
+        logTypeStatusMap.put(LoggingConstants.CARBON_LOGFILE, carbonLogTypeStatus);
+        ArrayList<String> appenderNameList = new ArrayList<>();
+        for (Map.Entry<String,Boolean> entry : logTypeStatusMap.entrySet()) {
+            String appenderName = entry.getKey();
+            Boolean status = entry.getValue();
+            if (status) {
+                appenderNameList.add(appenderName);
+                loadConfigs();
+                ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
+                configureRemoteServer(url, connectTimeoutMillis, list, appenderName);
+                applyConfigs();
+            }
+        }
+        //Audit log for remote server logging configuration update
+        Date currentTime = Calendar.getInstance().getTime();
+        SimpleDateFormat date = new SimpleDateFormat("'['yyyy-MM-dd HH:mm:ss,SSSZ']'");
+        auditLog.info("Remote audit server logging configuration updated successfully with url: " + url
+                + " by user: " + CarbonContext.getThreadLocalCarbonContext().getUsername() + " for appender(s): "
+                + appenderNameList + " at: " + date.format(currentTime));
+    }
+
+    private void configureRemoteServer(String url, String connectTimeoutMillis,
+            ArrayList<String> appenderPropertiesList, String appenderName) throws IOException {
+        String layoutTypeKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
+                + LoggingConstants.TYPE_SUFFIX;
+        String layoutTypePatternKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
+                + LoggingConstants.PATTERN_SUFFIX;
         String layoutTypePatternDefaultValue = LoggingConstants.DEFAULT_LAYOUT_PATTERN;
         String layoutTypePatternValue = null;
-        for (String key : list) {
+        for (String key : appenderPropertiesList) {
             if (layoutTypeKey.equals(key)) {
                 String layoutTypeValue = Utils.getProperty(logPropFile, key);
                 if (LoggingConstants.PATTERN_LAYOUT_TYPE.equals(layoutTypeValue)) {
@@ -80,51 +102,43 @@ public class LoggingConfig {
             }
             config.clearProperty(key);
         }
-        config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.TYPE_SUFFIX,
+        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.HTTP_APPENDER_TYPE);
+        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.NAME_SUFFIX,
+                appenderName);
         config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.NAME_SUFFIX,
-                LoggingConstants.AUDIT_LOGFILE);
-        config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.LAYOUT_SUFFIX
-                        + LoggingConstants.TYPE_SUFFIX, LoggingConstants.PATTERN_LAYOUT_TYPE);
+                LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
+                        + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.PATTERN_LAYOUT_TYPE);
         if (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) {
             config.setProperty(
-                    LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.LAYOUT_SUFFIX
-                            + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternValue);
+                    LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
+                            + LoggingConstants.PATTERN_SUFFIX,
+                    layoutTypePatternValue);
         } else {
             config.setProperty(
-                    LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.LAYOUT_SUFFIX
-                            + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternDefaultValue);
+                    LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
+                            + LoggingConstants.PATTERN_SUFFIX,
+                    layoutTypePatternDefaultValue);
         }
-        config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.URL_SUFFIX, url);
+        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.URL_SUFFIX,
+                url);
         if (connectTimeoutMillis != null && !connectTimeoutMillis.isEmpty()) {
-            config.setProperty(
-                    LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, connectTimeoutMillis);
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
+                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX,
+                    connectTimeoutMillis);
         } else {
-            config.clearProperty(
-                    LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE
-                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX);
+            config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName
+                    + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX);
         }
         config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.FILTER_SUFFIX
+                LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX
                         + LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.THRESHOLD_FILTER_TYPE);
         config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + LoggingConstants.AUDIT_LOGFILE + LoggingConstants.FILTER_SUFFIX
+                LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX
                         + LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX,
                 LoggingConstants.THRESHOLD_FILTER_LEVEL);
-        applyConfigs();
-        //Audit log for remote audit server logging configuration update
-        Date currentTime = Calendar.getInstance().getTime();
-        SimpleDateFormat date = new SimpleDateFormat("'['yyyy-MM-dd HH:mm:ss,SSSZ']'");
-        auditLog.info("Remote audit server logging configuration updated successfully with url: " + url
-                + ((connectTimeoutMillis != null) && !(connectTimeoutMillis.isEmpty()) ? " and connection timeout: "
-                + connectTimeoutMillis + "ms" : "") + " by user: "
-                + CarbonContext.getThreadLocalCarbonContext().getUsername() + " at: " + date.format(currentTime));
     }
 
     private void applyConfigs() throws IOException, ConfigurationException {

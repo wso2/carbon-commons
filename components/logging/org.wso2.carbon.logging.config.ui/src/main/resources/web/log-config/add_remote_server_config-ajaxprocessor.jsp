@@ -33,47 +33,95 @@
 <script type="text/javascript" src="js/loggingconfig.js"></script>
 <fmt:bundle basename="org.wso2.carbon.logging.config.ui.i18n.Resources">
 
-    <table class="styledLeft">
-        <thead>
+<table class="styledLeft">
+    <thead>
         <tr>
-            <th><fmt:message key="configure.remote.server.url"/></th>
+            <th><fmt:message key="log.type"/></th>
         </tr>
-        </thead>
+    </thead>
+    <tbody>
         <tr>
-            <td class="formRow">
-                <table class="normal sectionTop">
-                    <tr>
-                        <td width="40%" class="leftCol-med labelField"><fmt:message key="remote.server.url"/><span class="required">*</span></td>
-                        <td>
-                            <input value="" size="50"
-                                   id="remoteServerUrl"
-                                   tabindex="6" type="url" autofocus/>
-                           <div class="sectionHelp">
-                               <fmt:message key='help.remoteServerUrl'/>
-                           </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td width="40%" class="leftCol-med labelField"><fmt:message key="remote.server.timeout"/></td>
-                        <td>
-                            <input value="" size="25"
-                                   id="connectTimeoutMillis"
-                                   tabindex="6" type="text" white-list-patterns="^0*[1-9][0-9]*$"/>
-                            <div class="sectionHelp">
-                               <fmt:message key='help.remoteServerTimeout'/>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+            <td>
+                <input type="checkbox" id="audit-log-option" name="log-type-selector" checked="checked">
+                <label for="audit-log-option"><fmt:message  key="audit.logs"/></label>
+                <div class="sectionHelp" style="display:inline-block">
+                    <fmt:message key='audit.logs.helper'/>
+                </div>
             </td>
         </tr>
         <tr>
-            <td class="buttonRow">
-                <input value="<fmt:message key="update"/>" tabindex="11" type="button"
-                       class="button"
-                       id="addRemoteServerConfig"
-                       onclick="showConfirmationDialogBox('<fmt:message key="remote.server.config.add.confirm"/>', addRemoteServerConfig)"/>
+            <td>
+                <input type="checkbox" id="api-log-option" name="log-type-selector">
+                <label for="api-log-option"><fmt:message  key="api.logs"/></label>
+                <div class="sectionHelp" style="display:inline-block">
+                    <fmt:message key='api.logs.helper'/>
+                </div>
             </td>
         </tr>
+        <tr>
+            <td>
+                <input type="checkbox" id="carbon-log-option" name="log-type-selector">
+                <label for="carbon-log-option"><fmt:message  key="carbon.logs"/></label>
+                <div class="sectionHelp" style="display:inline-block">
+                    <fmt:message key='carbon.logs.helper'/>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<br/>
+<table class="styledLeft">
+    <thead>
+    <tr>
+        <th><fmt:message key="configure.remote.server.url"/></th>
+    </tr>
+    </thead>
+    <tr>
+        <td class="formRow">
+            <table class="normal sectionTop">
+                <tr>
+                    <td width="40%" class="leftCol-med labelField"><fmt:message key="remote.server.url"/><span class="required">*</span></td>
+                    <td>
+                        <input value="" size="50"
+                               id="remoteServerUrl"
+                               tabindex="6" type="url" autofocus/>
+                       <div class="sectionHelp">
+                           <fmt:message key='help.remoteServerUrl'/>
+                       </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" class="middle-header">
+        	<a onclick="showAdvancedConfigurations()" class="icon-link" style="background-image:url(images/plus.gif);"
+                             href="#advancedConfig" id="advancedConfigHeader"></a>
+        	<fmt:message key="advanced.config.header"/>
+        </td>
+    </tr>
+    <tr id="advancedConfig" style="display:none">
+        <td class="formRow">
+            <table class="normal sectionTop" id="showAdvancedConfigurations">
+                <td class="leftCol-med labelField"><fmt:message key="remote.server.timeout"/></td>
+                <td>
+                    <input value="" size="25"
+                           id="connectTimeoutMillis"
+                           tabindex="6" type="text" white-list-patterns="^0*[1-9][0-9]*$"/>
+                    <div class="sectionHelp">
+                       <fmt:message key='help.remoteServerTimeout'/>
+                    </div>
+                </td>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td class="buttonRow">
+            <input value="<fmt:message key="update"/>" tabindex="11" type="button"
+                   class="button"
+                   id="addRemoteServerConfig"
+                   onclick="showConfirmationDialogBox('<fmt:message key="remote.server.config.add.confirm"/>', addRemoteServerConfig)"/>
+        </td>
+    </tr>
     </table>
 </fmt:bundle>
