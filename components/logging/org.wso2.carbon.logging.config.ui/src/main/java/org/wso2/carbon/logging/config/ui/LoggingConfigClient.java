@@ -25,8 +25,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.logging.config.stub.LoggingConfigStub;
 
-import java.util.HashMap;
-
 /**
  * This is the Admin client used for updating Log4J2 appenders related to remote server configuration.
  */
