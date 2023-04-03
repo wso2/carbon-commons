@@ -30,14 +30,42 @@ function addRemoteServerConfig(url, ) {
             timeout = jQuery.trim(document.getElementById('connectTimeoutMillis').value);
         }
 
+        var auditLogTypeStatus = false;
+        if (document.getElementById('audit-log-option').checked === true) {
+            auditLogTypeStatus = true;
+        }
+
+        var apiLogTypeStatus = false;
+        if (document.getElementById('api-log-option').checked === true) {
+            apiLogTypeStatus = true;
+        }
+
+        var carbonLogTypeStatus = false;
+        if (document.getElementById('carbon-log-option').checked === true) {
+            carbonLogTypeStatus = true;
+        }
         jQuery.post('process_add_remote_server_config-ajaxprocessor.jsp',
             {
                 url: serverUrl,
-                connectTimeoutMillis: timeout
+                connectTimeoutMillis: timeout,
+                auditLogType: auditLogTypeStatus,
+                apiLogType: apiLogTypeStatus,
+                carbonLogType: carbonLogTypeStatus
             }, function(data) {
                 CARBON.showInfoDialog(data);
             });
     });
+}
+function showAdvancedConfigurations() {
+	var advancedConfHeader =  document.getElementById('advancedConfigHeader');
+	var configFields = document.getElementById('advancedConfig');
+	if(configFields.style.display == 'none') {
+	   advancedConfHeader.setAttribute('style','background-image:url(images/minus.gif);');
+	   configFields.style.display = '';
+	} else {
+	   advancedConfHeader.setAttribute('style','background-image:url(images/plus.gif);');
+	   configFields.style.display = 'none';
+	}
 }
 
 function showConfirmationDialogBox(message, yesCallback){

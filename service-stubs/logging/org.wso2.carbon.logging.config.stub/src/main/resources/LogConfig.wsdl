@@ -34,6 +34,9 @@
                     <xs:sequence>
                         <xs:element minOccurs="0" name="url" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="connectTimeoutMillis" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="auditLogTypeStatus" type="xs:boolean"/>
+                        <xs:element minOccurs="0" name="apiLogTypeStatus" type="xs:boolean"/>
+                        <xs:element minOccurs="0" name="carbonLogTypeStatus" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
