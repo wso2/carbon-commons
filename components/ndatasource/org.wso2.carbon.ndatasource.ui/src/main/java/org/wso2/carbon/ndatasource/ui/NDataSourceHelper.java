@@ -48,10 +48,8 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.io.*;
+import java.net.URLDecoder;
 import java.rmi.RemoteException;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -165,6 +163,11 @@ public class NDataSourceHelper {
 					handleException(bundle.getString("ds.url.cannotfound.msg"));
 				}
 				String username = sanitizeInput(request.getParameter("username"));
+				try {
+					username = URLDecoder.decode(username, "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					throw new RuntimeException(e);
+				}
 				String password = null;
 				
 				boolean isEditMode = Boolean.parseBoolean(request.getParameter("editMode"));
@@ -173,6 +176,11 @@ public class NDataSourceHelper {
 					changePassword = (changePassword == null || changePassword.equals("false")) ? "false" : "true";
 					if (Boolean.parseBoolean(changePassword)) {
 						password = request.getParameter("newPassword");
+						try {
+							password = URLDecoder.decode(password, "UTF-8");
+						} catch (UnsupportedEncodingException e) {
+							throw new RuntimeException(e);
+						}
 					} else {
 						WSDataSourceInfo dataSourceInfo = client.getDataSource(request.getParameter("dsName"));
 						WSDataSourceMetaInfo_WSDataSourceDefinition dataSourceDefinition = dataSourceInfo.getDsMetaInfo().getDefinition();
@@ -182,6 +190,11 @@ public class NDataSourceHelper {
 					}
 				} else {
 					password = request.getParameter("password");
+					try {
+						password = URLDecoder.decode(password, "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						throw new RuntimeException(e);
+					}
 				}
 
 				rdbmsDSXMLConfig.setUrl(url);
