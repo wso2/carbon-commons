@@ -1,4 +1,4 @@
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2498="http://exception.lang.commons.apache.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://service.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2495="http://io.java/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ax2497="http://configuration.commons.apache.org/xsd" targetNamespace="http://service.logging.carbon.wso2.org">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2447="http://io.java/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax2449="http://configuration.commons.apache.org/xsd" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://service.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ax2450="http://exception.lang.commons.apache.org/xsd" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://service.logging.carbon.wso2.org">
     <wsdl:documentation>LoggingConfig</wsdl:documentation>
     <wsdl:types>
         <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exception.lang.commons.apache.org/xsd">
@@ -12,20 +12,20 @@
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
-        <xs:schema xmlns:ax2500="http://configuration.commons.apache.org/xsd" xmlns:ns="http://org.apache.axis2/xsd" xmlns:ax2496="http://io.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
+        <xs:schema xmlns:ax2448="http://io.java/xsd" xmlns:ns="http://org.apache.axis2/xsd" xmlns:ax2452="http://configuration.commons.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
             <xs:import namespace="http://io.java/xsd"/>
             <xs:import namespace="http://configuration.commons.apache.org/xsd"/>
             <xs:element name="LoggingConfigIOException">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="IOException" nillable="true" type="ax2495:IOException"/>
+                        <xs:element minOccurs="0" name="IOException" nillable="true" type="ax2447:IOException"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="LoggingConfigConfigurationException">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="ConfigurationException" nillable="true" type="ax2500:ConfigurationException"/>
+                        <xs:element minOccurs="0" name="ConfigurationException" nillable="true" type="ax2449:ConfigurationException"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -35,17 +35,16 @@
                         <xs:element minOccurs="0" name="url" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="connectTimeoutMillis" nillable="true" type="xs:string"/>
                         <xs:element minOccurs="0" name="auditLogTypeStatus" type="xs:boolean"/>
-                        <xs:element minOccurs="0" name="apiLogTypeStatus" type="xs:boolean"/>
                         <xs:element minOccurs="0" name="carbonLogTypeStatus" type="xs:boolean"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
         </xs:schema>
-        <xs:schema xmlns:ax2499="http://exception.lang.commons.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://configuration.commons.apache.org/xsd">
+        <xs:schema xmlns:ax2451="http://exception.lang.commons.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://configuration.commons.apache.org/xsd">
             <xs:import namespace="http://exception.lang.commons.apache.org/xsd"/>
             <xs:complexType name="ConfigurationException">
                 <xs:complexContent>
-                    <xs:extension base="ax2498:NestableException">
+                    <xs:extension base="ax2450:NestableException">
                         <xs:sequence/>
                     </xs:extension>
                 </xs:complexContent>
@@ -114,13 +113,13 @@
     </wsdl:binding>
     <wsdl:service name="LoggingConfig">
         <wsdl:port name="LoggingConfigHttpsSoap11Endpoint" binding="tns:LoggingConfigSoap11Binding">
-            <soap:address location="https://localhost:8243/services/LoggingConfig.LoggingConfigHttpsSoap11Endpoint"/>
+            <soap:address location="https://localhost:9443/services/LoggingConfig.LoggingConfigHttpsSoap11Endpoint/"/>
         </wsdl:port>
         <wsdl:port name="LoggingConfigHttpsSoap12Endpoint" binding="tns:LoggingConfigSoap12Binding">
-            <soap12:address location="https://localhost:8243/services/LoggingConfig.LoggingConfigHttpsSoap12Endpoint"/>
+            <soap12:address location="https://localhost:9443/services/LoggingConfig.LoggingConfigHttpsSoap12Endpoint/"/>
         </wsdl:port>
         <wsdl:port name="LoggingConfigHttpsEndpoint" binding="tns:LoggingConfigHttpBinding">
-            <http:address location="https://localhost:8243/services/LoggingConfig.LoggingConfigHttpsEndpoint"/>
+            <http:address location="https://localhost:9443/services/LoggingConfig.LoggingConfigHttpsEndpoint/"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>

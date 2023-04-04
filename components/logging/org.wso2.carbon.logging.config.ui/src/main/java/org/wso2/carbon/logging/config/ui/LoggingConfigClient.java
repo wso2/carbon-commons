@@ -45,10 +45,9 @@ public class LoggingConfigClient {
     }
 
     public void addRemoteServerConfig(String url, String connectTimeoutMillis, boolean auditLogTypeStatus,
-            boolean apiLogTypeStatus, boolean carbonLogTypeStatus) throws Exception {
+            boolean carbonLogTypeStatus) throws Exception {
         try {
-            stub.addRemoteServerConfig(url, connectTimeoutMillis, auditLogTypeStatus, apiLogTypeStatus,
-                    carbonLogTypeStatus);
+            stub.addRemoteServerConfig(url, connectTimeoutMillis, auditLogTypeStatus, carbonLogTypeStatus);
         } catch (Exception e) {
             String msg = "Error occurred while adding remote server configuration.";
             log.error(msg, e);

@@ -31,7 +31,6 @@
         String url = request.getParameter("url");
         String connectTimeoutMillis = request.getParameter("connectTimeoutMillis");
         boolean auditLogType = Boolean.parseBoolean(request.getParameter("auditLogType"));
-        boolean apiLogType = Boolean.parseBoolean(request.getParameter("apiLogType"));
         boolean carbonLogType = Boolean.parseBoolean(request.getParameter("carbonLogType"));
 
         String backendServerURL = CarbonUIUtil.getServerURL(config.getServletContext(), session);
@@ -50,19 +49,19 @@
     %>
     <fmt:message key="remote.server.url.invalid"/>
     <%
-            } else if (!auditLogType && !apiLogType && !carbonLogType) {
+            } else if (!auditLogType && !carbonLogType) {
     %>
     <fmt:message key="remote.server.log.type.not.selected"/>
     <%
             } else if (connectTimeoutMillis == null || connectTimeoutMillis.isEmpty()) {
-                client.addRemoteServerConfig(url, connectTimeoutMillis, auditLogType, apiLogType, carbonLogType);
+                client.addRemoteServerConfig(url, connectTimeoutMillis, auditLogType, carbonLogType);
     %>
     <fmt:message key="successfully.added.remote.server.configuration"/>
     <%
             } else {
                 try {
                     Integer.parseInt(connectTimeoutMillis);
-                    client.addRemoteServerConfig(url, connectTimeoutMillis, auditLogType, apiLogType, carbonLogType);
+                    client.addRemoteServerConfig(url, connectTimeoutMillis, auditLogType, carbonLogType);
     %>
     <fmt:message key="successfully.added.remote.server.configuration"/>
     <%

@@ -51,15 +51,6 @@
         </tr>
         <tr>
             <td>
-                <input type="checkbox" id="api-log-option" name="log-type-selector">
-                <label for="api-log-option"><fmt:message  key="api.logs"/></label>
-                <div class="sectionHelp" style="display:inline-block">
-                    <fmt:message key='api.logs.helper'/>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <input type="checkbox" id="carbon-log-option" name="log-type-selector">
                 <label for="carbon-log-option"><fmt:message  key="carbon.logs"/></label>
                 <div class="sectionHelp" style="display:inline-block">

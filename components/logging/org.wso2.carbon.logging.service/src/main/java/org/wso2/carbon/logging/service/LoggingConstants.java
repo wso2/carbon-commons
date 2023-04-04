@@ -22,7 +22,6 @@ package org.wso2.carbon.logging.service;
 public final class LoggingConstants {
 
     public static final String AUDIT_LOGFILE = "AUDIT_LOGFILE";
-    public static final String API_LOGFILE = "API_LOGFILE";
     public static final String CARBON_LOGFILE = "CARBON_LOGFILE";
     public static final String NAME_SUFFIX = ".name";
     public static final String APPENDER_PREFIX = "appender.";

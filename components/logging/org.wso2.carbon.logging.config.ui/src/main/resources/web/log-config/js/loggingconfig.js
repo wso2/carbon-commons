@@ -35,11 +35,6 @@ function addRemoteServerConfig(url, ) {
             auditLogTypeStatus = true;
         }
 
-        var apiLogTypeStatus = false;
-        if (document.getElementById('api-log-option').checked === true) {
-            apiLogTypeStatus = true;
-        }
-
         var carbonLogTypeStatus = false;
         if (document.getElementById('carbon-log-option').checked === true) {
             carbonLogTypeStatus = true;
@@ -49,7 +44,6 @@ function addRemoteServerConfig(url, ) {
                 url: serverUrl,
                 connectTimeoutMillis: timeout,
                 auditLogType: auditLogTypeStatus,
-                apiLogType: apiLogTypeStatus,
                 carbonLogType: carbonLogTypeStatus
             }, function(data) {
                 CARBON.showInfoDialog(data);

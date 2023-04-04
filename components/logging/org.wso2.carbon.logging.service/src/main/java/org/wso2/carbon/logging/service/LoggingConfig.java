@@ -64,10 +64,9 @@ public class LoggingConfig {
     }
 
     public void addRemoteServerConfig(String url, String connectTimeoutMillis, boolean auditLogTypeStatus,
-            boolean apiLogTypeStatus, boolean carbonLogTypeStatus) throws IOException, ConfigurationException {
+            boolean carbonLogTypeStatus) throws IOException, ConfigurationException {
         HashMap<String, Boolean> logTypeStatusMap = new HashMap<>();
         logTypeStatusMap.put(LoggingConstants.AUDIT_LOGFILE, auditLogTypeStatus);
-        logTypeStatusMap.put(LoggingConstants.API_LOGFILE, apiLogTypeStatus);
         logTypeStatusMap.put(LoggingConstants.CARBON_LOGFILE, carbonLogTypeStatus);
         for (Map.Entry<String,Boolean> entry : logTypeStatusMap.entrySet()) {
             String appenderName = entry.getKey();
