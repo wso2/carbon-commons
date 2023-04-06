@@ -170,7 +170,7 @@ public class NDataSourceHelper {
 				try {
 					username = URLDecoder.decode(username, "UTF-8");
 				} catch (UnsupportedEncodingException e) {
-					throw new RuntimeException(e);
+					throw new IllegalArgumentException("Username does not conform to UTF-8 charset");
 				}
 				String password = null;
 				
@@ -183,7 +183,7 @@ public class NDataSourceHelper {
 						try {
 							password = URLDecoder.decode(password, "UTF-8");
 						} catch (UnsupportedEncodingException e) {
-							throw new RuntimeException(e);
+							throw new IllegalArgumentException("Password does not conform to UTF-8 charset");
 						}
 					} else {
 						WSDataSourceInfo dataSourceInfo = client.getDataSource(request.getParameter("dsName"));
@@ -197,7 +197,7 @@ public class NDataSourceHelper {
 					try {
 						password = URLDecoder.decode(password, "UTF-8");
 					} catch (UnsupportedEncodingException e) {
-						throw new RuntimeException(e);
+						throw new IllegalArgumentException("Password does not conform to UTF-8 charset");
 					}
 				}
 
