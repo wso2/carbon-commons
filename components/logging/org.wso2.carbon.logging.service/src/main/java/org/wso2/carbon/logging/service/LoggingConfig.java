@@ -81,6 +81,14 @@ public class LoggingConfig {
                 auditLog.info("Remote audit server logging configuration updated successfully with url: " + url
                         + " by user: " + CarbonContext.getThreadLocalCarbonContext().getUsername() + " for appender: "
                         + appenderName + " at: " + date.format(currentTime));
+            } else {
+                loadConfigs();
+                ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
+                applyDefaultConfigurations(list, appenderName);
+                applyConfigs();
+                if(log.isDebugEnabled()) {
+                    log.debug("Default logging configuration applied for appender: " + appenderName);
+                }
             }
         }
     }
@@ -91,7 +99,12 @@ public class LoggingConfig {
                 + LoggingConstants.TYPE_SUFFIX;
         String layoutTypePatternKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
                 + LoggingConstants.PATTERN_SUFFIX;
-        String layoutTypePatternDefaultValue = LoggingConstants.DEFAULT_LAYOUT_PATTERN;
+        String layoutTypePatternDefaultValue = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;;
+        if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
+            layoutTypePatternDefaultValue = LoggingConstants.API_LOGS_DEFAULT_LAYOUT_PATTERN;
+        } else if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
+            layoutTypePatternDefaultValue = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
+        }
         String layoutTypePatternValue = null;
         for (String key : appenderPropertiesList) {
             if (layoutTypeKey.equals(key)) {
@@ -129,11 +142,78 @@ public class LoggingConfig {
         config.setProperty(
                 LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX
                         + LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-                LoggingConstants.THRESHOLD_FILTER_TYPE);
+                LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
         config.setProperty(
                 LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX
                         + LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX,
                 LoggingConstants.THRESHOLD_FILTER_LEVEL);
+    }
+
+    private void applyDefaultConfigurations(ArrayList<String> appenderPropertiesList, String appenderName) {
+        if (appenderPropertiesList.contains(LoggingConstants.APPENDER_PREFIX + appenderName
+                + LoggingConstants.URL_SUFFIX)) {
+            //Clear all properties if the appender is a remote appender
+            for (String key : appenderPropertiesList) {
+                config.clearProperty(key);
+            }
+            //set default config for appender
+            applyDefaultConfigsForLogs(appenderName);
+        }
+    }
+
+    private void applyDefaultConfigsForLogs(String appenderName) {
+        String appenderPrefixString = LoggingConstants.APPENDER_PREFIX + appenderName;
+        config.setProperty(appenderPrefixString + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.ROLLING_FILE_APPENDER_TYPE);
+        config.setProperty(appenderPrefixString + LoggingConstants.NAME_SUFFIX, appenderName);
+        if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
+            config.setProperty(appenderPrefixString + LoggingConstants.FILE_NAME_SUFFIX,
+                    LoggingConstants.CARBON_LOGS_DEFAULT_FILE_NAME);
+            config.setProperty(appenderPrefixString + LoggingConstants.FILE_PATTERN_SUFFIX,
+                    LoggingConstants.CARBON_LOGS_DEFAULT_FILE_PATTERN);
+            config.setProperty(appenderPrefixString + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX,
+                    LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN);
+            config.setProperty(appenderPrefixString + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX
+                            + LoggingConstants.LEVEL_SUFFIX, LoggingConstants.CARBON_LOGS_DEFAULT_THRESHOLD_LEVEL);
+        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
+            config.setProperty(appenderPrefixString + LoggingConstants.FILE_NAME_SUFFIX,
+                    LoggingConstants.API_LOGS_DEFAULT_FILE_NAME);
+            config.setProperty(appenderPrefixString + LoggingConstants.FILE_PATTERN_SUFFIX,
+                    LoggingConstants.API_LOGS_DEFAULT_FILE_PATTERN);
+            config.setProperty(appenderPrefixString + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX,
+                    LoggingConstants.API_LOGS_DEFAULT_LAYOUT_PATTERN);
+            config.setProperty(appenderPrefixString + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX
+                            + LoggingConstants.LEVEL_SUFFIX, LoggingConstants.API_LOGS_DEFAULT_THRESHOLD_LEVEL);
+        } else if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            config.setProperty(appenderPrefixString + LoggingConstants.FILE_NAME_SUFFIX,
+                    LoggingConstants.AUDIT_LOGS_DEFAULT_FILE_NAME);
+            config.setProperty(appenderPrefixString + LoggingConstants.FILE_PATTERN_SUFFIX,
+                    LoggingConstants.AUDIT_LOGS_DEFAULT_FILE_PATTERN);
+            config.setProperty(appenderPrefixString + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX,
+                    LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN);
+            config.setProperty(appenderPrefixString + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX
+                            + LoggingConstants.LEVEL_SUFFIX, LoggingConstants.AUDIT_LOGS_DEFAULT_THRESHOLD_LEVEL);
+        }
+        config.setProperty(appenderPrefixString + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.PATTERN_LAYOUT_TYPE);
+        config.setProperty(appenderPrefixString + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.DEFAULT_POLICIES_TYPE);
+        config.setProperty(appenderPrefixString + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX
+                        + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_POLICIES_TIME_TYPE);
+        config.setProperty(appenderPrefixString + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX
+                + LoggingConstants.INTERVAL_SUFFIX, LoggingConstants.DEFAULT_POLICIES_TIME_INTERVAL);
+        config.setProperty(appenderPrefixString + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX
+                + LoggingConstants.MODULATE_SUFFIX, LoggingConstants.DEFAULT_POLICIES_TIME_MODULATE);
+        config.setProperty(appenderPrefixString + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX
+                        + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_POLICIES_SIZE_TYPE);
+        config.setProperty(appenderPrefixString + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX
+                + LoggingConstants.SIZE_SUFFIX, LoggingConstants.DEFAULT_POLICIES_SIZE_SIZE);
+        config.setProperty(appenderPrefixString + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.DEFAULT_STRATEGY_TYPE);
+        config.setProperty(appenderPrefixString + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.MAX_SUFFIX,
+                LoggingConstants.DEFAULT_STRATEGY_MAX);
+        config.setProperty(appenderPrefixString + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX
+                        + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
     }
 
     private void applyConfigs() throws IOException, ConfigurationException {

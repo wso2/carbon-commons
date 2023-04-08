@@ -34,8 +34,41 @@ public final class LoggingConstants {
     public static final String LEVEL_SUFFIX = ".level";
     public static final String CONNECTION_TIMEOUT_SUFFIX = ".connectTimeoutMillis";
     public static final String PATTERN_LAYOUT_TYPE = "PatternLayout";
-    public static final String THRESHOLD_FILTER_TYPE = "ThresholdFilter";
+    public static final String DEFAULT_THRESHOLD_FILTER_TYPE = "ThresholdFilter";
     public static final String THRESHOLD_FILTER_LEVEL = "INFO";
     public static final String HTTP_APPENDER_TYPE = "http";
-    public static final String DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%d] %5p {%c} - %m%ex%n";
+    public static final String AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%d] %5p {%c} - %m%ex%n";
+
+    // Default logging constants
+    public static final String ROLLING_FILE_APPENDER_TYPE = "RollingFile";
+    public static final String FILE_NAME_SUFFIX = ".fileName";
+    public static final String CARBON_LOGS_DEFAULT_FILE_NAME = "${sys:carbon.home}/repository/logs/wso2carbon.log";
+    public static final String FILE_PATTERN_SUFFIX = ".filePattern";
+    public static final String CARBON_LOGS_DEFAULT_FILE_PATTERN = "${sys:carbon.home}/repository/logs/wso2carbon-%d{MM-dd-yyyy}-%i.log";
+    public static final String CARBON_LOGS_DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%appName] [%d] %5p {%c} - %m%ex%n";
+    public static final String POLICIES_SUFFIX = ".policies";
+    public static final String TIME_SUFFIX = ".time";
+    public static final String DEFAULT_POLICIES_TYPE = "Policies";
+    public static final String DEFAULT_POLICIES_TIME_TYPE = "TimeBasedTriggeringPolicy";
+    public static final String DEFAULT_POLICIES_TIME_INTERVAL = "1";
+    public static final String INTERVAL_SUFFIX = ".interval";
+    public static final String DEFAULT_POLICIES_TIME_MODULATE = "true";
+    public static final String MODULATE_SUFFIX = ".modulate";
+    public static final String SIZE_SUFFIX = ".size";
+    public static final String DEFAULT_POLICIES_SIZE_TYPE = "SizeBasedTriggeringPolicy";
+    public static final String DEFAULT_POLICIES_SIZE_SIZE = "10MB";
+    public static final String STRATEGY_SUFFIX = ".strategy";
+    public static final String DEFAULT_STRATEGY_TYPE = "DefaultRolloverStrategy";
+    public static final String DEFAULT_STRATEGY_MAX = "20";
+    public static final String MAX_SUFFIX = ".max";
+    public static final String DEFAULT_THRESHOLD_TYPE = "ThresholdFilter";
+    public static final String CARBON_LOGS_DEFAULT_THRESHOLD_LEVEL = "DEBUG";
+    public static final String AUDIT_LOGS_DEFAULT_FILE_NAME = "${sys:carbon.home}/repository/logs/audit.log";
+    public static final String AUDIT_LOGS_DEFAULT_FILE_PATTERN = "${sys:carbon.home}/repository/logs/audit-%d{MM-dd-yyyy}.log";
+    public static final String AUDIT_LOGS_DEFAULT_THRESHOLD_LEVEL = "INFO";
+    public static final String API_LOGS_DEFAULT_FILE_NAME = "${sys:carbon.home}/repository/logs/api.log";
+    public static final String API_LOGS_DEFAULT_FILE_PATTERN = "${sys:carbon.home}/repository/logs/api-%d{MM-dd-yyyy}-%i.log";
+    public static final String API_LOGS_DEFAULT_LAYOUT_PATTERN = "[%d] %5p {%c} %X{apiName} - %m%ex%n";
+    public static final String API_LOGS_DEFAULT_THRESHOLD_LEVEL = "DEBUG";
+
 }
