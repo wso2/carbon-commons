@@ -1,4 +1,4 @@
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2498="http://exception.lang.commons.apache.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://service.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2495="http://io.java/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ax2497="http://configuration.commons.apache.org/xsd" targetNamespace="http://service.logging.carbon.wso2.org">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2447="http://io.java/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax2449="http://configuration.commons.apache.org/xsd" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://service.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ax2450="http://exception.lang.commons.apache.org/xsd" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://service.logging.carbon.wso2.org">
     <wsdl:documentation>RemoteLoggingConfig</wsdl:documentation>
     <wsdl:types>
         <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exception.lang.commons.apache.org/xsd">
@@ -113,13 +113,13 @@
     </wsdl:binding>
     <wsdl:service name="RemoteLoggingConfig">
         <wsdl:port name="RemoteLoggingConfigHttpsSoap11Endpoint" binding="tns:RemoteLoggingConfigSoap11Binding">
-            <soap:address location="https://localhost:9443/services/RemoteLoggingConfig.RemoteLoggingConfigHttpsSoap11Endpoint"/>
+            <soap:address location="https://localhost:9443/services/RemoteLoggingConfig.RemoteLoggingConfigHttpsSoap11Endpoint/"/>
         </wsdl:port>
         <wsdl:port name="RemoteLoggingConfigHttpsSoap12Endpoint" binding="tns:RemoteLoggingConfigSoap12Binding">
-            <soap12:address location="https://localhost:9443/services/RemoteLoggingConfig.RemoteLoggingConfigHttpsSoap12Endpoint"/>
+            <soap12:address location="https://localhost:9443/services/RemoteLoggingConfig.RemoteLoggingConfigHttpsSoap12Endpoint/"/>
         </wsdl:port>
         <wsdl:port name="RemoteLoggingConfigHttpsEndpoint" binding="tns:RemoteLoggingConfigHttpBinding">
-            <http:address location="https://localhost:9443/services/RemoteLoggingConfig.RemoteLoggingConfigHttpsEndpoint"/>
+            <http:address location="https://localhost:9443/services/RemoteLoggingConfig.RemoteLoggingConfigHttpsEndpoint/"/>
         </wsdl:port>
     </wsdl:service>
 </wsdl:definitions>
