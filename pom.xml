@@ -842,13 +842,13 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.config.ui</artifactId>
-                <version>${project.version}</version>
+                <artifactId>org.wso2.carbon.logging.remote.config.ui</artifactId>
+                <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.config.stub</artifactId>
-                <version>${project.version}</version>
+                <artifactId>org.wso2.carbon.logging.remote.config.stub</artifactId>
+                <version>${carbon.commons.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
@@ -863,8 +863,8 @@
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
-                <artifactId>org.wso2.carbon.logging.config.mgt.ui.feature</artifactId>
-                <version>${project.version}</version>
+                <artifactId>org.wso2.carbon.logging.remote.config.mgt.ui.feature</artifactId>
+                <version>${carbon.commons.version}</version>
                 <type>zip</type>
             </dependency>
             <dependency>
