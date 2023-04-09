@@ -1,0 +1,126 @@
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2498="http://exception.lang.commons.apache.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://service.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2495="http://io.java/xsd" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ax2497="http://configuration.commons.apache.org/xsd" targetNamespace="http://service.logging.carbon.wso2.org">
+    <wsdl:documentation>RemoteLoggingConfig</wsdl:documentation>
+    <wsdl:types>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exception.lang.commons.apache.org/xsd">
+            <xs:complexType name="NestableException">
+                <xs:sequence>
+                    <xs:element minOccurs="0" name="cause" nillable="true" type="xs:anyType"/>
+                    <xs:element minOccurs="0" name="message" nillable="true" type="xs:string"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="messages" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="throwableCount" type="xs:int"/>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="throwables" nillable="true" type="xs:anyType"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema xmlns:ax2500="http://configuration.commons.apache.org/xsd" xmlns:ns="http://org.apache.axis2/xsd" xmlns:ax2496="http://io.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
+            <xs:import namespace="http://io.java/xsd"/>
+            <xs:import namespace="http://configuration.commons.apache.org/xsd"/>
+            <xs:element name="RemoteLoggingConfigIOException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="IOException" nillable="true" type="ax2495:IOException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="RemoteLoggingConfigConfigurationException">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="ConfigurationException" nillable="true" type="ax2500:ConfigurationException"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="addRemoteServerConfig">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="url" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="connectTimeoutMillis" nillable="true" type="xs:string"/>
+                        <xs:element minOccurs="0" name="auditLogTypeStatus" type="xs:boolean"/>
+                        <xs:element minOccurs="0" name="apiLogTypeStatus" type="xs:boolean"/>
+                        <xs:element minOccurs="0" name="carbonLogTypeStatus" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+        <xs:schema xmlns:ax2499="http://exception.lang.commons.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://configuration.commons.apache.org/xsd">
+            <xs:import namespace="http://exception.lang.commons.apache.org/xsd"/>
+            <xs:complexType name="ConfigurationException">
+                <xs:complexContent>
+                    <xs:extension base="ax2498:NestableException">
+                        <xs:sequence/>
+                    </xs:extension>
+                </xs:complexContent>
+            </xs:complexType>
+        </xs:schema>
+        <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://io.java/xsd">
+            <xs:complexType name="IOException">
+                <xs:sequence/>
+            </xs:complexType>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="addRemoteServerConfigRequest">
+        <wsdl:part name="parameters" element="ns1:addRemoteServerConfig"/>
+    </wsdl:message>
+    <wsdl:message name="RemoteLoggingConfigIOException">
+        <wsdl:part name="parameters" element="ns1:RemoteLoggingConfigIOException"/>
+    </wsdl:message>
+    <wsdl:message name="RemoteLoggingConfigConfigurationException">
+        <wsdl:part name="parameters" element="ns1:RemoteLoggingConfigConfigurationException"/>
+    </wsdl:message>
+    <wsdl:portType name="RemoteLoggingConfigPortType">
+        <wsdl:operation name="addRemoteServerConfig">
+            <wsdl:input message="tns:addRemoteServerConfigRequest" wsaw:Action="urn:addRemoteServerConfig"/>
+            <wsdl:fault message="tns:RemoteLoggingConfigIOException" name="RemoteLoggingConfigIOException" wsaw:Action="urn:addRemoteServerConfigRemoteLoggingConfigIOException"/>
+            <wsdl:fault message="tns:RemoteLoggingConfigConfigurationException" name="RemoteLoggingConfigConfigurationException" wsaw:Action="urn:addRemoteServerConfigRemoteLoggingConfigConfigurationException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="RemoteLoggingConfigSoap11Binding" type="tns:RemoteLoggingConfigPortType">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="addRemoteServerConfig">
+            <soap:operation soapAction="urn:addRemoteServerConfig" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+            <wsdl:fault name="RemoteLoggingConfigIOException">
+                <soap:fault use="literal" name="RemoteLoggingConfigIOException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="RemoteLoggingConfigSoap12Binding" type="tns:RemoteLoggingConfigPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="addRemoteServerConfig">
+            <soap12:operation soapAction="urn:addRemoteServerConfig" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap12:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+            <wsdl:fault name="RemoteLoggingConfigIOException">
+                <soap12:fault use="literal" name="RemoteLoggingConfigIOException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:binding name="RemoteLoggingConfigHttpBinding" type="tns:RemoteLoggingConfigPortType">
+        <http:binding verb="POST"/>
+        <wsdl:operation name="addRemoteServerConfig">
+            <http:operation location="addRemoteServerConfig"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="RemoteLoggingConfig">
+        <wsdl:port name="RemoteLoggingConfigHttpsSoap11Endpoint" binding="tns:RemoteLoggingConfigSoap11Binding">
+            <soap:address location="https://localhost:8243/services/RemoteLoggingConfig.RemoteLoggingConfigHttpsSoap11Endpoint"/>
+        </wsdl:port>
+        <wsdl:port name="RemoteLoggingConfigHttpsSoap12Endpoint" binding="tns:RemoteLoggingConfigSoap12Binding">
+            <soap12:address location="https://localhost:8243/services/RemoteLoggingConfig.RemoteLoggingConfigHttpsSoap12Endpoint"/>
+        </wsdl:port>
+        <wsdl:port name="RemoteLoggingConfigHttpsEndpoint" binding="tns:RemoteLoggingConfigHttpBinding">
+            <http:address location="https://localhost:8243/services/RemoteLoggingConfig.RemoteLoggingConfigHttpsEndpoint"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>
