@@ -37,15 +37,18 @@ public final class LoggingConstants {
     public static final String DEFAULT_THRESHOLD_FILTER_TYPE = "ThresholdFilter";
     public static final String THRESHOLD_FILTER_LEVEL = "INFO";
     public static final String HTTP_APPENDER_TYPE = "http";
-    public static final String AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%d] %5p {%c} - %m%ex%n";
+    public static final String AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN
+            = "TID: [%tenantId] [%d] [%X{Correlation-ID}] %5p {%c} - %mm%ex%n";
 
     // Default logging constants
     public static final String ROLLING_FILE_APPENDER_TYPE = "RollingFile";
     public static final String FILE_NAME_SUFFIX = ".fileName";
     public static final String CARBON_LOGS_DEFAULT_FILE_NAME = "${sys:carbon.home}/repository/logs/wso2carbon.log";
     public static final String FILE_PATTERN_SUFFIX = ".filePattern";
-    public static final String CARBON_LOGS_DEFAULT_FILE_PATTERN = "${sys:carbon.home}/repository/logs/wso2carbon-%d{MM-dd-yyyy}-%i.log";
-    public static final String CARBON_LOGS_DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%appName] [%d] %5p {%c} - %m%ex%n";
+    public static final String CARBON_LOGS_DEFAULT_FILE_PATTERN
+            = "${sys:carbon.home}/repository/logs/wso2carbon-%d{MM-dd-yyyy}.%i.log";
+    public static final String CARBON_LOGS_DEFAULT_LAYOUT_PATTERN
+            = "TID: [%tenantId] [%appName] [%d] [%X{Correlation-ID}] %5p {%c} - %mm%ex%n";
     public static final String POLICIES_SUFFIX = ".policies";
     public static final String TIME_SUFFIX = ".time";
     public static final String DEFAULT_POLICIES_TYPE = "Policies";
@@ -64,11 +67,8 @@ public final class LoggingConstants {
     public static final String DEFAULT_THRESHOLD_TYPE = "ThresholdFilter";
     public static final String CARBON_LOGS_DEFAULT_THRESHOLD_LEVEL = "DEBUG";
     public static final String AUDIT_LOGS_DEFAULT_FILE_NAME = "${sys:carbon.home}/repository/logs/audit.log";
-    public static final String AUDIT_LOGS_DEFAULT_FILE_PATTERN = "${sys:carbon.home}/repository/logs/audit-%d{MM-dd-yyyy}.log";
+    public static final String AUDIT_LOGS_DEFAULT_FILE_PATTERN
+            = "${sys:carbon.home}/repository/logs/audit-%d{MM-dd-yyyy}.%i.log";
     public static final String AUDIT_LOGS_DEFAULT_THRESHOLD_LEVEL = "INFO";
-    public static final String API_LOGS_DEFAULT_FILE_NAME = "${sys:carbon.home}/repository/logs/api.log";
-    public static final String API_LOGS_DEFAULT_FILE_PATTERN = "${sys:carbon.home}/repository/logs/api-%d{MM-dd-yyyy}-%i.log";
-    public static final String API_LOGS_DEFAULT_LAYOUT_PATTERN = "[%d] %5p {%c} %X{apiName} - %m%ex%n";
-    public static final String API_LOGS_DEFAULT_THRESHOLD_LEVEL = "DEBUG";
 
 }

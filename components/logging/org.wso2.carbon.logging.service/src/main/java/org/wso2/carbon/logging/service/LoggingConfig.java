@@ -100,9 +100,7 @@ public class LoggingConfig {
         String layoutTypePatternKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
                 + LoggingConstants.PATTERN_SUFFIX;
         String layoutTypePatternDefaultValue = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;;
-        if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
-            layoutTypePatternDefaultValue = LoggingConstants.API_LOGS_DEFAULT_LAYOUT_PATTERN;
-        } else if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
+        if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
             layoutTypePatternDefaultValue = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
         }
         String layoutTypePatternValue = null;
@@ -175,15 +173,6 @@ public class LoggingConfig {
                     LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN);
             config.setProperty(appenderPrefixString + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX
                             + LoggingConstants.LEVEL_SUFFIX, LoggingConstants.CARBON_LOGS_DEFAULT_THRESHOLD_LEVEL);
-        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
-            config.setProperty(appenderPrefixString + LoggingConstants.FILE_NAME_SUFFIX,
-                    LoggingConstants.API_LOGS_DEFAULT_FILE_NAME);
-            config.setProperty(appenderPrefixString + LoggingConstants.FILE_PATTERN_SUFFIX,
-                    LoggingConstants.API_LOGS_DEFAULT_FILE_PATTERN);
-            config.setProperty(appenderPrefixString + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX,
-                    LoggingConstants.API_LOGS_DEFAULT_LAYOUT_PATTERN);
-            config.setProperty(appenderPrefixString + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX
-                            + LoggingConstants.LEVEL_SUFFIX, LoggingConstants.API_LOGS_DEFAULT_THRESHOLD_LEVEL);
         } else if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
             config.setProperty(appenderPrefixString + LoggingConstants.FILE_NAME_SUFFIX,
                     LoggingConstants.AUDIT_LOGS_DEFAULT_FILE_NAME);
