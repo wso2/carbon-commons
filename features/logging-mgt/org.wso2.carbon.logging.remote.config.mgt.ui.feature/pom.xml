@@ -57,8 +57,8 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.remote.config.ui:${carbon.commons.version}</bundleDef>
-                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.remote.config.stub:${carbon.commons.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.remote.config.ui:${project.version}</bundleDef>
+                                <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.remote.config.stub:${project.version}</bundleDef>
                             </bundles>
                             <importFeatures>
                                 <importFeatureDef>org.wso2.carbon.core.ui:compatible:${carbon.kernel.feature.version}</importFeatureDef>

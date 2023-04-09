@@ -76,7 +76,7 @@
                             </bundles>
                             <includedFeatures>
                                 <includedFeatureDef>
-                                    org.wso2.carbon.commons:org.wso2.carbon.logging.remote.config.mgt.ui.feature:${carbon.commons.version}
+                                    org.wso2.carbon.commons:org.wso2.carbon.logging.remote.config.mgt.ui.feature:${project.version}
                                 </includedFeatureDef>
                             </includedFeatures>
                         </configuration>
