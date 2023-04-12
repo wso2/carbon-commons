@@ -36,7 +36,7 @@ public class RemoteLoggingConfigClient {
     public RemoteLoggingConfigClient(String cookie, String backendServerURL,
                                ConfigurationContext configCtx) throws AxisFault {
 
-        String serviceURL = backendServerURL + "LoggingConfig";
+        String serviceURL = backendServerURL + "RemoteLoggingConfig";
         stub = new RemoteLoggingConfigStub(configCtx, serviceURL);
         ServiceClient client = stub._getServiceClient();
         Options option = client.getOptions();
