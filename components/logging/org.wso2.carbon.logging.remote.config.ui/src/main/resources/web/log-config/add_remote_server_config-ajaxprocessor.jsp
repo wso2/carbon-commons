@@ -94,15 +94,39 @@
     <tr id="advancedConfig" style="display:none">
         <td class="formRow">
             <table class="normal sectionTop" id="showAdvancedConfigurations">
-                <td class="leftCol-med labelField"><fmt:message key="remote.server.timeout"/></td>
-                <td>
-                    <input value="" size="25"
-                           id="connectTimeoutMillis"
-                           tabindex="6" type="text" white-list-patterns="^0*[1-9][0-9]*$"/>
-                    <div class="sectionHelp">
-                       <fmt:message key='help.remoteServerTimeout'/>
-                    </div>
-                </td>
+                <tr>
+                    <td class="leftCol-med labelField"><fmt:message key="remote.server.timeout"/></td>
+                    <td>
+                        <input value="" size="25"
+                               id="connectTimeoutMillis"
+                               tabindex="6" type="text" white-list-patterns="^0*[1-9][0-9]*$"/>
+                        <div class="sectionHelp">
+                           <fmt:message key='help.remoteServerTimeout'/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="leftCol-med labelField"><fmt:message key="remote.server.username"/></td>
+                    <td>
+                        <input value="" size="25"
+                               id="remoteUsername"
+                               tabindex="6" type="text"/>
+                        <div class="sectionHelp">
+                           <fmt:message key='help.remoteServerUsername'/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="leftCol-med labelField"><fmt:message key="remote.server.password"/></td>
+                    <td>
+                        <input value="" size="25"
+                               id="remotePassword"
+                               tabindex="6" type="password"/>
+                        <div class="sectionHelp">
+                           <fmt:message key='help.remoteServerPassword'/>
+                        </div>
+                    </td>
+                </tr>
             </table>
         </td>
     </tr>

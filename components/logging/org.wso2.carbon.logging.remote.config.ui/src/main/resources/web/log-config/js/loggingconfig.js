@@ -39,12 +39,26 @@ function addRemoteServerConfig(url, ) {
         if (document.getElementById('carbon-log-option').checked === true) {
             carbonLogTypeStatus = true;
         }
+
+        var username = null;
+        if (document.getElementById('remoteUsername')) {
+            username = jQuery.trim(document.getElementById('remoteUsername').value);
+        }
+
+        var password = null;
+        if (document.getElementById('remotePassword')) {
+            password = jQuery.trim(document.getElementById('remotePassword').value);
+        }
+
         jQuery.post('process_add_remote_server_config-ajaxprocessor.jsp',
             {
                 url: serverUrl,
                 connectTimeoutMillis: timeout,
                 auditLogType: auditLogTypeStatus,
-                carbonLogType: carbonLogTypeStatus
+                apiLogType: apiLogTypeStatus,
+                carbonLogType: carbonLogTypeStatus,
+                remoteUsername: username,
+                remotePassword: password
             }, function(data) {
                 CARBON.showInfoDialog(data);
             });

@@ -19,6 +19,7 @@
 
 <%@ page import="org.apache.axis2.context.ConfigurationContext" %>
 <%@ page import="org.wso2.carbon.logging.remote.config.ui.RemoteLoggingConfigClient" %>
+<%@ page import="org.wso2.carbon.logging.remote.config.stub.types.carbon.RemoteServerLoggerData" %>
 <%@ page import="org.wso2.carbon.utils.ServerConstants" %>
 <%@ page import="org.wso2.carbon.ui.CarbonUIUtil" %>
 <%@ page import="org.wso2.carbon.CarbonConstants" %>
@@ -30,8 +31,18 @@
         response.setHeader("Cache-Control", "no-cache");
         String url = request.getParameter("url");
         String connectTimeoutMillis = request.getParameter("connectTimeoutMillis");
+        String remoteUsername = request.getParameter("remoteUsername");
+        String remotePassword = request.getParameter("remotePassword");
         boolean auditLogType = Boolean.parseBoolean(request.getParameter("auditLogType"));
         boolean carbonLogType = Boolean.parseBoolean(request.getParameter("carbonLogType"));
+        RemoteServerLoggerData data = new RemoteServerLoggerData();
+        data.setUrl(url);
+        data.setConnectTimeoutMillis(connectTimeoutMillis);
+        data.setUsername(remoteUsername);
+        data.setPassword(remotePassword);
+        data.setAuditLogType(auditLogType);
+        data.setApiLogType(apiLogType);
+        data.setCarbonLogType(carbonLogType);
 
         String backendServerURL = CarbonUIUtil.getServerURL(config.getServletContext(), session);
         ConfigurationContext configContext =
@@ -54,14 +65,14 @@
     <fmt:message key="remote.server.log.type.not.selected"/>
     <%
             } else if (connectTimeoutMillis == null || connectTimeoutMillis.isEmpty()) {
-                client.addRemoteServerConfig(url, connectTimeoutMillis, auditLogType, carbonLogType);
+                client.addRemoteServerConfig(data);
     %>
     <fmt:message key="successfully.added.remote.server.configuration"/>
     <%
             } else {
                 try {
                     Integer.parseInt(connectTimeoutMillis);
-                    client.addRemoteServerConfig(url, connectTimeoutMillis, auditLogType, carbonLogType);
+                    client.addRemoteServerConfig(data);
     %>
     <fmt:message key="successfully.added.remote.server.configuration"/>
     <%
