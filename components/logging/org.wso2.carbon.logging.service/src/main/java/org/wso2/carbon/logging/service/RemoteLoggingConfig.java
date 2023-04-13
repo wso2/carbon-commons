@@ -19,14 +19,17 @@
 
 package org.wso2.carbon.logging.service;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.configuration.PropertiesConfigurationLayout;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 import org.wso2.carbon.logging.service.util.Utils;
 import org.wso2.carbon.utils.ServerConstants;
 
@@ -36,6 +39,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,8 +67,23 @@ public class RemoteLoggingConfig {
         layout.load(new InputStreamReader(new FileInputStream(logPropFile)));
     }
 
-    public void addRemoteServerConfig(String url, String connectTimeoutMillis, boolean auditLogTypeStatus,
-            boolean apiLogTypeStatus, boolean carbonLogTypeStatus) throws IOException, ConfigurationException {
+    public void addRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException {
+        String url = null;
+        boolean auditLogTypeStatus = false;
+        boolean apiLogTypeStatus = false;
+        boolean carbonLogTypeStatus = false;
+        if (data != null) {
+            url = data.getUrl();
+            auditLogTypeStatus = data.isAuditLogType();
+            apiLogTypeStatus = data.isApiLogType();
+            carbonLogTypeStatus = data.isCarbonLogType();
+            if (url == null || url.isEmpty()) {
+                throw new IllegalArgumentException("URL cannot be empty");
+            }
+            if (!auditLogTypeStatus && !apiLogTypeStatus && !carbonLogTypeStatus) {
+                throw new IllegalArgumentException("At least one log type should be selected");
+            }
+        }
         HashMap<String, Boolean> logTypeStatusMap = new HashMap<>();
         logTypeStatusMap.put(LoggingConstants.AUDIT_LOGFILE, auditLogTypeStatus);
         logTypeStatusMap.put(LoggingConstants.API_LOGFILE, apiLogTypeStatus);
@@ -74,7 +93,7 @@ public class RemoteLoggingConfig {
             if (entry.getValue()) {
                 loadConfigs();
                 ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
-                applyRemoteConfigurations(url, connectTimeoutMillis, list, appenderName);
+                applyRemoteConfigurations(data, list, appenderName);
                 applyConfigs();
                 //Audit log for remote server logging configuration update
                 Date currentTime = Calendar.getInstance().getTime();
@@ -94,8 +113,8 @@ public class RemoteLoggingConfig {
         }
     }
 
-    private void applyRemoteConfigurations(String url, String connectTimeoutMillis,
-            ArrayList<String> appenderPropertiesList, String appenderName) throws IOException {
+    private void applyRemoteConfigurations(RemoteServerLoggerData data, ArrayList<String> appenderPropertiesList,
+            String appenderName) throws IOException {
         String layoutTypeKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
                 + LoggingConstants.TYPE_SUFFIX;
         String layoutTypePatternKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
@@ -132,13 +151,31 @@ public class RemoteLoggingConfig {
                     LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
                             + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternDefaultValue);
         }
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.URL_SUFFIX, url);
-        if (connectTimeoutMillis != null && !connectTimeoutMillis.isEmpty()) {
+        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.URL_SUFFIX, data.getUrl());
+        if (data != null && data.getConnectTimeoutMillis() != null && !data.getConnectTimeoutMillis().isEmpty()) {
             config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
-                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, connectTimeoutMillis);
+                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
         } else {
             config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName
                     + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX);
+        }
+        // Set the username and password if available
+        if (data != null && !StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
+                            + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_HEADER_TYPE);
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
+                            + LoggingConstants.NAME_SUFFIX, LoggingConstants.AUTHORIZATION_HEADER);
+            String credentials = data.getUsername() + ":" + data.getPassword();
+            byte[] base64EncodedHeader = Base64.encodeBase64(credentials.getBytes(StandardCharsets.UTF_8));
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
+                            + LoggingConstants.VALUE_SUFFIX, "Basic " + new String(base64EncodedHeader));
+        } else {
+            config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
+                    + LoggingConstants.TYPE_SUFFIX);
+            config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
+                    + LoggingConstants.NAME_SUFFIX);
+            config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
+                    + LoggingConstants.VALUE_SUFFIX);
         }
         config.setProperty(
                 LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX

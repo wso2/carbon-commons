@@ -56,13 +56,17 @@ public final class LoggingConstants {
     public static final String DEFAULT_POLICIES_TIME_MODULATE = "true";
     public static final String MODULATE_SUFFIX = ".modulate";
     public static final String SIZE_SUFFIX = ".size";
+
+    public static final String HEADERS_SUFFIX = ".headers";
+    public static final String VALUE_SUFFIX = ".value";
+    public static final String DEFAULT_HEADER_TYPE = "Property";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String DEFAULT_POLICIES_SIZE_TYPE = "SizeBasedTriggeringPolicy";
     public static final String DEFAULT_POLICIES_SIZE_SIZE = "10MB";
     public static final String STRATEGY_SUFFIX = ".strategy";
     public static final String DEFAULT_STRATEGY_TYPE = "DefaultRolloverStrategy";
     public static final String DEFAULT_STRATEGY_MAX = "20";
     public static final String MAX_SUFFIX = ".max";
-    public static final String DEFAULT_THRESHOLD_TYPE = "ThresholdFilter";
     public static final String CARBON_LOGS_DEFAULT_THRESHOLD_LEVEL = "DEBUG";
     public static final String AUDIT_LOGS_DEFAULT_FILE_NAME = "${sys:carbon.home}/repository/logs/audit.log";
     public static final String AUDIT_LOGS_DEFAULT_FILE_PATTERN = "${sys:carbon.home}/repository/logs/audit-%d{MM-dd-yyyy}.log";
