@@ -60,7 +60,11 @@
                     <xs:element minOccurs="0" name="auditLogType" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="carbonLogType" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="connectTimeoutMillis" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="keystoreLocation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="keystorePassword" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="truststoreLocation" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="truststorePassword" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="url" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
                 </xs:sequence>

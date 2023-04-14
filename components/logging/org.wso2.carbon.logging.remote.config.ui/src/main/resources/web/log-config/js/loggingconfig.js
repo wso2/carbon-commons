@@ -55,6 +55,26 @@ function addRemoteServerConfig(url, ) {
             password = jQuery.trim(document.getElementById('remotePassword').value);
         }
 
+        var keystoreLocation = null;
+        if (document.getElementById('keystoreLocation')) {
+            keystoreLocation = jQuery.trim(document.getElementById('keystoreLocation').value);
+        }
+
+        var keystorePassword = null;
+        if (document.getElementById('keystorePassword')) {
+            keystorePassword = jQuery.trim(document.getElementById('keystorePassword').value);
+        }
+
+        var truststoreLocation = null;
+        if (document.getElementById('truststoreLocation')) {
+            truststoreLocation = jQuery.trim(document.getElementById('truststoreLocation').value);
+        }
+
+        var truststorePassword = null;
+        if (document.getElementById('truststorePassword')) {
+            truststorePassword = jQuery.trim(document.getElementById('truststorePassword').value);
+        }
+
         jQuery.post('process_add_remote_server_config-ajaxprocessor.jsp',
             {
                 url: serverUrl,
@@ -63,7 +83,11 @@ function addRemoteServerConfig(url, ) {
                 apiLogType: apiLogTypeStatus,
                 carbonLogType: carbonLogTypeStatus,
                 remoteUsername: username,
-                remotePassword: password
+                remotePassword: password,
+                keystoreLocation: keystoreLocation,
+                keystorePassword: keystorePassword,
+                truststoreLocation: truststoreLocation,
+                truststorePassword: truststorePassword
             }, function(data) {
                 CARBON.showInfoDialog(data);
             });

@@ -31,6 +31,10 @@ public class RemoteServerLoggerData {
     private boolean carbonLogType;
     private String username;
     private String password;
+    private String keystoreLocation;
+    private String keystorePassword;
+    private String truststoreLocation;
+    private String truststorePassword;
 
     public RemoteServerLoggerData() {
     }
@@ -89,5 +93,37 @@ public class RemoteServerLoggerData {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getKeystoreLocation() {
+        return keystoreLocation;
+    }
+
+    public void setKeystoreLocation(String keystoreLocation) {
+        this.keystoreLocation = keystoreLocation;
+    }
+
+    public String getKeystorePassword() {
+        return keystorePassword;
+    }
+
+    public void setKeystorePassword(String keystorePassword) {
+        this.keystorePassword = keystorePassword;
+    }
+
+    public String getTruststoreLocation() {
+        return truststoreLocation;
+    }
+
+    public void setTruststoreLocation(String truststoreLocation) {
+        this.truststoreLocation = truststoreLocation;
+    }
+
+    public String getTruststorePassword() {
+        return truststorePassword;
+    }
+
+    public void setTruststorePassword(String truststorePassword) {
+        this.truststorePassword = truststorePassword;
     }
 }

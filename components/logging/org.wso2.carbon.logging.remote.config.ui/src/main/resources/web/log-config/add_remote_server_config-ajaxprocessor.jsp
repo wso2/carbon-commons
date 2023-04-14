@@ -136,6 +136,50 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+                    <td class="leftCol-med labelField"><fmt:message key="remote.server.ssl.keystore.location"/></td>
+                    <td>
+                        <input value="" size="25"
+                               id="keystoreLocation"
+                               tabindex="6" type="text"/>
+                        <div class="sectionHelp">
+                           <fmt:message key='help.remoteServerKeystoreLocation'/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="leftCol-med labelField"><fmt:message key="remote.server.ssl.keystore.password"/></td>
+                    <td>
+                        <input value="" size="25"
+                               id="keystorePassword"
+                               tabindex="6" type="text"/>
+                        <div class="sectionHelp">
+                           <fmt:message key='help.remoteServerKeystorePassword'/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="leftCol-med labelField"><fmt:message key="remote.server.ssl.truststore.location"/></td>
+                    <td>
+                        <input value="" size="25"
+                               id="truststoreLocation"
+                               tabindex="6" type="text"/>
+                        <div class="sectionHelp">
+                           <fmt:message key='help.remoteServerTruststoreLocation'/>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="leftCol-med labelField"><fmt:message key="remote.server.ssl.truststore.password"/></td>
+                    <td>
+                        <input value="" size="25"
+                               id="truststorePassword"
+                               tabindex="6" type="text"/>
+                        <div class="sectionHelp">
+                           <fmt:message key='help.remoteServerTruststorePassword'/>
+                        </div>
+                    </td>
+                </tr>
             </table>
         </td>
     </tr>

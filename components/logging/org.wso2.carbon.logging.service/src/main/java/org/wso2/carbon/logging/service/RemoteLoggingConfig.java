@@ -106,7 +106,7 @@ public class RemoteLoggingConfig {
                 ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
                 applyDefaultConfigurations(list, appenderName);
                 applyConfigs();
-                if(log.isDebugEnabled()) {
+                if (log.isDebugEnabled()) {
                     log.debug("Default logging configuration applied for appender: " + appenderName);
                 }
             }
@@ -139,43 +139,59 @@ public class RemoteLoggingConfig {
                 LoggingConstants.HTTP_APPENDER_TYPE);
         config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.NAME_SUFFIX,
                 appenderName);
-        config.setProperty(
-                LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
+        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
                         + LoggingConstants.TYPE_SUFFIX, LoggingConstants.PATTERN_LAYOUT_TYPE);
         if (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) {
-            config.setProperty(
-                    LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
                             + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternValue);
         } else {
-            config.setProperty(
-                    LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
                             + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternDefaultValue);
         }
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.URL_SUFFIX, data.getUrl());
-        if (data != null && data.getConnectTimeoutMillis() != null && !data.getConnectTimeoutMillis().isEmpty()) {
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
-                            + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
-        } else {
-            config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName
-                    + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX);
-        }
-        // Set the username and password if available
-        if (data != null && !StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
-                            + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_HEADER_TYPE);
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
-                            + LoggingConstants.NAME_SUFFIX, LoggingConstants.AUTHORIZATION_HEADER);
-            String credentials = data.getUsername() + ":" + data.getPassword();
-            byte[] base64EncodedHeader = Base64.encodeBase64(credentials.getBytes(StandardCharsets.UTF_8));
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
-                            + LoggingConstants.VALUE_SUFFIX, "Basic " + new String(base64EncodedHeader));
-        } else {
-            config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
-                    + LoggingConstants.TYPE_SUFFIX);
-            config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
-                    + LoggingConstants.NAME_SUFFIX);
-            config.clearProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
-                    + LoggingConstants.VALUE_SUFFIX);
+        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.URL_SUFFIX,
+                data.getUrl());
+        if (data != null) {
+            // Set the connection timeout if available
+            if (!StringUtils.isEmpty(data.getConnectTimeoutMillis())) {
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
+                                + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
+            }
+            // Set the username and password if available
+            if (!StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
+                                + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_HEADER_TYPE);
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
+                                + LoggingConstants.NAME_SUFFIX, LoggingConstants.AUTHORIZATION_HEADER);
+                String credentials = data.getUsername() + ":" + data.getPassword();
+                byte[] base64EncodedHeader = Base64.encodeBase64(credentials.getBytes(StandardCharsets.UTF_8));
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
+                                + LoggingConstants.VALUE_SUFFIX, "Basic " + new String(base64EncodedHeader));
+            }
+            // Set the SSL configurations if available
+            if (!StringUtils.isEmpty(data.getKeystoreLocation()) && !StringUtils.isEmpty(
+                    data.getKeystorePassword()) && !StringUtils.isEmpty(data.getTruststoreLocation())
+                    && !StringUtils.isEmpty(data.getTruststorePassword())) {
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                                + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_SSL_TYPE);
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                                + LoggingConstants.KEYSTORE_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                        LoggingConstants.DEFAULT_SSL_KEYSTORE_TYPE);
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                                + LoggingConstants.KEYSTORE_SUFFIX + LoggingConstants.LOCATION_SUFFIX,
+                        data.getKeystoreLocation());
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                                + LoggingConstants.KEYSTORE_SUFFIX + LoggingConstants.PASSWORD_SUFFIX,
+                        data.getKeystorePassword());
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                                + LoggingConstants.TRUSTSTORE_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                        LoggingConstants.DEFAULT_SSL_TRUSTSTORE_TYPE);
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                                + LoggingConstants.TRUSTSTORE_SUFFIX + LoggingConstants.LOCATION_SUFFIX,
+                        data.getTruststoreLocation());
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                                + LoggingConstants.TRUSTSTORE_SUFFIX + LoggingConstants.PASSWORD_SUFFIX,
+                        data.getTruststorePassword());
+            }
         }
         config.setProperty(
                 LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX
