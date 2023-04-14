@@ -18,6 +18,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page import="org.apache.axis2.context.ConfigurationContext" %>
+<%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ page import="org.wso2.carbon.logging.remote.config.ui.RemoteLoggingConfigClient" %>
 <%@ page import="org.wso2.carbon.logging.remote.config.stub.types.carbon.RemoteServerLoggerData" %>
 <%@ page import="org.wso2.carbon.utils.ServerConstants" %>
@@ -35,6 +36,10 @@
         String remotePassword = request.getParameter("remotePassword");
         boolean auditLogType = Boolean.parseBoolean(request.getParameter("auditLogType"));
         boolean carbonLogType = Boolean.parseBoolean(request.getParameter("carbonLogType"));
+        String keystoreLocation = request.getParameter("keystoreLocation");
+        String keystorePassword = request.getParameter("keystorePassword");
+        String truststoreLocation = request.getParameter("truststoreLocation");
+        String truststorePassword = request.getParameter("truststorePassword");
         RemoteServerLoggerData data = new RemoteServerLoggerData();
         data.setUrl(url);
         data.setConnectTimeoutMillis(connectTimeoutMillis);
@@ -43,6 +48,10 @@
         data.setAuditLogType(auditLogType);
         data.setApiLogType(apiLogType);
         data.setCarbonLogType(carbonLogType);
+        data.setKeystoreLocation(keystoreLocation);
+        data.setKeystorePassword(keystorePassword);
+        data.setTruststoreLocation(truststoreLocation);
+        data.setTruststorePassword(truststorePassword);
 
         String backendServerURL = CarbonUIUtil.getServerURL(config.getServletContext(), session);
         ConfigurationContext configContext =
@@ -63,6 +72,12 @@
             } else if (!auditLogType && !carbonLogType) {
     %>
     <fmt:message key="remote.server.log.type.not.selected"/>
+    <%
+            } else if (!StringUtils.isEmpty(keystoreLocation) && !StringUtils.isEmpty(keystorePassword)
+            && !StringUtils.isEmpty(truststoreLocation) && !StringUtils.isEmpty(truststorePassword)
+            && !Pattern.matches("^https://.*$", url)) {
+    %>
+    <fmt:message key="remote.server.ssl.https.endpoint.validation"/>
     <%
             } else if (connectTimeoutMillis == null || connectTimeoutMillis.isEmpty()) {
                 client.addRemoteServerConfig(data);

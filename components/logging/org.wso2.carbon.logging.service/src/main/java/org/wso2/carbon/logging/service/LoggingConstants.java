@@ -75,4 +75,14 @@ public final class LoggingConstants {
             = "${sys:carbon.home}/repository/logs/audit-%d{MM-dd-yyyy}.%i.log";
     public static final String AUDIT_LOGS_DEFAULT_THRESHOLD_LEVEL = "INFO";
 
+    // SSL related suffixes
+    public static final String SSL_SUFFIX = ".ssl";
+    public static final String LOCATION_SUFFIX = ".location";
+    public static final String PASSWORD_SUFFIX = ".password";
+    public static final String KEYSTORE_SUFFIX = ".keystore";
+    public static final String TRUSTSTORE_SUFFIX = ".truststore";
+    public static final String DEFAULT_SSL_TYPE = "SSL";
+    public static final String DEFAULT_SSL_KEYSTORE_TYPE = "KeyStore";
+    public static final String DEFAULT_SSL_TRUSTSTORE_TYPE = "TrustStore";
+
 }
