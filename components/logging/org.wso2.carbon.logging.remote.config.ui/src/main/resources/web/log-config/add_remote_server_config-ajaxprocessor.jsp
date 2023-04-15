@@ -106,6 +106,12 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="leftCol-med labelField">
+                        <b><i><fmt:message key="remote.server.basic.auth"/></i></b>
+                    </td>
+                    <td/>
+                </tr>
+                <tr>
                     <td class="leftCol-med labelField"><fmt:message key="remote.server.username"/></td>
                     <td>
                         <input value="" size="25"
@@ -126,6 +132,12 @@
                            <fmt:message key='help.remoteServerPassword'/>
                         </div>
                     </td>
+                </tr>
+                <tr>
+                    <td class="leftCol-med labelField">
+                        <b><i><fmt:message key="remote.server.ssl.auth"/></i></b>
+                    </td>
+                    <td/>
                 </tr>
                 <tr>
                     <td class="leftCol-med labelField"><fmt:message key="remote.server.ssl.keystore.location"/></td>
