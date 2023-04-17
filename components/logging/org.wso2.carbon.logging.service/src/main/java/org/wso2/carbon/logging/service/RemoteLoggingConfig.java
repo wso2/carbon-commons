@@ -67,6 +67,13 @@ public class RemoteLoggingConfig {
         layout.load(new InputStreamReader(new FileInputStream(logPropFile)));
     }
 
+    /**
+     * This method is used to add a remote server configuration
+     *
+     * @param data RemoteServerLoggerData object that contains the remote server configuration
+     * @throws IOException if an error occurs while writing to the log4j2.properties file
+     * @throws ConfigurationException if an error occurs while loading the log4j2.properties file
+     */
     public void addRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException {
         String url = null;
         boolean auditLogTypeStatus = false;
@@ -113,6 +120,14 @@ public class RemoteLoggingConfig {
         }
     }
 
+    /**
+     * This method is used to define the remote server configuration parameters
+     *
+     * @param data RemoteServerLoggerData object that contains the remote server configuration
+     * @param appenderPropertiesList ArrayList of existing appender properties
+     * @param appenderName name of the appender
+     * @throws IOException if an error occurs while reading from the log4j2.properties file
+     */
     private void applyRemoteConfigurations(RemoteServerLoggerData data, ArrayList<String> appenderPropertiesList,
             String appenderName) throws IOException {
         String layoutTypeKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
@@ -203,6 +218,12 @@ public class RemoteLoggingConfig {
                 LoggingConstants.THRESHOLD_FILTER_LEVEL);
     }
 
+    /**
+     * Clear and apply default configurations for the given appender
+     *
+     * @param appenderPropertiesList List of properties of the appender
+     * @param appenderName           Name of the appender
+     */
     private void applyDefaultConfigurations(ArrayList<String> appenderPropertiesList, String appenderName) {
         if (appenderPropertiesList.contains(LoggingConstants.APPENDER_PREFIX + appenderName
                 + LoggingConstants.URL_SUFFIX)) {
@@ -215,6 +236,11 @@ public class RemoteLoggingConfig {
         }
     }
 
+    /**
+     * Apply default configurations for the given appender
+     *
+     * @param appenderName  Name of the appender
+     */
     private void applyDefaultConfigsForLogs(String appenderName) {
         String appenderPrefixString = LoggingConstants.APPENDER_PREFIX + appenderName;
         config.setProperty(appenderPrefixString + LoggingConstants.TYPE_SUFFIX,

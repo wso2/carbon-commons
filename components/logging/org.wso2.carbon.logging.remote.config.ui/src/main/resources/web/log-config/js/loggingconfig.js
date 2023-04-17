@@ -16,7 +16,7 @@
  * under the License.
  */
 
-function addRemoteServerConfig(url, ) {
+function addRemoteServerConfig() {
     sessionAwareFunction(function() {
         jQuery.noConflict();
 
