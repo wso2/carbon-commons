@@ -16,7 +16,7 @@
  * under the License.
  */
 
-function addRemoteServerConfig(url, ) {
+function addRemoteServerConfig() {
     sessionAwareFunction(function() {
         jQuery.noConflict();
 
@@ -75,7 +75,6 @@ function addRemoteServerConfig(url, ) {
                 url: serverUrl,
                 connectTimeoutMillis: timeout,
                 auditLogType: auditLogTypeStatus,
-                apiLogType: apiLogTypeStatus,
                 carbonLogType: carbonLogTypeStatus,
                 remoteUsername: username,
                 remotePassword: password,

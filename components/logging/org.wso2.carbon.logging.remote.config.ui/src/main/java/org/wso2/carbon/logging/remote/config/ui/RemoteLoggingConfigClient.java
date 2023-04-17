@@ -45,6 +45,12 @@ public class RemoteLoggingConfigClient {
         option.setProperty(org.apache.axis2.transport.http.HTTPConstants.COOKIE_STRING, cookie);
     }
 
+    /**
+     * Add remote server configuration.
+     *
+     * @param data RemoteServerLoggerData
+     * @throws Exception Exception
+     */
     public void addRemoteServerConfig(RemoteServerLoggerData data) throws Exception {
         try {
             stub.addRemoteServerConfig(data);

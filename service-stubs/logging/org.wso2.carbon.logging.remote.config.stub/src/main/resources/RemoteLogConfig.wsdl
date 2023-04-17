@@ -1,4 +1,4 @@
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2498="http://exception.lang.commons.apache.org/xsd" xmlns:ax2501="http://data.service.logging.carbon.wso2.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2495="http://io.java/xsd" xmlns:ax2497="http://configuration.commons.apache.org/xsd" xmlns:tns="http://service.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://service.logging.carbon.wso2.org">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2447="http://io.java/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:ax2449="http://configuration.commons.apache.org/xsd" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ax2450="http://exception.lang.commons.apache.org/xsd" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2453="http://data.service.logging.carbon.wso2.org/xsd" xmlns:tns="http://service.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://service.logging.carbon.wso2.org">
     <wsdl:documentation>RemoteLoggingConfig</wsdl:documentation>
     <wsdl:types>
         <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exception.lang.commons.apache.org/xsd">
@@ -12,7 +12,7 @@
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
-        <xs:schema xmlns:ax2500="http://configuration.commons.apache.org/xsd" xmlns:ax2502="http://data.service.logging.carbon.wso2.org/xsd" xmlns:ns="http://org.apache.axis2/xsd" xmlns:ax2496="http://io.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
+        <xs:schema xmlns:ax2454="http://data.service.logging.carbon.wso2.org/xsd" xmlns:ax2448="http://io.java/xsd" xmlns:ns="http://org.apache.axis2/xsd" xmlns:ax2452="http://configuration.commons.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
             <xs:import namespace="http://io.java/xsd"/>
             <xs:import namespace="http://configuration.commons.apache.org/xsd"/>
             <xs:import namespace="http://data.service.logging.carbon.wso2.org/xsd"/>
@@ -33,7 +33,7 @@
             <xs:element name="addRemoteServerConfig">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="data" nillable="true" type="ax2501:RemoteServerLoggerData"/>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ax2454:RemoteServerLoggerData"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
@@ -56,7 +56,6 @@
         <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://data.service.logging.carbon.wso2.org/xsd">
             <xs:complexType name="RemoteServerLoggerData">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="apiLogType" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="auditLogType" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="carbonLogType" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="connectTimeoutMillis" nillable="true" type="xs:string"/>

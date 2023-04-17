@@ -27,7 +27,6 @@ public class RemoteServerLoggerData {
     private String url;
     private String connectTimeoutMillis;
     private boolean auditLogType;
-    private boolean apiLogType;
     private boolean carbonLogType;
     private String username;
     private String password;
@@ -61,14 +60,6 @@ public class RemoteServerLoggerData {
 
     public void setAuditLogType(boolean auditLogType) {
         this.auditLogType = auditLogType;
-    }
-
-    public boolean isApiLogType() {
-        return apiLogType;
-    }
-
-    public void setApiLogType(boolean apiLogType) {
-        this.apiLogType = apiLogType;
     }
 
     public boolean isCarbonLogType() {

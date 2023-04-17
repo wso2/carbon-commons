@@ -46,7 +46,6 @@
         data.setUsername(remoteUsername);
         data.setPassword(remotePassword);
         data.setAuditLogType(auditLogType);
-        data.setApiLogType(apiLogType);
         data.setCarbonLogType(carbonLogType);
         data.setKeystoreLocation(keystoreLocation);
         data.setKeystorePassword(keystorePassword);
