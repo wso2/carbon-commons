@@ -151,7 +151,7 @@
                 <tr>
                     <td class="leftCol-med labelField"><fmt:message key="remote.server.ssl.keystore.location"/></td>
                     <td>
-                        <input value="" size="25"
+                        <input value="" size="50"
                                id="keystoreLocation"
                                tabindex="6" type="text"/>
                         <div class="sectionHelp">
@@ -164,7 +164,7 @@
                     <td>
                         <input value="" size="25"
                                id="keystorePassword"
-                               tabindex="6" type="text"/>
+                               tabindex="6" type="password"/>
                         <div class="sectionHelp">
                            <fmt:message key='help.remoteServerKeystorePassword'/>
                         </div>
@@ -173,7 +173,7 @@
                 <tr>
                     <td class="leftCol-med labelField"><fmt:message key="remote.server.ssl.truststore.location"/></td>
                     <td>
-                        <input value="" size="25"
+                        <input value="" size="50"
                                id="truststoreLocation"
                                tabindex="6" type="text"/>
                         <div class="sectionHelp">
@@ -186,7 +186,7 @@
                     <td>
                         <input value="" size="25"
                                id="truststorePassword"
-                               tabindex="6" type="text"/>
+                               tabindex="6" type="password"/>
                         <div class="sectionHelp">
                            <fmt:message key='help.remoteServerTruststorePassword'/>
                         </div>
