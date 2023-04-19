@@ -32,6 +32,7 @@
         response.setHeader("Cache-Control", "no-cache");
         String url = request.getParameter("url");
         String connectTimeoutMillis = request.getParameter("connectTimeoutMillis");
+        boolean verifyHostname = Boolean.parseBoolean(request.getParameter("verifyHostname"));
         String remoteUsername = request.getParameter("remoteUsername");
         String remotePassword = request.getParameter("remotePassword");
         boolean auditLogType = Boolean.parseBoolean(request.getParameter("auditLogType"));
@@ -44,6 +45,7 @@
         RemoteServerLoggerData data = new RemoteServerLoggerData();
         data.setUrl(url);
         data.setConnectTimeoutMillis(connectTimeoutMillis);
+        data.setVerifyHostname(verifyHostname);
         data.setUsername(remoteUsername);
         data.setPassword(remotePassword);
         data.setAuditLogType(auditLogType);

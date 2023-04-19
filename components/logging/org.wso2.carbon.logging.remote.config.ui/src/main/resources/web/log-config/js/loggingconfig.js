@@ -30,6 +30,11 @@ function addRemoteServerConfig() {
             timeout = jQuery.trim(document.getElementById('connectTimeoutMillis').value);
         }
 
+        var verifyHostname = true;
+        if (document.getElementById('verify-hostname-option').checked !== true) {
+            verifyHostname = false;
+        }
+
         var auditLogTypeStatus = false;
         if (document.getElementById('audit-log-option').checked === true) {
             auditLogTypeStatus = true;
@@ -79,6 +84,7 @@ function addRemoteServerConfig() {
             {
                 url: serverUrl,
                 connectTimeoutMillis: timeout,
+                verifyHostname: verifyHostname,
                 auditLogType: auditLogTypeStatus,
                 apiLogType: apiLogTypeStatus,
                 carbonLogType: carbonLogTypeStatus,

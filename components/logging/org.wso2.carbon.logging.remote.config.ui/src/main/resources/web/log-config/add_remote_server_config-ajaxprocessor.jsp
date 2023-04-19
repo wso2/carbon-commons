@@ -115,6 +115,16 @@
                     </td>
                 </tr>
                 <tr>
+                    <td class="leftCol-med labelField"><fmt:message key="remote.server.verifyHostname"/></td>
+                    <td>
+                        <input type="checkbox" id="verify-hostname-option" name="verify-hostname-selector" checked="checked">
+                    </td>
+                </tr>
+                <tr>
+                    <td/>
+                    <td/>
+                </tr>
+                <tr>
                     <td class="leftCol-med labelField">
                         <b><i><fmt:message key="remote.server.basic.auth"/></i></b>
                     </td>
