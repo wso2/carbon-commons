@@ -158,6 +158,11 @@ public class RemoteLoggingConfig {
                 config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
                                 + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
             }
+            // Set verify hostname value if set as false because the default value is true
+            if (!data.isVerifyHostname()) {
+                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
+                        + LoggingConstants.VERIFY_HOSTNAME_SUFFIX, data.isVerifyHostname());
+            }
             // Set the username and password if available
             if (!StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
                 config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX

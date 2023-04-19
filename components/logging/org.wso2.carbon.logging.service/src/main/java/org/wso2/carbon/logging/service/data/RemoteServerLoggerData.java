@@ -26,6 +26,7 @@ public class RemoteServerLoggerData {
 
     private String url;
     private String connectTimeoutMillis;
+    private boolean verifyHostname = true;
     private boolean auditLogType;
     private boolean carbonLogType;
     private String username;
@@ -116,5 +117,13 @@ public class RemoteServerLoggerData {
 
     public void setTruststorePassword(String truststorePassword) {
         this.truststorePassword = truststorePassword;
+    }
+
+    public boolean isVerifyHostname() {
+        return verifyHostname;
+    }
+
+    public void setVerifyHostname(boolean verifyHostname) {
+        this.verifyHostname = verifyHostname;
     }
 }

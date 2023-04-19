@@ -66,6 +66,7 @@
                     <xs:element minOccurs="0" name="truststorePassword" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="url" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="username" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="verifyHostname" type="xs:boolean"/>
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
