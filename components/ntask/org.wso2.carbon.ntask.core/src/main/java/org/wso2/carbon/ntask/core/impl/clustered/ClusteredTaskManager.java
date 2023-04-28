@@ -240,9 +240,6 @@ public class ClusteredTaskManager extends AbstractQuartzTaskManager {
         } finally {
             lock.unlock();
         }
-        /* the delete from repository has to be done here, because, this would be the admin node
-         * with read/write registry access, and the target slave will not have write access */
-        result &= this.getTaskRepository().deleteTask(taskName);
         return result;        
     }
 
