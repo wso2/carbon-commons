@@ -122,3 +122,35 @@ function loadPage() {
         jQuery("#addRemoteServerConfig").load('add_remote_server_config-ajaxprocessor.jsp');
     });
 }
+
+function resetConfig() {
+    sessionAwareFunction(function() {
+        jQuery.noConflict();
+
+        var auditLogTypeStatus = false;
+        if (document.getElementById('audit-log-option').checked === true) {
+            auditLogTypeStatus = true;
+        }
+
+        var apiLogTypeStatus = false;
+        if (document.getElementById('api-log-option').checked === true) {
+            apiLogTypeStatus = true;
+        }
+
+        var carbonLogTypeStatus = false;
+        if (document.getElementById('carbon-log-option').checked === true) {
+            carbonLogTypeStatus = true;
+        }
+
+        jQuery.post('process_add_remote_server_config-ajaxprocessor.jsp',
+            {
+                reset: true,
+                auditLogType: auditLogTypeStatus,
+                apiLogType: apiLogTypeStatus,
+                carbonLogType: carbonLogTypeStatus
+            },
+            function(data) {
+                CARBON.showInfoDialog(data);
+            });
+    });
+}
