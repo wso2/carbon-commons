@@ -60,4 +60,20 @@ public class RemoteLoggingConfigClient {
             throw e;
         }
     }
+
+    /**
+     * Reset remote server configuration.
+     *
+     * @param data RemoteServerLoggerData
+     * @throws Exception Exception
+     */
+    public void resetRemoteServerConfig(RemoteServerLoggerData data) throws Exception {
+        try {
+            stub.resetRemoteServerConfig(data);
+        } catch (Exception e) {
+            String msg = "Error occurred while resetting remote server configuration.";
+            log.error(msg, e);
+            throw e;
+        }
+    }
 }

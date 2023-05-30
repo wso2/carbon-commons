@@ -204,5 +204,21 @@
                    onclick="showConfirmationDialogBox('<fmt:message key="remote.server.config.add.confirm"/>', addRemoteServerConfig)"/>
         </td>
     </tr>
-    </table>
+</table>
+<br/>
+<table class="styledLeft">
+    <thead>
+    <tr>
+        <th><fmt:message key="restore.default"/></th>
+    </tr>
+    </thead>
+    <tr>
+        <td class="buttonRow">
+            <input type="button" tabindex="12" value="<fmt:message key="reset"/>" class="button" id="resetConfig"
+                   onclick="showConfirmationDialogBox('<fmt:message key="remote.server.config.restore.confirm"/>',
+                   resetConfig)"/>
+        </td>
+    </tr>
+</table>
+
 </fmt:bundle>

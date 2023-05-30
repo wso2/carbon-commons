@@ -41,12 +41,33 @@ public final class LoggingConstants {
             = "TID: [%tenantId] [%d] [%X{Correlation-ID}] %5p {%c} - %mm%ex%n";
 
     // Default logging constants
-    public static final String CARBON_LOGS_DEFAULT_LAYOUT_PATTERN
-            = "TID: [%tenantId] [%appName] [%d] [%X{Correlation-ID}] %5p {%c} - %mm%ex%n";
+    public static final String CARBON_LOGS_DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%appName] [%d] [%X{Correlation-ID}] %5p {%c} - %mm%ex%n";
+    public static final String ROLLING_FILE = "RollingFile";
+    public static final String DEFAULT_CARBON_LOGFILE_PATH = "${sys:carbon.home}/repository/logs/wso2carbon.log";
+    public static final String DEFAULT_CARBON_LOGFILE_PATTERN = "${sys:carbon.home}/repository/logs/wso2carbon-%d{MM-dd-yyyy}-%i.log";
+    public static final String POLICIES = "Policies";
+    public static final String TIME_BASED_TRIGGERING_POLICY = "TimeBasedTriggeringPolicy";
+    public static final int DEFAULT_INTERVAL = 1;
+    public static final boolean DEFAULT_MODULATE = true;
+    public static final String SIZE_BASED_TRIGGERING_POLICY = "SizeBasedTriggeringPolicy";
+    public static final String DEFAULT_SIZE = "10MB";
+    public static final String DEFAULT_ROLLOVER_STRATEGY = "DefaultRolloverStrategy";
+    public static final int DEFAULT_MAX = 20;
+
     public static final String HEADERS_SUFFIX = ".headers";
     public static final String VALUE_SUFFIX = ".value";
     public static final String DEFAULT_HEADER_TYPE = "Property";
     public static final String AUTHORIZATION_HEADER = "Authorization";
+
+    public static final String FILE_NAME_SUFFIX = ".fileName";
+    public static final String FILE_PATTERN_SUFFIX = ".filePattern";
+    public static final String POLICIES_SUFFIX = ".policies";
+    public static final String STRATEGY_SUFFIX = ".strategy";
+    public static final String TIME_SUFFIX = ".time";
+    public static final String SIZE_SUFFIX = ".size";
+    public static final String MAX_SUFFIX = ".max";
+    public static final String INTERVAL_SUFFIX = ".interval";
+    public static final String MODULATE_SUFFIX = ".modulate";
 
     // SSL related suffixes
     public static final String SSL_SUFFIX = ".ssl";
@@ -58,5 +79,4 @@ public final class LoggingConstants {
     public static final String DEFAULT_SSL_KEYSTORE_TYPE = "KeyStore";
     public static final String DEFAULT_SSL_TRUSTSTORE_TYPE = "TrustStore";
     public static final String VERIFY_HOSTNAME_SUFFIX = ".verifyHostname";
-
 }

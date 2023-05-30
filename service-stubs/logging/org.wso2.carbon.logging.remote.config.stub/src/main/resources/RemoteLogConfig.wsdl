@@ -30,6 +30,13 @@
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="resetRemoteServerConfig">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ax2453:RemoteServerLoggerData"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
             <xs:element name="addRemoteServerConfig">
                 <xs:complexType>
                     <xs:sequence>
@@ -80,17 +87,37 @@
     <wsdl:message name="RemoteLoggingConfigConfigurationException">
         <wsdl:part name="parameters" element="ns1:RemoteLoggingConfigConfigurationException"/>
     </wsdl:message>
+    <wsdl:message name="resetRemoteServerConfigRequest">
+        <wsdl:part name="parameters" element="ns1:resetRemoteServerConfig"/>
+    </wsdl:message>
     <wsdl:portType name="RemoteLoggingConfigPortType">
         <wsdl:operation name="addRemoteServerConfig">
             <wsdl:input message="tns:addRemoteServerConfigRequest" wsaw:Action="urn:addRemoteServerConfig"/>
             <wsdl:fault message="tns:RemoteLoggingConfigIOException" name="RemoteLoggingConfigIOException" wsaw:Action="urn:addRemoteServerConfigRemoteLoggingConfigIOException"/>
             <wsdl:fault message="tns:RemoteLoggingConfigConfigurationException" name="RemoteLoggingConfigConfigurationException" wsaw:Action="urn:addRemoteServerConfigRemoteLoggingConfigConfigurationException"/>
         </wsdl:operation>
+        <wsdl:operation name="resetRemoteServerConfig">
+            <wsdl:input message="tns:resetRemoteServerConfigRequest" wsaw:Action="urn:resetRemoteServerConfig"/>
+            <wsdl:fault message="tns:RemoteLoggingConfigIOException" name="RemoteLoggingConfigIOException" wsaw:Action="urn:resetRemoteServerConfigRemoteLoggingConfigIOException"/>
+            <wsdl:fault message="tns:RemoteLoggingConfigConfigurationException" name="RemoteLoggingConfigConfigurationException" wsaw:Action="urn:resetRemoteServerConfigRemoteLoggingConfigConfigurationException"/>
+        </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="RemoteLoggingConfigSoap11Binding" type="tns:RemoteLoggingConfigPortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="addRemoteServerConfig">
             <soap:operation soapAction="urn:addRemoteServerConfig" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+            <wsdl:fault name="RemoteLoggingConfigIOException">
+                <soap:fault use="literal" name="RemoteLoggingConfigIOException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="resetRemoteServerConfig">
+            <soap:operation soapAction="urn:resetRemoteServerConfig" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -116,11 +143,29 @@
                 <soap12:fault use="literal" name="RemoteLoggingConfigIOException"/>
             </wsdl:fault>
         </wsdl:operation>
+        <wsdl:operation name="resetRemoteServerConfig">
+            <soap12:operation soapAction="urn:resetRemoteServerConfig" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap12:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+            <wsdl:fault name="RemoteLoggingConfigIOException">
+                <soap12:fault use="literal" name="RemoteLoggingConfigIOException"/>
+            </wsdl:fault>
+        </wsdl:operation>
     </wsdl:binding>
     <wsdl:binding name="RemoteLoggingConfigHttpBinding" type="tns:RemoteLoggingConfigPortType">
         <http:binding verb="POST"/>
         <wsdl:operation name="addRemoteServerConfig">
             <http:operation location="addRemoteServerConfig"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="resetRemoteServerConfig">
+            <http:operation location="resetRemoteServerConfig"/>
             <wsdl:input>
                 <mime:content type="text/xml" part="parameters"/>
             </wsdl:input>

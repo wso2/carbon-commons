@@ -30,78 +30,93 @@
 <fmt:bundle basename="org.wso2.carbon.logging.remote.config.ui.i18n.Resources">
     <%
         response.setHeader("Cache-Control", "no-cache");
-        String url = request.getParameter("url");
-        String connectTimeoutMillis = request.getParameter("connectTimeoutMillis");
-        boolean verifyHostname = Boolean.parseBoolean(request.getParameter("verifyHostname"));
-        String remoteUsername = request.getParameter("remoteUsername");
-        String remotePassword = request.getParameter("remotePassword");
-        boolean auditLogType = Boolean.parseBoolean(request.getParameter("auditLogType"));
-        boolean carbonLogType = Boolean.parseBoolean(request.getParameter("carbonLogType"));
-        String keystoreLocation = request.getParameter("keystoreLocation");
-        String keystorePassword = request.getParameter("keystorePassword");
-        String truststoreLocation = request.getParameter("truststoreLocation");
-        String truststorePassword = request.getParameter("truststorePassword");
-        RemoteServerLoggerData data = new RemoteServerLoggerData();
-        data.setUrl(url);
-        data.setConnectTimeoutMillis(connectTimeoutMillis);
-        data.setVerifyHostname(verifyHostname);
-        data.setUsername(remoteUsername);
-        data.setPassword(remotePassword);
-        data.setAuditLogType(auditLogType);
-        data.setCarbonLogType(carbonLogType);
-        data.setKeystoreLocation(keystoreLocation);
-        data.setKeystorePassword(keystorePassword);
-        data.setTruststoreLocation(truststoreLocation);
-        data.setTruststorePassword(truststorePassword);
 
         String backendServerURL = CarbonUIUtil.getServerURL(config.getServletContext(), session);
         ConfigurationContext configContext =
                 (ConfigurationContext) config.getServletContext().getAttribute(CarbonConstants.CONFIGURATION_CONTEXT);
 
         String cookie = (String) session.getAttribute(ServerConstants.ADMIN_SERVICE_COOKIE);
-        RemoteLoggingConfigClient client;
-        client = new RemoteLoggingConfigClient(cookie, backendServerURL, configContext);
-        try {
-            if (url == null || url.isEmpty()) {
+        RemoteLoggingConfigClient client = new RemoteLoggingConfigClient(cookie, backendServerURL, configContext);
+
+        RemoteServerLoggerData data = new RemoteServerLoggerData();
+        boolean auditLogType = Boolean.parseBoolean(request.getParameter("auditLogType"));
+        boolean carbonLogType = Boolean.parseBoolean(request.getParameter("carbonLogType"));
+        data.setAuditLogType(auditLogType);
+        data.setCarbonLogType(carbonLogType);
+
+        if (Boolean.parseBoolean(request.getParameter("reset"))) {
+            try {
+                client.resetRemoteServerConfig(data);
+    %>
+    <fmt:message key="successfully.reset.remote.server.configuration"/>
+    <%
+            } catch (Exception e) {
+    %>
+    <fmt:message key="reset.remote.server.config.failed"/>
+    <%
+            }
+        } else {
+            String url = request.getParameter("url");
+            String connectTimeoutMillis = request.getParameter("connectTimeoutMillis");
+            boolean verifyHostname = Boolean.parseBoolean(request.getParameter("verifyHostname"));
+            String remoteUsername = request.getParameter("remoteUsername");
+            String remotePassword = request.getParameter("remotePassword");
+            String keystoreLocation = request.getParameter("keystoreLocation");
+            String keystorePassword = request.getParameter("keystorePassword");
+            String truststoreLocation = request.getParameter("truststoreLocation");
+            String truststorePassword = request.getParameter("truststorePassword");
+            data.setUrl(url);
+            data.setConnectTimeoutMillis(connectTimeoutMillis);
+            data.setVerifyHostname(verifyHostname);
+            data.setUsername(remoteUsername);
+            data.setPassword(remotePassword);
+            data.setKeystoreLocation(keystoreLocation);
+            data.setKeystorePassword(keystorePassword);
+            data.setTruststoreLocation(truststoreLocation);
+            data.setTruststorePassword(truststorePassword);
+
+            try {
+                if (url == null || url.isEmpty()) {
     %>
     <fmt:message key="remote.server.url.empty"/>
     <%
-            } else if (!Pattern.matches("^(http|https)://.*$", url)) {
+                } else if (!Pattern.matches("^(http|https)://.*$", url)) {
     %>
     <fmt:message key="remote.server.url.invalid"/>
     <%
-            } else if (!auditLogType && !carbonLogType) {
+                } else if (!auditLogType && !carbonLogType) {
     %>
     <fmt:message key="remote.server.log.type.not.selected"/>
     <%
-            } else if (!StringUtils.isEmpty(keystoreLocation) && !StringUtils.isEmpty(keystorePassword)
-            && !StringUtils.isEmpty(truststoreLocation) && !StringUtils.isEmpty(truststorePassword)
-            && !Pattern.matches("^https://.*$", url)) {
+                } else if (!StringUtils.isEmpty(keystoreLocation) && !StringUtils.isEmpty(keystorePassword)
+                    && !StringUtils.isEmpty(truststoreLocation) && !StringUtils.isEmpty(truststorePassword)
+                    && !Pattern.matches("^https://.*$", url)) {
     %>
     <fmt:message key="remote.server.ssl.https.endpoint.validation"/>
     <%
-            } else if (connectTimeoutMillis == null || connectTimeoutMillis.isEmpty()) {
-                client.addRemoteServerConfig(data);
-    %>
-    <fmt:message key="successfully.added.remote.server.configuration"/>
-    <%
-            } else {
-                try {
-                    Integer.parseInt(connectTimeoutMillis);
+                } else if (connectTimeoutMillis == null || connectTimeoutMillis.isEmpty()) {
                     client.addRemoteServerConfig(data);
     %>
     <fmt:message key="successfully.added.remote.server.configuration"/>
     <%
-                } catch (NumberFormatException e) {
+                } else {
+                    try {
+                        Integer.parseInt(connectTimeoutMillis);
+                        client.addRemoteServerConfig(data);
+    %>
+    <fmt:message key="successfully.added.remote.server.configuration"/>
+    <%
+                    } catch (NumberFormatException e) {
     %>
     <fmt:message key="remote.server.timeout.invalid"/>
     <%
+                    }
                 }
-            }
-        } catch (Exception e) {
+            } catch (Exception e) {
     %>
     <fmt:message key="add.remote.server.config.failed"/>
     <%
+            }
         }
     %>
 </fmt:bundle>
