@@ -37,6 +37,8 @@
         <module>org.wso2.carbon.logging.updater</module>
         <module>org.wso2.carbon.logging.view</module>
         <module>org.wso2.carbon.logging.view.ui</module>
+        <module>org.wso2.carbon.logging.appender.http</module>
+        <module>org.wso2.carbon.logging.appender.service</module>
     </modules>
 
         <dependencies>

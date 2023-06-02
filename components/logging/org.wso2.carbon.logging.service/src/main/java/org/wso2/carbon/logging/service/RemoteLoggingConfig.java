@@ -255,73 +255,77 @@ public class RemoteLoggingConfig {
             }
             config.clearProperty(key);
         }
+        // appender.CARBON_LOGFILE.type = SecuredHttp
         config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.HTTP_APPENDER_TYPE);
+        // appender.CARBON_LOGFILE.name = CARBON_LOGFILE
         config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.NAME_SUFFIX,
                 appenderName);
+        // appender.CARBON_LOGFILE.layout.type = PatternLayout
         config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
                         + LoggingConstants.TYPE_SUFFIX, LoggingConstants.PATTERN_LAYOUT_TYPE);
-        if (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) {
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
-                            + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternValue);
-        } else {
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
-                            + LoggingConstants.PATTERN_SUFFIX, layoutTypePatternDefaultValue);
-        }
+        // appender.CARBON_LOGFILE.layout.pattern = TID: [%tenantId] [%appName] [%d] %5p {%c} - %m%ex%n
+        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX
+                + LoggingConstants.PATTERN_SUFFIX,
+                (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) ? layoutTypePatternValue :
+                        layoutTypePatternDefaultValue);
+        // appender.CARBON_LOGFILE.url = https://localhost:3000
         config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.URL_SUFFIX,
                 data.getUrl());
-        if (data != null) {
-            // Set the connection timeout if available
-            if (!StringUtils.isEmpty(data.getConnectTimeoutMillis())) {
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
-                                + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
-            }
-            // Set verify hostname value if set as false because the default value is true
-            if (!data.isVerifyHostname()) {
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
-                        + LoggingConstants.VERIFY_HOSTNAME_SUFFIX, data.isVerifyHostname());
-            }
-            // Set the username and password if available
-            if (!StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
-                                + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_HEADER_TYPE);
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
-                                + LoggingConstants.NAME_SUFFIX, LoggingConstants.AUTHORIZATION_HEADER);
-                String credentials = data.getUsername() + ":" + data.getPassword();
-                byte[] base64EncodedHeader = Base64.encodeBase64(credentials.getBytes(StandardCharsets.UTF_8));
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.HEADERS_SUFFIX
-                                + LoggingConstants.VALUE_SUFFIX, "Basic " + new String(base64EncodedHeader));
-            }
-            // Set the SSL configurations if available
-            if (!StringUtils.isEmpty(data.getKeystoreLocation()) && !StringUtils.isEmpty(
-                    data.getKeystorePassword()) && !StringUtils.isEmpty(data.getTruststoreLocation())
-                    && !StringUtils.isEmpty(data.getTruststorePassword())) {
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
-                                + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_SSL_TYPE);
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
-                                + LoggingConstants.KEYSTORE_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-                        LoggingConstants.DEFAULT_SSL_KEYSTORE_TYPE);
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
-                                + LoggingConstants.KEYSTORE_SUFFIX + LoggingConstants.LOCATION_SUFFIX,
-                        data.getKeystoreLocation());
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
-                                + LoggingConstants.KEYSTORE_SUFFIX + LoggingConstants.PASSWORD_SUFFIX,
-                        data.getKeystorePassword());
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
-                                + LoggingConstants.TRUSTSTORE_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-                        LoggingConstants.DEFAULT_SSL_TRUSTSTORE_TYPE);
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
-                                + LoggingConstants.TRUSTSTORE_SUFFIX + LoggingConstants.LOCATION_SUFFIX,
-                        data.getTruststoreLocation());
-                config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
-                                + LoggingConstants.TRUSTSTORE_SUFFIX + LoggingConstants.PASSWORD_SUFFIX,
-                        data.getTruststorePassword());
-            }
+
+        // Set the connection timeout if available
+        if (!StringUtils.isEmpty(data.getConnectTimeoutMillis())) {
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
+                    + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
         }
+
+        // Set the username and password if available
+        if (!StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
+            // appender.CARBON_LOGFILE.username = user
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
+                    + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
+            // appender.CARBON_LOGFILE.password = pass
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
+                    + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
+        }
+
+        // appender.CARBON_LOGFILE.processingLimit = 1000
+        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName
+                + LoggingConstants.PROCESSING_LIMIT_SUFFIX, LoggingConstants.DEFAULT_PROCESSING_LIMIT);
+
+        // Set the SSL configurations if available
+        if (!StringUtils.isEmpty(data.getKeystoreLocation())
+                && !StringUtils.isEmpty(data.getKeystorePassword())
+                && !StringUtils.isEmpty(data.getTruststoreLocation())
+                && !StringUtils.isEmpty(data.getTruststorePassword())) {
+            // appender.CARBON_LOGFILE.sslconf.type = SSLConf
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                            + LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_SSLCONF_TYPE);
+            // appender.CARBON_LOGFILE.sslconf.protocol = SSL
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                    + LoggingConstants.PROTOCOL_SUFFIX, LoggingConstants.DEFAULT_SSL_PROTOCOL);
+            // appender.CARBON_LOGFILE.sslconf.keyStoreLocation = repository/resources/security/wso2carbon.jks
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                            + LoggingConstants.KEYSTORE_LOCATION_SUFFIX, data.getKeystoreLocation());
+            // appender.CARBON_LOGFILE.sslconf.keyStorePassword = $secret{log4j2_keystore_pass}
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                            + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX, data.getKeystorePassword());
+            // appender.CARBON_LOGFILE.sslconf.trustStoreLocation =repository/resources/security/client-truststore.jks
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                            + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX, data.getTruststoreLocation());
+            // appender.CARBON_LOGFILE.sslconf.trustStorePassword = $secret{log4j2_truststore_pass}
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                            + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX, data.getTruststorePassword());
+            // appender.CARBON_LOGFILE.sslconf.verifyHostName = false
+            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX
+                    + LoggingConstants.VERIFY_HOSTNAME_SUFFIX, data.isVerifyHostname());
+        }
+        // appender.CARBON_LOGFILE.filter.threshold.type = ThresholdFilter
         config.setProperty(
                 LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX
                         + LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
+        // appender.CARBON_LOGFILE.filter.threshold.level = INFO
         config.setProperty(
                 LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX
                         + LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX,
