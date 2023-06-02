@@ -33,12 +33,14 @@ public final class LoggingConstants {
     public static final String THRESHOLD_SUFFIX = ".threshold";
     public static final String LEVEL_SUFFIX = ".level";
     public static final String CONNECTION_TIMEOUT_SUFFIX = ".connectTimeoutMillis";
+    public static final String AUTH_USERNAME_SUFFIX = ".username";
+    public static final String AUTH_PASSWORD_SUFFIX = ".password";
+    public static final String PROCESSING_LIMIT_SUFFIX = ".processingLimit";
     public static final String PATTERN_LAYOUT_TYPE = "PatternLayout";
     public static final String DEFAULT_THRESHOLD_FILTER_TYPE = "ThresholdFilter";
     public static final String THRESHOLD_FILTER_LEVEL = "INFO";
-    public static final String HTTP_APPENDER_TYPE = "http";
-    public static final String AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN
-            = "TID: [%tenantId] [%d] [%X{Correlation-ID}] %5p {%c} - %mm%ex%n";
+    public static final String HTTP_APPENDER_TYPE = "SecuredHttp";
+    public static final String AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%d] %5p {%c} - %m%ex%n";
 
     // Default logging constants
     public static final String CARBON_LOGS_DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%appName] [%d] [%X{Correlation-ID}] %5p {%c} - %mm%ex%n";
@@ -53,11 +55,9 @@ public final class LoggingConstants {
     public static final String DEFAULT_SIZE = "10MB";
     public static final String DEFAULT_ROLLOVER_STRATEGY = "DefaultRolloverStrategy";
     public static final int DEFAULT_MAX = 20;
+    public static final int DEFAULT_PROCESSING_LIMIT = 1000;
 
-    public static final String HEADERS_SUFFIX = ".headers";
-    public static final String VALUE_SUFFIX = ".value";
-    public static final String DEFAULT_HEADER_TYPE = "Property";
-    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String API_LOGS_DEFAULT_LAYOUT_PATTERN = "[%d] %5p {%c} %X{apiName} - %m%ex%n";
 
     public static final String FILE_NAME_SUFFIX = ".fileName";
     public static final String FILE_PATTERN_SUFFIX = ".filePattern";
@@ -70,13 +70,13 @@ public final class LoggingConstants {
     public static final String MODULATE_SUFFIX = ".modulate";
 
     // SSL related suffixes
-    public static final String SSL_SUFFIX = ".ssl";
-    public static final String LOCATION_SUFFIX = ".location";
-    public static final String PASSWORD_SUFFIX = ".password";
-    public static final String KEYSTORE_SUFFIX = ".keystore";
-    public static final String TRUSTSTORE_SUFFIX = ".truststore";
-    public static final String DEFAULT_SSL_TYPE = "SSL";
-    public static final String DEFAULT_SSL_KEYSTORE_TYPE = "KeyStore";
-    public static final String DEFAULT_SSL_TRUSTSTORE_TYPE = "TrustStore";
-    public static final String VERIFY_HOSTNAME_SUFFIX = ".verifyHostname";
+    public static final String SSL_SUFFIX = ".sslconf";
+    public static final String PROTOCOL_SUFFIX = ".protocol";
+    public static final String KEYSTORE_LOCATION_SUFFIX = ".keyStoreLocation";
+    public static final String KEYSTORE_PASSWORD_SUFFIX = ".keyStorePassword";
+    public static final String TRUSTSTORE_LOCATION_SUFFIX = ".trustStoreLocation";
+    public static final String TRUSTSTORE_PASSWORD_SUFFIX = ".trustStorePassword";
+    public static final String DEFAULT_SSLCONF_TYPE = "SSLConf";
+    public static final String DEFAULT_SSL_PROTOCOL = "SSL";
+    public static final String VERIFY_HOSTNAME_SUFFIX = ".verifyHostName";
 }
