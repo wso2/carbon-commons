@@ -858,12 +858,12 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.logging.appender.http</artifactId>
-                <version>${carbon.commons.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.logging.appender.service</artifactId>
-                <version>${carbon.commons.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
@@ -880,7 +880,7 @@
             <dependency>
                 <groupId>org.wso2.carbon.commons</groupId>
                 <artifactId>org.wso2.carbon.logging.appender.feature</artifactId>
-                <version>${carbon.commons.version}</version>
+                <version>${project.version}</version>
                 <type>zip</type>
             </dependency>
             <dependency>
