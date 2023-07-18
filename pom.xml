@@ -1916,7 +1916,7 @@
         <wsdl4j.wso2.version>1.6.2.wso2v4</wsdl4j.wso2.version>
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <orbit.version.h2.engine>1.2.140.wso2v3</orbit.version.h2.engine>
-        <orbit.version.commons.fileuploader>1.2.0.wso2v1</orbit.version.commons.fileuploader>
+        <orbit.version.commons.fileuploader>1.5.0.wso2v2</orbit.version.commons.fileuploader>
 
         <!-- opensaml-->
         <opensaml2.version>2.4.1.wso2v1</opensaml2.version>
