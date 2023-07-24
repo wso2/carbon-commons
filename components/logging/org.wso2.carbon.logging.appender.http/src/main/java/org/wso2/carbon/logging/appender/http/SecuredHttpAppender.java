@@ -27,7 +27,10 @@ import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.appender.HttpManager;
 import org.apache.logging.log4j.core.appender.HttpURLConnectionManager;
 import org.apache.logging.log4j.core.config.Property;
-import org.apache.logging.log4j.core.config.plugins.*;
+import org.apache.logging.log4j.core.config.plugins.Plugin;
+import org.apache.logging.log4j.core.config.plugins.PluginBuilderAttribute;
+import org.apache.logging.log4j.core.config.plugins.PluginBuilderFactory;
+import org.apache.logging.log4j.core.config.plugins.PluginElement;
 import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 import org.apache.logging.log4j.core.net.ssl.KeyStoreConfiguration;
 import org.apache.logging.log4j.core.net.ssl.StoreConfigurationException;
@@ -40,8 +43,14 @@ import org.wso2.securevault.SecretResolverFactory;
 
 import java.io.Serializable;
 import java.net.URL;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.Base64;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Plugin(name = "SecuredHttp", category = "Core", elementType = "appender", printObject = true)
 public class SecuredHttpAppender extends AbstractAppender {
