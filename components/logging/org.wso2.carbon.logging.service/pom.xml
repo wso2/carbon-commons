@@ -43,6 +43,7 @@
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
                         <Private-Package>org.wso2.carbon.logging.service.internal</Private-Package>
                         <Export-Package>
+                            !org.wso2.carbon.logging.service.internal.*,
                             org.wso2.carbon.logging.service.*;version="4.3.0",
                         </Export-Package>
                         <Import-Package>
