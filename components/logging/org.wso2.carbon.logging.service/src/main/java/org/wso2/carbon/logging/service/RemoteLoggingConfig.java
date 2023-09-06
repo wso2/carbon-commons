@@ -50,7 +50,7 @@ import java.util.Map;
 /**
  * This is the Admin service used for configuring the remote server logging configurations
  */
-public class RemoteLoggingConfig {
+public class RemoteLoggingConfig implements RemoteLoggingConfigService{
     private static final Log log = LogFactory.getLog(RemoteLoggingConfig.class);
     private static final Log auditLog = CarbonConstants.AUDIT_LOG;
 
