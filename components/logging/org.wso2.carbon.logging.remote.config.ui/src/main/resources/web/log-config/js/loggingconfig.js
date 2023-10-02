@@ -16,68 +16,21 @@
  * under the License.
  */
 
-function addRemoteServerConfig() {
+function addRemoteServerConfig(logType) {
     sessionAwareFunction(function() {
         jQuery.noConflict();
 
-        var serverUrl = null;
-        if (document.getElementById('remoteServerUrl')) {
-            serverUrl = jQuery.trim(document.getElementById('remoteServerUrl').value);
-        }
-
-        var timeout = null;
-        if (document.getElementById('connectTimeoutMillis')) {
-            timeout = jQuery.trim(document.getElementById('connectTimeoutMillis').value);
-        }
-
+        var serverUrl = getSingleInputValue('remoteServerUrl');
+        var timeout = getSingleInputValue('connectTimeoutMillis');
+        var username = getSingleInputValue('remoteUsername');
+        var password = getSingleInputValue('remotePassword');
+        var keystoreLocation = getSingleInputValue('keystoreLocation');
+        var keystorePassword = getSingleInputValue('keystorePassword');
+        var truststoreLocation = getSingleInputValue('truststoreLocation');
+        var truststorePassword = getSingleInputValue('truststorePassword');
         var verifyHostname = true;
         if (document.getElementById('verify-hostname-option').checked !== true) {
             verifyHostname = false;
-        }
-
-        var auditLogTypeStatus = false;
-        if (document.getElementById('audit-log-option').checked === true) {
-            auditLogTypeStatus = true;
-        }
-
-        var apiLogTypeStatus = false;
-        if (document.getElementById('api-log-option').checked === true) {
-            apiLogTypeStatus = true;
-        }
-
-        var carbonLogTypeStatus = false;
-        if (document.getElementById('carbon-log-option').checked === true) {
-            carbonLogTypeStatus = true;
-        }
-
-        var username = null;
-        if (document.getElementById('remoteUsername')) {
-            username = jQuery.trim(document.getElementById('remoteUsername').value);
-        }
-
-        var password = null;
-        if (document.getElementById('remotePassword')) {
-            password = jQuery.trim(document.getElementById('remotePassword').value);
-        }
-
-        var keystoreLocation = null;
-        if (document.getElementById('keystoreLocation')) {
-            keystoreLocation = jQuery.trim(document.getElementById('keystoreLocation').value);
-        }
-
-        var keystorePassword = null;
-        if (document.getElementById('keystorePassword')) {
-            keystorePassword = jQuery.trim(document.getElementById('keystorePassword').value);
-        }
-
-        var truststoreLocation = null;
-        if (document.getElementById('truststoreLocation')) {
-            truststoreLocation = jQuery.trim(document.getElementById('truststoreLocation').value);
-        }
-
-        var truststorePassword = null;
-        if (document.getElementById('truststorePassword')) {
-            truststorePassword = jQuery.trim(document.getElementById('truststorePassword').value);
         }
 
         jQuery.post('process_add_remote_server_config-ajaxprocessor.jsp',
@@ -85,9 +38,7 @@ function addRemoteServerConfig() {
                 url: serverUrl,
                 connectTimeoutMillis: timeout,
                 verifyHostname: verifyHostname,
-                auditLogType: auditLogTypeStatus,
-                apiLogType: apiLogTypeStatus,
-                carbonLogType: carbonLogTypeStatus,
+                logType: logType,
                 remoteUsername: username,
                 remotePassword: password,
                 keystoreLocation: keystoreLocation,
@@ -112,8 +63,16 @@ function showAdvancedConfigurations() {
 }
 
 function showConfirmationDialogBox(message, yesCallback){
-   jQuery.noConflict();
-   CARBON.showConfirmationDialog(message,yesCallback, null);
+    jQuery.noConflict();
+
+    var logType = true;
+    if (document.getElementById('log-option')) {
+        logType = jQuery.trim(document.getElementById('log-option').value);
+    }
+    var yesCallbackWrapper = function() {
+        yesCallback(logType);
+    }
+    CARBON.showConfirmationDialog(message,yesCallbackWrapper, null);
 }
 
 function loadPage() {
@@ -123,34 +82,122 @@ function loadPage() {
     });
 }
 
-function resetConfig() {
+function resetConfig(logType) {
     sessionAwareFunction(function() {
         jQuery.noConflict();
-
-        var auditLogTypeStatus = false;
-        if (document.getElementById('audit-log-option').checked === true) {
-            auditLogTypeStatus = true;
-        }
-
-        var apiLogTypeStatus = false;
-        if (document.getElementById('api-log-option').checked === true) {
-            apiLogTypeStatus = true;
-        }
-
-        var carbonLogTypeStatus = false;
-        if (document.getElementById('carbon-log-option').checked === true) {
-            carbonLogTypeStatus = true;
-        }
-
         jQuery.post('process_add_remote_server_config-ajaxprocessor.jsp',
             {
                 reset: true,
-                auditLogType: auditLogTypeStatus,
-                apiLogType: apiLogTypeStatus,
-                carbonLogType: carbonLogTypeStatus
+                logType: logType.toUpperCase()
             },
             function(data) {
                 CARBON.showInfoDialog(data);
+                clearRemoteServerConfigInputs(logType);
             });
     });
 }
+
+function getConfigData(logType) {
+    sessionAwareFunction(function() {
+        jQuery.noConflict();
+        jQuery.post('process_add_remote_server_config-ajaxprocessor.jsp',
+            {
+                get: true,
+                logType: logType.toUpperCase()
+            },
+            function(data) {
+                setRemoteServerConfigInputs(logType, data);
+            });
+    });
+}
+
+function clearRemoteServerConfigInputs(logType) {
+
+    var inputIdList = [
+        "remoteServerUrl",
+        "connectTimeoutMillis",
+        "remoteUsername",
+        "remotePassword",
+        "keystoreLocation",
+        "keystorePassword",
+        "truststoreLocation",
+        "truststorePassword"
+    ]
+    for (inputId of inputIdList) {
+        resetSingleInput(inputId);
+    }
+
+    var element = jQuery('#' + 'verify-hostname-option');
+    if (element) {
+        element.prop('checked', false);
+    }
+}
+
+
+function setRemoteServerConfigInputs(logType, remoteServerLoggerData) {
+
+    var inputIdValueMap = {
+        "remoteServerUrl": remoteServerLoggerData.url,
+        "connectTimeoutMillis": remoteServerLoggerData.connectTimeoutMillis,
+        "remoteUsername": remoteServerLoggerData.username,
+        "remotePassword": remoteServerLoggerData.password,
+        "keystoreLocation": remoteServerLoggerData.keystoreLocation,
+        "keystorePassword": remoteServerLoggerData.keystorePassword,
+        "truststoreLocation": remoteServerLoggerData.truststoreLocation,
+        "truststorePassword": remoteServerLoggerData.truststorePassword
+    }
+
+    for (inputId in inputIdValueMap) {
+        setSingleInput(inputId, inputIdValueMap[inputId]);
+    }
+
+    var element = jQuery('#' + 'verify-hostname-option');
+    if (element) {
+        if (remoteServerLoggerData.verifyHostname) {
+            element.prop('checked', true);
+        }
+    }
+}
+
+function logTypeSelectionChanged(logType) {
+    sessionAwareFunction(function() {
+        jQuery.noConflict();
+
+        var remoteServerLoggerData = null;
+        getConfigData(logType);
+
+        if (remoteServerLoggerData) {
+            setRemoteServerConfigInputs(logType, remoteServerLoggerData);
+        } else {
+            clearRemoteServerConfigInputs(logType);
+        }
+    });
+}
+
+function resetSingleInput (inputId) {
+
+    var element = document.getElementById(inputId);
+    if (element) {
+        element.value = '';
+    }
+}
+
+function setSingleInput (inputId, value) {
+
+    var element = document.getElementById(inputId);
+    if (element) {
+        element.value = value;
+    }
+}
+
+function getSingleInputValue (inputId) {
+
+    var element = document.getElementById(inputId);
+    if (element) {
+        return element.value;
+    }
+    return null;
+}
+
+// This is called to load default configurations for the first time
+logTypeSelectionChanged("AUDIT");

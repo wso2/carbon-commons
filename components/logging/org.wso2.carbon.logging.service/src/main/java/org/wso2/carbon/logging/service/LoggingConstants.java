@@ -80,4 +80,21 @@ public final class LoggingConstants {
     public static final String DEFAULT_SSLCONF_TYPE = "SSLConf";
     public static final String DEFAULT_SSL_PROTOCOL = "SSL";
     public static final String VERIFY_HOSTNAME_SUFFIX = ".verifyHostName";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String TRUSTSTORE_PASSWORD = "trustStorePassword";
+    public static final String TRUSTSTORE_LOCATION = "trustStoreLocation";
+    public static final String CARBON_LOG_TYPE = "carbonLogType";
+    public static final String CONNECT_TIMEOUT_MILLIS = "connectTimeoutMillis";
+    public static final String AUDIT_LOG_TYPE = "auditLogType";
+    public static final String URL = "url";
+    public static final String VERIFY_HOSTNAME = "verifyHostName";
+    public static final String KEYSTORE_PASSWORD = "keyStorePassword";
+    public static final String KEYSTORE_LOCATION = "keyStoreLocation";
+    public static final String CONNECTION_TIMEOUT = "connectionTimeout";
+    public static final String REMOTE_SERVER_LOGGER_RESOURCE_PATH = "/identity/config/remoteServer";
+
+    public static final String AUDIT = "AUDIT";
+    public static final String CARBON = "CARBON";
+    public static final String LOG_TYPE = "logType";
 }

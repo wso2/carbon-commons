@@ -27,6 +27,7 @@
 <%@ page import="java.util.regex.Pattern" %>
 <%@ page import="java.util.regex.Pattern" %>
 <%@ page import="java.util.regex.Pattern" %>
+<%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
 <fmt:bundle basename="org.wso2.carbon.logging.remote.config.ui.i18n.Resources">
     <%
         response.setHeader("Cache-Control", "no-cache");
@@ -39,14 +40,18 @@
         RemoteLoggingConfigClient client = new RemoteLoggingConfigClient(cookie, backendServerURL, configContext);
 
         RemoteServerLoggerData data = new RemoteServerLoggerData();
-        boolean auditLogType = Boolean.parseBoolean(request.getParameter("auditLogType"));
-        boolean apiLogType = Boolean.parseBoolean(request.getParameter("apiLogType"));
-        boolean carbonLogType = Boolean.parseBoolean(request.getParameter("carbonLogType"));
-        data.setAuditLogType(auditLogType);
-        data.setApiLogType(apiLogType);
-        data.setCarbonLogType(carbonLogType);
-
-        if (Boolean.parseBoolean(request.getParameter("reset"))) {
+        String  logType = request.getParameter("logType");
+        data.setLogType(logType);
+        if (Boolean.parseBoolean(request.getParameter("get"))) {
+            try {
+                RemoteServerLoggerData remoteServerLoggerData = client.getRemoteServerConfig(logType);
+                ObjectMapper mapper = new ObjectMapper();
+                String json = mapper.writeValueAsString(remoteServerLoggerData);
+                response.setContentType("application/json");
+                response.getWriter().write(json);
+            } catch (Exception e) {
+            }
+        } else if (Boolean.parseBoolean(request.getParameter("reset"))) {
             try {
                 client.resetRemoteServerConfig(data);
     %>
@@ -85,10 +90,6 @@
                 } else if (!Pattern.matches("^(http|https)://.*$", url)) {
     %>
     <fmt:message key="remote.server.url.invalid"/>
-    <%
-                } else if (!auditLogType && !apiLogType && !carbonLogType) {
-    %>
-    <fmt:message key="remote.server.log.type.not.selected"/>
     <%
                 } else if (!StringUtils.isEmpty(keystoreLocation) && !StringUtils.isEmpty(keystorePassword)
                     && !StringUtils.isEmpty(truststoreLocation) && !StringUtils.isEmpty(truststorePassword)

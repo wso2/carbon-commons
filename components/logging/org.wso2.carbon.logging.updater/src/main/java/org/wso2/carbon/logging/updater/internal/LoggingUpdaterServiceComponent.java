@@ -33,10 +33,13 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
+import org.wso2.carbon.base.api.ServerConfigurationService;
+import org.wso2.carbon.logging.service.RemoteLoggingConfigService;
 import org.wso2.carbon.logging.updater.LogConfigUpdater;
 import org.wso2.carbon.logging.updater.LoggingUpdaterConstants;
 import org.wso2.carbon.logging.updater.LoggingUpdaterException;
 import org.wso2.carbon.logging.updater.LoggingUpdaterUtil;
+import org.wso2.carbon.logging.updater.RemoteLoggingConfigUpdater;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -52,6 +55,7 @@ public class LoggingUpdaterServiceComponent implements EventHandler {
 
     final static Log log = LogFactory.getLog(LoggingUpdaterServiceComponent.class);
     private ConfigurationAdmin configurationAdmin;
+    private static final String REMOTE_LOGIN_PERIODIC_DB_SYNC_PERIOD = "RemoteLogging.PeriodicDBSync.Period";
 
     @Reference(name = "osgi.configadmin.service",
             service = ConfigurationAdmin.class,
@@ -73,6 +77,16 @@ public class LoggingUpdaterServiceComponent implements EventHandler {
             ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
             DataHolder.getInstance().setScheduledExecutorService(scheduledExecutorService);
             scheduledExecutorService.scheduleAtFixedRate(logConfigUpdater, 5000L, 5000L, TimeUnit.MILLISECONDS);
+
+            RemoteLoggingConfigUpdater remoteLoggingConfigUpdater =
+                    new RemoteLoggingConfigUpdater(DataHolder.getInstance().getRemoteLoggingConfigService());
+            ScheduledExecutorService remoteLoggingConfigUpdaterExecutorService = Executors.newScheduledThreadPool(1);
+            DataHolder.getInstance()
+                    .setRemoteLoggingConfigUpdaterExecutorService(remoteLoggingConfigUpdaterExecutorService);
+            int syncPeriod = Integer.parseInt(DataHolder.getInstance().getServerConfigurationService()
+                    .getFirstProperty(REMOTE_LOGIN_PERIODIC_DB_SYNC_PERIOD));
+            remoteLoggingConfigUpdaterExecutorService.scheduleAtFixedRate(remoteLoggingConfigUpdater, 60 * 1000L,
+                    syncPeriod * 60 * 1000L, TimeUnit.MILLISECONDS);
         } catch (LoggingUpdaterException e) {
             log.error("Error while Activating LoggingUpdater component", e);
         }
@@ -82,6 +96,7 @@ public class LoggingUpdaterServiceComponent implements EventHandler {
     public void deactivate() {
 
         DataHolder.getInstance().getScheduledExecutorService().shutdown();
+        DataHolder.getInstance().getRemoteLoggingConfigUpdaterExecutorService().shutdown();
     }
 
     public void unsetConfigAdminService(ConfigurationAdmin configurationAdmin) {
@@ -100,5 +115,38 @@ public class LoggingUpdaterServiceComponent implements EventHandler {
         } else {
             log.info("Logging configuration applied successfully");
         }
+    }
+
+    @Reference(
+            name = "remote.logging.config.service",
+            service = RemoteLoggingConfigService.class,
+            unbind = "unsetRemoteLoggingConfigService",
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC
+    )
+    public void setRemoteLoggingConfigService(RemoteLoggingConfigService remoteLoggingConfigService) {
+
+        DataHolder.getInstance().setRemoteLoggingConfigService(remoteLoggingConfigService);
+    }
+
+    public void unsetRemoteLoggingConfigService(RemoteLoggingConfigService remoteLoggingConfigService) {
+
+        DataHolder.getInstance().setRemoteLoggingConfigService(null);
+    }
+
+    @Reference(
+            name = "server.configuration.service",
+            policy = ReferencePolicy.DYNAMIC,
+            cardinality = ReferenceCardinality.MANDATORY,
+            unbind = "unsetServerConfigurationService"
+    )
+    protected void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
+
+        DataHolder.getInstance().setServerConfigurationService(serverConfigurationService);
+    }
+
+    protected void unsetServerConfigurationService(ServerConfigurationService serverConfigurationService) {
+
+        DataHolder.getInstance().setServerConfigurationService(null);
     }
 }

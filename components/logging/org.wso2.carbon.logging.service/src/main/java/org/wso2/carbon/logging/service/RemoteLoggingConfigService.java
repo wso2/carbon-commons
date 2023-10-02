@@ -22,6 +22,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * This is the interface used for configuring the remote server logging configurations.
@@ -38,6 +39,17 @@ public interface RemoteLoggingConfigService {
     void addRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException;
 
     /**
+     * This method is used to add a remote server configuration.
+     *
+     * @param data                      RemoteServerLoggerData object that contains the remote server configuration.
+     * @param isPeriodicalSyncRequest   Boolean value to indicate whether the request is a periodical sync request or not.
+     * @throws IOException              If an error occurs while writing to the log4j2.properties file.
+     * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
+     */
+    void addRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest) throws IOException, ConfigurationException;
+
+
+    /**
      * This method is used to reset the remote server configurations to the defaults.
      *
      * @param data                      RemoteServerLoggerData object that contains the remote server configuration.
@@ -45,4 +57,38 @@ public interface RemoteLoggingConfigService {
      * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
      */
     void resetRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException;
+
+    /**
+     * This method is used to reset the remote server configurations to the defaults.
+     *
+     * @param data                      RemoteServerLoggerData object that contains the remote server configuration.
+     * @param isPeriodicalSyncRequest   Boolean value to indicate whether the request is a periodical sync request or not.
+     * @throws IOException              If an error occurs while writing to the log4j2.properties file.
+     * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
+     */
+    void resetRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest) throws IOException, ConfigurationException;
+
+    /**
+     * This method is used to get the remote server configurations.
+     *
+     * @return List of RemoteServerLoggerData objects that contains the remote server configurations.
+     * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
+     */
+    List<RemoteServerLoggerData> getRemoteServerConfigs() throws ConfigurationException;
+
+    /**
+     * This method is used to get the remote server configuration for a given log type.
+     * @param logType  The log type of the remote server configuration.
+     * @return RemoteServerLoggerData object that contains the remote server configuration.
+     * @throws ConfigurationException If an error occurs while loading the log4j2.properties file.
+     */
+    RemoteServerLoggerData getRemoteServerConfig(String logType)
+            throws ConfigurationException;
+
+    /**
+     * This method is used to sync the remote server configurations with the remote server.
+     *
+     * @throws ConfigurationException If an error occurs while loading the configurations from database.
+     */
+    void syncRemoteServerConfigs() throws ConfigurationException, IOException;
 }
