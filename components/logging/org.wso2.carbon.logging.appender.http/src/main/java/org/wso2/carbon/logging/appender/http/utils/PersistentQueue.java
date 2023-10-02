@@ -15,7 +15,7 @@ public class PersistentQueue {
     private ExcerptAppender appender;
     private ExcerptTailer tailer;
     private PersistentQueue() {
-        String filePath = "some/path/to/file";
+        String filePath = "some/path/to/file"; //Can be read through the deployment.toml file
         init(filePath);
     }
 
@@ -41,6 +41,14 @@ public class PersistentQueue {
             return false;
         }
         return true;
+    }
+
+    public Object peek() {
+        AtomicReference<Object> deserializedObject = new AtomicReference<>();
+        long index = tailer.index();
+        Object dequeuedObject = dequeue();
+        tailer.moveToIndex(index);
+        return dequeuedObject;
     }
 
     public Object dequeue() {
