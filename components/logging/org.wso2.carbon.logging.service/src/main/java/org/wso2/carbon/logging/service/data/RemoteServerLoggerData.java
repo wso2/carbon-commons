@@ -27,8 +27,7 @@ public class RemoteServerLoggerData {
     private String url;
     private String connectTimeoutMillis;
     private boolean verifyHostname = true;
-    private boolean auditLogType;
-    private boolean carbonLogType;
+    private String logType;
     private String username;
     private String password;
     private String keystoreLocation;
@@ -37,93 +36,106 @@ public class RemoteServerLoggerData {
     private String truststorePassword;
 
     public RemoteServerLoggerData() {
+
     }
 
     public String getUrl() {
+
         return url;
     }
 
     public void setUrl(String url) {
+
         this.url = url;
     }
 
     public String getConnectTimeoutMillis() {
+
         return connectTimeoutMillis;
     }
 
     public void setConnectTimeoutMillis(String connectTimeoutMillis) {
+
         this.connectTimeoutMillis = connectTimeoutMillis;
     }
 
-    public boolean isAuditLogType() {
-        return auditLogType;
+    public String getLogType() {
+
+        return logType;
     }
 
-    public void setAuditLogType(boolean auditLogType) {
-        this.auditLogType = auditLogType;
-    }
+    public void setLogType(String logType) {
 
-    public boolean isCarbonLogType() {
-        return carbonLogType;
-    }
-
-    public void setCarbonLogType(boolean carbonLogType) {
-        this.carbonLogType = carbonLogType;
+        this.logType = logType;
     }
 
     public String getUsername() {
+
         return username;
     }
 
     public void setUsername(String username) {
+
         this.username = username;
     }
 
     public String getPassword() {
+
         return password;
     }
 
     public void setPassword(String password) {
+
         this.password = password;
     }
 
     public String getKeystoreLocation() {
+
         return keystoreLocation;
     }
 
     public void setKeystoreLocation(String keystoreLocation) {
+
         this.keystoreLocation = keystoreLocation;
     }
 
     public String getKeystorePassword() {
+
         return keystorePassword;
     }
 
     public void setKeystorePassword(String keystorePassword) {
+
         this.keystorePassword = keystorePassword;
     }
 
     public String getTruststoreLocation() {
+
         return truststoreLocation;
     }
 
     public void setTruststoreLocation(String truststoreLocation) {
+
         this.truststoreLocation = truststoreLocation;
     }
 
     public String getTruststorePassword() {
+
         return truststorePassword;
     }
 
     public void setTruststorePassword(String truststorePassword) {
+
         this.truststorePassword = truststorePassword;
     }
 
     public boolean isVerifyHostname() {
+
         return verifyHostname;
     }
 
     public void setVerifyHostname(boolean verifyHostname) {
+
         this.verifyHostname = verifyHostname;
     }
 }

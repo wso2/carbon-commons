@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -67,6 +69,22 @@ public class Utils {
             for (String key : properties.stringPropertyNames()){
                 if (key.startsWith(LoggingConstants.APPENDER_PREFIX + appenderName)){
                     keys.add(key);
+                }
+            }
+        } catch (IOException e) {
+            throw new IOException("Error occurred while reading the input stream");
+        }
+        return keys;
+    }
+
+    public static Map<String, String> getKeyValuesOfAppender(File srcFile, String appenderName) throws IOException {
+        Map<String, String> keys = new HashMap<>();
+        try (FileInputStream fis = new FileInputStream(srcFile)) {
+            Properties properties = new Properties();
+            properties.load(fis);
+            for (String key : properties.stringPropertyNames()){
+                if (key.startsWith(LoggingConstants.APPENDER_PREFIX + appenderName)){
+                    keys.put(key, String.valueOf(properties.get(key)));
                 }
             }
         } catch (IOException e) {
