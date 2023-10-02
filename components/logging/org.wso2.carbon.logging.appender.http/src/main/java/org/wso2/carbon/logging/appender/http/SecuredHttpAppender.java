@@ -38,6 +38,7 @@ import org.apache.logging.log4j.core.net.ssl.TrustStoreConfiguration;
 import org.wso2.carbon.logging.appender.http.models.SslConfiguration;
 import org.wso2.carbon.logging.appender.http.utils.AppenderConstants;
 import org.wso2.carbon.logging.appender.http.models.HttpConnectionConfig;
+import org.wso2.carbon.logging.appender.http.utils.PersistentQueueService;
 import org.wso2.securevault.SecretResolver;
 import org.wso2.securevault.SecretResolverFactory;
 
@@ -46,8 +47,6 @@ import java.net.URL;
 import java.util.Base64;
 import java.util.Objects;
 import java.util.Properties;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -202,7 +201,7 @@ public class SecuredHttpAppender extends AbstractAppender {
     }
 
     private HttpManager manager = null;
-    private final BlockingQueue<LogEvent> queue;
+    private final PersistentQueueService persistentQueueService;
     private final HttpConnectionConfig httpConnConfig;
     private final ScheduledExecutorService scheduler;
     private final int processingLimit;
@@ -217,7 +216,7 @@ public class SecuredHttpAppender extends AbstractAppender {
 
         this.httpConnConfig = httpConnectionConfig;
         this.processingLimit = processingLimit;
-        this.queue = new ArrayBlockingQueue<>(processingLimit);
+        this.persistentQueueService = PersistentQueueService.getInstance();
 
         scheduler = Executors.newScheduledThreadPool(AppenderConstants.SCHEDULER_CORE_POOL_SIZE);
         scheduler.scheduleWithFixedDelay(new LogPublisherTask(), AppenderConstants.SCHEDULER_INITIAL_DELAY,
@@ -235,12 +234,10 @@ public class SecuredHttpAppender extends AbstractAppender {
             isManagerInitialized = initManager();
         }
 
-        if (!queue.offer(event.toImmutable())) {
-            if (++failedCount % 1000 == 0) {
-                error("Logging events queue exceed the process limits " + processingLimit + ", dropping the " +
-                        "log event");
-            }
+        if (!persistentQueueService.enqueue(event.toImmutable())) {
+            error("Logging events queue failed to persist the log event");
         }
+
     }
 
     @Override
@@ -359,17 +356,14 @@ public class SecuredHttpAppender extends AbstractAppender {
     private final class LogPublisherTask implements Runnable {
         @Override
         public void run() {
-            // print all the messages in the queue to the console if the queue is not empty
-            if (isManagerInitialized && !queue.isEmpty()) {
-                try {
-                    LogEvent event = queue.take();
+            // publish logs from the queue
+            LogEvent event = (LogEvent) persistentQueueService.dequeue();
+            try {
+                if(event!=null) {
                     manager.send(getLayout(), event);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    error("Error occurred while publishing logs to HTTP endpoint", e);
-                } catch (Exception e) {
-                    error("Error occurred while publishing logs to HTTP endpoint", e);
                 }
+            } catch (Exception e) {
+                error("Error occurred while publishing logs to HTTP endpoint", e);
             }
         }
     }

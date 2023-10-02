@@ -1550,6 +1550,11 @@
                 <artifactId>org.wso2.carbon.logging.view.ui</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>net.openhft</groupId>
+                <artifactId>chronicle-queue</artifactId>
+                <version>5.24ea26</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
