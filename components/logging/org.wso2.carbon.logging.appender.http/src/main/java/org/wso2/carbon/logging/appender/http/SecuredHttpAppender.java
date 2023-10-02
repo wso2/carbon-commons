@@ -188,7 +188,7 @@ public class SecuredHttpAppender extends AbstractAppender {
                     getConfiguration().getLoggerContext(), getName(), url, method, connectTimeoutMillis,
                     readTimeoutMillis, username, password, headers, sslConfiguration, verifyHostname);
             return new SecuredHttpAppender(getName(), getLayout(), getFilter(), isIgnoreExceptions(),
-                    getPropertyArray(), httpConnectionConfig, processingLimit);
+                    getPropertyArray(), httpConnectionConfig);
         }
     }
 
@@ -204,18 +204,15 @@ public class SecuredHttpAppender extends AbstractAppender {
     private final PersistentQueue persistentQueue;
     private final HttpConnectionConfig httpConnConfig;
     private final ScheduledExecutorService scheduler;
-    private final int processingLimit;
-    private int failedCount = 0;
     private boolean isManagerInitialized = false;
 
     protected SecuredHttpAppender(final String name, final Layout<? extends Serializable> layout, final Filter filter,
                                   final boolean ignoreExceptions, final Property[] properties,
-                                  HttpConnectionConfig httpConnectionConfig, final int processingLimit) {
+                                  HttpConnectionConfig httpConnectionConfig) {
         super(name, filter, layout, ignoreExceptions, properties);
         Objects.requireNonNull(layout, "layout");
 
         this.httpConnConfig = httpConnectionConfig;
-        this.processingLimit = processingLimit;
         this.persistentQueue = PersistentQueue.getInstance();
 
         scheduler = Executors.newScheduledThreadPool(AppenderConstants.SCHEDULER_CORE_POOL_SIZE);
@@ -237,7 +234,6 @@ public class SecuredHttpAppender extends AbstractAppender {
         if (!persistentQueue.enqueue(event.toImmutable())) {
             error("Logging events queue failed to persist the log event");
         }
-
     }
 
     @Override
