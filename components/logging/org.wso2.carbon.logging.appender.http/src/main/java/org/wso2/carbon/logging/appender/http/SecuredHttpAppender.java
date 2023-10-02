@@ -38,7 +38,7 @@ import org.apache.logging.log4j.core.net.ssl.TrustStoreConfiguration;
 import org.wso2.carbon.logging.appender.http.models.SslConfiguration;
 import org.wso2.carbon.logging.appender.http.utils.AppenderConstants;
 import org.wso2.carbon.logging.appender.http.models.HttpConnectionConfig;
-import org.wso2.carbon.logging.appender.http.utils.PersistentQueueService;
+import org.wso2.carbon.logging.appender.http.utils.PersistentQueue;
 import org.wso2.securevault.SecretResolver;
 import org.wso2.securevault.SecretResolverFactory;
 
@@ -201,7 +201,7 @@ public class SecuredHttpAppender extends AbstractAppender {
     }
 
     private HttpManager manager = null;
-    private final PersistentQueueService persistentQueueService;
+    private final PersistentQueue persistentQueue;
     private final HttpConnectionConfig httpConnConfig;
     private final ScheduledExecutorService scheduler;
     private final int processingLimit;
@@ -216,7 +216,7 @@ public class SecuredHttpAppender extends AbstractAppender {
 
         this.httpConnConfig = httpConnectionConfig;
         this.processingLimit = processingLimit;
-        this.persistentQueueService = PersistentQueueService.getInstance();
+        this.persistentQueue = PersistentQueue.getInstance();
 
         scheduler = Executors.newScheduledThreadPool(AppenderConstants.SCHEDULER_CORE_POOL_SIZE);
         scheduler.scheduleWithFixedDelay(new LogPublisherTask(), AppenderConstants.SCHEDULER_INITIAL_DELAY,
@@ -234,7 +234,7 @@ public class SecuredHttpAppender extends AbstractAppender {
             isManagerInitialized = initManager();
         }
 
-        if (!persistentQueueService.enqueue(event.toImmutable())) {
+        if (!persistentQueue.enqueue(event.toImmutable())) {
             error("Logging events queue failed to persist the log event");
         }
 
@@ -357,7 +357,7 @@ public class SecuredHttpAppender extends AbstractAppender {
         @Override
         public void run() {
             // publish logs from the queue
-            LogEvent event = (LogEvent) persistentQueueService.dequeue();
+            LogEvent event = (LogEvent) persistentQueue.dequeue();
             try {
                 if(event!=null) {
                     manager.send(getLayout(), event);

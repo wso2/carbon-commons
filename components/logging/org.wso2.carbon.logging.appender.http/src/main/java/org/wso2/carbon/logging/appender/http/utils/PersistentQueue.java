@@ -8,20 +8,20 @@ import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 import java.io.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PersistentQueueService {
+public class PersistentQueue {
 
-    private static PersistentQueueService instance;
+    private static PersistentQueue instance;
     private ChronicleQueue queue;
     private ExcerptAppender appender;
     private ExcerptTailer tailer;
-    private PersistentQueueService() {
+    private PersistentQueue() {
         String filePath = "some/path/to/file";
         init(filePath);
     }
 
-    public static PersistentQueueService getInstance() {
+    public static PersistentQueue getInstance() {
         if (instance == null) {
-            instance = new PersistentQueueService();
+            instance = new PersistentQueue();
         }
         return instance;
     }
