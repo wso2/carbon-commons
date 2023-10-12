@@ -99,7 +99,7 @@
                 <tr>
                     <td class="leftCol-med labelField"><fmt:message key="remote.server.verifyHostname"/></td>
                     <td>
-                        <input type="checkbox" id="verify-hostname-option" name="verify-hostname-selector">
+                        <input type="checkbox" id="verify-hostname-option" name="verify-hostname-selector" checked="checked">
                     </td>
                 </tr>
                 <tr>

@@ -55,7 +55,7 @@ public class LoggingUpdaterServiceComponent implements EventHandler {
 
     final static Log log = LogFactory.getLog(LoggingUpdaterServiceComponent.class);
     private ConfigurationAdmin configurationAdmin;
-    private static final String REMOTE_LOGIN_PERIODIC_DB_SYNC_PERIOD = "RemoteLogging.PeriodicDBSync.Period";
+    private static final String REMOTE_LOGIN_CONFIG_SYNC_PERIOD = "RemoteLogging.ConfigSync.Period";
 
     @Reference(name = "osgi.configadmin.service",
             service = ConfigurationAdmin.class,
@@ -84,7 +84,7 @@ public class LoggingUpdaterServiceComponent implements EventHandler {
             DataHolder.getInstance()
                     .setRemoteLoggingConfigUpdaterExecutorService(remoteLoggingConfigUpdaterExecutorService);
             int syncPeriod = Integer.parseInt(DataHolder.getInstance().getServerConfigurationService()
-                    .getFirstProperty(REMOTE_LOGIN_PERIODIC_DB_SYNC_PERIOD));
+                    .getFirstProperty(REMOTE_LOGIN_CONFIG_SYNC_PERIOD));
             remoteLoggingConfigUpdaterExecutorService.scheduleAtFixedRate(remoteLoggingConfigUpdater, 60 * 1000L,
                     syncPeriod * 60 * 1000L, TimeUnit.MILLISECONDS);
         } catch (LoggingUpdaterException e) {
