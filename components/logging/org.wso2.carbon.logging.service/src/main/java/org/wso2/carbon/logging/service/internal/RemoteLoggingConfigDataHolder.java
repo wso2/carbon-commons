@@ -20,7 +20,6 @@ package org.wso2.carbon.logging.service.internal;
 
 import org.apache.axis2.clustering.ClusteringAgent;
 import org.wso2.carbon.logging.service.RemoteLoggingConfigService;
-import org.wso2.carbon.logging.service.clustering.ClusterRemoteLoggerConfigInvalidationRequestSender;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
 /**
@@ -32,7 +31,6 @@ public class RemoteLoggingConfigDataHolder {
     private RegistryService registryService;
     private RemoteLoggingConfigService remoteLoggingConfigService;
     private ClusteringAgent clusteringAgent;
-    private ClusterRemoteLoggerConfigInvalidationRequestSender clusterRemoteLoggerConfigInvalidationRequestSender;
 
     private RemoteLoggingConfigDataHolder() {
 
@@ -77,16 +75,5 @@ public class RemoteLoggingConfigDataHolder {
     public void setClusteringAgent(ClusteringAgent clusteringAgent) {
 
         this.clusteringAgent = clusteringAgent;
-    }
-
-    public ClusterRemoteLoggerConfigInvalidationRequestSender getClusterRemoteLoggerConfigInvalidationRequestSender() {
-
-        return clusterRemoteLoggerConfigInvalidationRequestSender;
-    }
-
-    public void setClusterRemoteLoggerConfigInvalidationRequestSender(
-            ClusterRemoteLoggerConfigInvalidationRequestSender clusterRemoteLoggerConfigInvalidationRequestSender) {
-
-        this.clusterRemoteLoggerConfigInvalidationRequestSender = clusterRemoteLoggerConfigInvalidationRequestSender;
     }
 }
