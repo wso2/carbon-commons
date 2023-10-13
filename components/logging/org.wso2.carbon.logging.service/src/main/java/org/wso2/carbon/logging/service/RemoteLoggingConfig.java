@@ -113,12 +113,6 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         applyRemoteConfigurations(data, list, appenderName);
         applyConfigs();
         logAuditForConfigUpdate(url, appenderName);
-        if (!isPeriodicalSyncRequest) {
-            RemoteLoggingConfigDataHolder.getInstance().getClusterRemoteLoggerConfigInvalidationRequestSender()
-                    .send(true,
-                            CarbonContext.getThreadLocalCarbonContext().getTenantDomain(),
-                            CarbonContext.getThreadLocalCarbonContext().getTenantId());
-        }
     }
 
     private void logAuditForConfigUpdate(String url, String appenderName) {
@@ -164,12 +158,6 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         applyConfigs();
 
         logAuditForConfigReset(appenderName);
-        if (!isPeriodicalSyncRequest) {
-            RemoteLoggingConfigDataHolder.getInstance().getClusterRemoteLoggerConfigInvalidationRequestSender()
-                    .send(true,
-                            CarbonContext.getThreadLocalCarbonContext().getTenantDomain(),
-                            CarbonContext.getThreadLocalCarbonContext().getTenantId());
-        }
     }
 
     private void logAuditForConfigReset(String appenderName) {
