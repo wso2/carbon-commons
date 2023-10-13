@@ -20,16 +20,21 @@
 package org.wso2.carbon.logging.updater.internal;
 
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.wso2.carbon.base.api.ServerConfigurationService;
+import org.wso2.carbon.logging.service.RemoteLoggingConfigService;
 
 import java.nio.file.attribute.FileTime;
 import java.util.concurrent.ScheduledExecutorService;
 
 public class DataHolder {
 
-    private  ConfigurationAdmin configurationAdmin;
-    private  ScheduledExecutorService scheduledExecutorService;
+    private ConfigurationAdmin configurationAdmin;
+    private ScheduledExecutorService scheduledExecutorService;
+    private ScheduledExecutorService remoteLoggingConfigUpdaterExecutorService;
+    private RemoteLoggingConfigService remoteLoggingConfigService;
+    private ServerConfigurationService serverConfigurationService;
     private static final DataHolder instance = new DataHolder();
-    private  FileTime modifiedTime;
+    private FileTime modifiedTime;
 
     private DataHolder() {
 
@@ -68,5 +73,37 @@ public class DataHolder {
     public void setModifiedTime(FileTime modifiedTime) {
 
         this.modifiedTime = modifiedTime;
+    }
+
+    public ScheduledExecutorService getRemoteLoggingConfigUpdaterExecutorService() {
+
+        return remoteLoggingConfigUpdaterExecutorService;
+    }
+
+    public void setRemoteLoggingConfigUpdaterExecutorService(
+            ScheduledExecutorService remoteLoggingConfigUpdaterExecutorService) {
+
+        this.remoteLoggingConfigUpdaterExecutorService = remoteLoggingConfigUpdaterExecutorService;
+    }
+
+    public RemoteLoggingConfigService getRemoteLoggingConfigService() {
+
+        return remoteLoggingConfigService;
+    }
+
+    public void setRemoteLoggingConfigService(
+            RemoteLoggingConfigService remoteLoggingConfigService) {
+
+        this.remoteLoggingConfigService = remoteLoggingConfigService;
+    }
+
+    public ServerConfigurationService getServerConfigurationService() {
+
+        return serverConfigurationService;
+    }
+
+    public void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
+
+        this.serverConfigurationService = serverConfigurationService;
     }
 }
