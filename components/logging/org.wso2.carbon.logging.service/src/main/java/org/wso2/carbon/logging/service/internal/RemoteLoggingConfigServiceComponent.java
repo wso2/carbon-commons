@@ -29,9 +29,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.logging.service.RemoteLoggingConfig;
 import org.wso2.carbon.logging.service.RemoteLoggingConfigService;
-import org.wso2.carbon.logging.service.clustering.ClusterRemoteLoggerConfigInvalidationRequestSender;
 import org.wso2.carbon.registry.core.service.RegistryService;
-import org.wso2.carbon.utils.ConfigurationContextService;
 
 import java.io.IOException;
 
@@ -51,10 +49,6 @@ public class RemoteLoggingConfigServiceComponent {
             componentContext.getBundleContext().registerService(
                     RemoteLoggingConfigService.class, remoteLoggingConfig, null);
             RemoteLoggingConfigDataHolder.getInstance().setRemoteLoggingConfigService(remoteLoggingConfig);
-            ClusterRemoteLoggerConfigInvalidationRequestSender clusterRemoteLoggerConfigInvalidationRequestSender =
-                    new ClusterRemoteLoggerConfigInvalidationRequestSender();
-            RemoteLoggingConfigDataHolder.getInstance().setClusterRemoteLoggerConfigInvalidationRequestSender(
-                    clusterRemoteLoggerConfigInvalidationRequestSender);
         } catch (IOException e) {
             LOG.error("IO exception occurred when creating RemoteLoggingConfig instance", e);
         }
@@ -89,23 +83,5 @@ public class RemoteLoggingConfigServiceComponent {
             LOG.debug("Unsetting the RegistryService");
         }
         RemoteLoggingConfigDataHolder.getInstance().setRegistryService(null);
-    }
-
-    @Reference(
-            name = "config.context.service",
-            cardinality = ReferenceCardinality.OPTIONAL,
-            policy = ReferencePolicy.DYNAMIC,
-            unbind = "unsetClusteringAgent"
-    )
-    protected void setClusteringAgent(ConfigurationContextService configurationContextService) {
-
-        RemoteLoggingConfigDataHolder.getInstance()
-                .setClusteringAgent(configurationContextService.getServerConfigContext().getAxisConfiguration().
-                        getClusteringAgent());
-    }
-
-    protected void unsetClusteringAgent(ConfigurationContextService configurationContextService) {
-
-        RemoteLoggingConfigDataHolder.getInstance().setClusteringAgent(null);
     }
 }
