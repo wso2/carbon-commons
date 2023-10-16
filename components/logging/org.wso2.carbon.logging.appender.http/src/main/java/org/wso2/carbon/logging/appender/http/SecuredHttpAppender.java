@@ -39,6 +39,7 @@ import org.wso2.carbon.logging.appender.http.models.SslConfiguration;
 import org.wso2.carbon.logging.appender.http.utils.AppenderConstants;
 import org.wso2.carbon.logging.appender.http.models.HttpConnectionConfig;
 import org.wso2.carbon.logging.appender.http.utils.PersistentQueue;
+import org.wso2.carbon.logging.appender.http.utils.PersistentQueueException;
 import org.wso2.securevault.SecretResolver;
 import org.wso2.securevault.SecretResolverFactory;
 
@@ -231,8 +232,12 @@ public class SecuredHttpAppender extends AbstractAppender {
             isManagerInitialized = initManager();
         }
 
-        if (!persistentQueue.enqueue(event.toImmutable())) {
-            error("Logging events queue failed to persist the log event");
+        try {
+            if (!persistentQueue.enqueue(event.toImmutable())) {
+                error("Logging events queue failed to persist the log event");
+            }
+        } catch (PersistentQueueException e) {
+            error("Error occurred while persisting logs to the queue", e);
         }
     }
 
@@ -353,8 +358,8 @@ public class SecuredHttpAppender extends AbstractAppender {
         @Override
         public void run() {
             // publish logs from the queue
-            LogEvent event = (LogEvent) persistentQueue.peek();
             try {
+                LogEvent event = (LogEvent) persistentQueue.peek();
                 if(event!=null) {
                     manager.send(getLayout(), event);
                 }
@@ -362,7 +367,11 @@ public class SecuredHttpAppender extends AbstractAppender {
                 error("Error occurred while publishing logs to HTTP endpoint", e);
             }
             // remove the log event from the queue
-            persistentQueue.dequeue();
+            try {
+                persistentQueue.dequeue();
+            } catch (PersistentQueueException e) {
+                error("Error occurred while removing logs from the queue", e);
+            }
         }
     }
 }

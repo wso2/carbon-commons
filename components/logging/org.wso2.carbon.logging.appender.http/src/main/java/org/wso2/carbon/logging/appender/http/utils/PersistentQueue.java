@@ -1,5 +1,6 @@
 package org.wso2.carbon.logging.appender.http.utils;
 
+import net.openhft.chronicle.bytes.Bytes;
 import net.openhft.chronicle.queue.ChronicleQueue;
 import net.openhft.chronicle.queue.ExcerptAppender;
 import net.openhft.chronicle.queue.ExcerptTailer;
@@ -7,6 +8,7 @@ import net.openhft.chronicle.queue.RollCycles;
 import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
 
 import java.io.*;
+import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -50,8 +52,7 @@ public class PersistentQueue {
         return instance;
     }
 
-
-    public boolean enqueue(Serializable serializableObj) {
+    public boolean enqueue(Serializable serializableObj) throws PersistentQueueException {
 
         if (currentQueueSize >= queueLimit) {
             return false;
@@ -61,8 +62,7 @@ public class PersistentQueue {
                 byte[] serializedObject = serializeObject(serializableObj);
                 appender.writeBytes(b -> b.write(serializedObject));
             } catch (IOException e) {
-                e.printStackTrace();
-                return false;
+                throw new PersistentQueueException("Error while serializing object", e);
             }
         }
         currentQueueSize++;
@@ -70,30 +70,40 @@ public class PersistentQueue {
         return true;
     }
 
-    public Object peek() {
+    public Object peek() throws PersistentQueueException {
 
         AtomicReference<Object> deserializedObject = new AtomicReference<>();
-        tailer.readBytes(b->{
+        Bytes<ByteBuffer> bytes = Bytes.elasticByteBuffer();
+        try {
+            tailer.readBytes(bytes);
             try {
-                deserializedObject.set(deserializeObject(b.toByteArray()));
+                deserializedObject.set(deserializeObject(bytes.toByteArray()));
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                throw new PersistentQueueException("Error while deserializing object", e);
             }
-        });
+        }
+        finally {
+            bytes.releaseLast();
+        }
         tailer.moveToIndex(tailer.lastReadIndex());
         return deserializedObject.get();
     }
 
-    public Object dequeue() {
+    public Object dequeue() throws PersistentQueueException {
 
         AtomicReference<Object> deserializedObject = new AtomicReference<>();
-        tailer.readBytes(b->{
+        Bytes<ByteBuffer> bytes = Bytes.elasticByteBuffer();
+        try {
+            tailer.readBytes(bytes);
             try {
-                deserializedObject.set(deserializeObject(b.toByteArray()));
+                deserializedObject.set(deserializeObject(bytes.toByteArray()));
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                throw new PersistentQueueException("Error while deserializing object", e);
             }
-        });
+        }
+        finally {
+            bytes.releaseLast();
+        }
 
         if(currentFile==null){
             currentFile = tailer.currentFile();
@@ -111,6 +121,13 @@ public class PersistentQueue {
         saveMetaData();
 
         return deserializedObject.get();
+    }
+
+    public void undoPreviousDequeue() {
+
+        tailer.moveToIndex(tailer.lastReadIndex());
+        currentQueueSize++;
+        saveMetaData();
     }
 
     private void initMetaData(){
