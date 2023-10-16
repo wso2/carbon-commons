@@ -213,7 +213,7 @@ public class SecuredHttpAppender extends AbstractAppender {
         Objects.requireNonNull(layout, "layout");
 
         this.httpConnConfig = httpConnectionConfig;
-        this.persistentQueue = PersistentQueue.getInstance();
+        this.persistentQueue = PersistentQueue.getInstance(1000, AppenderConstants.QUEUE_DIRECTORY_PATH);
 
         scheduler = Executors.newScheduledThreadPool(AppenderConstants.SCHEDULER_CORE_POOL_SIZE);
         scheduler.scheduleWithFixedDelay(new LogPublisherTask(), AppenderConstants.SCHEDULER_INITIAL_DELAY,
