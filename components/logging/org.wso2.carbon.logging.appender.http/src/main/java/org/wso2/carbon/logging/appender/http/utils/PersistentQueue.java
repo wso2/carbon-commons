@@ -70,25 +70,6 @@ public class PersistentQueue {
         return true;
     }
 
-    public Object peek() throws PersistentQueueException {
-
-        AtomicReference<Object> deserializedObject = new AtomicReference<>();
-        Bytes<ByteBuffer> bytes = Bytes.elasticByteBuffer();
-        try {
-            tailer.readBytes(bytes);
-            try {
-                deserializedObject.set(deserializeObject(bytes.toByteArray()));
-            } catch (IOException | ClassNotFoundException e) {
-                throw new PersistentQueueException("Error while deserializing object", e);
-            }
-        }
-        finally {
-            bytes.releaseLast();
-        }
-        tailer.moveToIndex(tailer.lastReadIndex());
-        return deserializedObject.get();
-    }
-
     public Object dequeue() throws PersistentQueueException {
 
         AtomicReference<Object> deserializedObject = new AtomicReference<>();

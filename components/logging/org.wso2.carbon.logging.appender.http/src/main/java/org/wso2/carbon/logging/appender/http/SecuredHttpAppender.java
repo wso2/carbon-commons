@@ -359,18 +359,13 @@ public class SecuredHttpAppender extends AbstractAppender {
         public void run() {
             // publish logs from the queue
             try {
-                LogEvent event = (LogEvent) persistentQueue.peek();
+                LogEvent event = (LogEvent) persistentQueue.dequeue();
                 if(event!=null) {
                     manager.send(getLayout(), event);
                 }
             } catch (Exception e) {
+                persistentQueue.undoPreviousDequeue();
                 error("Error occurred while publishing logs to HTTP endpoint", e);
-            }
-            // remove the log event from the queue
-            try {
-                persistentQueue.dequeue();
-            } catch (PersistentQueueException e) {
-                error("Error occurred while removing logs from the queue", e);
             }
         }
     }
