@@ -188,7 +188,7 @@ public class SecuredHttpAppender extends AbstractAppender {
                     getConfiguration().getLoggerContext(), getName(), url, method, connectTimeoutMillis,
                     readTimeoutMillis, username, password, headers, sslConfiguration, verifyHostname);
             return new SecuredHttpAppender(getName(), getLayout(), getFilter(), isIgnoreExceptions(),
-                    getPropertyArray(), httpConnectionConfig);
+                    getPropertyArray(), httpConnectionConfig, processingLimit);
         }
     }
 
@@ -208,12 +208,12 @@ public class SecuredHttpAppender extends AbstractAppender {
 
     protected SecuredHttpAppender(final String name, final Layout<? extends Serializable> layout, final Filter filter,
                                   final boolean ignoreExceptions, final Property[] properties,
-                                  HttpConnectionConfig httpConnectionConfig) {
+                                  HttpConnectionConfig httpConnectionConfig, final int processingLimit) {
         super(name, filter, layout, ignoreExceptions, properties);
         Objects.requireNonNull(layout, "layout");
 
         this.httpConnConfig = httpConnectionConfig;
-        this.persistentQueue = PersistentQueue.getInstance(1000, AppenderConstants.QUEUE_DIRECTORY_PATH);
+        this.persistentQueue = PersistentQueue.getInstance(processingLimit, AppenderConstants.QUEUE_DIRECTORY_PATH);
 
         scheduler = Executors.newScheduledThreadPool(AppenderConstants.SCHEDULER_CORE_POOL_SIZE);
         scheduler.scheduleWithFixedDelay(new LogPublisherTask(), AppenderConstants.SCHEDULER_INITIAL_DELAY,
