@@ -8,7 +8,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 public class MetadataFileHandler {
-    private File jsonFile;
+    private final File jsonFile;
     private JsonObject metadata;
 
     public MetadataFileHandler(String filePath) {
