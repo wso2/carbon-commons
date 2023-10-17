@@ -42,20 +42,11 @@
     <tbody>
         <tr>
             <td>
-                <input type="checkbox" id="audit-log-option" name="log-type-selector" checked="checked">
-                <label for="audit-log-option"><fmt:message  key="audit.logs"/></label>
-                <div class="sectionHelp" style="display:inline-block">
-                    <fmt:message key='audit.logs.helper'/>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <input type="checkbox" id="carbon-log-option" name="log-type-selector">
-                <label for="carbon-log-option"><fmt:message  key="carbon.logs"/></label>
-                <div class="sectionHelp" style="display:inline-block">
-                    <fmt:message key='carbon.logs.helper'/>
-                </div>
+                <label for="log-type"><fmt:message  key="log.type.selection"/></label>
+                <select name="log-option" id="log-option" onchange="logTypeSelectionChanged(this.value);">
+                  <option value="AUDIT" selected>AUDIT</option>
+                  <option value="CARBON">CARBON</option>
+                </select>
             </td>
         </tr>
     </tbody>

@@ -24,8 +24,12 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.logging.service.RemoteLoggingConfig;
 import org.wso2.carbon.logging.service.RemoteLoggingConfigService;
+import org.wso2.carbon.registry.core.service.RegistryService;
 
 import java.io.IOException;
 
@@ -41,9 +45,10 @@ public class RemoteLoggingConfigServiceComponent {
     protected void activate(ComponentContext componentContext) {
 
         try {
-            RemoteLoggingConfig remoteLoggingConfig = new RemoteLoggingConfig();
+            RemoteLoggingConfigService remoteLoggingConfig = new RemoteLoggingConfig();
             componentContext.getBundleContext().registerService(
                     RemoteLoggingConfigService.class, remoteLoggingConfig, null);
+            RemoteLoggingConfigDataHolder.getInstance().setRemoteLoggingConfigService(remoteLoggingConfig);
         } catch (IOException e) {
             LOG.error("IO exception occurred when creating RemoteLoggingConfig instance", e);
         }
@@ -55,5 +60,28 @@ public class RemoteLoggingConfigServiceComponent {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Remote Logging Config Service Component bundle is deactivated");
         }
+    }
+
+    @Reference(
+            name = "registry.service",
+            service = RegistryService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRegistryService"
+    )
+    protected void setRegistryService(RegistryService registryService) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Setting the RegistryService");
+        }
+        RemoteLoggingConfigDataHolder.getInstance().setRegistryService(registryService);
+    }
+
+    protected void unsetRegistryService(RegistryService registryService) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Unsetting the RegistryService");
+        }
+        RemoteLoggingConfigDataHolder.getInstance().setRegistryService(null);
     }
 }
