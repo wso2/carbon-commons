@@ -29,7 +29,5 @@ public class AppenderConstants {
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BASIC_AUTH_PREFIX = "Basic ";
     public static final String HTTPS = "https";
-    public static final String QUEUE_DIRECTORY_PATH = "/temp/logsQueue";
-
-//    public static final String ERROR_ERROR_SERIALIZING_LOG_EVENT = "Error serializing log event";
+    public static final String QUEUE_DIRECTORY_PATH = "repository/logs/RemoteLogsQueue";
 }
