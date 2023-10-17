@@ -67,6 +67,7 @@
                         </Export-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Import-Package>
+                            net.openhft.chronicle.*; version="${chronicle-queue.version}",
                             *;resolution:=optional,
                         </Import-Package>
                         <Include-Resource>${project.build.directory}/classes/</Include-Resource>
