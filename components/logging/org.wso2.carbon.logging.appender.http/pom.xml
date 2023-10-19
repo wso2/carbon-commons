@@ -45,7 +45,7 @@
             <artifactId>org.eclipse.osgi.services</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.openhft</groupId>
+            <groupId>org.wso2.orbit.net.openhft</groupId>
             <artifactId>chronicle-queue</artifactId>
         </dependency>
     </dependencies>
