@@ -365,7 +365,7 @@ public class SecuredHttpAppender extends AbstractAppender {
                 }
             } catch (Exception e) {
                 persistentQueue.undoPreviousDequeue();
-                error("Error occurred while publishing logs to HTTP endpoint", e);
+                error("Error occurred while publishing logs to HTTP endpoint.", e);
             }
         }
     }

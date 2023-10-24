@@ -81,6 +81,9 @@ public class PersistentQueue {
         try {
             tailer.readBytes(bytes);
             try {
+                if(bytes.toByteArray().length==0) {
+                    return null;
+                }
                 deserializedObject.set(deserializeObject(bytes.toByteArray()));
             } catch (IOException | ClassNotFoundException e) {
                 throw new PersistentQueueException("Error while deserializing object", e);
@@ -100,11 +103,7 @@ public class PersistentQueue {
             currentFile = tailer.currentFile();
         }
         currentQueueSize--;
-        if(currentQueueSize<2){
-            System.out.println("Queue size is less than 2");
-        }
         saveMetaData();
-
         return deserializedObject.get();
     }
 
