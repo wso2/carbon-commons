@@ -40,19 +40,23 @@ public class PersistentQueue {
                 .rollCycle(RollCycles.FIVE_MINUTELY)
                 .build();
         appender = queue.createAppender();
+        appender.singleThreadedCheckDisabled(true);
         tailer = queue.createTailer();
+        tailer.singleThreadedCheckDisabled(true);
         initMetaData();
     }
 
     public static PersistentQueue getInstance(long maxMessageCount, String directoryPath) {
 
-        if (instance == null) {
-            instance = new PersistentQueue(maxMessageCount, directoryPath);
+        synchronized (PersistentQueue.class) {
+            if (instance == null) {
+                instance = new PersistentQueue(maxMessageCount, directoryPath);
+            }
         }
         return instance;
     }
 
-    public boolean enqueue(Serializable serializableObj) throws PersistentQueueException {
+    public synchronized boolean enqueue(Serializable serializableObj) throws PersistentQueueException {
 
         if (currentQueueSize >= queueLimit) {
             return false;
@@ -70,7 +74,7 @@ public class PersistentQueue {
         return true;
     }
 
-    public Object dequeue() throws PersistentQueueException {
+    public synchronized Object dequeue() throws PersistentQueueException {
 
         AtomicReference<Object> deserializedObject = new AtomicReference<>();
         Bytes<ByteBuffer> bytes = Bytes.elasticByteBuffer();
@@ -104,7 +108,7 @@ public class PersistentQueue {
         return deserializedObject.get();
     }
 
-    public void undoPreviousDequeue() {
+    public synchronized void undoPreviousDequeue() {
 
         tailer.moveToIndex(tailer.lastReadIndex());
         currentQueueSize++;

@@ -227,7 +227,7 @@ public class SecuredHttpAppender extends AbstractAppender {
     }
 
     @Override
-    public void append(LogEvent event) {
+    public synchronized void append(LogEvent event) {
         if (ServerStartupMonitor.isInitialized() && !isManagerInitialized) {
             isManagerInitialized = initManager();
         }
