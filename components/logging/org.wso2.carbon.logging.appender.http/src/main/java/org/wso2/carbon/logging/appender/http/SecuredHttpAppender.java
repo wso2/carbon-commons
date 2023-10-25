@@ -357,6 +357,9 @@ public class SecuredHttpAppender extends AbstractAppender {
     private final class LogPublisherTask implements Runnable {
         @Override
         public void run() {
+
+            // avoiding publishing attempts before the HttpManager is initialized
+            if (!isManagerInitialized) return;
             // publish logs from the queue
             try {
                 LogEvent event = (LogEvent) persistentQueue.dequeue();
