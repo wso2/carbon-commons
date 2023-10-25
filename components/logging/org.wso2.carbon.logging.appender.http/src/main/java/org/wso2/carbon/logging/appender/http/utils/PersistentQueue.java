@@ -20,10 +20,8 @@ public class PersistentQueue {
     private static final String TAILER_INDEX = "tailerIndex";
     private static final String TAILER_CYCLE = "tailerCycle";
     private static PersistentQueue instance;
-    private final ChronicleQueue queue;
     private final ExcerptAppender appender;
     private final ExcerptTailer tailer;
-    private final String directoryPath;
     private final long queueLimit;
     private long currentQueueSize = 0;
     private File currentFile = null;
@@ -31,17 +29,17 @@ public class PersistentQueue {
     private PersistentQueue(long queueLimit, String directoryPath) {
 
         this.metadataFileHandler = new MetadataFileHandler(directoryPath + "/" + METADATA_FILE_NAME);
-        this.directoryPath = directoryPath;
         this.queueLimit = queueLimit;
-        queue = SingleChronicleQueueBuilder
-                .binary(this.directoryPath)
-                .path(this.directoryPath)
+        try (ChronicleQueue queue = SingleChronicleQueueBuilder
+                .binary(directoryPath)
+                .path(directoryPath)
                 .blockSize(256)
-                .rollCycle(RollCycles.FIVE_MINUTELY)
-                .build();
-        appender = queue.createAppender();
-        appender.singleThreadedCheckDisabled(true);
-        tailer = queue.createTailer();
+                .rollCycle(RollCycles.FAST_HOURLY)
+                .build()) {
+            appender = queue.createAppender();
+            appender.singleThreadedCheckDisabled(true);
+            tailer = queue.createTailer();
+        }
         tailer.singleThreadedCheckDisabled(true);
         initMetaData();
     }
@@ -129,11 +127,12 @@ public class PersistentQueue {
             currentQueueSize = Long.parseLong(metadataFileHandler.readMetadata(CURRENT_QUEUE_SIZE));
         }
         if(metadataFileHandler.readMetadata(TAILER_CYCLE)!=null){
-            tailer.moveToIndex(Long.parseLong(metadataFileHandler.readMetadata(TAILER_CYCLE)));
+            tailer.moveToCycle(Integer.parseInt(metadataFileHandler.readMetadata(TAILER_CYCLE)));
         }
         if(metadataFileHandler.readMetadata(TAILER_INDEX)!=null){
             tailer.moveToIndex(Long.parseLong(metadataFileHandler.readMetadata(TAILER_INDEX)));
         }
+        this.currentFile=tailer.currentFile();
     }
 
     private static byte[] serializeObject(Serializable obj) throws IOException {

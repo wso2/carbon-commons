@@ -233,16 +233,16 @@ public class SecuredHttpAppender extends AbstractAppender {
 
     @Override
     public synchronized void append(LogEvent event) {
-        if (ServerStartupMonitor.isInitialized() && !isManagerInitialized) {
+
+        if (!isManagerInitialized && ServerStartupMonitor.isInitialized()) {
             isManagerInitialized = initManager();
         }
-
         try {
             if (!persistentQueue.enqueue(event.toImmutable())) {
-                error("Logging events queue failed to persist the log event");
+                error("Failed to persist the log event in the logging events queue.");
             }
         } catch (PersistentQueueException e) {
-            error("Error occurred while persisting logs to the queue", e);
+            error("An error was encountered when attempting to save logs to the queue.", e);
         }
     }
 
