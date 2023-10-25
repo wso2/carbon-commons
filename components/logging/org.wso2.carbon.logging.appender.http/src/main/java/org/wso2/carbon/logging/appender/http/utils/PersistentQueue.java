@@ -114,6 +114,15 @@ public class PersistentQueue {
         saveMetaData();
     }
 
+    public long getCurrentQueueSize() {
+
+        return currentQueueSize;
+    }
+
+    public long getQueueLimit() {
+        return queueLimit;
+    }
+
     private void initMetaData(){
 
         if(metadataFileHandler.readMetadata(CURRENT_QUEUE_SIZE)!=null){

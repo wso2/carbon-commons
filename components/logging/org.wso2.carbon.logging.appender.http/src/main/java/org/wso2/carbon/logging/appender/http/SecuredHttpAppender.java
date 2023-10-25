@@ -46,6 +46,7 @@ import org.wso2.securevault.SecretResolverFactory;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.concurrent.Executors;
@@ -206,6 +207,9 @@ public class SecuredHttpAppender extends AbstractAppender {
     private final HttpConnectionConfig httpConnConfig;
     private final ScheduledExecutorService scheduler;
     private boolean isManagerInitialized = false;
+    private Date lastFailureFreeTime;
+    private boolean initialFailureWarningIssued = false;
+    private boolean finalLogFailureCountWarningIssued = false;
 
     protected SecuredHttpAppender(final String name, final Layout<? extends Serializable> layout, final Filter filter,
                                   final boolean ignoreExceptions, final Property[] properties,
@@ -219,6 +223,7 @@ public class SecuredHttpAppender extends AbstractAppender {
         scheduler = Executors.newScheduledThreadPool(AppenderConstants.SCHEDULER_CORE_POOL_SIZE);
         scheduler.scheduleWithFixedDelay(new LogPublisherTask(), AppenderConstants.SCHEDULER_INITIAL_DELAY,
                 AppenderConstants.SCHEDULER_DELAY, TimeUnit.MILLISECONDS);
+        lastFailureFreeTime = new Date();
     }
 
     @Override
@@ -354,6 +359,34 @@ public class SecuredHttpAppender extends AbstractAppender {
         return password;
     }
 
+    private void printWarningLogOnRemoteServerFailure() {
+
+        long failureCountWarningThreshold = persistentQueue.getQueueLimit()/2;
+        if(!initialFailureWarningIssued) {
+            long timeSinceLastPublished = new Date().getTime() - lastFailureFreeTime.getTime();
+            int FAILURE_WARNING_DELAY_MINUTES = 15;
+            // initial warning in 15 minutes of no logs published.
+            if (timeSinceLastPublished > TimeUnit.MINUTES.toMillis(FAILURE_WARNING_DELAY_MINUTES)) {
+                getStatusLogger().warn("No logs have been published to the remote server for " +
+                        FAILURE_WARNING_DELAY_MINUTES + " minutes. Please check the remote server status.");
+                initialFailureWarningIssued = true;
+            }
+        } else if (!finalLogFailureCountWarningIssued
+                && persistentQueue.getCurrentQueueSize() > failureCountWarningThreshold) {
+            // final warning when the queue size exceeds 50% of the queue limit.
+            getStatusLogger().warn("The number of logs in the queue has exceeded 50% of the allocated queue limit. " +
+                    "Please check the remote server status.");
+            finalLogFailureCountWarningIssued = true;
+        }
+    }
+
+    private void resetWarningLogOnRemoteServerSuccess() {
+
+        initialFailureWarningIssued = false;
+        finalLogFailureCountWarningIssued = false;
+        lastFailureFreeTime = new Date();
+    }
+
     private final class LogPublisherTask implements Runnable {
         @Override
         public void run() {
@@ -365,10 +398,11 @@ public class SecuredHttpAppender extends AbstractAppender {
                 LogEvent event = (LogEvent) persistentQueue.dequeue();
                 if(event!=null) {
                     manager.send(getLayout(), event);
+                    resetWarningLogOnRemoteServerSuccess();
                 }
             } catch (Exception e) {
                 persistentQueue.undoPreviousDequeue();
-                error("Error occurred while publishing logs to HTTP endpoint.", e);
+                printWarningLogOnRemoteServerFailure();
             }
         }
     }
