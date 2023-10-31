@@ -92,7 +92,7 @@ public class SecuredHttpAppender extends AbstractAppender {
         private boolean verifyHostname = true;
 
         @PluginBuilderAttribute
-        private int processingLimit = 1000;
+        private int processingLimit = 10;
 
         public URL getUrl() {
             return url;

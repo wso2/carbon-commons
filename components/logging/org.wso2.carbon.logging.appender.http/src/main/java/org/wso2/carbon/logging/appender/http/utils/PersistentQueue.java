@@ -30,16 +30,15 @@ public class PersistentQueue {
 
         this.metadataFileHandler = new MetadataFileHandler(directoryPath + "/" + METADATA_FILE_NAME);
         this.queueLimit = queueLimit;
-        try (ChronicleQueue queue = SingleChronicleQueueBuilder
+        ChronicleQueue queue = SingleChronicleQueueBuilder
                 .binary(directoryPath)
                 .path(directoryPath)
                 .blockSize(256)
-                .rollCycle(RollCycles.FAST_HOURLY)
-                .build()) {
-            appender = queue.createAppender();
-            appender.singleThreadedCheckDisabled(true);
-            tailer = queue.createTailer();
-        }
+                .rollCycle(RollCycles.FAST_DAILY)
+                .build();
+        appender = queue.createAppender();
+        appender.singleThreadedCheckDisabled(true);
+        tailer = queue.createTailer();
         tailer.singleThreadedCheckDisabled(true);
         initMetaData();
     }
