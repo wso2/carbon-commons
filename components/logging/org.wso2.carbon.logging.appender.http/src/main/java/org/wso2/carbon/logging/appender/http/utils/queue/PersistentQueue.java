@@ -11,7 +11,6 @@ import java.util.zip.GZIPOutputStream;
 
 public class PersistentQueue<T extends Serializable> {
 
-    private static PersistentQueue instance;
     private final String QUEUE_BLOCK_LIST_KEY = "QUEUE_BLOCKS_LIST";
     private final String queueDirectoryPath;
     private final long maxDiskSpaceInBytes;
@@ -19,18 +18,9 @@ public class PersistentQueue<T extends Serializable> {
     private MetadataFileHandler queueMetaDataHandler;
     private QueueBlock appenderBlock, tailerBlock;
 
-    // return singleton instance of the queue
-    public static PersistentQueue getInstance(String queueDirectoryPath, long maxDiskSpaceInBytes, long maxBatchSizeInBytes)
-            throws PersistentQueueException {
+    private final Object lock = new Object();
 
-        synchronized (PersistentQueue.class) {
-            if (instance == null) {
-                instance = new PersistentQueue(queueDirectoryPath, maxDiskSpaceInBytes, maxBatchSizeInBytes);
-            }
-            return instance;
-        }
-    }
-    private PersistentQueue(String queueDirectoryPath, long maxDiskSpaceInBytes, long maxBatchSizeInBytes)
+    public PersistentQueue(String queueDirectoryPath, long maxDiskSpaceInBytes, long maxBatchSizeInBytes)
             throws PersistentQueueException {
 
         this.queueDirectoryPath = queueDirectoryPath;
@@ -39,7 +29,7 @@ public class PersistentQueue<T extends Serializable> {
         init();
     }
 
-    public void enqueue(T object) throws PersistentQueueException {
+    public synchronized void enqueue(T object) throws PersistentQueueException {
 
         byte[] data = serializeObject(object);
         if(data.length == 0) {
@@ -54,21 +44,44 @@ public class PersistentQueue<T extends Serializable> {
         }
     }
 
-    public T dequeue() throws PersistentQueueException {
+    public synchronized T dequeue() throws PersistentQueueException {
 
         byte[] readData = null;
-        if(tailerBlock.canConsume()) { // queue block has remaining data
-            readData = tailerBlock.consume();
-        }
-        else if(!appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
-            // queue block doesn't have data remaining but there are more blocks to consume
-            tailerBlock = loadNextBlock();
-            if(tailerBlock != null && tailerBlock.canConsume()) {
+        synchronized (lock) {
+            if (tailerBlock.hasUnprocessedItems()) { // queue block has remaining data
                 readData = tailerBlock.consume();
+            } else if (!appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
+                // queue block doesn't have data remaining but there are more blocks to consume
+                tailerBlock = loadNextBlock();
+                if (tailerBlock != null) {
+                    readData = tailerBlock.consume();
+                } else {
+                    return null;
+                }
+            } else {
+                return null; // queue is empty
             }
         }
-        else {
-            return null; // queue is empty
+        return deserializeObject(readData);
+    }
+
+    public T peek() throws PersistentQueueException {
+
+        byte[] readData = null;
+        synchronized (lock) {
+            if (tailerBlock.hasUnprocessedItems()) { // queue block has remaining data
+                readData = tailerBlock.peekNextItem();
+            } else if (!appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
+                // queue block doesn't have data remaining but there are more blocks to consume
+                tailerBlock = loadNextBlock();
+                if (tailerBlock != null) {
+                    readData = tailerBlock.peekNextItem();
+                } else {
+                    return null;
+                }
+            } else {
+                return null; // queue is empty
+            }
         }
         return deserializeObject(readData);
     }
@@ -83,11 +96,6 @@ public class PersistentQueue<T extends Serializable> {
         this.queueMetaDataHandler = new MetadataFileHandler(
                 this.queueDirectoryPath + "/" + QUEUE_METADATA_FILE_NAME);
         initMetaData();
-    }
-
-    public long getMaxDiskSpaceInBytes() {
-
-        return maxDiskSpaceInBytes;
     }
 
     private void initMetaData() throws PersistentQueueException {
@@ -105,14 +113,14 @@ public class PersistentQueue<T extends Serializable> {
     private void loadAppenderBlock() throws PersistentQueueException {
 
         JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY);
-        String appenderBlockName = queueBlocks.get(0).getAsString();
+        String appenderBlockName = queueBlocks.get(queueBlocks.size() - 1).getAsString();
         this.appenderBlock = QueueBlock.loadBlock(this.queueDirectoryPath, appenderBlockName);
     }
 
     private void loadTailerBlock() throws PersistentQueueException {
 
         JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY);
-        String tailerBlockName = queueBlocks.get(queueBlocks.size() - 1).getAsString();
+        String tailerBlockName = queueBlocks.get(0).getAsString();
         if(appenderBlock.getFileName().equals(tailerBlockName)) {
             this.tailerBlock = appenderBlock;
         }
@@ -169,11 +177,11 @@ public class PersistentQueue<T extends Serializable> {
         JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY);
         QueueBlock consumedTailerBlock = tailerBlock;
         QueueBlock nextBlock = null;
-        if(queueBlocks.size()>1) {
-            String tailerBlockName = queueBlocks.get(queueBlocks.size() - 2).getAsString();
+        queueBlocks.remove(0);
+        if(queueBlocks.size()>0) {
+            String tailerBlockName = queueBlocks.get(0).getAsString();
             nextBlock = QueueBlock.loadBlock(this.queueDirectoryPath, tailerBlockName);
         }
-        queueBlocks.remove(queueBlocks.size() - 1);
         consumedTailerBlock.delete();
         this.queueMetaDataHandler.addJsonArray(QUEUE_BLOCK_LIST_KEY, queueBlocks);
         return nextBlock;
@@ -187,6 +195,14 @@ public class PersistentQueue<T extends Serializable> {
                     .mapToLong(p -> p.toFile().length())
                     .sum();
         }
+    }
+
+    public long getMaxBatchSizeInBytes() {
+        return maxBatchSizeInBytes;
+    }
+
+    public long getMaxDiskSpaceInBytes() {
+        return maxDiskSpaceInBytes;
     }
 
     public void close() throws PersistentQueueException {

@@ -220,8 +220,8 @@ public class SecuredHttpAppender extends AbstractAppender {
 
         this.httpConnConfig = httpConnectionConfig;
         try {
-            this.persistentQueue = PersistentQueue.getInstance(AppenderConstants.QUEUE_DIRECTORY_PATH, 1024*1024 * 100,
-                    1024 * 100);
+            this.persistentQueue = new PersistentQueue<LogEvent>(AppenderConstants.QUEUE_DIRECTORY_PATH, 1024*1024 * 100,
+                    1024 * 256);
         } catch (PersistentQueueException e) {
             error("Error initializing the persistent queue", e);
         }
@@ -363,25 +363,25 @@ public class SecuredHttpAppender extends AbstractAppender {
         return password;
     }
 
-    private void printWarningLogOnRemoteServerFailure() throws IOException {
-        // todo: change to match the new implementation of the queue
-        long failureCountWarningThreshold = persistentQueue.getMaxDiskSpaceInBytes()/2;
-        if(!initialFailureWarningIssued) {
-            long timeSinceLastPublished = new Date().getTime() - lastFailureFreeTime.getTime();
-            int FAILURE_WARNING_DELAY_MINUTES = 15;
-            // initial warning in 15 minutes of no logs published.
-            if (timeSinceLastPublished > TimeUnit.MINUTES.toMillis(FAILURE_WARNING_DELAY_MINUTES)) {
-                getStatusLogger().warn("No logs have been published to the remote server for " +
-                        FAILURE_WARNING_DELAY_MINUTES + " minutes. Please check the remote server status.");
-                initialFailureWarningIssued = true;
-            }
-        } else if (!finalLogFailureCountWarningIssued
-                && persistentQueue.getCurrentDiskUsage() > failureCountWarningThreshold) {
-            // final warning when the queue size exceeds 50% of the queue limit.
-            getStatusLogger().warn("The number of logs in the queue has exceeded 50% of the allocated queue limit. " +
-                    "Please check the remote server status.");
-            finalLogFailureCountWarningIssued = true;
-        }
+    private void printWarningLogOnRemoteServerFailure() {
+
+//        long failureCountWarningThreshold = persistentQueue.getMaxDiskSpaceInBytes()/2;
+//        if(!initialFailureWarningIssued) {
+//            long timeSinceLastPublished = new Date().getTime() - lastFailureFreeTime.getTime();
+//            int FAILURE_WARNING_DELAY_MINUTES = 15;
+//            // initial warning in 15 minutes of no logs published.
+//            if (timeSinceLastPublished > TimeUnit.MINUTES.toMillis(FAILURE_WARNING_DELAY_MINUTES)) {
+//                getStatusLogger().warn("No logs have been published to the remote server for " +
+//                        FAILURE_WARNING_DELAY_MINUTES + " minutes. Please check the remote server status.");
+//                initialFailureWarningIssued = true;
+//            }
+//        } else if (!finalLogFailureCountWarningIssued
+//                && persistentQueue.getCurrentDiskUsage() > failureCountWarningThreshold) {
+//            // final warning when the queue size exceeds 50% of the queue limit.
+//            getStatusLogger().warn("The number of logs in the queue has exceeded 50% of the allocated queue limit. " +
+//                    "Please check the remote server status.");
+//            finalLogFailureCountWarningIssued = true;
+//        }
     }
 
     private void resetWarningLogOnRemoteServerSuccess() {
@@ -399,14 +399,14 @@ public class SecuredHttpAppender extends AbstractAppender {
             if (!isManagerInitialized) return;
             // publish logs from the queue
             try {
-                LogEvent event = (LogEvent) persistentQueue.dequeue();
+                LogEvent event = (LogEvent) persistentQueue.peek();
                 if(event!=null) {
                     manager.send(getLayout(), event);
+                    persistentQueue.dequeue();
                     resetWarningLogOnRemoteServerSuccess();
                 }
             } catch (Exception e) {
-                persistentQueue.undoPreviousDequeue(); //todo: implement this
-                printWarningLogOnRemoteServerFailure(); // todo: handle this
+                printWarningLogOnRemoteServerFailure();
             }
         }
     }

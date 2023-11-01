@@ -1,3 +1,10 @@
+/*
+  * bit sequence structure of messages in the queue block
+  * 4 bytes - appender offset value
+  * 4 bytes - tailer offset value
+  * 4 bytes - message length
+  * n bytes - message data
+ */
 package org.wso2.carbon.logging.appender.http.utils.queue;
 
 import java.io.IOException;
@@ -10,14 +17,17 @@ import java.nio.file.Paths;
 public class QueueBlock {
 
     private static final String QUEUE_BLOCK_SUB_DIRECTORY_PATH ="tmp/blocks";
-    private static final String META_DATA_SUB_DIRECTORY_PATH ="tmp/meta";
+    private static final String QUEUE_BLOCK_FILE_EXTENSION = ".pqbd"; // persistent queue block data
+    private static final int METADATA_BLOCK_LENGTH = 8;
+    private static final int APPENDER_OFFSET_VALUE_METADATA_INDEX = 0;
+    private static final int TAILER_OFFSET_VALUE_METADATA_INDEX = 4;
+    private static final int MESSAGE_LENGTH_BIT_COUNT = 4;
     RandomAccessFile file;
     private final MappedByteBuffer buffer;
-    private int currentAppenderOffset = 0;
-    private int currentTailerOffset = 0;
+    private int currentAppenderIndex;
+    private int currentTailerIndex;
     private String queueDirectoryPath;
     private String fileName;
-    private MetadataFileHandler metadataFileHandler;
     public QueueBlock(final String queueDirectoryPath, final String fileName, final long length) throws PersistentQueueException {
 
         this.queueDirectoryPath = queueDirectoryPath;
@@ -25,29 +35,30 @@ public class QueueBlock {
         try {
             String queueBlocksDirectoryPath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH;
             Files.createDirectories(Paths.get(queueBlocksDirectoryPath));
-            this.file = new RandomAccessFile(queueBlocksDirectoryPath + "/" + fileName, "rw");
+            this.file = new RandomAccessFile(queueBlocksDirectoryPath + "/" + fileName
+                    + QUEUE_BLOCK_FILE_EXTENSION, "rw");
             this.file.setLength(length);
             this.buffer = file.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, length);
-            this.metadataFileHandler = new MetadataFileHandler(queueDirectoryPath + "/" + META_DATA_SUB_DIRECTORY_PATH
-                    + "/" + fileName + ".meta");
+            this.file.close();
             initMetaData();
-        } catch (PersistentQueueException | IOException e) {
+        } catch (IOException e) {
             throw new PersistentQueueException("Error: Unable to create metadata file", e);
         }
     }
 
     // this constructor is to be used when loading a block from disk
-    public QueueBlock(final String queueDirectoryPath, final String fileName) throws PersistentQueueException {
+    private QueueBlock(final String queueDirectoryPath, final String fileName) throws PersistentQueueException {
 
         this.queueDirectoryPath = queueDirectoryPath;
         this.fileName = fileName;
         try {
-            String filePath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName;
+            String filePath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
+                    + QUEUE_BLOCK_FILE_EXTENSION;
             RandomAccessFile file = new RandomAccessFile(filePath, "rw");
             this.file = file;
             this.buffer = file.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, file.length());
-            this.metadataFileHandler = new MetadataFileHandler(queueDirectoryPath + "/" + META_DATA_SUB_DIRECTORY_PATH
-                    + "/" + fileName + ".meta");
+            this.currentAppenderIndex = buffer.getInt(APPENDER_OFFSET_VALUE_METADATA_INDEX);
+            this.currentTailerIndex = buffer.getInt(TAILER_OFFSET_VALUE_METADATA_INDEX);
         } catch (IOException e) {
             throw new PersistentQueueException("Error: Unable to load metadata file", e);
         }
@@ -55,7 +66,8 @@ public class QueueBlock {
 
     public static QueueBlock loadBlock(String directoryPath, String fileName) throws PersistentQueueException {
 
-        if(Files.exists(Paths.get(directoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName))){
+        if(Files.exists(Paths.get(directoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
+                + QUEUE_BLOCK_FILE_EXTENSION))){
             return new QueueBlock(directoryPath, fileName);
         }
         throw new PersistentQueueException("Error: Unable to load block");
@@ -63,22 +75,23 @@ public class QueueBlock {
 
     public boolean canAppend(int length){
 
-        buffer.position(currentAppenderOffset);
-        return buffer.remaining() >= length;
+        buffer.position(currentAppenderIndex);
+        return buffer.remaining() >= (MESSAGE_LENGTH_BIT_COUNT + length);
     }
 
-    public boolean canConsume(){
+    public boolean hasUnprocessedItems(){
 
-        return currentTailerOffset < currentAppenderOffset;
+        return currentTailerIndex < currentAppenderIndex;
     }
 
     public boolean append(byte[] data){
 
         if(canAppend(data.length)){
-            buffer.position(currentAppenderOffset);
+            buffer.position(currentAppenderIndex);
             buffer.putInt(data.length);
             buffer.put(data);
-            currentAppenderOffset += data.length + 4; // 4 bytes for the length
+            currentAppenderIndex += (MESSAGE_LENGTH_BIT_COUNT + data.length); // 4 bytes for the length
+            buffer.putInt(APPENDER_OFFSET_VALUE_METADATA_INDEX, currentAppenderIndex);
             return true;
         }
         return false;
@@ -86,12 +99,22 @@ public class QueueBlock {
 
     public byte[] consume(){
 
-        if(canConsume()){
-            buffer.position(currentTailerOffset);
+        if(hasUnprocessedItems()){
+            byte[] data = peekNextItem();
+            currentTailerIndex += (MESSAGE_LENGTH_BIT_COUNT + data.length); // 4 bytes for the length
+            buffer.putInt(TAILER_OFFSET_VALUE_METADATA_INDEX, currentTailerIndex);
+            return data;
+        }
+        return null;
+    }
+
+    public byte[] peekNextItem(){
+
+        if(hasUnprocessedItems()){
+            buffer.position(currentTailerIndex);
             int length = buffer.getInt();
             byte[] data = new byte[length];
             buffer.get(data);
-            currentTailerOffset += length + 4; // 4 bytes for the length
             return data;
         }
         return null;
@@ -99,13 +122,13 @@ public class QueueBlock {
 
     public void delete() throws PersistentQueueException {
 
-        String filePath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName;
+        String filePath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
+                + QUEUE_BLOCK_FILE_EXTENSION;
         this.close();
         try {
-            metadataFileHandler.deleteFile();
             Files.deleteIfExists(Paths.get(filePath));
         } catch (IOException e) {
-            throw new PersistentQueueException("Error: Unable to delete file", e);
+            throw new PersistentQueueException("Error: Unable to delete meta data file", e);
         }
     }
 
@@ -115,19 +138,18 @@ public class QueueBlock {
 
     public void close() throws PersistentQueueException {
 
+        buffer.force();
         try {
             file.close();
-            metadataFileHandler.close();
         } catch (IOException e) {
-            throw new PersistentQueueException("Error: Unable to close file", e);
+            throw new PersistentQueueException("Error: Unable to close meta data file", e);
         }
     }
 
     private void initMetaData() {
 
-        if(!metadataFileHandler.isInitialized()) {
-            metadataFileHandler.addLong("currentAppenderOffset", 0);
-            metadataFileHandler.addLong("currentTailerOffset", 0);
-        }
+        this.currentAppenderIndex = this.currentTailerIndex = METADATA_BLOCK_LENGTH;
+        this.buffer.putInt(APPENDER_OFFSET_VALUE_METADATA_INDEX, currentAppenderIndex);
+        this.buffer.putInt(TAILER_OFFSET_VALUE_METADATA_INDEX, currentTailerIndex);
     }
 }

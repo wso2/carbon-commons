@@ -15,10 +15,11 @@ public class MetadataFileHandler {
    private final File jsonFile;
     private JsonObject metadata;
     private boolean isInitialized;
+    private final Object onMemWriteLock = new Object();
 
     public MetadataFileHandler(String filePath) throws PersistentQueueException {
 
-       jsonFile = new File(filePath);
+        jsonFile = new File(filePath);
         metadata = new JsonObject();
         loadMetadataFromFile();
     }
@@ -102,7 +103,7 @@ public class MetadataFileHandler {
             } catch (IOException e) {
 
                e.printStackTrace();
-                //todo: Handle exceptions appropriately
+                // Handle exceptions appropriately
             }
         }
        else{
