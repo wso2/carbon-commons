@@ -16,18 +16,19 @@ import java.nio.file.Paths;
 
 public class QueueBlock {
 
-    private static final String QUEUE_BLOCK_SUB_DIRECTORY_PATH ="tmp/blocks";
+    private static final String QUEUE_BLOCK_SUB_DIRECTORY_PATH ="blocks";
     private static final String QUEUE_BLOCK_FILE_EXTENSION = ".pqbd"; // persistent queue block data
     private static final int METADATA_BLOCK_LENGTH = 8;
     private static final int APPENDER_OFFSET_VALUE_METADATA_INDEX = 0;
     private static final int TAILER_OFFSET_VALUE_METADATA_INDEX = 4;
     private static final int MESSAGE_LENGTH_BIT_COUNT = 4;
-    RandomAccessFile file;
+    private final RandomAccessFile file;
     private final MappedByteBuffer buffer;
+    private final String queueDirectoryPath;
+    private final String fileName;
     private int currentAppenderIndex;
     private int currentTailerIndex;
-    private String queueDirectoryPath;
-    private String fileName;
+
     public QueueBlock(final String queueDirectoryPath, final String fileName, final long length) throws PersistentQueueException {
 
         this.queueDirectoryPath = queueDirectoryPath;
@@ -42,7 +43,9 @@ public class QueueBlock {
             this.file.close();
             initMetaData();
         } catch (IOException e) {
-            throw new PersistentQueueException("Error: Unable to create metadata file", e);
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CREATION_FAILED,
+                    "Error: Unable to create metadata file", e);
         }
     }
 
@@ -60,17 +63,22 @@ public class QueueBlock {
             this.currentAppenderIndex = buffer.getInt(APPENDER_OFFSET_VALUE_METADATA_INDEX);
             this.currentTailerIndex = buffer.getInt(TAILER_OFFSET_VALUE_METADATA_INDEX);
         } catch (IOException e) {
-            throw new PersistentQueueException("Error: Unable to load metadata file", e);
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CREATION_FAILED,
+                    "Error: Unable to create metadata file", e);
         }
     }
 
     public static QueueBlock loadBlock(String directoryPath, String fileName) throws PersistentQueueException {
 
-        if(Files.exists(Paths.get(directoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
-                + QUEUE_BLOCK_FILE_EXTENSION))){
-            return new QueueBlock(directoryPath, fileName);
+        String queueBlockFilePath = directoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
+                + QUEUE_BLOCK_FILE_EXTENSION;
+        if(!Files.exists(Paths.get(queueBlockFilePath))){
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_FILE_NOT_FOUND,
+                    "Error: Unable to find queue block data file.");
         }
-        throw new PersistentQueueException("Error: Unable to load block");
+        return new QueueBlock(directoryPath, fileName);
     }
 
     public boolean canAppend(int length){
@@ -122,18 +130,30 @@ public class QueueBlock {
 
     public void delete() throws PersistentQueueException {
 
-        String filePath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
+        String queueBlockDataFilePath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
                 + QUEUE_BLOCK_FILE_EXTENSION;
         this.close();
         try {
-            Files.deleteIfExists(Paths.get(filePath));
+            Files.deleteIfExists(Paths.get(queueBlockDataFilePath));
         } catch (IOException e) {
-            throw new PersistentQueueException("Error: Unable to delete meta data file", e);
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_DELETION_FAILED,
+                    "Error: Unable to delete meta data file", e);
         }
     }
 
     public String getFileName() {
         return fileName;
+    }
+
+    public long getLength() throws PersistentQueueException {
+        try {
+            return file.length();
+        } catch (IOException e) {
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_LENGTH_CALCULATION_FAILED,
+                    "Error: Unable to get length of meta data file", e);
+        }
     }
 
     public void close() throws PersistentQueueException {
@@ -142,7 +162,9 @@ public class QueueBlock {
         try {
             file.close();
         } catch (IOException e) {
-            throw new PersistentQueueException("Error: Unable to close meta data file", e);
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CLOSE_FAILED,
+                    "Error: Unable to close meta data file", e);
         }
     }
 

@@ -17,6 +17,7 @@ public class PersistentQueue<T extends Serializable> {
     private final long maxBatchSizeInBytes;
     private MetadataFileHandler queueMetaDataHandler;
     private QueueBlock appenderBlock, tailerBlock;
+    private long currentDiskUsage;
 
     private final Object lock = new Object();
 
@@ -33,7 +34,9 @@ public class PersistentQueue<T extends Serializable> {
 
         byte[] data = serializeObject(object);
         if(data.length == 0) {
-            throw new RuntimeException("Error: Unable to serialize object.");
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.EMPTY_OBJECT,
+                    "Error: Unable to serialize object.");
         }
         if (!appenderBlock.append(data)) {
             if(!appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
@@ -90,7 +93,9 @@ public class PersistentQueue<T extends Serializable> {
 
         File queueDirectory = new File(this.queueDirectoryPath);
         if(!queueDirectory.exists() && !queueDirectory.mkdirs()) {
-            throw new PersistentQueueException("Error: Unable to create queue directory");
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DIRECTORY_CREATION_FAILED,
+                    "Error: Unable to create queue directory");
         }
         final String QUEUE_METADATA_FILE_NAME = "queue_metadata.pq";
         this.queueMetaDataHandler = new MetadataFileHandler(
@@ -107,6 +112,13 @@ public class PersistentQueue<T extends Serializable> {
         }
         loadAppenderBlock();
         loadTailerBlock();
+        try {
+            currentDiskUsage = calculateDiskUsage();
+        } catch (IOException e) {
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_USAGE_CALCULATION_FAILED,
+                    "Error: Unable to calculate disk usage.", e);
+        }
     }
 
     // appender should be loaded first to allow equality check when tailer is being loaded
@@ -137,7 +149,9 @@ public class PersistentQueue<T extends Serializable> {
             objectOutputStream.writeObject(obj);
         }
         catch (IOException e) {
-            throw new PersistentQueueException("Error while serializing object", e);
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_MESSAGE_SERIALIZATION_FAILED,
+                    "Error while serializing object", e);
         }
         return byteArrayOutputStream.toByteArray();
     }
@@ -149,19 +163,18 @@ public class PersistentQueue<T extends Serializable> {
             return (T)objectInputStream.readObject();
         }
         catch (IOException | ClassNotFoundException e) {
-            throw new PersistentQueueException("Error while deserializing object", e);
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_MESSAGE_DESERIALIZATION_FAILED,
+                    "Error while deserializing object", e);
         }
     }
 
     private QueueBlock createNewBlock() throws PersistentQueueException {
 
-
-        try {
-            if(getCurrentDiskUsage() >= maxDiskSpaceInBytes) {
-                throw new PersistentQueueException("Error: Queue disk usage limit reached.");
-            }
-        } catch (IOException e) {
-            throw new PersistentQueueException("Error: Unable to calculate disk usage.", e);
+        if(currentDiskUsage >= maxDiskSpaceInBytes) {
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_SPACE_LIMIT_EXCEEDED,
+                    "Error: Queue disk usage limit reached.");
         }
         String QUEUE_BLOCK_FILE_NAME = "qb_%s";
         String newBlockName = String.format(QUEUE_BLOCK_FILE_NAME, System.currentTimeMillis());
@@ -169,6 +182,7 @@ public class PersistentQueue<T extends Serializable> {
         JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY);
         queueBlocks.add(newBlockName);
         this.queueMetaDataHandler.addJsonArray(QUEUE_BLOCK_LIST_KEY, queueBlocks);
+        currentDiskUsage += maxBatchSizeInBytes;
         return newBlock;
     }
 
@@ -182,12 +196,13 @@ public class PersistentQueue<T extends Serializable> {
             String tailerBlockName = queueBlocks.get(0).getAsString();
             nextBlock = QueueBlock.loadBlock(this.queueDirectoryPath, tailerBlockName);
         }
+        currentDiskUsage -= consumedTailerBlock.getLength();
         consumedTailerBlock.delete();
         this.queueMetaDataHandler.addJsonArray(QUEUE_BLOCK_LIST_KEY, queueBlocks);
         return nextBlock;
     }
 
-    public long getCurrentDiskUsage() throws IOException {
+    public long calculateDiskUsage() throws IOException {
 
         Path folder = Paths.get(this.queueDirectoryPath);
         try(java.util.stream.Stream<Path> paths = Files.walk(folder)) {
@@ -205,6 +220,10 @@ public class PersistentQueue<T extends Serializable> {
         return maxDiskSpaceInBytes;
     }
 
+    public long getCurrentDiskUsage() {
+        return currentDiskUsage;
+    }
+
     public void close() throws PersistentQueueException {
 
         this.queueMetaDataHandler.close();
@@ -214,7 +233,9 @@ public class PersistentQueue<T extends Serializable> {
                 this.tailerBlock.close();
             }
         } catch (PersistentQueueException e) {
-            throw new PersistentQueueException("Error: Unable to close queue", e);
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_CLOSE_FAILED ,
+                    "Error: Unable to close queue", e);
         }
     }
 }

@@ -195,6 +195,16 @@ public class SecuredHttpAppender extends AbstractAppender {
         }
     }
 
+    public static enum FailureWaringLevel {
+        NONE,
+        INITIAL,
+        HALF_QUEUE_SIZE,
+        OVER_90_PERCENT,
+        FULLY_USED,
+
+        LOOSING_LOGS
+    }
+
     /**
      * @return a builder for a SecuredHttpAppender.
      */
@@ -208,9 +218,8 @@ public class SecuredHttpAppender extends AbstractAppender {
     private final HttpConnectionConfig httpConnConfig;
     private final ScheduledExecutorService scheduler;
     private boolean isManagerInitialized = false;
-    private Date lastFailureFreeTime;
-    private boolean initialFailureWarningIssued = false;
-    private boolean finalLogFailureCountWarningIssued = false;
+    private FailureWaringLevel failureWarningLevel;
+    private long lastLogLossWarningTime;
 
     protected SecuredHttpAppender(final String name, final Layout<? extends Serializable> layout, final Filter filter,
                                   final boolean ignoreExceptions, final Property[] properties,
@@ -218,6 +227,7 @@ public class SecuredHttpAppender extends AbstractAppender {
         super(name, filter, layout, ignoreExceptions, properties);
         Objects.requireNonNull(layout, "layout");
 
+        this.failureWarningLevel = FailureWaringLevel.NONE;
         this.httpConnConfig = httpConnectionConfig;
         try {
             this.persistentQueue = new PersistentQueue<LogEvent>(AppenderConstants.QUEUE_DIRECTORY_PATH, 1024*1024 * 100,
@@ -229,7 +239,6 @@ public class SecuredHttpAppender extends AbstractAppender {
         scheduler = Executors.newScheduledThreadPool(AppenderConstants.SCHEDULER_CORE_POOL_SIZE);
         scheduler.scheduleWithFixedDelay(new LogPublisherTask(), AppenderConstants.SCHEDULER_INITIAL_DELAY,
                 AppenderConstants.SCHEDULER_DELAY, TimeUnit.MILLISECONDS);
-        lastFailureFreeTime = new Date();
     }
 
     @Override
@@ -246,7 +255,18 @@ public class SecuredHttpAppender extends AbstractAppender {
         try {
             persistentQueue.enqueue(event.toImmutable());
         } catch (PersistentQueueException e) {
-            error("An error was encountered when attempting to save logs to the queue.", e);
+            if(e.getErrorType().equals(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_SPACE_LIMIT_EXCEEDED)) {
+                try {
+                    this.failureWarningLevel = FailureWaringLevel.FULLY_USED;
+                    printWarningLogOnRemoteServerFailure();
+                } catch (PersistentQueueException ex) {
+                    error("Error: Unable to print log loss warning message.", ex);
+                }
+            }
+            else {
+                error("An error was encountered when attempting to save logs to the queue.", e);
+            }
         }
     }
 
@@ -363,32 +383,57 @@ public class SecuredHttpAppender extends AbstractAppender {
         return password;
     }
 
-    private void printWarningLogOnRemoteServerFailure() {
+    private void printWarningLogOnRemoteServerFailure() throws PersistentQueueException {
 
-//        long failureCountWarningThreshold = persistentQueue.getMaxDiskSpaceInBytes()/2;
-//        if(!initialFailureWarningIssued) {
-//            long timeSinceLastPublished = new Date().getTime() - lastFailureFreeTime.getTime();
-//            int FAILURE_WARNING_DELAY_MINUTES = 15;
-//            // initial warning in 15 minutes of no logs published.
-//            if (timeSinceLastPublished > TimeUnit.MINUTES.toMillis(FAILURE_WARNING_DELAY_MINUTES)) {
-//                getStatusLogger().warn("No logs have been published to the remote server for " +
-//                        FAILURE_WARNING_DELAY_MINUTES + " minutes. Please check the remote server status.");
-//                initialFailureWarningIssued = true;
-//            }
-//        } else if (!finalLogFailureCountWarningIssued
-//                && persistentQueue.getCurrentDiskUsage() > failureCountWarningThreshold) {
-//            // final warning when the queue size exceeds 50% of the queue limit.
-//            getStatusLogger().warn("The number of logs in the queue has exceeded 50% of the allocated queue limit. " +
-//                    "Please check the remote server status.");
-//            finalLogFailureCountWarningIssued = true;
-//        }
+        long diskUsage = persistentQueue.getCurrentDiskUsage();
+        switch (this.failureWarningLevel) {
+            case NONE:
+                getStatusLogger().warn("Remote log publishing failure : Unable to publish logs to the remote server. " +
+                        "Please check the remote server status.");
+                this.failureWarningLevel = FailureWaringLevel.INITIAL;
+                break;
+            case INITIAL:
+                if (diskUsage > persistentQueue.getMaxDiskSpaceInBytes() / 2) {
+                    getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has exceeded" +
+                            " 50% of the allocated queue limit. Please check the remote server status.");
+                    this.failureWarningLevel = FailureWaringLevel.HALF_QUEUE_SIZE;
+                }
+                break;
+            case HALF_QUEUE_SIZE:
+                if (diskUsage > persistentQueue.getMaxDiskSpaceInBytes() * 0.9) {
+                    getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has exceeded" +
+                            " 90% of the allocated queue limit. Please check the remote server status.");
+                    this.failureWarningLevel = FailureWaringLevel.OVER_90_PERCENT;
+                }
+                break;
+            case OVER_90_PERCENT:
+                if (diskUsage >= persistentQueue.getMaxDiskSpaceInBytes()) {
+                    getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has exceeded" +
+                            " the allocated queue limit. Please check the remote server status.");
+                    this.failureWarningLevel = FailureWaringLevel.FULLY_USED;
+                }
+                break;
+            case FULLY_USED:
+                getStatusLogger().warn("Remote log publishing failure : Allocated queue limit reached. Starting to loose" +
+                        " logs. Please check the remote server status.");
+                this.failureWarningLevel = FailureWaringLevel.LOOSING_LOGS;
+                this.lastLogLossWarningTime = new Date().getTime();
+                break;
+            case LOOSING_LOGS:
+                long timeSinceLastWarning = new Date().getTime() - lastLogLossWarningTime;
+                int FAILURE_WARNING_DELAY_MINUTES = 15;
+                if (timeSinceLastWarning > TimeUnit.MINUTES.toMillis(FAILURE_WARNING_DELAY_MINUTES)) {
+                    getStatusLogger().warn("Remote log publishing failure : Allocated queue limit reached. Starting to " +
+                            "loose logs. Please check the remote server status.");
+                    this.lastLogLossWarningTime = new Date().getTime();
+                }
+                break;
+        }
     }
 
     private void resetWarningLogOnRemoteServerSuccess() {
 
-        initialFailureWarningIssued = false;
-        finalLogFailureCountWarningIssued = false;
-        lastFailureFreeTime = new Date();
+        this.failureWarningLevel = FailureWaringLevel.NONE;
     }
 
     private final class LogPublisherTask implements Runnable {
@@ -406,7 +451,11 @@ public class SecuredHttpAppender extends AbstractAppender {
                     resetWarningLogOnRemoteServerSuccess();
                 }
             } catch (Exception e) {
-                printWarningLogOnRemoteServerFailure();
+                try {
+                    printWarningLogOnRemoteServerFailure();
+                } catch (PersistentQueueException ex) {
+                    error("Error: Unable to print log loss warning message.", ex);
+                }
             }
         }
     }
