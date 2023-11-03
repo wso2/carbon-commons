@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-public class PersistentQueue<T extends Serializable> {
+public class PersistentQueue<T extends Serializable> implements AutoCloseable {
 
     private final String QUEUE_BLOCK_LIST_KEY = "QUEUE_BLOCKS_LIST";
     private final String queueDirectoryPath;
@@ -153,6 +153,7 @@ public class PersistentQueue<T extends Serializable> {
         return byteArrayOutputStream.toByteArray();
     }
 
+    @SuppressWarnings("unchecked")
     private T deserializeObject(byte[] bytes) throws PersistentQueueException {
 
         try (ObjectInputStream objectInputStream = new ObjectInputStream(
@@ -209,10 +210,6 @@ public class PersistentQueue<T extends Serializable> {
         }
     }
 
-    public long getMaxBatchSizeInBytes() {
-        return maxBatchSizeInBytes;
-    }
-
     public long getMaxDiskSpaceInBytes() {
         return maxDiskSpaceInBytes;
     }
@@ -221,6 +218,7 @@ public class PersistentQueue<T extends Serializable> {
         return currentDiskUsage;
     }
 
+    @Override
     public void close() throws PersistentQueueException {
 
         this.queueMetaDataHandler.close();

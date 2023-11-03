@@ -44,7 +44,6 @@ import org.wso2.carbon.logging.appender.http.utils.queue.PersistentQueueExceptio
 import org.wso2.securevault.SecretResolver;
 import org.wso2.securevault.SecretResolverFactory;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Base64;
@@ -94,7 +93,10 @@ public class SecuredHttpAppender extends AbstractAppender {
         private boolean verifyHostname = true;
 
         @PluginBuilderAttribute
-        private int processingLimit = 10;
+        private int blockSizeInKB = 256;
+
+        @PluginBuilderAttribute
+        private int maxDiskSpaceInMB = 256;
 
         public URL getUrl() {
             return url;
@@ -132,8 +134,12 @@ public class SecuredHttpAppender extends AbstractAppender {
             return verifyHostname;
         }
 
-        public int getProcessingLimit() {
-            return processingLimit;
+        public int getBlockSizeInKB() {
+            return blockSizeInKB;
+        }
+
+        public int getMaxDiskSpaceInMB() {
+            return maxDiskSpaceInMB;
         }
 
         public B setUrl(final URL url) {
@@ -181,8 +187,13 @@ public class SecuredHttpAppender extends AbstractAppender {
             return asBuilder();
         }
 
-        public B setProcessingLimit(final int processingLimit) {
-            this.processingLimit = processingLimit;
+        public B setBlockSizeInKB(final int blockSizeInKB) {
+            this.blockSizeInKB = blockSizeInKB;
+            return asBuilder();
+        }
+
+        public B setMaxDiskSpaceInMB(final int maxDiskSpaceInMB) {
+            this.maxDiskSpaceInMB = maxDiskSpaceInMB;
             return asBuilder();
         }
 
@@ -192,11 +203,11 @@ public class SecuredHttpAppender extends AbstractAppender {
                     getConfiguration().getLoggerContext(), getName(), url, method, connectTimeoutMillis,
                     readTimeoutMillis, username, password, headers, sslConfiguration, verifyHostname);
             return new SecuredHttpAppender(getName(), getLayout(), getFilter(), isIgnoreExceptions(),
-                    getPropertyArray(), httpConnectionConfig, processingLimit);
+                    getPropertyArray(), httpConnectionConfig, blockSizeInKB * 1024, maxDiskSpaceInMB * 1024 * 1024);
         }
     }
 
-    public static enum FailureWaringLevel {
+    public enum FailureWaringLevel {
         NONE,
         INITIAL,
         HALF_QUEUE_SIZE,
@@ -224,15 +235,16 @@ public class SecuredHttpAppender extends AbstractAppender {
 
     protected SecuredHttpAppender(final String name, final Layout<? extends Serializable> layout, final Filter filter,
                                   final boolean ignoreExceptions, final Property[] properties,
-                                  HttpConnectionConfig httpConnectionConfig, final int processingLimit) {
+                                  HttpConnectionConfig httpConnectionConfig, final int maxDiskSpaceInBytes,
+                                  final int maxBatchSizeInBytes) {
         super(name, filter, layout, ignoreExceptions, properties);
         Objects.requireNonNull(layout, "layout");
 
         this.failureWarningLevel = FailureWaringLevel.NONE;
         this.httpConnConfig = httpConnectionConfig;
         try {
-            this.persistentQueue = new PersistentQueue<LogEvent>(AppenderConstants.QUEUE_DIRECTORY_PATH, 1024,
-                    512);
+            this.persistentQueue = new PersistentQueue<>(AppenderConstants.QUEUE_DIRECTORY_PATH,
+                    maxDiskSpaceInBytes, maxBatchSizeInBytes);
         } catch (PersistentQueueException e) {
             error("Error initializing the persistent queue", e);
         }
@@ -450,7 +462,7 @@ public class SecuredHttpAppender extends AbstractAppender {
             if (!isManagerInitialized) return;
             // publish logs from the queue
             try {
-                LogEvent event = (LogEvent) persistentQueue.peek();
+                LogEvent event = persistentQueue.peek();
                 if(event!=null) {
                     manager.send(getLayout(), event);
                     persistentQueue.dequeue();

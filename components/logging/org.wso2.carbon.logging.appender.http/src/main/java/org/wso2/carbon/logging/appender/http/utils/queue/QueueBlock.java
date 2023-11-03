@@ -31,7 +31,7 @@ public class QueueBlock {
     private final String fileName;
     private int currentAppenderIndex;
     private int currentTailerIndex;
-    private Map<Integer,byte[]> lastPeekedItems;
+    private final Map<Integer,byte[]> lastPeekedItems;
 
     private final ReentrantReadWriteLock resetLock = new ReentrantReadWriteLock();
     private final ReentrantReadWriteLock.ReadLock readLock = resetLock.readLock();
