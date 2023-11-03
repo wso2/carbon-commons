@@ -235,12 +235,19 @@ public class SecuredHttpAppender extends AbstractAppender {
     protected SecuredHttpAppender(final String name, final Layout<? extends Serializable> layout, final Filter filter,
                                   final boolean ignoreExceptions, final Property[] properties,
                                   HttpConnectionConfig httpConnectionConfig, final int maxDiskSpaceInBytes,
-                                  final int maxBatchSizeInBytes) {
+                                  int maxBatchSizeInBytes) {
         super(name, filter, layout, ignoreExceptions, properties);
         Objects.requireNonNull(layout, "layout");
 
-        this.failureWarningLevel = FailureWaringLevel.NONE;
         this.httpConnConfig = httpConnectionConfig;
+        this.failureWarningLevel = FailureWaringLevel.NONE;
+
+        if (maxBatchSizeInBytes < AppenderConstants.MINIMUM_BATCH_FILE_SIZE_IN_BYTES) {
+            getStatusLogger().warn("The provided batch size is less than the minimum batch size. " +
+                    "Hence the minimum batch size is used.");
+            maxBatchSizeInBytes = AppenderConstants.MINIMUM_BATCH_FILE_SIZE_IN_BYTES;
+        }
+
         try {
             this.persistentQueue = new PersistentQueue<>(AppenderConstants.QUEUE_DIRECTORY_PATH,
                     maxDiskSpaceInBytes, maxBatchSizeInBytes);
