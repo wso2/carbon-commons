@@ -53,19 +53,20 @@ public class PersistentQueue<T extends Serializable> {
         synchronized (lock) {
             if (tailerBlock.hasUnprocessedItems()) { // queue block has remaining data
                 readData = tailerBlock.consume();
-            } else if (!appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
+                if(!tailerBlock.hasUnprocessedItems()
+                        && appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
+                    // if the queue is empty, reset the final block to be reused later
+                    tailerBlock.setValuesToDefault();
+                }
+            } else if (queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).size() > 1) {
                 // queue block doesn't have data remaining but there are more blocks to consume
                 tailerBlock = loadNextBlock();
                 if (tailerBlock != null) {
                     readData = tailerBlock.consume();
-                } else {
-                    return null;
                 }
-            } else {
-                return null; // queue is empty
             }
         }
-        return deserializeObject(readData);
+        return readData != null? deserializeObject(readData) : null;
     }
 
     public T peek() throws PersistentQueueException {
@@ -74,19 +75,15 @@ public class PersistentQueue<T extends Serializable> {
         synchronized (lock) {
             if (tailerBlock.hasUnprocessedItems()) { // queue block has remaining data
                 readData = tailerBlock.peekNextItem();
-            } else if (!appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
+            } else if (queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).size() > 1) {
                 // queue block doesn't have data remaining but there are more blocks to consume
                 tailerBlock = loadNextBlock();
                 if (tailerBlock != null) {
                     readData = tailerBlock.peekNextItem();
-                } else {
-                    return null;
                 }
-            } else {
-                return null; // queue is empty
             }
         }
-        return deserializeObject(readData);
+        return readData != null? deserializeObject(readData) : null;
     }
 
     private void init() throws PersistentQueueException {
@@ -171,7 +168,7 @@ public class PersistentQueue<T extends Serializable> {
 
     private QueueBlock createNewBlock() throws PersistentQueueException {
 
-        if(currentDiskUsage >= maxDiskSpaceInBytes) {
+        if((currentDiskUsage + maxBatchSizeInBytes) > maxDiskSpaceInBytes) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_SPACE_LIMIT_EXCEEDED,
                     "Error: Queue disk usage limit reached.");

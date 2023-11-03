@@ -20,6 +20,7 @@
 
 package org.wso2.carbon.logging.appender.http;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
@@ -230,8 +231,8 @@ public class SecuredHttpAppender extends AbstractAppender {
         this.failureWarningLevel = FailureWaringLevel.NONE;
         this.httpConnConfig = httpConnectionConfig;
         try {
-            this.persistentQueue = new PersistentQueue<LogEvent>(AppenderConstants.QUEUE_DIRECTORY_PATH, 1024*1024 * 100,
-                    1024 * 256);
+            this.persistentQueue = new PersistentQueue<LogEvent>(AppenderConstants.QUEUE_DIRECTORY_PATH, 1024,
+                    512);
         } catch (PersistentQueueException e) {
             error("Error initializing the persistent queue", e);
         }
@@ -258,7 +259,9 @@ public class SecuredHttpAppender extends AbstractAppender {
             if(e.getErrorType().equals(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_SPACE_LIMIT_EXCEEDED)) {
                 try {
-                    this.failureWarningLevel = FailureWaringLevel.FULLY_USED;
+                    if(this.failureWarningLevel != FailureWaringLevel.LOOSING_LOGS) {
+                        this.failureWarningLevel = FailureWaringLevel.FULLY_USED;
+                    }
                     printWarningLogOnRemoteServerFailure();
                 } catch (PersistentQueueException ex) {
                     error("Error: Unable to print log loss warning message.", ex);
@@ -421,10 +424,10 @@ public class SecuredHttpAppender extends AbstractAppender {
                 break;
             case LOOSING_LOGS:
                 long timeSinceLastWarning = new Date().getTime() - lastLogLossWarningTime;
-                int FAILURE_WARNING_DELAY_MINUTES = 15;
+                int FAILURE_WARNING_DELAY_MINUTES = 1;
                 if (timeSinceLastWarning > TimeUnit.MINUTES.toMillis(FAILURE_WARNING_DELAY_MINUTES)) {
-                    getStatusLogger().warn("Remote log publishing failure : Allocated queue limit reached. Starting to " +
-                            "loose logs. Please check the remote server status.");
+                    getStatusLogger().warn("Remote log publishing failure : Allocated queue limit reached. Unsaved" +
+                            "logs are being dumped. Please check the remote server status.");
                     this.lastLogLossWarningTime = new Date().getTime();
                 }
                 break;
@@ -433,7 +436,10 @@ public class SecuredHttpAppender extends AbstractAppender {
 
     private void resetWarningLogOnRemoteServerSuccess() {
 
-        this.failureWarningLevel = FailureWaringLevel.NONE;
+        if(this.failureWarningLevel != FailureWaringLevel.NONE) {
+            getStatusLogger().info("Remote log publishing success : Remote server is up and running.");
+            this.failureWarningLevel = FailureWaringLevel.NONE;
+        }
     }
 
     private final class LogPublisherTask implements Runnable {
@@ -454,7 +460,7 @@ public class SecuredHttpAppender extends AbstractAppender {
                 try {
                     printWarningLogOnRemoteServerFailure();
                 } catch (PersistentQueueException ex) {
-                    error("Error: Unable to print log loss warning message.", ex);
+                    getStatusLogger().log(Level.WARN, "Error: Unable to print log loss warning message.", ex);
                 }
             }
         }

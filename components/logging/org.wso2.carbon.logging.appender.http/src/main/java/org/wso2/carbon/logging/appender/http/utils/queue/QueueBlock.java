@@ -13,6 +13,9 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class QueueBlock {
 
@@ -28,6 +31,11 @@ public class QueueBlock {
     private final String fileName;
     private int currentAppenderIndex;
     private int currentTailerIndex;
+    private Map<Integer,byte[]> lastPeekedItems;
+
+    private final ReentrantReadWriteLock resetLock = new ReentrantReadWriteLock();
+    private final ReentrantReadWriteLock.ReadLock readLock = resetLock.readLock();
+    private final ReentrantReadWriteLock.WriteLock writeLock = resetLock.writeLock();
 
     public QueueBlock(final String queueDirectoryPath, final String fileName, final long length) throws PersistentQueueException {
 
@@ -40,8 +48,8 @@ public class QueueBlock {
                     + QUEUE_BLOCK_FILE_EXTENSION, "rw");
             this.file.setLength(length);
             this.buffer = file.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, length);
-            this.file.close();
-            initMetaData();
+            this.lastPeekedItems = new HashMap<>();
+            setValuesToDefault();
         } catch (IOException e) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CREATION_FAILED,
@@ -62,6 +70,7 @@ public class QueueBlock {
             this.buffer = file.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, file.length());
             this.currentAppenderIndex = buffer.getInt(APPENDER_OFFSET_VALUE_METADATA_INDEX);
             this.currentTailerIndex = buffer.getInt(TAILER_OFFSET_VALUE_METADATA_INDEX);
+            this.lastPeekedItems = new HashMap<>();
         } catch (IOException e) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CREATION_FAILED,
@@ -83,70 +92,116 @@ public class QueueBlock {
 
     public boolean canAppend(int length){
 
-        buffer.position(currentAppenderIndex);
-        return buffer.remaining() >= (MESSAGE_LENGTH_BIT_COUNT + length);
+        try {
+            readLock.lock();
+            buffer.position(currentAppenderIndex);
+            return buffer.remaining() >= (MESSAGE_LENGTH_BIT_COUNT + length);
+        }
+        finally {
+            readLock.unlock();
+        }
     }
 
     public boolean hasUnprocessedItems(){
 
-        return currentTailerIndex < currentAppenderIndex;
+        try {
+            readLock.lock();
+            return currentTailerIndex < currentAppenderIndex;
+        }
+        finally {
+            readLock.unlock();
+        }
     }
 
-    public boolean append(byte[] data){
+    public synchronized boolean append(byte[] data){
 
-        if(canAppend(data.length)){
-            buffer.position(currentAppenderIndex);
-            buffer.putInt(data.length);
-            buffer.put(data);
-            currentAppenderIndex += (MESSAGE_LENGTH_BIT_COUNT + data.length); // 4 bytes for the length
-            buffer.putInt(APPENDER_OFFSET_VALUE_METADATA_INDEX, currentAppenderIndex);
-            return true;
+        try {
+            // read lock used as append operation and consume operation work on different pointers. Therefore, no
+            // need to synchronize them.
+            readLock.lock();
+            if(canAppend(data.length)){
+                buffer.position(currentAppenderIndex);
+                buffer.putInt(data.length);
+                buffer.put(data);
+                currentAppenderIndex += (MESSAGE_LENGTH_BIT_COUNT + data.length); // 4 bytes for the length
+                buffer.putInt(APPENDER_OFFSET_VALUE_METADATA_INDEX, currentAppenderIndex);
+                return true;
+            }
+            return false;
         }
-        return false;
+        finally {
+            readLock.unlock();
+        }
     }
 
-    public byte[] consume(){
+    public synchronized byte[] consume(){
 
-        if(hasUnprocessedItems()){
-            byte[] data = peekNextItem();
-            currentTailerIndex += (MESSAGE_LENGTH_BIT_COUNT + data.length); // 4 bytes for the length
-            buffer.putInt(TAILER_OFFSET_VALUE_METADATA_INDEX, currentTailerIndex);
-            return data;
+        try {
+            // read lock used as append operation and consume operation work on different pointers. Therefore, no
+            // need to synchronize them.
+            readLock.lock();
+            if (hasUnprocessedItems()) {
+                byte[] data = peekNextItem();
+                lastPeekedItems.remove(currentTailerIndex);
+                currentTailerIndex += (MESSAGE_LENGTH_BIT_COUNT + data.length); // 4 bytes for the length
+                buffer.putInt(TAILER_OFFSET_VALUE_METADATA_INDEX, currentTailerIndex);
+                return data;
+            }
+            return null;
         }
-        return null;
+        finally {
+            readLock.unlock();
+        }
     }
 
     public byte[] peekNextItem(){
-
-        if(hasUnprocessedItems()){
-            buffer.position(currentTailerIndex);
-            int length = buffer.getInt();
-            byte[] data = new byte[length];
-            buffer.get(data);
-            return data;
+        try {
+            readLock.lock();
+            if(lastPeekedItems.containsKey(currentTailerIndex)){
+                return lastPeekedItems.get(currentTailerIndex);
+            }
+            if (hasUnprocessedItems()) {
+                buffer.position(currentTailerIndex);
+                int length = buffer.getInt();
+                byte[] data = new byte[length];
+                buffer.get(data);
+                lastPeekedItems.put(currentTailerIndex, data);
+                return data;
+            }
+            return null;
         }
-        return null;
+        finally {
+            readLock.unlock();
+        }
     }
 
-    public void delete() throws PersistentQueueException {
+    public synchronized void delete() throws PersistentQueueException {
 
-        String queueBlockDataFilePath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
-                + QUEUE_BLOCK_FILE_EXTENSION;
-        this.close();
         try {
-            Files.deleteIfExists(Paths.get(queueBlockDataFilePath));
-        } catch (IOException e) {
-            throw new PersistentQueueException(
-                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_DELETION_FAILED,
-                    "Error: Unable to delete meta data file", e);
+            writeLock.lock();
+            String queueBlockDataFilePath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
+                    + QUEUE_BLOCK_FILE_EXTENSION;
+            this.close();
+            try {
+                Files.deleteIfExists(Paths.get(queueBlockDataFilePath));
+            } catch (IOException e) {
+                throw new PersistentQueueException(
+                        PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_DELETION_FAILED,
+                        "Error: Unable to delete meta data file", e);
+            }
+        }
+        finally {
+            writeLock.unlock();
         }
     }
 
     public String getFileName() {
+
         return fileName;
     }
 
     public long getLength() throws PersistentQueueException {
+
         try {
             return file.length();
         } catch (IOException e) {
@@ -158,20 +213,32 @@ public class QueueBlock {
 
     public void close() throws PersistentQueueException {
 
-        buffer.force();
         try {
-            file.close();
-        } catch (IOException e) {
-            throw new PersistentQueueException(
-                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CLOSE_FAILED,
-                    "Error: Unable to close meta data file", e);
+            writeLock.lock();
+            buffer.force();
+            try {
+                file.close();
+            } catch (IOException e) {
+                throw new PersistentQueueException(
+                        PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CLOSE_FAILED,
+                        "Error: Unable to close meta data file", e);
+            }
+        }
+        finally {
+            writeLock.unlock();
         }
     }
 
-    private void initMetaData() {
+    public void setValuesToDefault() {
 
-        this.currentAppenderIndex = this.currentTailerIndex = METADATA_BLOCK_LENGTH;
-        this.buffer.putInt(APPENDER_OFFSET_VALUE_METADATA_INDEX, currentAppenderIndex);
-        this.buffer.putInt(TAILER_OFFSET_VALUE_METADATA_INDEX, currentTailerIndex);
+        try {
+            writeLock.lock();
+            this.currentAppenderIndex = this.currentTailerIndex = METADATA_BLOCK_LENGTH;
+            this.buffer.putInt(APPENDER_OFFSET_VALUE_METADATA_INDEX, currentAppenderIndex);
+            this.buffer.putInt(TAILER_OFFSET_VALUE_METADATA_INDEX, currentTailerIndex);
+        }
+        finally {
+            writeLock.unlock();
+        }
     }
 }
