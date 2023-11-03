@@ -30,5 +30,5 @@ public class AppenderConstants {
     public static final String BASIC_AUTH_PREFIX = "Basic ";
     public static final String HTTPS = "https";
     public static final String QUEUE_DIRECTORY_PATH = "repository/logs/RemoteLogsQueue";
-    public static final int MINIMUM_BATCH_FILE_SIZE_IN_BYTES =  1024 * 256; // 256 KB
+    public static final int MINIMUM_BATCH_SIZE_IN_BYTES =  1024 * 256; // 256 KB
 }

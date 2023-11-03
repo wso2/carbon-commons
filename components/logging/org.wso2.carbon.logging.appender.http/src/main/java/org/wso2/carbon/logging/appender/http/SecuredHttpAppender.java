@@ -212,7 +212,6 @@ public class SecuredHttpAppender extends AbstractAppender {
         HALF_QUEUE_SIZE,
         OVER_90_PERCENT,
         FULLY_USED,
-
         LOOSING_LOGS
     }
 
@@ -242,10 +241,10 @@ public class SecuredHttpAppender extends AbstractAppender {
         this.httpConnConfig = httpConnectionConfig;
         this.failureWarningLevel = FailureWaringLevel.NONE;
 
-        if (maxBatchSizeInBytes < AppenderConstants.MINIMUM_BATCH_FILE_SIZE_IN_BYTES) {
+        if (maxBatchSizeInBytes < AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES) {
             getStatusLogger().warn("The provided batch size is less than the minimum batch size. " +
                     "Hence the minimum batch size is used.");
-            maxBatchSizeInBytes = AppenderConstants.MINIMUM_BATCH_FILE_SIZE_IN_BYTES;
+            maxBatchSizeInBytes = AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES;
         }
 
         try {
@@ -457,6 +456,7 @@ public class SecuredHttpAppender extends AbstractAppender {
     }
 
     private final class LogPublisherTask implements Runnable {
+
         @Override
         public void run() {
 
