@@ -20,7 +20,6 @@
 
 package org.wso2.carbon.logging.appender.http;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
@@ -270,14 +269,10 @@ public class SecuredHttpAppender extends AbstractAppender {
         } catch (PersistentQueueException e) {
             if(e.getErrorType().equals(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_SPACE_LIMIT_EXCEEDED)) {
-                try {
                     if(this.failureWarningLevel != FailureWaringLevel.LOOSING_LOGS) {
                         this.failureWarningLevel = FailureWaringLevel.FULLY_USED;
                     }
                     printWarningLogOnRemoteServerFailure();
-                } catch (PersistentQueueException ex) {
-                    error("Error: Unable to print log loss warning message.", ex);
-                }
             }
             else {
                 error("An error was encountered when attempting to save logs to the queue.", e);
@@ -398,7 +393,7 @@ public class SecuredHttpAppender extends AbstractAppender {
         return password;
     }
 
-    private void printWarningLogOnRemoteServerFailure() throws PersistentQueueException {
+    private void printWarningLogOnRemoteServerFailure() {
 
         long diskUsage = persistentQueue.getCurrentDiskUsage();
         switch (this.failureWarningLevel) {
@@ -458,21 +453,17 @@ public class SecuredHttpAppender extends AbstractAppender {
         @Override
         public void run() {
 
-            // avoiding publishing attempts before the HttpManager is initialized
-            if (!isManagerInitialized) return;
-            // publish logs from the queue
-            try {
-                LogEvent event = persistentQueue.peek();
-                if(event!=null) {
-                    manager.send(getLayout(), event);
-                    persistentQueue.dequeue();
-                    resetWarningLogOnRemoteServerSuccess();
-                }
-            } catch (Exception e) {
+            if (isManagerInitialized && !persistentQueue.isEmpty()) {
+                // publish logs from the queue
                 try {
+                    LogEvent event = persistentQueue.peek();
+                    if (event != null) {
+                        manager.send(getLayout(), event);
+                        persistentQueue.dequeue();
+                        resetWarningLogOnRemoteServerSuccess();
+                    }
+                } catch (Exception e) {
                     printWarningLogOnRemoteServerFailure();
-                } catch (PersistentQueueException ex) {
-                    getStatusLogger().log(Level.WARN, "Error: Unable to print log loss warning message.", ex);
                 }
             }
         }

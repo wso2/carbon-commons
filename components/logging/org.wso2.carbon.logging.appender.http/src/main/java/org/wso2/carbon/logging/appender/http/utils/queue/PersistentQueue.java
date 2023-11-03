@@ -86,6 +86,12 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         return readData != null? deserializeObject(readData) : null;
     }
 
+    public boolean isEmpty() {
+
+        return queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).size() == 1
+                && !tailerBlock.hasUnprocessedItems();
+    }
+
     private void init() throws PersistentQueueException {
 
         File queueDirectory = new File(this.queueDirectoryPath);

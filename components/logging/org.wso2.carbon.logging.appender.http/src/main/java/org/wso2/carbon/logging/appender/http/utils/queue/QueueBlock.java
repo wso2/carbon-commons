@@ -37,7 +37,8 @@ public class QueueBlock {
     private final ReentrantReadWriteLock.ReadLock readLock = resetLock.readLock();
     private final ReentrantReadWriteLock.WriteLock writeLock = resetLock.writeLock();
 
-    public QueueBlock(final String queueDirectoryPath, final String fileName, final long length) throws PersistentQueueException {
+    public QueueBlock(final String queueDirectoryPath, final String fileName, final long length)
+            throws PersistentQueueException {
 
         this.queueDirectoryPath = queueDirectoryPath;
         this.fileName = fileName;
