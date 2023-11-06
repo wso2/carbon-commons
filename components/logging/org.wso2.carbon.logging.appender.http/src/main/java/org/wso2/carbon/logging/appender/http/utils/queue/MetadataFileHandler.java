@@ -74,8 +74,9 @@ public class MetadataFileHandler {
                 isInitialized = true;
             } catch (IOException e) {
 
-                e.printStackTrace();
-                // Handle exceptions appropriately
+                throw new PersistentQueueException(
+                        PersistentQueueException.PersistentQueueErrorTypes.QUEUE_META_DATA_FILE_READING_FAILED,
+                        "Error: Unable to read metadata file", e);
             }
         }
         else{
