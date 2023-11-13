@@ -43,6 +43,8 @@ import java.util.zip.GZIPOutputStream;
 public class PersistentQueue<T extends Serializable> implements AutoCloseable {
 
     private final String QUEUE_BLOCK_LIST_KEY = "QUEUE_BLOCKS_LIST";
+
+    private final String QUEUE_METADATA_FILE_NAME = "queue_metadata.pq";
     private final String queueDirectoryPath;
     private final long maxDiskSpaceInBytes;
     private final long maxBatchSizeInBytes;
@@ -194,7 +196,6 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DIRECTORY_CREATION_FAILED,
                     "Unable to create queue directory");
         }
-        final String QUEUE_METADATA_FILE_NAME = "queue_metadata.pq";
         this.queueMetaDataHandler = new MetadataFileHandler(
                 this.queueDirectoryPath + "/" + QUEUE_METADATA_FILE_NAME);
         initMetaData();
