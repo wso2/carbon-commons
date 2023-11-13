@@ -268,7 +268,7 @@ public class SecuredHttpAppender extends AbstractAppender {
         }
         catch (IllegalArgumentException e) {
             maxBatchSizeInBytes = AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES;
-            final String warningMessage = String.format("%s. Batch size set to default value %d bytes.",
+            final String warningMessage = String.format("%s. Batch size set to default value of %d bytes.",
                     e.getMessage(), AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES);
             error(warningMessage);
         }
@@ -427,7 +427,7 @@ public class SecuredHttpAppender extends AbstractAppender {
 
     private void printWarningLogOnRemoteServerFailure() {
 
-        switch (this.failureWarningLevel) {
+        switch(this.failureWarningLevel) {
             case NONE:
                 getStatusLogger().warn("Remote log publishing failure : Unable to publish logs to the remote server. " +
                         "Please check the remote server status.");
