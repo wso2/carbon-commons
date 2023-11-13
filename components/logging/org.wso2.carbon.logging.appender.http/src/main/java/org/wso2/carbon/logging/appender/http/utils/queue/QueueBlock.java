@@ -17,7 +17,17 @@
  * under the License.
  *
  */
+
+/*
+ * bit sequence structure of messages in the queue block
+ * 4 bytes - appender offset value
+ * 4 bytes - tailer offset value
+ * 4 bytes - message length
+ * n bytes - message data
+ */
 package org.wso2.carbon.logging.appender.http.utils.queue;
+
+import org.wso2.carbon.logging.appender.http.utils.queue.exception.PersistentQueueException;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -29,6 +39,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+/**
+ * This class represents a block of the queue. Each block is a file in the disk.
+ */
 public class QueueBlock {
 
     private static final String QUEUE_BLOCK_SUB_DIRECTORY_PATH ="blocks";
@@ -49,6 +62,13 @@ public class QueueBlock {
     private final ReentrantReadWriteLock.ReadLock readLock = resetLock.readLock();
     private final ReentrantReadWriteLock.WriteLock writeLock = resetLock.writeLock();
 
+    /**
+     * This constructor is to be used when creating a new block.
+     * @param queueDirectoryPath path of the queue directory
+     * @param fileName name of the file
+     * @param length length of the file
+     * @throws PersistentQueueException if an error occurs while creating the block.
+     */
     public QueueBlock(final String queueDirectoryPath, final String fileName, final long length)
             throws PersistentQueueException {
 
@@ -66,7 +86,7 @@ public class QueueBlock {
         } catch (IOException e) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CREATION_FAILED,
-                    "Error: Unable to create metadata file", e);
+                    "Unable to create metadata file", e);
         }
     }
 
@@ -87,23 +107,35 @@ public class QueueBlock {
         } catch (IOException e) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CREATION_FAILED,
-                    "Error: Unable to create metadata file", e);
+                    "Unable to create metadata file", e);
         }
     }
 
+    /**
+     * This method is to be used when loading the next queue block to memory.
+     * @param directoryPath path of the queue directory
+     * @param fileName name of the file
+     * @return QueueBlock next queue block
+     * @throws PersistentQueueException if an error occurs while creating the block.
+     */
     public static QueueBlock loadBlock(String directoryPath, String fileName) throws PersistentQueueException {
 
         String queueBlockFilePath = directoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
                 + QUEUE_BLOCK_FILE_EXTENSION;
-        if(!Files.exists(Paths.get(queueBlockFilePath))){
+        if(!Files.exists(Paths.get(queueBlockFilePath))) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_FILE_NOT_FOUND,
-                    "Error: Unable to find queue block data file.");
+                    "Unable to find queue block data file.");
         }
         return new QueueBlock(directoryPath, fileName);
     }
 
-    public boolean canAppend(int length){
+    /**
+     * Returns if the block can append the given length of data.
+     * @param length length of the data
+     * @return boolean if the block can append the given length of data.
+     */
+    public boolean canAppend(int length) {
 
         try {
             readLock.lock();
@@ -115,7 +147,11 @@ public class QueueBlock {
         }
     }
 
-    public boolean hasUnprocessedItems(){
+    /**
+     * Returns if the block has unprocessed items.
+     * @return boolean if the block has unprocessed items.
+     */
+    public boolean hasUnprocessedItems() {
 
         try {
             readLock.lock();
@@ -126,13 +162,18 @@ public class QueueBlock {
         }
     }
 
-    public synchronized boolean append(byte[] data){
+    /**
+     * Appends the given data to the block.
+     * @param data byte stream to be appended
+     * @return boolean if the append operation was successful.
+     */
+    public synchronized boolean append(byte[] data) {
 
         try {
             // read lock used as append operation and consume operation work on different pointers. Therefore, no
             // need to synchronize them.
             readLock.lock();
-            if(canAppend(data.length)){
+            if(canAppend(data.length)) {
                 buffer.position(currentAppenderIndex);
                 buffer.putInt(data.length);
                 buffer.put(data);
@@ -147,13 +188,17 @@ public class QueueBlock {
         }
     }
 
-    public synchronized byte[] consume(){
+    /**
+     * Consumes the next item in the block.
+     * @return byte stream of the next item
+     */
+    public synchronized byte[] consume() {
 
         try {
             // read lock used as append operation and consume operation work on different pointers. Therefore, no
             // need to synchronize them.
             readLock.lock();
-            if (hasUnprocessedItems()) {
+            if(hasUnprocessedItems()) {
                 byte[] data = peekNextItem();
                 lastPeekedItems.remove(currentTailerIndex);
                 currentTailerIndex += (MESSAGE_LENGTH_BIT_COUNT + data.length); // 4 bytes for the length
@@ -167,13 +212,18 @@ public class QueueBlock {
         }
     }
 
-    public byte[] peekNextItem(){
+    /**
+     * Peeks the next item in the block without consuming.
+     * @return byte stream of the next item
+     */
+    public byte[] peekNextItem() {
+
         try {
             readLock.lock();
-            if(lastPeekedItems.containsKey(currentTailerIndex)){
+            if(lastPeekedItems.containsKey(currentTailerIndex)) {
                 return lastPeekedItems.get(currentTailerIndex);
             }
-            if (hasUnprocessedItems()) {
+            if(hasUnprocessedItems()) {
                 buffer.position(currentTailerIndex);
                 int length = buffer.getInt();
                 byte[] data = new byte[length];
@@ -188,6 +238,10 @@ public class QueueBlock {
         }
     }
 
+    /**
+     * Deletes the block.
+     * @throws PersistentQueueException if an error occurs while deleting the block.
+     */
     public synchronized void delete() throws PersistentQueueException {
 
         try {
@@ -200,7 +254,7 @@ public class QueueBlock {
             } catch (IOException e) {
                 throw new PersistentQueueException(
                         PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_DELETION_FAILED,
-                        "Error: Unable to delete meta data file", e);
+                        "Unable to delete meta data file", e);
             }
         }
         finally {
@@ -208,22 +262,19 @@ public class QueueBlock {
         }
     }
 
+    /**
+     * Returns the name of the file relevant to the block.
+     * @return name of the block
+     */
     public String getFileName() {
 
         return fileName;
     }
 
-    public long getLength() throws PersistentQueueException {
-
-        try {
-            return file.length();
-        } catch (IOException e) {
-            throw new PersistentQueueException(
-                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_LENGTH_CALCULATION_FAILED,
-                    "Error: Unable to get length of meta data file", e);
-        }
-    }
-
+    /**
+     * Closes the block.
+     * @throws PersistentQueueException if an error occurs while closing the block.
+     */
     public void close() throws PersistentQueueException {
 
         try {
@@ -234,7 +285,7 @@ public class QueueBlock {
             } catch (IOException e) {
                 throw new PersistentQueueException(
                         PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CLOSE_FAILED,
-                        "Error: Unable to close meta data file", e);
+                        "Unable to close meta data file", e);
             }
         }
         finally {
@@ -242,6 +293,9 @@ public class QueueBlock {
         }
     }
 
+    /**
+     * Resets the block.
+     */
     public void setValuesToDefault() {
 
         try {

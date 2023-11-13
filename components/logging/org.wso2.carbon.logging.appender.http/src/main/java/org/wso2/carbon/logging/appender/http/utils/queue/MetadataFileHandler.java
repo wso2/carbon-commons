@@ -20,22 +20,38 @@
 
 package org.wso2.carbon.logging.appender.http.utils.queue;
 
+import com.google.common.base.Optional;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.wso2.carbon.logging.appender.http.utils.queue.exception.PersistentQueueException;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * This class is used to handle the metadata file of the queue.
+ */
 public class MetadataFileHandler {
 
     private final File jsonFile;
     private JsonObject metadata;
     private boolean isInitialized;
 
+    /**
+     * Constructor of the MetadataFileHandler class.
+     *
+     * @param filePath path of the metadata file.
+     * @throws PersistentQueueException if an error occurs while creating the metadata file.
+     */
     public MetadataFileHandler(String filePath) throws PersistentQueueException {
 
         jsonFile = new File(filePath);
@@ -43,39 +59,72 @@ public class MetadataFileHandler {
         loadMetadataFromFile();
     }
 
-    public JsonArray getAsJsonArray(String key) {
+    /**
+     * Returns the value of the given key.
+     *
+     * @param key key of the value.
+     * @return value of the given key.
+     */
+    public Optional<JsonArray> getAsJsonArray(String key) {
 
-        if (metadata.has(key)) {
-            return metadata.get(key).getAsJsonArray();
+        if (metadata.has(key) && metadata.get(key).isJsonArray()) {
+            return Optional.of(metadata.get(key).getAsJsonArray());
         }
-        return null;
+        return Optional.absent();
     }
 
-    public void addJsonArray(String key, JsonArray value) {
+    /**
+     * Adds an array to the metadata file.
+     *
+     * @param key key of the array.
+     * @param value array to be added to metadata file.
+     * @throws PersistentQueueException if an error occurs while adding the array to the metadata file.
+     */
+    public void addJsonArray(String key, JsonArray value) throws PersistentQueueException {
 
         metadata.add(key, value);
         saveMetadataToFile();
     }
 
+    /**
+     * Returns if the metadata file is initialized.
+     *
+     * @return boolean if the metadata file is initialized.
+     */
     public boolean isInitialized() {
 
         return isInitialized;
     }
 
-    public void close() {
+    /**
+     * Sets if the metadata file is initialized.
+     * @param isInitialized boolean if the metadata file is initialized.
+     */
+    public void setIsInitialized(boolean isInitialized) {
+
+        this.isInitialized = isInitialized;
+    }
+
+    /**
+     * Closes the metadata file.
+     *
+     * @throws PersistentQueueException if an error occurs while closing the metadata file.
+     */
+    public void close() throws PersistentQueueException {
 
         saveMetadataToFile();
     }
 
-    private void saveMetadataToFile() {
+    private void saveMetadataToFile() throws PersistentQueueException {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(jsonFile, StandardCharsets.UTF_8))) {
             Gson gson = new Gson();
             String json = gson.toJson(metadata);
             writer.write(json);
         } catch (IOException e) {
-            e.printStackTrace();
-            // Handle exceptions appropriately
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_META_DATA_FILE_READING_FAILED,
+                    "Unable to read metadata file", e);
         }
     }
 
@@ -83,33 +132,29 @@ public class MetadataFileHandler {
 
         if (jsonFile.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(jsonFile, StandardCharsets.UTF_8))) {
-
                 String line;
                 StringBuilder jsonContent = new StringBuilder();
                 while ((line = reader.readLine()) != null) {
-
                     jsonContent.append(line);
                 }
                 metadata = new JsonParser().parse(jsonContent.toString()).getAsJsonObject();
                 isInitialized = true;
             } catch (IOException e) {
-
                 throw new PersistentQueueException(
                         PersistentQueueException.PersistentQueueErrorTypes.QUEUE_META_DATA_FILE_READING_FAILED,
-                        "Error: Unable to read metadata file", e);
+                        "Unable to read metadata file", e);
             }
         }
-        else{
+        else {
             try {
                 Files.createDirectories(Paths.get(jsonFile.getParent()));
                 if(!jsonFile.createNewFile()){
-                    throw new PersistentQueueException(
-                            PersistentQueueException.PersistentQueueErrorTypes.QUEUE_META_DATA_FILE_CREATION_FAILED, "Meta data file creation failed.");
+                    throw new IOException("Unable to create metadata file");
                 }
             } catch (IOException e) {
                 throw new PersistentQueueException(
                         PersistentQueueException.PersistentQueueErrorTypes.QUEUE_META_DATA_FILE_CREATION_FAILED,
-                        "Error: Unable to create metadata file", e);
+                        "Unable to create metadata file", e);
             }
         }
     }

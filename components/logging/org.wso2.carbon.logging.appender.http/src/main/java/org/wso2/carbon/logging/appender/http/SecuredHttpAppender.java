@@ -39,7 +39,7 @@ import org.wso2.carbon.logging.appender.http.models.SslConfiguration;
 import org.wso2.carbon.logging.appender.http.utils.AppenderConstants;
 import org.wso2.carbon.logging.appender.http.models.HttpConnectionConfig;
 import org.wso2.carbon.logging.appender.http.utils.queue.PersistentQueue;
-import org.wso2.carbon.logging.appender.http.utils.queue.PersistentQueueException;
+import org.wso2.carbon.logging.appender.http.utils.queue.exception.PersistentQueueException;
 import org.wso2.securevault.SecretResolver;
 import org.wso2.securevault.SecretResolverFactory;
 
@@ -92,6 +92,9 @@ public class SecuredHttpAppender extends AbstractAppender {
         private boolean verifyHostname = true;
 
         @PluginBuilderAttribute
+        private int processingLimit = 1000;
+
+        @PluginBuilderAttribute
         private int blockSizeInKB = 256;
 
         @PluginBuilderAttribute
@@ -127,6 +130,15 @@ public class SecuredHttpAppender extends AbstractAppender {
 
         public SslConfiguration getSslConfiguration() {
             return sslConfiguration;
+        }
+
+        /**
+         * The processing limit is no longer used. The queue size is now limited by the maxDiskSpaceInMB.
+         * @deprecated Use {@link #getMaxDiskSpaceInMB()} instead.
+         */
+        @Deprecated
+        public int getProcessingLimit() {
+            return processingLimit;
         }
 
         public boolean isVerifyHostname() {
@@ -178,6 +190,16 @@ public class SecuredHttpAppender extends AbstractAppender {
 
         public B setSslConfiguration(final SslConfiguration sslConfiguration) {
             this.sslConfiguration = sslConfiguration;
+            return asBuilder();
+        }
+
+        /**
+         * The processing limit is no longer used. The queue size is now limited by the maxDiskSpaceInMB.
+         * @deprecated Use {@link #setMaxDiskSpaceInMB(int)} instead.
+         */
+        @Deprecated
+        public B setProcessingLimit(final int processingLimit) {
+            this.processingLimit = processingLimit;
             return asBuilder();
         }
 
@@ -241,10 +263,14 @@ public class SecuredHttpAppender extends AbstractAppender {
         this.httpConnConfig = httpConnectionConfig;
         this.failureWarningLevel = FailureWaringLevel.NONE;
 
-        if (maxBatchSizeInBytes < AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES) {
-            getStatusLogger().warn("The provided batch size is less than the minimum batch size. " +
-                    "Hence the minimum batch size is used.");
+        try {
+            validateBatchSize(maxBatchSizeInBytes, maxDiskSpaceInBytes);
+        }
+        catch (IllegalArgumentException e) {
             maxBatchSizeInBytes = AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES;
+            final String warningMessage = String.format("%s. Batch size set to default value %d bytes.",
+                    e.getMessage(), AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES);
+            error(warningMessage);
         }
 
         try {
@@ -401,29 +427,28 @@ public class SecuredHttpAppender extends AbstractAppender {
 
     private void printWarningLogOnRemoteServerFailure() {
 
-        long diskUsage = persistentQueue.getCurrentDiskUsage();
         switch (this.failureWarningLevel) {
             case NONE:
                 getStatusLogger().warn("Remote log publishing failure : Unable to publish logs to the remote server. " +
                         "Please check the remote server status.");
-                this.failureWarningLevel = FailureWaringLevel.INITIAL;
+                this.failureWarningLevel = getCurrentWarningLevel();
                 break;
             case INITIAL:
-                if (diskUsage > persistentQueue.getMaxDiskSpaceInBytes() / 2) {
+                if (persistentQueue.getUsedSpaceFraction() > 0.5) {
                     getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has exceeded" +
                             " 50% of the allocated queue limit. Please check the remote server status.");
                     this.failureWarningLevel = FailureWaringLevel.HALF_QUEUE_SIZE;
                 }
                 break;
             case HALF_QUEUE_SIZE:
-                if (diskUsage > persistentQueue.getMaxDiskSpaceInBytes() * 0.9) {
+                if (persistentQueue.getUsedSpaceFraction() > 0.9) {
                     getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has exceeded" +
                             " 90% of the allocated queue limit. Please check the remote server status.");
                     this.failureWarningLevel = FailureWaringLevel.OVER_90_PERCENT;
                 }
                 break;
             case OVER_90_PERCENT:
-                if (diskUsage >= persistentQueue.getMaxDiskSpaceInBytes()) {
+                if (persistentQueue.isFull()) {
                     getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has exceeded" +
                             " the allocated queue limit. Please check the remote server status.");
                     this.failureWarningLevel = FailureWaringLevel.FULLY_USED;
@@ -435,7 +460,7 @@ public class SecuredHttpAppender extends AbstractAppender {
                 this.failureWarningLevel = FailureWaringLevel.LOOSING_LOGS;
                 this.lastLogLossWarningTime = new Date().getTime();
                 break;
-            case LOOSING_LOGS:
+            default:
                 long timeSinceLastWarning = new Date().getTime() - lastLogLossWarningTime;
                 int FAILURE_WARNING_DELAY_MINUTES = 1;
                 if (timeSinceLastWarning > TimeUnit.MINUTES.toMillis(FAILURE_WARNING_DELAY_MINUTES)) {
@@ -447,11 +472,38 @@ public class SecuredHttpAppender extends AbstractAppender {
         }
     }
 
+    private FailureWaringLevel getCurrentWarningLevel() {
+
+        if(persistentQueue.getUsedSpaceFraction() < 0.9) { // next half warning
+            return FailureWaringLevel.INITIAL;
+        }
+        else if(!persistentQueue.isFull()) { // next check 90% warning
+            return FailureWaringLevel.HALF_QUEUE_SIZE;
+        }
+        else { // on next check fully used warning issued
+            return FailureWaringLevel.FULLY_USED;
+        }
+    }
+
     private void resetWarningLogOnRemoteServerSuccess() {
 
         if(this.failureWarningLevel != FailureWaringLevel.NONE) {
             getStatusLogger().info("Remote log publishing success : Remote server is up and running.");
             this.failureWarningLevel = FailureWaringLevel.NONE;
+        }
+    }
+
+    private void validateBatchSize(int maxBatchSizeInBytes, int maxDiskSpaceInBytes) throws IllegalArgumentException {
+
+        if (maxBatchSizeInBytes < 0) {
+            throw new IllegalArgumentException("The batch size cannot be negative.");
+        }
+        if (maxBatchSizeInBytes < AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES) {
+            throw new IllegalArgumentException(String.format("The batch size cannot be less than %d."
+                    , AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES));
+        }
+        if (maxBatchSizeInBytes < maxDiskSpaceInBytes) {
+            throw new IllegalArgumentException("The batch size cannot be less than the maximum disk space.");
         }
     }
 

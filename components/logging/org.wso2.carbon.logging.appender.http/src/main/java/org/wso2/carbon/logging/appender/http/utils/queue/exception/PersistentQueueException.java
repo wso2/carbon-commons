@@ -18,8 +18,11 @@
  *
  */
 
-package org.wso2.carbon.logging.appender.http.utils.queue;
+package org.wso2.carbon.logging.appender.http.utils.queue.exception;
 
+/**
+ * This class implements exception to be used in PersistentQueue.
+ */
 public class PersistentQueueException extends Exception {
 
     public enum PersistentQueueErrorTypes {
@@ -41,17 +44,36 @@ public class PersistentQueueException extends Exception {
 
     private final PersistentQueueErrorTypes errorType;
 
+    /**
+     * Constructor for PersistentQueueException.
+     *
+     * @param errorType error type
+     * @param message   error message
+     */
     public PersistentQueueException(PersistentQueueErrorTypes errorType, String message) {
+
         super(message);
         this.errorType = errorType;
     }
 
+    /**
+     * Constructor for PersistentQueueException.
+     * @param errorType error type
+     * @param message error message
+     * @param cause cause of the exception
+     */
     public PersistentQueueException(PersistentQueueErrorTypes errorType, String message, Throwable cause) {
+
         super(message, cause);
         this.errorType = errorType;
     }
 
+    /**
+     * Get the error type.
+     * @return error type
+     */
     public PersistentQueueErrorTypes getErrorType() {
+
         return errorType;
     }
 }

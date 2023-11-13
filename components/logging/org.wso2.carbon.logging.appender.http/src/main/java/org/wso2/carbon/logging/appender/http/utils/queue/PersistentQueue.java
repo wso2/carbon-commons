@@ -21,14 +21,25 @@
 package org.wso2.carbon.logging.appender.http.utils.queue;
 
 import com.google.gson.JsonArray;
+import org.wso2.carbon.logging.appender.http.utils.queue.exception.PersistentQueueException;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * This class implements a file based queue which can be used to store objects in serialized form in a persistent
+ * manner and consumed later.
+ */
 public class PersistentQueue<T extends Serializable> implements AutoCloseable {
 
     private final String QUEUE_BLOCK_LIST_KEY = "QUEUE_BLOCKS_LIST";
@@ -38,9 +49,17 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
     private MetadataFileHandler queueMetaDataHandler;
     private QueueBlock appenderBlock, tailerBlock;
     private long currentDiskUsage;
+    private boolean isDiskFull = false;
 
     private final Object lock = new Object();
 
+    /**
+     * Constructor of the PersistentQueue class.
+     * @param queueDirectoryPath path of the queue directory.
+     * @param maxDiskSpaceInBytes maximum disk space that can be used by the queue.
+     * @param maxBatchSizeInBytes maximum size of a single queue block.
+     * @throws PersistentQueueException if an error occurs while creating the queue.
+     */
     public PersistentQueue(String queueDirectoryPath, long maxDiskSpaceInBytes, long maxBatchSizeInBytes)
             throws PersistentQueueException {
 
@@ -50,13 +69,18 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         init();
     }
 
+    /**
+     * Enqueues the given object to the queue.
+     * @param object object to be enqueued.
+     * @throws PersistentQueueException if an error occurs while enqueuing the object.
+     */
     public synchronized void enqueue(T object) throws PersistentQueueException {
 
         byte[] data = serializeObject(object);
         if(data.length == 0) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.EMPTY_OBJECT,
-                    "Error: Unable to serialize object.");
+                    "Unable to serialize object.");
         }
         if (!appenderBlock.append(data)) {
             if(!appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
@@ -67,6 +91,11 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         }
     }
 
+    /**
+     * Dequeues the next object from the queue.
+     * @return dequeued object.
+     * @throws PersistentQueueException if an error occurs while dequeuing the object.
+     */
     public synchronized T dequeue() throws PersistentQueueException {
 
         byte[] readData = null;
@@ -78,7 +107,8 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
                     // if the queue is empty, reset the final block to be reused later
                     tailerBlock.setValuesToDefault();
                 }
-            } else if (queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).size() > 1) {
+            } else if (queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).isPresent() &&
+                    queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).get().size() > 1) {
                 // queue block doesn't have data remaining but there are more blocks to consume
                 tailerBlock = loadNextBlock();
                 if (tailerBlock != null) {
@@ -89,13 +119,19 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         return readData != null? deserializeObject(readData) : null;
     }
 
+    /**
+     * Peeks the next object from the queue without removing it.
+     * @return peeked object.
+     * @throws PersistentQueueException if an error occurs while peeking the object.
+     */
     public T peek() throws PersistentQueueException {
 
         byte[] readData = null;
         synchronized (lock) {
             if (tailerBlock.hasUnprocessedItems()) { // queue block has remaining data
                 readData = tailerBlock.peekNextItem();
-            } else if (queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).size() > 1) {
+            } else if (queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).isPresent() &&
+                    queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).get().size() > 1) {
                 // queue block doesn't have data remaining but there are more blocks to consume
                 tailerBlock = loadNextBlock();
                 if (tailerBlock != null) {
@@ -106,10 +142,48 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         return readData != null? deserializeObject(readData) : null;
     }
 
+    /**
+     * Checks if the queue is empty.
+     * @return boolean if the queue is empty.
+     */
     public boolean isEmpty() {
 
-        return queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).size() == 1
+        // QUEUE_BLOCK_LIST_KEY always exists.
+        return queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).get().size() == 1
                 && !tailerBlock.hasUnprocessedItems();
+    }
+
+    /**
+     * Checks if the queue is full.
+     * @return boolean if the queue is full.
+     */
+    public boolean isFull() {
+
+        return this.isDiskFull;
+    }
+
+    /**
+     * Loops through each file in the queue directory and calculates the disk usage of the queue.
+     * @return disk usage of the queue.
+     * @throws IOException if an error occurs while calculating the disk usage.
+     */
+    public long calculateDiskUsage() throws IOException {
+
+        Path folder = Paths.get(this.queueDirectoryPath);
+        try(java.util.stream.Stream<Path> paths = Files.walk(folder)) {
+            return paths.filter(p -> p.toFile().isFile())
+                    .mapToLong(p -> p.toFile().length())
+                    .sum();
+        }
+    }
+
+    /**
+     * Returns the fraction of the disk space used by the queue.
+     * @return fraction of the disk space used by the queue.
+     */
+    public float getUsedSpaceFraction() {
+
+        return isDiskSpaceFull()? 1 : (float) currentDiskUsage /maxBatchSizeInBytes;
     }
 
     private void init() throws PersistentQueueException {
@@ -118,7 +192,7 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         if(!queueDirectory.exists() && !queueDirectory.mkdirs()) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DIRECTORY_CREATION_FAILED,
-                    "Error: Unable to create queue directory");
+                    "Unable to create queue directory");
         }
         final String QUEUE_METADATA_FILE_NAME = "queue_metadata.pq";
         this.queueMetaDataHandler = new MetadataFileHandler(
@@ -140,21 +214,45 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         } catch (IOException e) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_USAGE_CALCULATION_FAILED,
-                    "Error: Unable to calculate disk usage.", e);
+                    "Unable to calculate disk usage.", e);
+        }
+        this.queueMetaDataHandler.setIsInitialized(true);
+    }
+
+    /**
+     * Closes the queue.
+     * @throws PersistentQueueException if an error occurs while closing the queue.
+     */
+    @Override
+    public void close() throws PersistentQueueException {
+
+        try {
+            this.appenderBlock.close();
+            if(!appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
+                this.tailerBlock.close();
+            }
+        } catch (PersistentQueueException e) {
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_CLOSE_FAILED ,
+                    "Unable to close queue", e);
+        } finally {
+            this.queueMetaDataHandler.close();
         }
     }
 
     // appender should be loaded first to allow equality check when tailer is being loaded
     private void loadAppenderBlock() throws PersistentQueueException {
 
-        JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY);
+        JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).get();
+        // QUEUE_BLOCK_LIST_KEY always exists.
         String appenderBlockName = queueBlocks.get(queueBlocks.size() - 1).getAsString();
         this.appenderBlock = QueueBlock.loadBlock(this.queueDirectoryPath, appenderBlockName);
     }
 
     private void loadTailerBlock() throws PersistentQueueException {
 
-        JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY);
+        // QUEUE_BLOCK_LIST_KEY always exists.
+        JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).get();
         String tailerBlockName = queueBlocks.get(0).getAsString();
         if(appenderBlock.getFileName().equals(tailerBlockName)) {
             this.tailerBlock = appenderBlock;
@@ -195,24 +293,30 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
 
     private QueueBlock createNewBlock() throws PersistentQueueException {
 
-        if((currentDiskUsage + maxBatchSizeInBytes) > maxDiskSpaceInBytes) {
+        if(isDiskSpaceFull()) {
+            this.isDiskFull = true;
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_SPACE_LIMIT_EXCEEDED,
-                    "Error: Queue disk usage limit reached.");
+                    "Queue disk usage limit reached.");
         }
         String QUEUE_BLOCK_FILE_NAME = "qb_%s";
         String newBlockName = String.format(QUEUE_BLOCK_FILE_NAME, System.currentTimeMillis());
         QueueBlock newBlock = new QueueBlock(this.queueDirectoryPath, newBlockName, maxBatchSizeInBytes);
-        JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY);
+        JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).get();
         queueBlocks.add(newBlockName);
         this.queueMetaDataHandler.addJsonArray(QUEUE_BLOCK_LIST_KEY, queueBlocks);
-        currentDiskUsage += maxBatchSizeInBytes;
+        updateDiskUsage(true);
         return newBlock;
+    }
+
+    private boolean isDiskSpaceFull() {
+
+        return (currentDiskUsage + maxBatchSizeInBytes) > maxDiskSpaceInBytes;
     }
 
     private QueueBlock loadNextBlock() throws PersistentQueueException {
 
-        JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY);
+        JsonArray queueBlocks = this.queueMetaDataHandler.getAsJsonArray(QUEUE_BLOCK_LIST_KEY).get();
         QueueBlock consumedTailerBlock = tailerBlock;
         QueueBlock nextBlock = null;
         queueBlocks.remove(0);
@@ -220,43 +324,22 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
             String tailerBlockName = queueBlocks.get(0).getAsString();
             nextBlock = QueueBlock.loadBlock(this.queueDirectoryPath, tailerBlockName);
         }
-        currentDiskUsage -= consumedTailerBlock.getLength();
         consumedTailerBlock.delete();
+        this.isDiskFull = false;
         this.queueMetaDataHandler.addJsonArray(QUEUE_BLOCK_LIST_KEY, queueBlocks);
+        updateDiskUsage(false);
         return nextBlock;
     }
 
-    public long calculateDiskUsage() throws IOException {
+    private void updateDiskUsage(boolean incrementWithDefaultIfFailed) throws PersistentQueueException {
 
-        Path folder = Paths.get(this.queueDirectoryPath);
-        try(java.util.stream.Stream<Path> paths = Files.walk(folder)) {
-            return paths.filter(p -> p.toFile().isFile())
-                    .mapToLong(p -> p.toFile().length())
-                    .sum();
-        }
-    }
-
-    public long getMaxDiskSpaceInBytes() {
-        return maxDiskSpaceInBytes;
-    }
-
-    public long getCurrentDiskUsage() {
-        return currentDiskUsage;
-    }
-
-    @Override
-    public void close() throws PersistentQueueException {
-
-        this.queueMetaDataHandler.close();
         try {
-            this.appenderBlock.close();
-            if(!appenderBlock.getFileName().equals(tailerBlock.getFileName())) {
-                this.tailerBlock.close();
-            }
-        } catch (PersistentQueueException e) {
+            currentDiskUsage = calculateDiskUsage();
+        } catch (IOException e) {
+            currentDiskUsage+=incrementWithDefaultIfFailed?maxBatchSizeInBytes:-maxBatchSizeInBytes;
             throw new PersistentQueueException(
-                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_CLOSE_FAILED ,
-                    "Error: Unable to close queue", e);
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_USAGE_CALCULATION_FAILED,
+                    "Unable to calculate disk usage.", e);
         }
     }
 }
