@@ -20,7 +20,6 @@
 
 package org.wso2.carbon.logging.appender.http.utils.queue;
 
-import com.google.common.base.Optional;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -36,6 +35,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 /**
  * This class is used to handle the metadata file of the queue.
@@ -70,7 +70,7 @@ public class MetadataFileHandler {
         if (metadata.has(key) && metadata.get(key).isJsonArray()) {
             return Optional.of(metadata.get(key).getAsJsonArray());
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     /**
@@ -144,11 +144,10 @@ public class MetadataFileHandler {
                         PersistentQueueException.PersistentQueueErrorTypes.QUEUE_META_DATA_FILE_READING_FAILED,
                         "Unable to read metadata file", e);
             }
-        }
-        else {
+        } else {
             try {
                 Files.createDirectories(Paths.get(jsonFile.getParent()));
-                if(!jsonFile.createNewFile()){
+                if (!jsonFile.createNewFile()) {
                     throw new IOException("Unable to create metadata file");
                 }
             } catch (IOException e) {

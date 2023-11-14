@@ -35,9 +35,9 @@ import org.apache.logging.log4j.core.config.plugins.validation.constraints.Requi
 import org.apache.logging.log4j.core.net.ssl.KeyStoreConfiguration;
 import org.apache.logging.log4j.core.net.ssl.StoreConfigurationException;
 import org.apache.logging.log4j.core.net.ssl.TrustStoreConfiguration;
+import org.wso2.carbon.logging.appender.http.models.HttpConnectionConfig;
 import org.wso2.carbon.logging.appender.http.models.SslConfiguration;
 import org.wso2.carbon.logging.appender.http.utils.AppenderConstants;
-import org.wso2.carbon.logging.appender.http.models.HttpConnectionConfig;
 import org.wso2.carbon.logging.appender.http.utils.queue.PersistentQueue;
 import org.wso2.carbon.logging.appender.http.utils.queue.exception.PersistentQueueException;
 import org.wso2.securevault.SecretResolver;
@@ -53,6 +53,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This implements the log4j appended that is used to publish logs to a remote server via HTTP.
+ */
 @Plugin(name = "SecuredHttp", category = "Core", elementType = "appender", printObject = true)
 public class SecuredHttpAppender extends AbstractAppender {
 
@@ -228,6 +231,9 @@ public class SecuredHttpAppender extends AbstractAppender {
         }
     }
 
+    /**
+     * Enum to represent the warning levels of the failure to publish logs to the remote server.
+     */
     public enum FailureWaringLevel {
         NONE,
         INITIAL,
@@ -252,6 +258,7 @@ public class SecuredHttpAppender extends AbstractAppender {
     private boolean isManagerInitialized = false;
     private FailureWaringLevel failureWarningLevel;
     private long lastLogLossWarningTime;
+    private static final int FAILURE_WARNING_DELAY_MINUTES = 1;
 
     protected SecuredHttpAppender(final String name, final Layout<? extends Serializable> layout, final Filter filter,
                                   final boolean ignoreExceptions, final Property[] properties,
@@ -265,8 +272,7 @@ public class SecuredHttpAppender extends AbstractAppender {
 
         try {
             validateBatchSize(maxBatchSizeInBytes, maxDiskSpaceInBytes);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             maxBatchSizeInBytes = AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES;
             final String warningMessage = String.format("%s. Batch size set to default value of %d bytes.",
                     e.getMessage(), AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES);
@@ -299,14 +305,13 @@ public class SecuredHttpAppender extends AbstractAppender {
         try {
             persistentQueue.enqueue(event.toImmutable());
         } catch (PersistentQueueException e) {
-            if(e.getErrorType().equals(
+            if (e.getErrorType().equals(
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_SPACE_LIMIT_EXCEEDED)) {
-                    if(this.failureWarningLevel != FailureWaringLevel.LOOSING_LOGS) {
+                    if (this.failureWarningLevel != FailureWaringLevel.LOOSING_LOGS) {
                         this.failureWarningLevel = FailureWaringLevel.FULLY_USED;
                     }
                     printWarningLogOnRemoteServerFailure();
-            }
-            else {
+            } else {
                 error("An error was encountered when attempting to save logs to the queue.", e);
             }
         }
@@ -365,7 +370,8 @@ public class SecuredHttpAppender extends AbstractAppender {
         org.apache.logging.log4j.core.net.ssl.SslConfiguration sslConfiguration = null;
         if (httpConnConfig.getSslConfiguration() != null) {
             String keystorePassword = resolveSecretPassword(httpConnConfig.getSslConfiguration().getKeyStorePassword());
-            String truststorePassword = resolveSecretPassword(httpConnConfig.getSslConfiguration().getTrustStorePassword());
+            String truststorePassword = resolveSecretPassword(httpConnConfig.getSslConfiguration()
+                    .getTrustStorePassword());
             try {
                 KeyStoreConfiguration keyStoreConfiguration = KeyStoreConfiguration.createKeyStoreConfiguration(
                         httpConnConfig.getSslConfiguration().getKeyStoreLocation(),
@@ -376,7 +382,8 @@ public class SecuredHttpAppender extends AbstractAppender {
                         truststorePassword.toCharArray(), null, null, null, null);
 
                 sslConfiguration = org.apache.logging.log4j.core.net.ssl.SslConfiguration.createSSLConfiguration(
-                        httpConnConfig.getSslConfiguration().getProtocol(), keyStoreConfiguration, trustStoreConfiguration);
+                        httpConnConfig.getSslConfiguration().getProtocol(), keyStoreConfiguration,
+                        trustStoreConfiguration);
             } catch (StoreConfigurationException e) {
                 error("Error initializing the SSL configuration", e);
                 return false;
@@ -435,34 +442,33 @@ public class SecuredHttpAppender extends AbstractAppender {
                 break;
             case INITIAL:
                 if (persistentQueue.getUsedSpaceFraction() > 0.5) {
-                    getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has exceeded" +
-                            " 50% of the allocated queue limit. Please check the remote server status.");
+                    getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has " +
+                            "exceeded 50% of the allocated queue limit. Please check the remote server status.");
                     this.failureWarningLevel = FailureWaringLevel.HALF_QUEUE_SIZE;
                 }
                 break;
             case HALF_QUEUE_SIZE:
                 if (persistentQueue.getUsedSpaceFraction() > 0.9) {
-                    getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has exceeded" +
-                            " 90% of the allocated queue limit. Please check the remote server status.");
+                    getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has " +
+                            "exceeded 90% of the allocated queue limit. Please check the remote server status.");
                     this.failureWarningLevel = FailureWaringLevel.OVER_90_PERCENT;
                 }
                 break;
             case OVER_90_PERCENT:
                 if (persistentQueue.isFull()) {
-                    getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has exceeded" +
-                            " the allocated queue limit. Please check the remote server status.");
+                    getStatusLogger().warn("Remote log publishing failure : The number of logs in the queue has " +
+                            "exceeded the allocated queue limit. Please check the remote server status.");
                     this.failureWarningLevel = FailureWaringLevel.FULLY_USED;
                 }
                 break;
             case FULLY_USED:
-                getStatusLogger().warn("Remote log publishing failure : Allocated queue limit reached. Starting to loose" +
-                        " logs. Please check the remote server status.");
+                getStatusLogger().warn("Remote log publishing failure : Allocated queue limit reached. Starting to " +
+                        "loose logs. Please check the remote server status.");
                 this.failureWarningLevel = FailureWaringLevel.LOOSING_LOGS;
                 this.lastLogLossWarningTime = new Date().getTime();
                 break;
             default:
                 long timeSinceLastWarning = new Date().getTime() - lastLogLossWarningTime;
-                int FAILURE_WARNING_DELAY_MINUTES = 1;
                 if (timeSinceLastWarning > TimeUnit.MINUTES.toMillis(FAILURE_WARNING_DELAY_MINUTES)) {
                     getStatusLogger().warn("Remote log publishing failure : Allocated queue limit reached. Unsaved" +
                             "logs are being dumped. Please check the remote server status.");
@@ -474,20 +480,18 @@ public class SecuredHttpAppender extends AbstractAppender {
 
     private FailureWaringLevel getCurrentWarningLevel() {
 
-        if(persistentQueue.getUsedSpaceFraction() < 0.9) { // next half warning
+        if (persistentQueue.getUsedSpaceFraction() < 0.9) { // next half warning
             return FailureWaringLevel.INITIAL;
-        }
-        else if(!persistentQueue.isFull()) { // next check 90% warning
+        } else if (!persistentQueue.isFull()) { // next check 90% warning
             return FailureWaringLevel.HALF_QUEUE_SIZE;
-        }
-        else { // on next check fully used warning issued
+        } else { // on next check fully used warning issued
             return FailureWaringLevel.FULLY_USED;
         }
     }
 
     private void resetWarningLogOnRemoteServerSuccess() {
 
-        if(this.failureWarningLevel != FailureWaringLevel.NONE) {
+        if (this.failureWarningLevel != FailureWaringLevel.NONE) {
             getStatusLogger().info("Remote log publishing success : Remote server is up and running.");
             this.failureWarningLevel = FailureWaringLevel.NONE;
         }

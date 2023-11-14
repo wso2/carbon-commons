@@ -25,6 +25,9 @@ package org.wso2.carbon.logging.appender.http.utils.queue.exception;
  */
 public class PersistentQueueException extends Exception {
 
+    /**
+     * Enum for PersistentQueueErrorTypes.
+     */
     public enum PersistentQueueErrorTypes {
         QUEUE_DIRECTORY_CREATION_FAILED,
         QUEUE_DISK_SPACE_LIMIT_EXCEEDED,
@@ -37,7 +40,6 @@ public class PersistentQueueException extends Exception {
         QUEUE_BLOCK_CREATION_FAILED,
         QUEUE_BLOCK_FILE_NOT_FOUND,
         QUEUE_BLOCK_DELETION_FAILED,
-        QUEUE_BLOCK_LENGTH_CALCULATION_FAILED,
         EMPTY_OBJECT,
         QUEUE_META_DATA_FILE_READING_FAILED
     }
