@@ -227,7 +227,7 @@ public class SecuredHttpAppender extends AbstractAppender {
                     getConfiguration().getLoggerContext(), getName(), url, method, connectTimeoutMillis,
                     readTimeoutMillis, username, password, headers, sslConfiguration, verifyHostname);
             return new SecuredHttpAppender(getName(), getLayout(), getFilter(), isIgnoreExceptions(),
-                    getPropertyArray(), httpConnectionConfig, blockSizeInKB * 1024, maxDiskSpaceInMB * 1024 * 1024);
+                    getPropertyArray(), httpConnectionConfig,  maxDiskSpaceInMB * 1024, blockSizeInKB * 1024 * 1024);
         }
     }
 
@@ -270,6 +270,8 @@ public class SecuredHttpAppender extends AbstractAppender {
         this.httpConnConfig = httpConnectionConfig;
         this.failureWarningLevel = FailureWaringLevel.NONE;
 
+        validateDiskSpace(maxDiskSpaceInBytes); // IllegalArgumentException not handled since max disk space usage
+                                                // should come from the user.
         try {
             validateBatchSize(maxBatchSizeInBytes, maxDiskSpaceInBytes);
         } catch (IllegalArgumentException e) {
@@ -497,10 +499,10 @@ public class SecuredHttpAppender extends AbstractAppender {
         }
     }
 
-    private void validateBatchSize(int maxBatchSizeInBytes, int maxDiskSpaceInBytes) throws IllegalArgumentException {
+    private void validateBatchSize(int maxBatchSizeInBytes, int maxDiskSpaceInBytes) {
 
-        if (maxBatchSizeInBytes < 0) {
-            throw new IllegalArgumentException("The batch size cannot be negative.");
+        if (maxBatchSizeInBytes <= 0) {
+            throw new IllegalArgumentException("The batch size has to be a positive value.");
         }
         if (maxBatchSizeInBytes < AppenderConstants.MINIMUM_BATCH_SIZE_IN_BYTES) {
             throw new IllegalArgumentException(String.format("The batch size cannot be less than %d."
@@ -508,6 +510,14 @@ public class SecuredHttpAppender extends AbstractAppender {
         }
         if (maxBatchSizeInBytes < maxDiskSpaceInBytes) {
             throw new IllegalArgumentException("The batch size cannot be less than the maximum disk space.");
+        }
+    }
+
+    private void validateDiskSpace(int maxDiskSpaceInBytes) {
+
+        if (maxDiskSpaceInBytes < AppenderConstants.MINIMUM_DISK_SPACE_IN_BYTES) {
+            throw new IllegalArgumentException(String.format("The maximum disk space cannot be less than %d."
+                    , AppenderConstants.MINIMUM_DISK_SPACE_IN_BYTES));
         }
     }
 
