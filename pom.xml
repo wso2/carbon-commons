@@ -215,6 +215,11 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>${jaxb.api.version}</version>
+            </dependency>
 
             <dependency>
                 <groupId>commons-codec.wso2</groupId>
@@ -1553,7 +1558,6 @@
         </dependencies>
     </dependencyManagement>
 
-
     <build>
         <extensions>
             <extension>
@@ -1954,6 +1958,8 @@
         <slf4j.imp.pkg.version.range>[1.6.1,1.8.0)</slf4j.imp.pkg.version.range>
         <javax.xml.parsers.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.parsers.import.pkg.version>
         <javax.xml.transform.import.pkg.version>[0.0.0, 1.0.0)</javax.xml.transform.import.pkg.version>
+        <jaxb.api.version>2.3.0</jaxb.api.version>
+
 
         <!-- Misc -->
         <cassandra.version>1.1.0.wso2v2</cassandra.version>
