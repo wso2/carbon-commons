@@ -264,32 +264,20 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         }
     }
 
-    // logic copied from org.apache.commons.lang.SerializationUtils function
-    // this is to be replaced with the use of the library in future
+    // replaceable org.apache.commons.lang.SerializationUtils functions
     private static void serialize(Serializable obj, OutputStream outputStream) {
 
         if (outputStream == null) {
             throw new IllegalArgumentException("The OutputStream must not be null");
-        } else {
-            ObjectOutputStream out = null;
-            try {
-                out = new ObjectOutputStream(outputStream);
-                out.writeObject(obj);
-            } catch (IOException e) {
-                throw new SerializationException(e);
-            } finally {
-                try {
-                    if (out != null) {
-                        out.close();
-                    }
-                } catch (IOException ignored) {
-                }
-            }
+        }
+        try (ObjectOutputStream out = new ObjectOutputStream(outputStream)) {
+            out.writeObject(obj);
+        } catch (IOException e) {
+            throw new SerializationException(e);
         }
     }
 
-    // logic copied from org.apache.commons.lang.SerializationUtils function
-    // this is to be replaced with the use of the library in future
+    // replaceable org.apache.commons.lang.SerializationUtils functions
     private static byte[] serialize(Serializable obj) {
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
@@ -297,42 +285,40 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         return baos.toByteArray();
     }
 
-    // logic copied from org.apache.commons.lang.SerializationUtils function
-    // this is to be replaced with the use of the library in future
+
+    // replaceable org.apache.commons.lang.SerializationUtils functions
     private static Object deserialize(InputStream inputStream) {
 
         if (inputStream == null) {
             throw new IllegalArgumentException("The InputStream must not be null");
-        } else {
-            ObjectInputStream objectInputStream = null;
-            Object obj;
-            try {
-                objectInputStream = new ObjectInputStream(inputStream);
-                obj = objectInputStream.readObject();
-            } catch (ClassNotFoundException | IOException e) {
-                throw new SerializationException(e);
-            } finally {
-                try {
-                    if (objectInputStream != null) {
-                        objectInputStream.close();
-                    }
-                } catch (IOException ignored) {
-                }
-            }
-            return obj;
         }
+        ObjectInputStream objectInputStream = null;
+        Object obj;
+        try {
+            objectInputStream = new ObjectInputStream(inputStream);
+            obj = objectInputStream.readObject();
+        } catch (ClassNotFoundException | IOException e) {
+            throw new SerializationException(e);
+        } finally {
+            try {
+                if (objectInputStream != null) {
+                    objectInputStream.close();
+                }
+            } catch (IOException ignored) {
+            }
+        }
+        return obj;
     }
 
-    // logic copied from org.apache.commons.lang.SerializationUtils function
-    // this is to be replaced with the use of the library in future
+
+    // replaceable org.apache.commons.lang.SerializationUtils functions
     private static Object deserialize(byte[] objectData) {
 
         if (objectData == null) {
             throw new IllegalArgumentException("The byte[] must not be null");
-        } else {
-            ByteArrayInputStream bais = new ByteArrayInputStream(objectData);
-            return deserialize(bais);
         }
+        ByteArrayInputStream bais = new ByteArrayInputStream(objectData);
+        return deserialize(bais);
     }
 
     private QueueBlock createNewBlock() throws PersistentQueueException {

@@ -268,6 +268,7 @@ public class SecuredHttpAppender extends AbstractAppender {
                                   final boolean ignoreExceptions, final Property[] properties,
                                   HttpConnectionConfig httpConnectionConfig, int maxDiskSpaceInBytes,
                                   int maxBatchSizeInBytes) {
+
         super(name, filter, layout, ignoreExceptions, properties);
         Objects.requireNonNull(layout, "layout");
 
@@ -496,9 +497,9 @@ public class SecuredHttpAppender extends AbstractAppender {
             return FailureWaringLevel.INITIAL;
         } else if (!persistentQueue.isFull()) { // next check 90% warning
             return FailureWaringLevel.HALF_QUEUE_SIZE;
-        } else { // on next check fully used warning issued
-            return FailureWaringLevel.FULLY_USED;
         }
+        // on next check fully used warning issued
+        return FailureWaringLevel.FULLY_USED;
     }
 
     private void resetWarningLogOnRemoteServerSuccess() {
