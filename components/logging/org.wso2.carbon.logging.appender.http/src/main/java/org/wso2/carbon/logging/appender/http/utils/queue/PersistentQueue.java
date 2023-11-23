@@ -21,22 +21,23 @@
 package org.wso2.carbon.logging.appender.http.utils.queue;
 
 import com.google.gson.JsonArray;
+import org.apache.commons.lang.SerializationException;
 import org.wso2.carbon.logging.appender.http.utils.queue.exception.PersistentQueueException;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * This class implements a file based queue which can be used to store objects in serialized form in a persistent
@@ -81,7 +82,7 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
      */
     public synchronized void enqueue(T object) throws PersistentQueueException {
 
-        byte[] data = serializeObject(object);
+        byte[] data = serialize(object);
         if (data.length == 0) {
             throw new PersistentQueueException(
                     PersistentQueueException.PersistentQueueErrorTypes.EMPTY_OBJECT,
@@ -121,7 +122,7 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
                 }
             }
         }
-        return readData != null ? deserializeObject(readData) : null;
+        return readData != null ? (T) deserialize(readData) : null;
     }
 
     /**
@@ -144,7 +145,7 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
                 }
             }
         }
-        return readData != null ? deserializeObject(readData) : null;
+        return readData != null ? (T) deserialize(readData) : null;
     }
 
     /**
@@ -263,30 +264,74 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
         }
     }
 
-    private byte[] serializeObject(T obj) throws PersistentQueueException {
+    // logic copied from org.apache.commons.lang.SerializationUtils function
+    // this is to be replaced with the use of the library in future
+    private static void serialize(Serializable obj, OutputStream outputStream) {
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-                new GZIPOutputStream(byteArrayOutputStream))) {
-            objectOutputStream.writeObject(obj);
-        } catch (IOException e) {
-            throw new PersistentQueueException(
-                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_MESSAGE_SERIALIZATION_FAILED,
-                    "Error while serializing object", e);
+        if (outputStream == null) {
+            throw new IllegalArgumentException("The OutputStream must not be null");
+        } else {
+            ObjectOutputStream out = null;
+            try {
+                out = new ObjectOutputStream(outputStream);
+                out.writeObject(obj);
+            } catch (IOException e) {
+                throw new SerializationException(e);
+            } finally {
+                try {
+                    if (out != null) {
+                        out.close();
+                    }
+                } catch (IOException ignored) {
+                }
+            }
         }
-        return byteArrayOutputStream.toByteArray();
     }
 
-    @SuppressWarnings("unchecked")
-    private T deserializeObject(byte[] bytes) throws PersistentQueueException {
+    // logic copied from org.apache.commons.lang.SerializationUtils function
+    // this is to be replaced with the use of the library in future
+    private static byte[] serialize(Serializable obj) {
 
-        try (ObjectInputStream objectInputStream = new ObjectInputStream(
-                new GZIPInputStream(new ByteArrayInputStream(bytes)))) {
-            return (T) objectInputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            throw new PersistentQueueException(
-                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_MESSAGE_DESERIALIZATION_FAILED,
-                    "Error while deserializing object", e);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(512);
+        serialize(obj, baos);
+        return baos.toByteArray();
+    }
+
+    // logic copied from org.apache.commons.lang.SerializationUtils function
+    // this is to be replaced with the use of the library in future
+    private static Object deserialize(InputStream inputStream) {
+
+        if (inputStream == null) {
+            throw new IllegalArgumentException("The InputStream must not be null");
+        } else {
+            ObjectInputStream objectInputStream = null;
+            Object obj;
+            try {
+                objectInputStream = new ObjectInputStream(inputStream);
+                obj = objectInputStream.readObject();
+            } catch (ClassNotFoundException | IOException e) {
+                throw new SerializationException(e);
+            } finally {
+                try {
+                    if (objectInputStream != null) {
+                        objectInputStream.close();
+                    }
+                } catch (IOException ignored) {
+                }
+            }
+            return obj;
+        }
+    }
+
+    // logic copied from org.apache.commons.lang.SerializationUtils function
+    // this is to be replaced with the use of the library in future
+    private static Object deserialize(byte[] objectData) {
+
+        if (objectData == null) {
+            throw new IllegalArgumentException("The byte[] must not be null");
+        } else {
+            ByteArrayInputStream bais = new ByteArrayInputStream(objectData);
+            return deserialize(bais);
         }
     }
 
