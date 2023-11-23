@@ -41,7 +41,7 @@ public class PersistentQueueException extends Exception {
         QUEUE_BLOCK_FILE_NOT_FOUND,
         QUEUE_BLOCK_DELETION_FAILED,
         EMPTY_OBJECT,
-        QUEUE_META_DATA_FILE_READING_FAILED
+        QUEUE_META_DATA_FILE_READING_FAILED,
     }
 
     private final PersistentQueueErrorTypes errorType;

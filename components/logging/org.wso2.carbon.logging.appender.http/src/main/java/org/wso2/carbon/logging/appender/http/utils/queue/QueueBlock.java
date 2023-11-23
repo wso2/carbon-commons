@@ -50,9 +50,10 @@ public class QueueBlock {
     private static final int APPENDER_OFFSET_VALUE_METADATA_INDEX = 0;
     private static final int TAILER_OFFSET_VALUE_METADATA_INDEX = 4;
     private static final int MESSAGE_LENGTH_BIT_COUNT = 4;
+    private static String queueDirectoryPath;
+    private static boolean isInitialized = false;
     private final RandomAccessFile file;
     private final MappedByteBuffer buffer;
-    private final String queueDirectoryPath;
     private final String fileName;
     private int currentAppenderIndex;
     private int currentTailerIndex;
@@ -72,7 +73,11 @@ public class QueueBlock {
     public QueueBlock(final String queueDirectoryPath, final String fileName, final long length)
             throws PersistentQueueException {
 
-        this.queueDirectoryPath = queueDirectoryPath;
+        if (!isInitialized) {
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CREATION_FAILED,
+                    "QueueBlock class is not initialized.");
+        }
         this.fileName = fileName;
         try {
             String queueBlocksDirectoryPath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH;
@@ -93,7 +98,11 @@ public class QueueBlock {
     // this constructor is to be used when loading a block from disk
     private QueueBlock(final String queueDirectoryPath, final String fileName) throws PersistentQueueException {
 
-        this.queueDirectoryPath = queueDirectoryPath;
+        if (!isInitialized) {
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CREATION_FAILED,
+                    "QueueBlock class is not initialized.");
+        }
         this.fileName = fileName;
         try {
             String filePath = queueDirectoryPath + "/" + QUEUE_BLOCK_SUB_DIRECTORY_PATH + "/" + fileName
@@ -109,6 +118,16 @@ public class QueueBlock {
                     PersistentQueueException.PersistentQueueErrorTypes.QUEUE_BLOCK_CREATION_FAILED,
                     "Unable to create metadata file", e);
         }
+    }
+
+    /**
+     * This method is to be used when initializing the class.
+     * @param queueDirectoryPath path of the queue directory
+     */
+    public static void initClass(String queueDirectoryPath) {
+
+        QueueBlock.queueDirectoryPath = queueDirectoryPath;
+        QueueBlock.isInitialized = true;
     }
 
     /**

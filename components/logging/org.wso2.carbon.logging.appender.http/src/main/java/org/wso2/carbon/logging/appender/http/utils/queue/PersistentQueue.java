@@ -169,15 +169,21 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
     /**
      * Loops through each file in the queue directory and calculates the disk usage of the queue.
      * @return disk usage of the queue.
-     * @throws IOException if an error occurs while calculating the disk usage.
+     * @throws PersistentQueueException if an error occurs while calculating the disk usage.
      */
-    public long calculateDiskUsage() throws IOException {
+    public long calculateDiskUsage() throws PersistentQueueException {
 
-        Path folder = Paths.get(this.queueDirectoryPath);
-        try (Stream<Path> paths = Files.walk(folder)) {
-            return paths.filter(p -> p.toFile().isFile())
-                    .mapToLong(p -> p.toFile().length())
-                    .sum();
+        try {
+            Path folder = Paths.get(this.queueDirectoryPath);
+            try (Stream<Path> paths = Files.walk(folder)) {
+                return paths.filter(p -> p.toFile().isFile())
+                        .mapToLong(p -> p.toFile().length())
+                        .sum();
+            }
+        } catch (IOException e) {
+            throw new PersistentQueueException(
+                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_USAGE_CALCULATION_FAILED,
+                    "Unable to calculate disk usage.", e);
         }
     }
 
@@ -187,7 +193,7 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
      */
     public float getUsedSpaceFraction() {
 
-        return isDiskSpaceFull() ? 1 : (float) currentDiskUsage / maxBatchSizeInBytes;
+        return isDiskSpaceFull() ? 1 : (float) currentDiskUsage / maxDiskSpaceInBytes;
     }
 
     private void init() throws PersistentQueueException {
@@ -205,20 +211,16 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
 
     private void initMetaData() throws PersistentQueueException {
 
+        QueueBlock.initClass(this.queueDirectoryPath);
         // handling the initialization without existing metadata file
         if (!this.queueMetaDataHandler.isInitialized()) {
             queueMetaDataHandler.addJsonArray(QUEUE_BLOCK_LIST_KEY, new JsonArray());
+            currentDiskUsage = calculateDiskUsage();
             createNewBlock();
         }
         loadAppenderBlock();
         loadTailerBlock();
-        try {
-            currentDiskUsage = calculateDiskUsage();
-        } catch (IOException e) {
-            throw new PersistentQueueException(
-                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_USAGE_CALCULATION_FAILED,
-                    "Unable to calculate disk usage.", e);
-        }
+        currentDiskUsage = calculateDiskUsage();
         this.queueMetaDataHandler.setIsInitialized(true);
     }
 
@@ -339,11 +341,9 @@ public class PersistentQueue<T extends Serializable> implements AutoCloseable {
 
         try {
             currentDiskUsage = calculateDiskUsage();
-        } catch (IOException e) {
+        } catch (PersistentQueueException e) {
             currentDiskUsage += incrementWithDefaultIfFailed ? maxBatchSizeInBytes : -maxBatchSizeInBytes;
-            throw new PersistentQueueException(
-                    PersistentQueueException.PersistentQueueErrorTypes.QUEUE_DISK_USAGE_CALCULATION_FAILED,
-                    "Unable to calculate disk usage.", e);
+            throw e;
         }
     }
 }
