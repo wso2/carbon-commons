@@ -93,7 +93,7 @@ public final class LoggingConstants {
     public static final String CONNECTION_TIMEOUT = "connectionTimeout";
     public static final String REMOTE_SERVER_LOGGER_RESOURCE_PATH = "/identity/config/remoteServer";
 
-    public static final String AUDIT = "AUDIT";
-    public static final String CARBON = "CARBON";
+    public static final String AUDIT = "audit";
+    public static final String CARBON = "carbon";
     public static final String LOG_TYPE = "logType";
 }
