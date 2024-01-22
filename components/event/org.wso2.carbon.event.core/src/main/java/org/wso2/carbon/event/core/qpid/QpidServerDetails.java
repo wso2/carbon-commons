@@ -17,6 +17,8 @@
 package org.wso2.carbon.event.core.qpid;
 
 import org.wso2.carbon.utils.ServerConstants;
+import org.wso2.carbon.utils.multitenancy.MultitenantConstants;
+import org.wso2.carbon.utils.security.KeystoreUtils;
 
 @Deprecated
 public class QpidServerDetails {
@@ -25,8 +27,9 @@ public class QpidServerDetails {
     private static final String DOMAIN_NAME_SEPARATOR_INTERNAL = "!";
 
     private static final String SECURITY_RESOURCES_DIR = "/repository/resources/security/";
-    private static final String KEYSTORE_FILE = "wso2carbon.jks";
-    private static final String TRUSTSTORE_FILE = "client-truststore.jks";
+    private static final String KEYSTORE_FILE = "wso2carbon" +
+            KeystoreUtils.getKeyStoreFileExtension(MultitenantConstants.SUPER_TENANT_DOMAIN_NAME);
+    private static final String TRUSTSTORE_FILE = KeystoreUtils.getTrustStoreFileLocation();
 
     private String accessKey;
     private String clientID;

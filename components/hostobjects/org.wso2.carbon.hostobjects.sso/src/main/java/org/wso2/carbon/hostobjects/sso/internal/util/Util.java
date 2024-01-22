@@ -30,6 +30,7 @@ import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
+import org.wso2.carbon.utils.security.KeystoreUtils;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
@@ -222,7 +223,7 @@ public class Util {
                 keyStore = keyStoreManager.getKeyStore(generateKSNameFromDomainName(tenantDomain));
                 cert = (java.security.cert.X509Certificate) keyStore.getCertificate(tenantDomain);
             } else {
-                keyStore = KeyStore.getInstance("JKS");
+                keyStore = KeyStore.getInstance(KeystoreUtils.getKeyStoreFileType(tenantDomain));
                 keyStore.load(new FileInputStream(new File(keyStoreName)), keyStorePassword.toCharArray());
                 cert = (java.security.cert.X509Certificate) keyStore.getCertificate(alias);
             }
@@ -258,8 +259,8 @@ public class Util {
      * @return key store file name
      */
     private static String generateKSNameFromDomainName(String tenantDomain) {
-        String ksName = tenantDomain.trim().replace(".", "-");
-        return (ksName + ".jks");
+
+        return KeystoreUtils.getKeyStoreFileType(tenantDomain);
     }
     
     
