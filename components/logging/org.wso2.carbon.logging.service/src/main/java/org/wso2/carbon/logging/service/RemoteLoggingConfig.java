@@ -100,6 +100,8 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         String appenderName = LoggingConstants.AUDIT_LOGFILE;
         if (LoggingConstants.CARBON.equals(logType)) {
             appenderName = LoggingConstants.CARBON_LOGFILE;
+        } else if (LoggingConstants.API.equals(logType)) {
+            appenderName = LoggingConstants.API_LOGFILE;
         }
         if (StringUtils.isBlank(url)) {
             throw new ConfigurationException("URL cannot be empty");
@@ -147,6 +149,8 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         String appenderName = LoggingConstants.AUDIT_LOGFILE;
         if (LoggingConstants.CARBON.equals(logType)) {
             appenderName = LoggingConstants.CARBON_LOGFILE;
+        } else if (LoggingConstants.API.equals(logType)) {
+            appenderName = LoggingConstants.API_LOGFILE;
         }
 
         if (!isPeriodicalSyncRequest) {
@@ -200,7 +204,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         List<RemoteServerLoggerData> removedRemoteServerLoggerDataList = new ArrayList<>();
         loadConfigs();
 
-        for (String logType : new String[]{LoggingConstants.AUDIT, LoggingConstants.CARBON}) {
+        for (String logType : new String[]{LoggingConstants.AUDIT, LoggingConstants.CARBON, LoggingConstants.API}) {
             RemoteServerLoggerData remoteServerLoggerData =
                     findMatchingResponseData(remoteServerLoggerResponseDataList, logType);
 
@@ -257,6 +261,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         List<String> logTypes = new ArrayList<>();
         logTypes.add(LoggingConstants.AUDIT);
         logTypes.add(LoggingConstants.CARBON);
+        logTypes.add(LoggingConstants.API);
         List<RemoteServerLoggerData> remoteServerLoggerDataList = new ArrayList<>();
         for (String logType : logTypes) {
             RemoteServerLoggerData remoteServerLoggerData = getRemoteServerConfig(logType);
@@ -283,18 +288,31 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         config.setProperty(getKey(appenderName, LoggingConstants.NAME_SUFFIX), appenderName);
         // appender.CARBON_LOGFILE.type = RollingFile
         config.setProperty(getKey(appenderName, LoggingConstants.TYPE_SUFFIX), LoggingConstants.ROLLING_FILE);
+        String fileName = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATH;
+        String filePattern = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATTERN;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            fileName = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATH;
+            filePattern = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATTERN;
+        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
+            fileName = LoggingConstants.DEFAULT_API_LOGFILE_PATH;
+            filePattern = LoggingConstants.DEFAULT_API_LOGFILE_PATTERN;
+        }
         // appender.CARBON_LOGFILE.fileName = ${sys:carbon.home}/repository/logs/wso2carbon.log
-        config.setProperty(getKey(appenderName, LoggingConstants.FILE_NAME_SUFFIX),
-                LoggingConstants.DEFAULT_CARBON_LOGFILE_PATH);
+        config.setProperty(getKey(appenderName, LoggingConstants.FILE_NAME_SUFFIX), fileName);
         // appender.CARBON_LOGFILE.filePattern = ${sys:carbon.home}/repository/logs/wso2carbon-%d{MM-dd-yyyy}-%i.log
-        config.setProperty(getKey(appenderName, LoggingConstants.FILE_PATTERN_SUFFIX),
-                LoggingConstants.DEFAULT_CARBON_LOGFILE_PATTERN);
+        config.setProperty(getKey(appenderName, LoggingConstants.FILE_PATTERN_SUFFIX), filePattern);
         // appender.CARBON_LOGFILE.layout.type = PatternLayout
         config.setProperty(getKey(appenderName, LoggingConstants.LAYOUT_SUFFIX, LoggingConstants.TYPE_SUFFIX),
                 LoggingConstants.PATTERN_LAYOUT_TYPE);
+        String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
+        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
+            layoutPattern = LoggingConstants.API_LOGS_DEFAULT_LAYOUT_PATTERN;
+        }
         // appender.CARBON_LOGFILE.layout.pattern = TID: [%tenantId] [%appName] [%d] %5p {%c} - %m%ex%n
         config.setProperty(getKey(appenderName, LoggingConstants.LAYOUT_SUFFIX, LoggingConstants.PATTERN_SUFFIX),
-                LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN);
+                layoutPattern);
         // appender.CARBON_LOGFILE.policies.type = Policies
         config.setProperty(getKey(appenderName, LoggingConstants.POLICIES_SUFFIX, LoggingConstants.TYPE_SUFFIX),
                 LoggingConstants.POLICIES);
@@ -322,9 +340,14 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         // appender.CARBON_LOGFILE.filter.threshold.type = ThresholdFilter
         config.setProperty(getKey(appenderName, LoggingConstants.FILTER_SUFFIX, LoggingConstants.THRESHOLD_SUFFIX,
                 LoggingConstants.TYPE_SUFFIX), LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
-        // appender.CARBON_LOGFILE.filter.threshold.level = INFO
+        // CARBON and API logs have default threshold filter level DEBUG
+        String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
+        }
+        // appender.CARBON_LOGFILE.filter.threshold.level = DEBUG
         config.setProperty(getKey(appenderName, LoggingConstants.FILTER_SUFFIX, LoggingConstants.THRESHOLD_SUFFIX,
-                LoggingConstants.LEVEL_SUFFIX), LoggingConstants.THRESHOLD_FILTER_LEVEL);
+                LoggingConstants.LEVEL_SUFFIX), filterLevel);
     }
 
     /**
@@ -356,6 +379,8 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         String layoutTypePatternDefaultValue = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
         if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
             layoutTypePatternDefaultValue = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
+        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
+            layoutTypePatternDefaultValue = LoggingConstants.API_LOGS_DEFAULT_LAYOUT_PATTERN;
         }
         String layoutTypePatternValue = null;
         for (String key : appenderPropertiesList) {
@@ -436,10 +461,14 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX +
                         LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
-        // appender.CARBON_LOGFILE.filter.threshold.level = INFO
+        // CARBON and API logs have default threshold filter level DEBUG
+        String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
+        }
+        // appender.CARBON_LOGFILE.filter.threshold.level = DEBUG
         config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX +
-                        LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX,
-                LoggingConstants.THRESHOLD_FILTER_LEVEL);
+                        LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX, filterLevel);
     }
 
     private void applyConfigs() throws IOException, ConfigurationException {
@@ -456,6 +485,8 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             String logType = LoggingConstants.AUDIT;
             if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
                 logType = LoggingConstants.CARBON;
+            } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
+                logType = LoggingConstants.API;
             }
             try {
                 boolean transactionStarted = Transaction.isStarted();
@@ -502,6 +533,8 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             String logType = LoggingConstants.AUDIT;
             if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
                 logType = LoggingConstants.CARBON;
+            } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
+                logType = LoggingConstants.API;
             }
             String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + logType;
             if (!RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
@@ -544,8 +577,12 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     private boolean isDataUpdated(RemoteServerLoggerData remoteServerLoggerData, String logType) throws IOException {
 
-        String appenderName = logType.equals(LoggingConstants.AUDIT) ? LoggingConstants.AUDIT_LOGFILE :
-                LoggingConstants.CARBON_LOGFILE;
+        String appenderName = LoggingConstants.CARBON_LOGFILE;
+        if (LoggingConstants.AUDIT.equals(logType)) {
+            appenderName = LoggingConstants.AUDIT_LOGFILE;
+        } else if (LoggingConstants.API.equals(logType)) {
+            appenderName = LoggingConstants.API_LOGFILE;
+        }
         Map<String, String> appenderProperties = Utils.getKeyValuesOfAppender(logPropFile, appenderName);
 
         if (remoteServerLoggerData == null) {

@@ -46,6 +46,7 @@
                 <select name="log-option" id="log-option" onchange="logTypeSelectionChanged(this.value);">
                   <option value="AUDIT" selected>AUDIT</option>
                   <option value="CARBON">CARBON</option>
+                  <option value="API">API</option>
                 </select>
             </td>
         </tr>
