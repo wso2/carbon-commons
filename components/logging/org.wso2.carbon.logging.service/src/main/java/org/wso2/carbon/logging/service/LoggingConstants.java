@@ -38,7 +38,8 @@ public final class LoggingConstants {
     public static final String PROCESSING_LIMIT_SUFFIX = ".processingLimit";
     public static final String PATTERN_LAYOUT_TYPE = "PatternLayout";
     public static final String DEFAULT_THRESHOLD_FILTER_TYPE = "ThresholdFilter";
-    public static final String THRESHOLD_FILTER_LEVEL = "INFO";
+    public static final String THRESHOLD_FILTER_LEVEL_INFO = "INFO";
+    public static final String THRESHOLD_FILTER_LEVEL_DEBUG = "DEBUG";
     public static final String HTTP_APPENDER_TYPE = "SecuredHttp";
     public static final String AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%d] %5p {%c} - %m%ex%n";
 
@@ -47,6 +48,8 @@ public final class LoggingConstants {
     public static final String ROLLING_FILE = "RollingFile";
     public static final String DEFAULT_CARBON_LOGFILE_PATH = "${sys:carbon.home}/repository/logs/wso2carbon.log";
     public static final String DEFAULT_CARBON_LOGFILE_PATTERN = "${sys:carbon.home}/repository/logs/wso2carbon-%d{MM-dd-yyyy}-%i.log";
+    public static final String DEFAULT_AUDIT_LOGFILE_PATH = "${sys:carbon.home}/repository/logs/audit.log";
+    public static final String DEFAULT_AUDIT_LOGFILE_PATTERN = "${sys:carbon.home}/repository/logs/audit-%d{MM-dd-yyyy}.log";
     public static final String POLICIES = "Policies";
     public static final String TIME_BASED_TRIGGERING_POLICY = "TimeBasedTriggeringPolicy";
     public static final int DEFAULT_INTERVAL = 1;
