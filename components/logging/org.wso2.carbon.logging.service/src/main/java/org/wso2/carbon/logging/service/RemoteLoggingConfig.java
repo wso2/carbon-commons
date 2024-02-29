@@ -283,18 +283,27 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         config.setProperty(getKey(appenderName, LoggingConstants.NAME_SUFFIX), appenderName);
         // appender.CARBON_LOGFILE.type = RollingFile
         config.setProperty(getKey(appenderName, LoggingConstants.TYPE_SUFFIX), LoggingConstants.ROLLING_FILE);
+
+        String fileName = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATH;
+        String filePattern = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATTERN;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            fileName = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATH;
+            filePattern = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATTERN;
+        }
         // appender.CARBON_LOGFILE.fileName = ${sys:carbon.home}/repository/logs/wso2carbon.log
-        config.setProperty(getKey(appenderName, LoggingConstants.FILE_NAME_SUFFIX),
-                LoggingConstants.DEFAULT_CARBON_LOGFILE_PATH);
+        config.setProperty(getKey(appenderName, LoggingConstants.FILE_NAME_SUFFIX), fileName);
         // appender.CARBON_LOGFILE.filePattern = ${sys:carbon.home}/repository/logs/wso2carbon-%d{MM-dd-yyyy}-%i.log
-        config.setProperty(getKey(appenderName, LoggingConstants.FILE_PATTERN_SUFFIX),
-                LoggingConstants.DEFAULT_CARBON_LOGFILE_PATTERN);
+        config.setProperty(getKey(appenderName, LoggingConstants.FILE_PATTERN_SUFFIX), filePattern);
         // appender.CARBON_LOGFILE.layout.type = PatternLayout
         config.setProperty(getKey(appenderName, LoggingConstants.LAYOUT_SUFFIX, LoggingConstants.TYPE_SUFFIX),
                 LoggingConstants.PATTERN_LAYOUT_TYPE);
+        String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
+        }
         // appender.CARBON_LOGFILE.layout.pattern = TID: [%tenantId] [%appName] [%d] %5p {%c} - %m%ex%n
         config.setProperty(getKey(appenderName, LoggingConstants.LAYOUT_SUFFIX, LoggingConstants.PATTERN_SUFFIX),
-                LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN);
+                layoutPattern);
         // appender.CARBON_LOGFILE.policies.type = Policies
         config.setProperty(getKey(appenderName, LoggingConstants.POLICIES_SUFFIX, LoggingConstants.TYPE_SUFFIX),
                 LoggingConstants.POLICIES);
@@ -322,9 +331,13 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         // appender.CARBON_LOGFILE.filter.threshold.type = ThresholdFilter
         config.setProperty(getKey(appenderName, LoggingConstants.FILTER_SUFFIX, LoggingConstants.THRESHOLD_SUFFIX,
                 LoggingConstants.TYPE_SUFFIX), LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
+        String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
+        }
         // appender.CARBON_LOGFILE.filter.threshold.level = INFO
         config.setProperty(getKey(appenderName, LoggingConstants.FILTER_SUFFIX, LoggingConstants.THRESHOLD_SUFFIX,
-                LoggingConstants.LEVEL_SUFFIX), LoggingConstants.THRESHOLD_FILTER_LEVEL);
+                LoggingConstants.LEVEL_SUFFIX), filterLevel);
     }
 
     /**
@@ -436,10 +449,14 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX +
                         LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
-        // appender.CARBON_LOGFILE.filter.threshold.level = INFO
+        // CARBON and API logs have default threshold filter level DEBUG
+        String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
+        }
+        // appender.CARBON_LOGFILE.filter.threshold.level = DEBUG
         config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX +
-                        LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX,
-                LoggingConstants.THRESHOLD_FILTER_LEVEL);
+                LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX, filterLevel);
     }
 
     private void applyConfigs() throws IOException, ConfigurationException {
