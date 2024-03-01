@@ -1891,7 +1891,7 @@
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
         <commons-fileupload.version>1.1.1</commons-fileupload.version>
         <commons-io.wso2.version>2.0.0.wso2v1</commons-io.wso2.version>
-        <commons-codec.version>1.16.0</commons-codec.version>
+        <commons-codec.version>1.12</commons-codec.version>
         <commons.digester.wso2.version>1.8.1.wso2v1</commons.digester.wso2.version>
         <commons-fileupload.wso2.version>1.2.2.wso2v1</commons-fileupload.wso2.version>
         <commons-lang.wso2.version>2.6.0.wso2v1</commons-lang.wso2.version>
