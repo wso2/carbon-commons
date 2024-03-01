@@ -1,5 +1,4 @@
-
-<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2498="http://exception.lang.commons.apache.org/xsd" xmlns:ax2501="http://data.service.logging.carbon.wso2.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2495="http://io.java/xsd" xmlns:ax2497="http://configuration.commons.apache.org/xsd" xmlns:tns="http://service.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://service.logging.carbon.wso2.org">
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ax2455="http://configuration.commons.apache.org/xsd" xmlns:ax2456="http://exception.lang.commons.apache.org/xsd" xmlns:ax2459="http://data.service.logging.carbon.wso2.org/xsd" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:ns1="http://org.apache.axis2/xsd" xmlns:ax2453="http://io.java/xsd" xmlns:tns="http://service.logging.carbon.wso2.org" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://service.logging.carbon.wso2.org">
     <wsdl:documentation>RemoteLoggingConfig</wsdl:documentation>
     <wsdl:types>
         <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://exception.lang.commons.apache.org/xsd">
@@ -13,44 +12,76 @@
                 </xs:sequence>
             </xs:complexType>
         </xs:schema>
-        <xs:schema xmlns:ax2500="http://configuration.commons.apache.org/xsd" xmlns:ax2502="http://data.service.logging.carbon.wso2.org/xsd" xmlns:ns="http://org.apache.axis2/xsd" xmlns:ax2496="http://io.java/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
+        <xs:schema xmlns:ax2454="http://io.java/xsd" xmlns:ax2460="http://data.service.logging.carbon.wso2.org/xsd" xmlns:ax2458="http://configuration.commons.apache.org/xsd" xmlns:ns="http://org.apache.axis2/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://org.apache.axis2/xsd">
             <xs:import namespace="http://io.java/xsd"/>
             <xs:import namespace="http://configuration.commons.apache.org/xsd"/>
             <xs:import namespace="http://data.service.logging.carbon.wso2.org/xsd"/>
             <xs:element name="RemoteLoggingConfigIOException">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="IOException" nillable="true" type="ax2495:IOException"/>
+                        <xs:element minOccurs="0" name="IOException" nillable="true" type="ax2454:IOException"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="RemoteLoggingConfigConfigurationException">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="ConfigurationException" nillable="true" type="ax2500:ConfigurationException"/>
-                    </xs:sequence>
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="resetRemoteServerConfig">
-                <xs:complexType>
-                    <xs:sequence>
-                        <xs:element minOccurs="0" name="data" nillable="true" type="ax2501:RemoteServerLoggerData"/>
+                        <xs:element minOccurs="0" name="ConfigurationException" nillable="true" type="ax2455:ConfigurationException"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
             <xs:element name="addRemoteServerConfig">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element minOccurs="0" name="data" nillable="true" type="ax2501:RemoteServerLoggerData"/>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ax2459:RemoteServerLoggerData"/>
                     </xs:sequence>
                 </xs:complexType>
             </xs:element>
+            <xs:element name="resetRemoteServerConfig">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="data" nillable="true" type="ax2459:RemoteServerLoggerData"/>
+                        <xs:element minOccurs="0" name="args1" type="xs:boolean"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRemoteServerConfigs">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRemoteServerConfigsResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="return" nillable="true" type="ax2459:RemoteServerLoggerData"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRemoteServerConfig">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="logType" nillable="true" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="getRemoteServerConfigResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="0" name="return" nillable="true" type="ax2459:RemoteServerLoggerData"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="syncRemoteServerConfigs">
+                <xs:complexType>
+                    <xs:sequence/>
+                </xs:complexType>
+            </xs:element>
         </xs:schema>
-        <xs:schema xmlns:ax2499="http://exception.lang.commons.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://configuration.commons.apache.org/xsd">
+        <xs:schema xmlns:ax2457="http://exception.lang.commons.apache.org/xsd" attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://configuration.commons.apache.org/xsd">
             <xs:import namespace="http://exception.lang.commons.apache.org/xsd"/>
             <xs:complexType name="ConfigurationException">
                 <xs:complexContent>
-                    <xs:extension base="ax2498:NestableException">
+                    <xs:extension base="ax2456:NestableException">
                         <xs:sequence/>
                     </xs:extension>
                 </xs:complexContent>
@@ -64,12 +95,10 @@
         <xs:schema attributeFormDefault="qualified" elementFormDefault="qualified" targetNamespace="http://data.service.logging.carbon.wso2.org/xsd">
             <xs:complexType name="RemoteServerLoggerData">
                 <xs:sequence>
-                    <xs:element minOccurs="0" name="apiLogType" type="xs:boolean"/>
-                    <xs:element minOccurs="0" name="auditLogType" type="xs:boolean"/>
-                    <xs:element minOccurs="0" name="carbonLogType" type="xs:boolean"/>
                     <xs:element minOccurs="0" name="connectTimeoutMillis" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="keystoreLocation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="keystorePassword" nillable="true" type="xs:string"/>
+                    <xs:element minOccurs="0" name="logType" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="password" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="truststoreLocation" nillable="true" type="xs:string"/>
                     <xs:element minOccurs="0" name="truststorePassword" nillable="true" type="xs:string"/>
@@ -89,8 +118,23 @@
     <wsdl:message name="RemoteLoggingConfigConfigurationException">
         <wsdl:part name="parameters" element="ns1:RemoteLoggingConfigConfigurationException"/>
     </wsdl:message>
+    <wsdl:message name="syncRemoteServerConfigsRequest">
+        <wsdl:part name="parameters" element="ns1:syncRemoteServerConfigs"/>
+    </wsdl:message>
     <wsdl:message name="resetRemoteServerConfigRequest">
         <wsdl:part name="parameters" element="ns1:resetRemoteServerConfig"/>
+    </wsdl:message>
+    <wsdl:message name="getRemoteServerConfigRequest">
+        <wsdl:part name="parameters" element="ns1:getRemoteServerConfig"/>
+    </wsdl:message>
+    <wsdl:message name="getRemoteServerConfigResponse">
+        <wsdl:part name="parameters" element="ns1:getRemoteServerConfigResponse"/>
+    </wsdl:message>
+    <wsdl:message name="getRemoteServerConfigsRequest">
+        <wsdl:part name="parameters" element="ns1:getRemoteServerConfigs"/>
+    </wsdl:message>
+    <wsdl:message name="getRemoteServerConfigsResponse">
+        <wsdl:part name="parameters" element="ns1:getRemoteServerConfigsResponse"/>
     </wsdl:message>
     <wsdl:portType name="RemoteLoggingConfigPortType">
         <wsdl:operation name="addRemoteServerConfig">
@@ -98,16 +142,43 @@
             <wsdl:fault message="tns:RemoteLoggingConfigIOException" name="RemoteLoggingConfigIOException" wsaw:Action="urn:addRemoteServerConfigRemoteLoggingConfigIOException"/>
             <wsdl:fault message="tns:RemoteLoggingConfigConfigurationException" name="RemoteLoggingConfigConfigurationException" wsaw:Action="urn:addRemoteServerConfigRemoteLoggingConfigConfigurationException"/>
         </wsdl:operation>
+        <wsdl:operation name="syncRemoteServerConfigs">
+            <wsdl:input message="tns:syncRemoteServerConfigsRequest" wsaw:Action="urn:syncRemoteServerConfigs"/>
+            <wsdl:fault message="tns:RemoteLoggingConfigConfigurationException" name="RemoteLoggingConfigConfigurationException" wsaw:Action="urn:syncRemoteServerConfigsRemoteLoggingConfigConfigurationException"/>
+            <wsdl:fault message="tns:RemoteLoggingConfigIOException" name="RemoteLoggingConfigIOException" wsaw:Action="urn:syncRemoteServerConfigsRemoteLoggingConfigIOException"/>
+        </wsdl:operation>
         <wsdl:operation name="resetRemoteServerConfig">
             <wsdl:input message="tns:resetRemoteServerConfigRequest" wsaw:Action="urn:resetRemoteServerConfig"/>
             <wsdl:fault message="tns:RemoteLoggingConfigIOException" name="RemoteLoggingConfigIOException" wsaw:Action="urn:resetRemoteServerConfigRemoteLoggingConfigIOException"/>
             <wsdl:fault message="tns:RemoteLoggingConfigConfigurationException" name="RemoteLoggingConfigConfigurationException" wsaw:Action="urn:resetRemoteServerConfigRemoteLoggingConfigConfigurationException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteServerConfig">
+            <wsdl:input message="tns:getRemoteServerConfigRequest" wsaw:Action="urn:getRemoteServerConfig"/>
+            <wsdl:output message="tns:getRemoteServerConfigResponse" wsaw:Action="urn:getRemoteServerConfigResponse"/>
+            <wsdl:fault message="tns:RemoteLoggingConfigConfigurationException" name="RemoteLoggingConfigConfigurationException" wsaw:Action="urn:getRemoteServerConfigRemoteLoggingConfigConfigurationException"/>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteServerConfigs">
+            <wsdl:input message="tns:getRemoteServerConfigsRequest" wsaw:Action="urn:getRemoteServerConfigs"/>
+            <wsdl:output message="tns:getRemoteServerConfigsResponse" wsaw:Action="urn:getRemoteServerConfigsResponse"/>
+            <wsdl:fault message="tns:RemoteLoggingConfigConfigurationException" name="RemoteLoggingConfigConfigurationException" wsaw:Action="urn:getRemoteServerConfigsRemoteLoggingConfigConfigurationException"/>
         </wsdl:operation>
     </wsdl:portType>
     <wsdl:binding name="RemoteLoggingConfigSoap11Binding" type="tns:RemoteLoggingConfigPortType">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="addRemoteServerConfig">
             <soap:operation soapAction="urn:addRemoteServerConfig" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+            <wsdl:fault name="RemoteLoggingConfigIOException">
+                <soap:fault use="literal" name="RemoteLoggingConfigIOException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="syncRemoteServerConfigs">
+            <soap:operation soapAction="urn:syncRemoteServerConfigs" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -130,11 +201,47 @@
                 <soap:fault use="literal" name="RemoteLoggingConfigIOException"/>
             </wsdl:fault>
         </wsdl:operation>
+        <wsdl:operation name="getRemoteServerConfig">
+            <soap:operation soapAction="urn:getRemoteServerConfig" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteServerConfigs">
+            <soap:operation soapAction="urn:getRemoteServerConfigs" style="document"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+        </wsdl:operation>
     </wsdl:binding>
     <wsdl:binding name="RemoteLoggingConfigSoap12Binding" type="tns:RemoteLoggingConfigPortType">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
         <wsdl:operation name="addRemoteServerConfig">
             <soap12:operation soapAction="urn:addRemoteServerConfig" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap12:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+            <wsdl:fault name="RemoteLoggingConfigIOException">
+                <soap12:fault use="literal" name="RemoteLoggingConfigIOException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="syncRemoteServerConfigs">
+            <soap12:operation soapAction="urn:syncRemoteServerConfigs" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>
@@ -157,6 +264,30 @@
                 <soap12:fault use="literal" name="RemoteLoggingConfigIOException"/>
             </wsdl:fault>
         </wsdl:operation>
+        <wsdl:operation name="getRemoteServerConfig">
+            <soap12:operation soapAction="urn:getRemoteServerConfig" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap12:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteServerConfigs">
+            <soap12:operation soapAction="urn:getRemoteServerConfigs" style="document"/>
+            <wsdl:input>
+                <soap12:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap12:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="RemoteLoggingConfigConfigurationException">
+                <soap12:fault use="literal" name="RemoteLoggingConfigConfigurationException"/>
+            </wsdl:fault>
+        </wsdl:operation>
     </wsdl:binding>
     <wsdl:binding name="RemoteLoggingConfigHttpBinding" type="tns:RemoteLoggingConfigPortType">
         <http:binding verb="POST"/>
@@ -166,11 +297,35 @@
                 <mime:content type="text/xml" part="parameters"/>
             </wsdl:input>
         </wsdl:operation>
+        <wsdl:operation name="syncRemoteServerConfigs">
+            <http:operation location="syncRemoteServerConfigs"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+        </wsdl:operation>
         <wsdl:operation name="resetRemoteServerConfig">
             <http:operation location="resetRemoteServerConfig"/>
             <wsdl:input>
                 <mime:content type="text/xml" part="parameters"/>
             </wsdl:input>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteServerConfig">
+            <http:operation location="getRemoteServerConfig"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
+        </wsdl:operation>
+        <wsdl:operation name="getRemoteServerConfigs">
+            <http:operation location="getRemoteServerConfigs"/>
+            <wsdl:input>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:input>
+            <wsdl:output>
+                <mime:content type="text/xml" part="parameters"/>
+            </wsdl:output>
         </wsdl:operation>
     </wsdl:binding>
     <wsdl:service name="RemoteLoggingConfig">

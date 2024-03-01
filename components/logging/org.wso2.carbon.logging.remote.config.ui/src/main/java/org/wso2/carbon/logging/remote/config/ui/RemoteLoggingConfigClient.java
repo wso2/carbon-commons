@@ -30,12 +30,13 @@ import org.wso2.carbon.logging.remote.config.stub.types.carbon.RemoteServerLogge
  * This is the Admin client used for updating Log4J2 appenders related to remote server configuration.
  */
 public class RemoteLoggingConfigClient {
+
     private static final Log log = LogFactory.getLog(RemoteLoggingConfigClient.class);
 
     public RemoteLoggingConfigStub stub;
 
-    public RemoteLoggingConfigClient(String cookie, String backendServerURL,
-                               ConfigurationContext configCtx) throws AxisFault {
+    public RemoteLoggingConfigClient(String cookie, String backendServerURL, ConfigurationContext configCtx)
+            throws AxisFault {
 
         String serviceURL = backendServerURL + "RemoteLoggingConfig";
         stub = new RemoteLoggingConfigStub(configCtx, serviceURL);
@@ -52,6 +53,7 @@ public class RemoteLoggingConfigClient {
      * @throws Exception Exception
      */
     public void addRemoteServerConfig(RemoteServerLoggerData data) throws Exception {
+
         try {
             stub.addRemoteServerConfig(data);
         } catch (Exception e) {
@@ -68,10 +70,47 @@ public class RemoteLoggingConfigClient {
      * @throws Exception Exception
      */
     public void resetRemoteServerConfig(RemoteServerLoggerData data) throws Exception {
+
         try {
-            stub.resetRemoteServerConfig(data);
+            stub.resetRemoteServerConfig(data, false);
         } catch (Exception e) {
             String msg = "Error occurred while resetting remote server configuration.";
+            log.error(msg, e);
+            throw e;
+        }
+    }
+
+    /**
+     * Get remote server configuration.
+     *
+     * @return RemoteServerLoggerData[] Array of RemoteServerLoggerData
+     * @throws Exception If an error occurs while getting remote server configuration.
+     */
+    public RemoteServerLoggerData[] getRemoteServerConfigs() throws Exception {
+
+        try {
+            return stub.getRemoteServerConfigs();
+        } catch (Exception e) {
+            String msg = "Error occurred while getting remote server configuration.";
+            log.error(msg, e);
+            throw e;
+        }
+
+    }
+
+    /**
+     * Get remote server configuration for a given log type.
+     *
+     * @param logType The log type of the remote server configuration.
+     * @return RemoteServerLoggerData object that contains the remote server configuration.
+     * @throws Exception If an error occurs while getting remote server configuration.
+     */
+    public RemoteServerLoggerData getRemoteServerConfig(String logType) throws Exception {
+
+        try {
+            return stub.getRemoteServerConfig(logType);
+        } catch (Exception e) {
+            String msg = "Error occurred while getting remote server configuration.";
             log.error(msg, e);
             throw e;
         }

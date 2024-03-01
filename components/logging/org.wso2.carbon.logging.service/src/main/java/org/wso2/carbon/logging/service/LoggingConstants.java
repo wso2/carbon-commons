@@ -39,8 +39,11 @@ public final class LoggingConstants {
     public static final String PROCESSING_LIMIT_SUFFIX = ".processingLimit";
     public static final String PATTERN_LAYOUT_TYPE = "PatternLayout";
     public static final String DEFAULT_THRESHOLD_FILTER_TYPE = "ThresholdFilter";
-    public static final String THRESHOLD_FILTER_LEVEL = "INFO";
+    public static final String THRESHOLD_FILTER_LEVEL_INFO = "INFO";
+    public static final String THRESHOLD_FILTER_LEVEL_DEBUG = "DEBUG";
     public static final String HTTP_APPENDER_TYPE = "SecuredHttp";
+
+    public static final String API_LOGS_DEFAULT_LAYOUT_PATTERN = "[%d] %5p {%c} %X{apiName} - %m%ex%n";
     public static final String AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN = "TID: [%tenantId] [%d] %5p {%c} - %m%ex%n";
 
     // Default logging constants
@@ -48,6 +51,10 @@ public final class LoggingConstants {
     public static final String ROLLING_FILE = "RollingFile";
     public static final String DEFAULT_CARBON_LOGFILE_PATH = "${sys:carbon.home}/repository/logs/wso2carbon.log";
     public static final String DEFAULT_CARBON_LOGFILE_PATTERN = "${sys:carbon.home}/repository/logs/wso2carbon-%d{MM-dd-yyyy}-%i.log";
+    public static final String DEFAULT_AUDIT_LOGFILE_PATH = "${sys:carbon.home}/repository/logs/audit.log";
+    public static final String DEFAULT_AUDIT_LOGFILE_PATTERN = "${sys:carbon.home}/repository/logs/audit-%d{MM-dd-yyyy}.log";
+    public static final String DEFAULT_API_LOGFILE_PATH = "${sys:carbon.home}/repository/logs/api.log";
+    public static final String DEFAULT_API_LOGFILE_PATTERN = "${sys:carbon.home}/repository/logs/api-%d{MM-dd-yyyy}-%i.log";
     public static final String POLICIES = "Policies";
     public static final String TIME_BASED_TRIGGERING_POLICY = "TimeBasedTriggeringPolicy";
     public static final int DEFAULT_INTERVAL = 1;
@@ -57,9 +64,6 @@ public final class LoggingConstants {
     public static final String DEFAULT_ROLLOVER_STRATEGY = "DefaultRolloverStrategy";
     public static final int DEFAULT_MAX = 20;
     public static final int DEFAULT_PROCESSING_LIMIT = 1000;
-
-    public static final String API_LOGS_DEFAULT_LAYOUT_PATTERN = "[%d] %5p {%c} %X{apiName} - %m%ex%n";
-
     public static final String FILE_NAME_SUFFIX = ".fileName";
     public static final String FILE_PATTERN_SUFFIX = ".filePattern";
     public static final String POLICIES_SUFFIX = ".policies";
@@ -80,4 +84,22 @@ public final class LoggingConstants {
     public static final String DEFAULT_SSLCONF_TYPE = "SSLConf";
     public static final String DEFAULT_SSL_PROTOCOL = "SSL";
     public static final String VERIFY_HOSTNAME_SUFFIX = ".verifyHostName";
+    public static final String USERNAME = "username";
+    public static final String PASSWORD = "password";
+    public static final String TRUSTSTORE_PASSWORD = "trustStorePassword";
+    public static final String TRUSTSTORE_LOCATION = "trustStoreLocation";
+    public static final String CARBON_LOG_TYPE = "carbonLogType";
+    public static final String CONNECT_TIMEOUT_MILLIS = "connectTimeoutMillis";
+    public static final String AUDIT_LOG_TYPE = "auditLogType";
+    public static final String URL = "url";
+    public static final String VERIFY_HOSTNAME = "verifyHostName";
+    public static final String KEYSTORE_PASSWORD = "keyStorePassword";
+    public static final String KEYSTORE_LOCATION = "keyStoreLocation";
+    public static final String CONNECTION_TIMEOUT = "connectionTimeout";
+    public static final String REMOTE_SERVER_LOGGER_RESOURCE_PATH = "/identity/config/remoteServer";
+
+    public static final String AUDIT = "AUDIT";
+    public static final String CARBON = "CARBON";
+    public static final String API = "API";
+    public static final String LOG_TYPE = "logType";
 }
