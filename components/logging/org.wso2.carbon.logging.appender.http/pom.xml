@@ -57,7 +57,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.artifactId}</Bundle-Name>
-                        <Fragment-Host>org.ops4j.pax.logging.pax-logging-log4j2</Fragment-Host>
+                        <Fragment-Host>org.wso2.org.ops4j.pax.logging.pax-logging-log4j2</Fragment-Host>
                         <Export-Package>
                             org.wso2.carbon.logging.appender.*,
                         </Export-Package>

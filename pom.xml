@@ -334,11 +334,6 @@
                 <version>${commons-beanutils.version}</version>
             </dependency>
             <dependency>
-                <groupId>commons-beanutils.wso2</groupId>
-                <artifactId>commons-beanutils</artifactId>
-                <version>${commons.beanutils.wso2.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.wso2.orbit.commons-httpclient</groupId>
                 <artifactId>commons-httpclient</artifactId>
                 <version>${orbit.version.commons.httpclient}</version>
@@ -368,7 +363,7 @@
             </dependency>
 
             <dependency>
-            <groupId>org.ops4j.pax.logging</groupId>
+                <groupId>org.wso2.org.ops4j.pax.logging</groupId>
                 <artifactId>pax-logging-api</artifactId>
                 <version>${pax.logging.api.version}</version>
             </dependency>
@@ -1143,9 +1138,9 @@
                 <version>1.7.0.wso2v1</version>
             </dependency>
             <dependency>
-                <groupId>org.quartz-scheduler.wso2</groupId>
+                <groupId>org.wso2.orbit.org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
-                <version>2.1.1.wso2v1</version>
+                <version>${quartz2.orbit.version}</version>
             </dependency>
             <dependency>
                 <groupId>kaptcha.wso2</groupId>
@@ -1862,16 +1857,13 @@
         <orbit.version.commons.httpclient>3.1.0.wso2v6</orbit.version.commons.httpclient>
         <commons-collections.version>3.2.1</commons-collections.version>
         <orbit.version.commons.codec>1.4.0.wso2v1</orbit.version.commons.codec>
-        <commons-beanutils.version>1.8.3</commons-beanutils.version>
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-digester.version>1.8</commons-digester.version>
         <orbit.version.backport.util>3.1.0.wso2v1</orbit.version.backport.util>
         <version.commons.lang3>3.1</version.commons.lang3>
         <commons-pool.version>1.5.0.wso2v1</commons-pool.version>
         <commons-logging.version>1.1</commons-logging.version>
         <orbit.version.commons.lang>2.6.0.wso2v1</orbit.version.commons.lang>
-        <commons.beanutils.wso2.version>1.8.0.wso2v1</commons.beanutils.wso2.version>
-        <commons-collections.version>3.2</commons-collections.version>
-        <commons-beanutils.version>1.8.0</commons-beanutils.version>
         <commons-collections.version>3.2</commons-collections.version>
         <commons-digester.version>1.8</commons-digester.version>
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
@@ -1929,7 +1921,7 @@
         <opensaml2.wso2.version>2.4.1.wso2v1</opensaml2.wso2.version>
 
 
-        <com.google.code.gson.version>2.8.5</com.google.code.gson.version>
+        <com.google.code.gson.version>2.10.1</com.google.code.gson.version>
         <org.eclipse.osgi.version>3.9.1.v20130814-1242</org.eclipse.osgi.version>
         <version.equinox.osgi.services>3.3.100.v20130513-1956</version.equinox.osgi.services>
         <amqp.version>3.0.3.wso2v1</amqp.version>
@@ -1948,7 +1940,7 @@
         <!-- Misc -->
         <cassandra.version>1.1.0.wso2v2</cassandra.version>
         <jxl.wso2.version>2.6.8.wso2v1</jxl.wso2.version>
-        <quartz2.orbit.version>2.1.1.wso2v1</quartz2.orbit.version>
+        <quartz2.orbit.version>2.3.2.wso2v1</quartz2.orbit.version>
         <jaxen.version>1.1.1</jaxen.version>
         <woodstox.version>3.2.9</woodstox.version>
         <xml-apis.version>1.3.04</xml-apis.version>
@@ -1958,9 +1950,9 @@
         <activation.version>1.1</activation.version>
         <jetty.version>6.1.5</jetty.version>
         <orbit.version.wsdl4j>1.6.2.wso2v4</orbit.version.wsdl4j>
-        <quartz2.wso2.version>2.1.1.wso2v1</quartz2.wso2.version>
+        <quartz2.wso2.version>2.3.2.wso2v1</quartz2.wso2.version>
         <orbit.version.geronimo-jms_1.1_spec>1.1.0.wso2v1</orbit.version.geronimo-jms_1.1_spec>
-        <google.guava.version>27.0-jre</google.guava.version>
+        <google.guava.version>33.0.0-jre</google.guava.version>
         <hadoop.version>0.20.203.1-wso2v2</hadoop.version>
         <jdbc-pool.version>7.0.34.wso2v2</jdbc-pool.version>
         <hadoop.orbit.version>0.20.203.1.wso2v2</hadoop.orbit.version>
@@ -1989,8 +1981,8 @@
         <apache.felix.scr.ds.annotations.version>1.2.4</apache.felix.scr.ds.annotations.version>
         <version.org.wso2.orbit.javax.activation>1.1.1.wso2v2</version.org.wso2.orbit.javax.activation>
         <jacoco.maven.plugin.version>0.8.2</jacoco.maven.plugin.version>
-        <pax.logging.api.version>1.11.0</pax.logging.api.version>
-        <pax.logging.api.version.range>[1.11.0,2.2.0)</pax.logging.api.version.range>
+        <pax.logging.api.version>2.2.1-wso2v2</pax.logging.api.version>
+        <pax.logging.api.version.range>[1.11.0,3.0.0)</pax.logging.api.version.range>
         <import.package.version.commons.logging>[1.2.0,2.0.0)</import.package.version.commons.logging>
         <import.package.version.apache.logging.log4j>[2.12.4,3.0.0)</import.package.version.apache.logging.log4j>
         <version.eclipse.equinox.cm>1.3.100</version.eclipse.equinox.cm>
