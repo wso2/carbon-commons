@@ -61,7 +61,7 @@
             <artifactId>itext</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-beanutils.wso2</groupId>
+            <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
         </dependency>
         <dependency>
