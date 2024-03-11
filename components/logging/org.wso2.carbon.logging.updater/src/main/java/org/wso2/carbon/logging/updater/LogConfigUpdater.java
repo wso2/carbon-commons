@@ -80,7 +80,6 @@ public class LogConfigUpdater implements Runnable {
         Hashtable paxLoggingProperties = getPaxLoggingProperties();
         paxLoggingProperties.forEach(properties::put);
         configuration.update(properties);
-
     }
 
     private Hashtable getPaxLoggingProperties() throws IOException {
