@@ -61,6 +61,7 @@ public class LogConfigUpdater implements Runnable {
                 if (modifiedTime.compareTo(lastModifiedTime) > 0) {
                     DataHolder.getInstance().setModifiedTime(modifiedTime);
                     updateLoggingConfiguration();
+                    LOG.info("Logging configuration applied successfully");
                 }
             }
         } catch (LoggingUpdaterException e) {
@@ -79,6 +80,7 @@ public class LogConfigUpdater implements Runnable {
         Hashtable paxLoggingProperties = getPaxLoggingProperties();
         paxLoggingProperties.forEach(properties::put);
         configuration.update(properties);
+
     }
 
     private Hashtable getPaxLoggingProperties() throws IOException {
