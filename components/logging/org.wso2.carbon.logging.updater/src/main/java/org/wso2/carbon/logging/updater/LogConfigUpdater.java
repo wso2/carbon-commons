@@ -61,6 +61,7 @@ public class LogConfigUpdater implements Runnable {
                 if (modifiedTime.compareTo(lastModifiedTime) > 0) {
                     DataHolder.getInstance().setModifiedTime(modifiedTime);
                     updateLoggingConfiguration();
+                    LOG.info("Logging configuration applied successfully");
                 }
             }
         } catch (LoggingUpdaterException e) {
