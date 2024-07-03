@@ -32,7 +32,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.eclipse.osgi</groupId>
+            <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.osgi</artifactId>
         </dependency>
         <dependency>
@@ -84,6 +84,13 @@
                             org.wso2.carbon.ntask.core.*; version="${carbon.commons.exp.package.version}",
                         </Export-Package>
 			<Carbon-Component>UIBundle</Carbon-Component>
+                        <Provide-Capability>
+                            osgi.service;objectClass=org.apache.axis2.engine.ListenerManager,
+                            osgi.service;objectClass=org.wso2.carbon.registry.core.service.RegistryService,
+                            osgi.service;objectClass=org.wso2.carbon.user.core.service.RealmService,
+                            osgi.service;objectClass=org.wso2.carbon.utils.ConfigurationContextService,
+                            osgi.service;objectClass=org.wso2.carbon.securevault.SecretCallbackHandlerService
+                        </Provide-Capability>
                     </instructions>
                 </configuration>
             </plugin>
