@@ -57,7 +57,7 @@ public class TenantConstants {
                 "Domain should match the regex pattern %s."),
         ERROR_CODE_PRE_TENANT_CREATION_FAILED("TM-60018", "Error occurred in tenant pre creation."),
         ERROR_CODE_TENANT_LIMIT_REACHED("TM-60019", "Maximum tenant limit reached."),
-        ERROR_CODE_OWNER_NOT_FOUND("TM-60020", "Tenant owner cannot be found for the provided id: %s."),
+        ERROR_CODE_OWNER_NOT_FOUND("TM-60020", "Tenant owner cannot be found for the provided tenant id: %s."),
         ERROR_CODE_PARTIALLY_CREATED_OR_UPDATED("TM-60021", "Tenant creation / update was completed " +
                 "with errors.");
 
