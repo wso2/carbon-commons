@@ -59,7 +59,12 @@ public class TenantConstants {
         ERROR_CODE_TENANT_LIMIT_REACHED("TM-60019", "Maximum tenant limit reached."),
         ERROR_CODE_OWNER_NOT_FOUND("TM-60020", "Tenant owner cannot be found for the provided tenant id: %s."),
         ERROR_CODE_PARTIALLY_CREATED_OR_UPDATED("TM-60021", "Tenant creation / update was completed " +
-                "with errors.");
+                "with errors."),
+        ERROR_CODE_INVALID_FILTER_FORMAT("TM-60022", "The filter must follow the format: " +
+                "<attribute>+<operation>+<value>."),
+        ERROR_CODE_UNSUPPORTED_FILTER_ATTRIBUTE("TM-60023", "The filter attribute '%s' is not supported."),
+        ERROR_CODE_UNSUPPORTED_FILTER_OPERATION_FOR_ATTRIBUTE("TM-60024", "Unsupported filter operation " +
+                "for filter attribute '%s'.");
 
         private final String code;
         private final String message;
