@@ -1996,7 +1996,7 @@
         <orbit.version.commons.httpclient.logging>${orbit.version.commons.httpclient}
         </orbit.version.commons.httpclient.logging>
         <libthrift.version>0.9.2.wso2v1</libthrift.version>
-        <hector-core.version>1.1-0</hector-core.version>
+        <hector-core.version>1.1-4</hector-core.version>
         <perf4j.version>0.9.12.wso2v1</perf4j.version>
         <highscale.version>1.0.wso2v1</highscale.version>
         <orbit.version.distruptor>2.10.4-wso2v2</orbit.version.distruptor>
