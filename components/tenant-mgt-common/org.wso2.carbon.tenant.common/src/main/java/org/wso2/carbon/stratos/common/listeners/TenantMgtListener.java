@@ -46,4 +46,27 @@ public interface TenantMgtListener {
      * @throws StratosException
      */
     public void onPreDelete(int tenantId) throws StratosException;
+
+    /**
+     * This method will be called before a tenant creation.
+     *
+     * @param tenantInfoBean TenantInfoBean
+     * @throws StratosException
+     */
+    default void onPreTenantCreate(TenantInfoBean tenantInfoBean) throws StratosException {
+
+        // Not Implemented.
+    }
+
+    /**
+     * On Post delete method will delete product specific data.
+     *
+     * @param tenantId   Tenant id.
+     * @param tenantUuid Tenant unique identifier.
+     * @param adminUserUuid   Tenant admin User unique identifier.
+     * @throws StratosException If any error occurred while deleting data.
+     */
+    default void onPostDelete(int tenantId, String tenantUuid, String adminUserUuid) throws StratosException {
+        // Not Implemented
+    }
 }
