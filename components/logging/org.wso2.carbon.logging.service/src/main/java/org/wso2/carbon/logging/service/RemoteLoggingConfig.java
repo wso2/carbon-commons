@@ -181,7 +181,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         try {
             remoteServerConfig = RemoteLoggingConfigDataHolder.getInstance()
                     .getRemoteLoggingConfigDAO().getRemoteServerConfig(LogType.valueOf(logType));
-            return remoteServerConfig.get();
+            return remoteServerConfig.orElse(null);
         } catch (RemoteLoggingServerException e) {
             throw new ConfigurationException(e);
         }
@@ -458,8 +458,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
         try {
             LogType logType = getLogType(appenderName);
-            RemoteLoggingConfigDataHolder.getInstance()
-                    .getRemoteLoggingConfigDAO().resetRemoteServerConfig(logType);
+            RemoteLoggingConfigDataHolder.getInstance().getRemoteLoggingConfigDAO().resetRemoteServerConfig(logType);
         } catch (RemoteLoggingServerException e) {
             throw new ConfigurationException(e);
         }
