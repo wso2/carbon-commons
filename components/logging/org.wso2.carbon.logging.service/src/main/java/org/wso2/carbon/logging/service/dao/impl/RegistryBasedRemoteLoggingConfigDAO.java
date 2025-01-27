@@ -21,6 +21,7 @@ package org.wso2.carbon.logging.service.dao.impl;
 import org.apache.commons.configuration.ConfigurationException;
 import org.wso2.carbon.logging.service.LoggingConstants;
 import org.wso2.carbon.logging.service.LoggingConstants.LogType;
+import org.wso2.carbon.logging.service.RemoteLoggingServerException;
 import org.wso2.carbon.logging.service.dao.RemoteLoggingConfigDAO;
 import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 import org.wso2.carbon.logging.service.internal.RemoteLoggingConfigDataHolder;
@@ -37,8 +38,8 @@ import java.util.Optional;
 public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigDAO {
 
     @Override
-    public void saveRemoteServerConfigInRegistry(RemoteServerLoggerData data, LogType logType)
-            throws ConfigurationException {
+    public void saveRemoteServerConfigInRegistry(RemoteServerLoggerData data, LogType type)
+            throws RemoteLoggingServerException {
 
         try {
             Registry registry =
@@ -49,26 +50,26 @@ public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigD
                     registry.beginTransaction();
                 }
 
-                Resource resource = getResourceFromRemoteServerLoggerData(data, registry, logType);
-                registry.put(LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + logType, resource);
+                Resource resource = getResourceFromRemoteServerLoggerData(data, registry, type);
+                registry.put(LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + type, resource);
 
                 if (!transactionStarted) {
                     registry.commitTransaction();
                 }
             } catch (Exception e) {
                 registry.rollbackTransaction();
-                throw new ConfigurationException(e);
+                throw new RemoteLoggingServerException(e.getMessage(), e);
             }
         } catch (RegistryException e) {
-            throw new ConfigurationException("Error while updating the remote server logging configurations");
+            throw new RemoteLoggingServerException("Error while updating the remote server logging configurations");
         }
     }
 
     @Override
-    public Optional<RemoteServerLoggerData> getRemoteServerConfig(LogType logType) throws ConfigurationException {
+    public Optional<RemoteServerLoggerData> getRemoteServerConfig(LogType type) throws RemoteLoggingServerException {
 
         try {
-            String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + logType;
+            String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + type;
             if (!RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
                     .resourceExists(resourcePath)) {
                 return Optional.empty();
@@ -78,15 +79,15 @@ public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigD
                             .get(resourcePath);
             return Optional.of(getRemoteServerLoggerDataFromResource(resource));
         } catch (RegistryException e) {
-            throw new ConfigurationException(e);
+            throw new RemoteLoggingServerException(e.getMessage(), e);
         }
     }
 
     @Override
-    public void resetRemoteServerConfigInRegistry(LogType logType) throws ConfigurationException {
+    public void resetRemoteServerConfigInRegistry(LogType type) throws RemoteLoggingServerException {
 
         try {
-            String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + logType;
+            String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + type;
             if (!RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
                     .resourceExists(resourcePath)) {
                 return;
@@ -107,10 +108,10 @@ public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigD
                 }
             } catch (Exception e) {
                 registry.rollbackTransaction();
-                throw new ConfigurationException(e);
+                throw new RemoteLoggingServerException(e.getMessage(), e);
             }
         } catch (RegistryException e) {
-            throw new ConfigurationException("Error while resetting the remote server logging configurations");
+            throw new RemoteLoggingServerException("Error while resetting the remote server logging configurations");
         }
     }
 
