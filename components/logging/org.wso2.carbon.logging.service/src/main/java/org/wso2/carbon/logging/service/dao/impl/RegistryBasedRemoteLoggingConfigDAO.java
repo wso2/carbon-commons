@@ -38,7 +38,7 @@ import java.util.Optional;
 public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigDAO {
 
     @Override
-    public void saveRemoteServerConfigInRegistry(RemoteServerLoggerData data, LogType type)
+    public void saveRemoteServerConfig(RemoteServerLoggerData data, LogType type)
             throws RemoteLoggingServerException {
 
         try {
@@ -84,7 +84,7 @@ public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigD
     }
 
     @Override
-    public void resetRemoteServerConfigInRegistry(LogType type) throws RemoteLoggingServerException {
+    public void resetRemoteServerConfig(LogType type) throws RemoteLoggingServerException {
 
         try {
             String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + type;
