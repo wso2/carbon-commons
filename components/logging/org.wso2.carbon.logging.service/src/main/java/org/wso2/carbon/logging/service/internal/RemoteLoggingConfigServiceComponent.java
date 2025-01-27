@@ -29,6 +29,7 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 import org.wso2.carbon.logging.service.RemoteLoggingConfig;
 import org.wso2.carbon.logging.service.RemoteLoggingConfigService;
+import org.wso2.carbon.logging.service.dao.RemoteLoggingConfigDAO;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
 import java.io.IOException;
@@ -49,6 +50,7 @@ public class RemoteLoggingConfigServiceComponent {
             componentContext.getBundleContext().registerService(
                     RemoteLoggingConfigService.class, remoteLoggingConfig, null);
             RemoteLoggingConfigDataHolder.getInstance().setRemoteLoggingConfigService(remoteLoggingConfig);
+            LOG.debug("Remote Logging Config Service Component bundle is activated");
         } catch (IOException e) {
             LOG.error("IO exception occurred when creating RemoteLoggingConfig instance", e);
         }
@@ -57,9 +59,7 @@ public class RemoteLoggingConfigServiceComponent {
     @Deactivate
     protected void deactivate(ComponentContext ctxt) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Remote Logging Config Service Component bundle is deactivated");
-        }
+        LOG.debug("Remote Logging Config Service Component bundle is deactivated");
     }
 
     @Reference(
@@ -71,17 +71,32 @@ public class RemoteLoggingConfigServiceComponent {
     )
     protected void setRegistryService(RegistryService registryService) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Setting the RegistryService");
-        }
+        LOG.debug("Setting the RegistryService");
         RemoteLoggingConfigDataHolder.getInstance().setRegistryService(registryService);
     }
 
     protected void unsetRegistryService(RegistryService registryService) {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Unsetting the RegistryService");
-        }
+        LOG.debug("Unsetting the RegistryService");
         RemoteLoggingConfigDataHolder.getInstance().setRegistryService(null);
+    }
+
+    @Reference(
+            name = "remote.logging.dao.service",
+            service = RemoteLoggingConfigDAO.class,
+            cardinality = ReferenceCardinality.OPTIONAL,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetRemoteLoggingConfigDAOService"
+    )
+    protected void setRemoteLoggingConfigDAOService(RemoteLoggingConfigDAO remoteLoggingConfigDAO) {
+
+        LOG.debug("Setting the RemoteLoggingConfigDAO");
+        RemoteLoggingConfigDataHolder.getInstance().setRemoteLoggingConfigDAO(remoteLoggingConfigDAO);
+    }
+
+    protected void unsetRemoteLoggingConfigDAOService(RemoteLoggingConfigDAO remoteLoggingConfigDAO) {
+
+        LOG.debug("Unsetting the RemoteLoggingConfigDAO");
+        RemoteLoggingConfigDataHolder.getInstance().setRemoteLoggingConfigDAO(null);
     }
 }
