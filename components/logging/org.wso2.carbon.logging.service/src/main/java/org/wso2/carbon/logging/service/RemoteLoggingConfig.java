@@ -442,14 +442,14 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
         LogType logType = getLogType(appenderName);
         RemoteLoggingConfigDataHolder.getInstance()
-                .getRemoteLoggingConfigDAO().saveRemoteServerConfigInRegistry(data, logType);
+                .getRemoteLoggingConfigDAO().saveRemoteServerConfig(data, logType);
     }
 
     private void resetRemoteServerConfigInRegistry(String appenderName) throws ConfigurationException {
 
         LogType logType = getLogType(appenderName);
         RemoteLoggingConfigDataHolder.getInstance()
-                .getRemoteLoggingConfigDAO().resetRemoteServerConfigInRegistry(logType);
+                .getRemoteLoggingConfigDAO().resetRemoteServerConfig(logType);
     }
 
     private RemoteServerLoggerData findMatchingResponseData(List<RemoteServerLoggerData> responseDataList,
