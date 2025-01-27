@@ -177,9 +177,14 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             throw new ConfigurationException("Log type cannot be empty.");
         }
 
-        Optional<RemoteServerLoggerData> remoteServerConfig = RemoteLoggingConfigDataHolder.getInstance()
-                .getRemoteLoggingConfigDAO().getRemoteServerConfig(LogType.valueOf(logType));
-        return remoteServerConfig.get();
+        Optional<RemoteServerLoggerData> remoteServerConfig = null;
+        try {
+            remoteServerConfig = RemoteLoggingConfigDataHolder.getInstance()
+                    .getRemoteLoggingConfigDAO().getRemoteServerConfig(LogType.valueOf(logType));
+            return remoteServerConfig.get();
+        } catch (RemoteLoggingServerException e) {
+            throw new ConfigurationException(e);
+        }
     }
 
     public void syncRemoteServerConfigs() throws ConfigurationException, IOException {
@@ -440,16 +445,24 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     private void updateRemoteServerConfigInRegistry(RemoteServerLoggerData data, String appenderName)
             throws ConfigurationException {
 
-        LogType logType = getLogType(appenderName);
-        RemoteLoggingConfigDataHolder.getInstance()
-                .getRemoteLoggingConfigDAO().saveRemoteServerConfigInRegistry(data, logType);
+        try {
+            LogType logType = getLogType(appenderName);
+            RemoteLoggingConfigDataHolder.getInstance()
+                    .getRemoteLoggingConfigDAO().saveRemoteServerConfigInRegistry(data, logType);
+        } catch (RemoteLoggingServerException e) {
+            throw new ConfigurationException(e);
+        }
     }
 
     private void resetRemoteServerConfigInRegistry(String appenderName) throws ConfigurationException {
 
-        LogType logType = getLogType(appenderName);
-        RemoteLoggingConfigDataHolder.getInstance()
-                .getRemoteLoggingConfigDAO().resetRemoteServerConfigInRegistry(logType);
+        try {
+            LogType logType = getLogType(appenderName);
+            RemoteLoggingConfigDataHolder.getInstance()
+                    .getRemoteLoggingConfigDAO().resetRemoteServerConfigInRegistry(logType);
+        } catch (RemoteLoggingServerException e) {
+            throw new ConfigurationException(e);
+        }
     }
 
     private RemoteServerLoggerData findMatchingResponseData(List<RemoteServerLoggerData> responseDataList,
