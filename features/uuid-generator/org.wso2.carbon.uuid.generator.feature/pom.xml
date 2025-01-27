@@ -20,7 +20,7 @@
     <parent>
         <artifactId>uuid-generator-feature</artifactId>
         <groupId>org.wso2.carbon.commons</groupId>
-        <version>4.10.16</version>
+        <version>4.10.17-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
