@@ -19,8 +19,8 @@
 package org.wso2.carbon.logging.service.dao.impl;
 
 import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.lang.StringUtils;
 import org.wso2.carbon.logging.service.LoggingConstants;
+import org.wso2.carbon.logging.service.LoggingConstants.LogType;
 import org.wso2.carbon.logging.service.dao.RemoteLoggingConfigDAO;
 import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 import org.wso2.carbon.logging.service.internal.RemoteLoggingConfigDataHolder;
@@ -29,22 +29,20 @@ import org.wso2.carbon.registry.core.Resource;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
 import org.wso2.carbon.registry.core.jdbc.utils.Transaction;
 
+import java.util.Optional;
+
 /**
  * This class is used to update the remote server logging configurations in the registry.
  */
 public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigDAO {
 
     @Override
-    public void saveRemoteServerConfigInRegistry(RemoteServerLoggerData data, String appenderName)
+    public void saveRemoteServerConfigInRegistry(RemoteServerLoggerData data, LogType logType)
             throws ConfigurationException {
 
         try {
             Registry registry =
                     RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry();
-            String logType = LoggingConstants.AUDIT;
-            if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
-                logType = LoggingConstants.CARBON;
-            }
             try {
                 boolean transactionStarted = Transaction.isStarted();
                 if (!transactionStarted) {
@@ -67,34 +65,27 @@ public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigD
     }
 
     @Override
-    public RemoteServerLoggerData getRemoteServerConfig(String logType) throws ConfigurationException {
+    public Optional<RemoteServerLoggerData> getRemoteServerConfig(LogType logType) throws ConfigurationException {
 
         try {
-            if (StringUtils.isBlank(logType)) {
-                throw new ConfigurationException("Log type cannot be empty.");
-            }
             String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + logType;
             if (!RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
                     .resourceExists(resourcePath)) {
-                return null;
+                return Optional.empty();
             }
             Resource resource =
                     RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
                             .get(resourcePath);
-            return getRemoteServerLoggerDataFromResource(resource);
+            return Optional.of(getRemoteServerLoggerDataFromResource(resource));
         } catch (RegistryException e) {
             throw new ConfigurationException(e);
         }
     }
 
     @Override
-    public void resetRemoteServerConfigInRegistry(String appenderName) throws ConfigurationException {
+    public void resetRemoteServerConfigInRegistry(LogType logType) throws ConfigurationException {
 
         try {
-            String logType = LoggingConstants.AUDIT;
-            if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
-                logType = LoggingConstants.CARBON;
-            }
             String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + logType;
             if (!RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
                     .resourceExists(resourcePath)) {
@@ -124,7 +115,7 @@ public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigD
     }
 
     private Resource getResourceFromRemoteServerLoggerData(RemoteServerLoggerData data, Registry registry,
-                                                           String logType) throws RegistryException {
+                                                           LogType logType) throws RegistryException {
 
         Resource resource = registry.newResource();
         resource.addProperty(LoggingConstants.URL, data.getUrl());
@@ -135,7 +126,7 @@ public class RegistryBasedRemoteLoggingConfigDAO implements RemoteLoggingConfigD
         resource.addProperty(LoggingConstants.TRUSTSTORE_LOCATION, data.getTruststoreLocation());
         resource.addProperty(LoggingConstants.TRUSTSTORE_PASSWORD, data.getTruststorePassword());
         resource.addProperty(LoggingConstants.VERIFY_HOSTNAME, String.valueOf(data.isVerifyHostname()));
-        resource.addProperty(LoggingConstants.LOG_TYPE, logType);
+        resource.addProperty(LoggingConstants.LOG_TYPE, logType.toString());
         resource.addProperty(LoggingConstants.CONNECT_TIMEOUT_MILLIS, data.getConnectTimeoutMillis());
         resource.addProperty(LoggingConstants.CONNECTION_TIMEOUT, data.getConnectTimeoutMillis());
         return resource;

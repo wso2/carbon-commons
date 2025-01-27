@@ -28,6 +28,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.logging.service.LoggingConstants.LogType;
 import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 import org.wso2.carbon.logging.service.internal.RemoteLoggingConfigDataHolder;
 import org.wso2.carbon.logging.service.util.Utils;
@@ -44,6 +45,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * This is the Admin service used for configuring the remote server logging configurations
@@ -171,8 +173,13 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     @Override
     public RemoteServerLoggerData getRemoteServerConfig(String logType) throws ConfigurationException {
 
-        return RemoteLoggingConfigDataHolder.getInstance()
-                .getRemoteLoggingConfigDAO().getRemoteServerConfig(logType);
+        if (StringUtils.isBlank(logType)) {
+            throw new ConfigurationException("Log type cannot be empty.");
+        }
+
+        Optional<RemoteServerLoggerData> remoteServerConfig = RemoteLoggingConfigDataHolder.getInstance()
+                .getRemoteLoggingConfigDAO().getRemoteServerConfig(LogType.valueOf(logType));
+        return remoteServerConfig.get();
     }
 
     public void syncRemoteServerConfigs() throws ConfigurationException, IOException {
@@ -433,14 +440,16 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     private void updateRemoteServerConfigInRegistry(RemoteServerLoggerData data, String appenderName)
             throws ConfigurationException {
 
+        LogType logType = getLogType(appenderName);
         RemoteLoggingConfigDataHolder.getInstance()
-                .getRemoteLoggingConfigDAO().saveRemoteServerConfigInRegistry(data, appenderName);
+                .getRemoteLoggingConfigDAO().saveRemoteServerConfigInRegistry(data, logType);
     }
 
     private void resetRemoteServerConfigInRegistry(String appenderName) throws ConfigurationException {
 
+        LogType logType = getLogType(appenderName);
         RemoteLoggingConfigDataHolder.getInstance()
-                .getRemoteLoggingConfigDAO().resetRemoteServerConfigInRegistry(appenderName);
+                .getRemoteLoggingConfigDAO().resetRemoteServerConfigInRegistry(logType);
     }
 
     private RemoteServerLoggerData findMatchingResponseData(List<RemoteServerLoggerData> responseDataList,
@@ -526,4 +535,12 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         }
     }
 
+    private static LoggingConstants.LogType getLogType(String appenderName) {
+
+        LogType logType = LogType.AUDIT;
+        if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
+            logType = LogType.CARBON;
+        }
+        return logType;
+    }
 }
