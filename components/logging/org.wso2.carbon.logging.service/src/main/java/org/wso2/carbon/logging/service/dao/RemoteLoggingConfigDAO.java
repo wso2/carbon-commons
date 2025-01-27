@@ -36,7 +36,7 @@ public interface RemoteLoggingConfigDAO {
      * @param logType                   The log type of the remote server configuration.
      * @throws ConfigurationException   If an error occurs while loading the remote server configuration.
      */
-    void saveRemoteServerConfigInRegistry(RemoteServerLoggerData data, LogType logType) throws ConfigurationException;
+    void saveRemoteServerConfig(RemoteServerLoggerData data, LogType logType) throws ConfigurationException;
 
     /**
      * This method is used to get the remote server configuration from the storage.
@@ -52,5 +52,5 @@ public interface RemoteLoggingConfigDAO {
      * @param logType                   The log type of the remote server configuration.
      * @throws ConfigurationException   If an error occurs while loading the remote server configuration.
      */
-    void resetRemoteServerConfigInRegistry(LogType logType) throws ConfigurationException;
+    void resetRemoteServerConfig(LogType logType) throws ConfigurationException;
 }
