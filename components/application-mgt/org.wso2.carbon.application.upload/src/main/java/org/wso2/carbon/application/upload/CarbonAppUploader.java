@@ -21,11 +21,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.core.AbstractAdmin;
 import org.wso2.carbon.utils.CarbonUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.activation.DataHandler;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 
 /**
  * Carbon Application Uploader service.
@@ -33,6 +35,36 @@ import java.io.IOException;
 public class CarbonAppUploader extends AbstractAdmin {
 
     private static final Log log = LogFactory.getLog(CarbonAppUploader.class);
+
+    private void validateFileName(String fileName, String bpelTempPath) throws AxisFault {
+
+        if (StringUtils.isBlank(fileName)) {
+            throw new AxisFault("Invalid file name. File name is not available.");
+        }
+
+        String fileExtension = "";
+        int i = fileName.lastIndexOf('.');
+        if (i >= 0) { fileExtension = fileName.substring(i+1); }
+
+        if (!fileExtension.equals("jar")){
+            throw new AxisFault("Invalid file type : " + fileExtension);
+        }
+
+        String tempDirCanonical, tempFileCanonical;
+
+        try {
+            // Resolve the canonical paths of the temporary directory and the file
+            tempDirCanonical = new File(bpelTempPath).getCanonicalPath();
+            tempFileCanonical = new File(bpelTempPath, fileName).getCanonicalPath();
+        } catch (IOException e) {
+            throw new AxisFault("IOError: File name validation failed.", e);
+        }
+
+        // Verify if the file is in the intended temporary directory
+        if (!tempFileCanonical.startsWith(tempDirCanonical)) {
+            throw new AxisFault("Invalid file name. Attempt to create file outside of the designated directories.");
+        }
+    }
 
     public void uploadApp(UploadedFileItem[] fileItems) throws AxisFault {
         try {
@@ -47,9 +79,8 @@ public class CarbonAppUploader extends AbstractAdmin {
 
             for (UploadedFileItem uploadedFile : fileItems) {
                 String fileName = uploadedFile.getFileName();
-                if (fileName == null || fileName.equals(""))
-                    throw new AxisFault("Invalid file name");
 
+                validateFileName(fileName, carbonAppDirTemp);
                 if (uploadedFile.getFileType().equals("jar")) {
                     writeResource(uploadedFile.getDataHandler(), carbonAppDirTemp, carbonAppDir,
                             fileName);
@@ -80,20 +111,25 @@ public class CarbonAppUploader extends AbstractAdmin {
             /* File stream is copied to a temp directory in order handle hot deployment issue
                occurred in windows */
             FileUtils.copyFile(tempDestFile,destFile);
+        } catch (FileNotFoundException e) {
+            log.error("Cannot find the file", e);
+            throw e;
+        } catch (IOException e) {
+            log.error("IO error.");
+            throw e;
         } finally {
             try {
                 if (fos != null) {
                     fos.close();
                 }
+                if (!tempDestFile.delete()) {
+                    log.warn("temp file: " + tempDestFile.getAbsolutePath() +
+                            " deletion failed, scheduled deletion on server exit.");
+                    tempDestFile.deleteOnExit();
+                }
             } catch (IOException e) {
                 log.warn("Can't close file streams.", e);
             }
-        }
-
-        if (!tempDestFile.delete()) {
-            log.warn("temp file: " + tempDestFile.getAbsolutePath() +
-                                            " deletion failed, scheduled deletion on server exit.");
-            tempDestFile.deleteOnExit();
         }
     }
 
