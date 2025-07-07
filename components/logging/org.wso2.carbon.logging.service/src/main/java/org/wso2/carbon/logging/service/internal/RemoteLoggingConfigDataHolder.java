@@ -19,6 +19,7 @@
 package org.wso2.carbon.logging.service.internal;
 
 import org.apache.axis2.clustering.ClusteringAgent;
+import org.wso2.carbon.base.api.ServerConfigurationService;
 import org.wso2.carbon.logging.service.RemoteLoggingConfigService;
 import org.wso2.carbon.logging.service.dao.RemoteLoggingConfigDAO;
 import org.wso2.carbon.logging.service.dao.impl.RegistryBasedRemoteLoggingConfigDAO;
@@ -35,6 +36,7 @@ public class RemoteLoggingConfigDataHolder {
     private ClusteringAgent clusteringAgent;
     private RemoteLoggingConfigDAO remoteLoggingConfigDAO;
     private RemoteLoggingConfigDAO defaultRemoteLoggingConfigDAO = new RegistryBasedRemoteLoggingConfigDAO();
+    private ServerConfigurationService serverConfigurationService;
 
     private RemoteLoggingConfigDataHolder() {
 
@@ -92,5 +94,16 @@ public class RemoteLoggingConfigDataHolder {
     public void setRemoteLoggingConfigDAO(RemoteLoggingConfigDAO remoteLoggingConfigDAO) {
 
         this.remoteLoggingConfigDAO = remoteLoggingConfigDAO;
+    }
+
+
+    public void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
+
+        this.serverConfigurationService = serverConfigurationService;
+    }
+
+    public ServerConfigurationService getServerConfigurationService() {
+
+        return serverConfigurationService;
     }
 }

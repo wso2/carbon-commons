@@ -32,4 +32,6 @@ public class AppenderConstants {
     public static final String QUEUE_DIRECTORY_PATH = "repository/logs/remotequeue";
     public static final int MINIMUM_BATCH_SIZE_IN_BYTES =  1024 * 256; // 256 KB
     public static final int MINIMUM_DISK_SPACE_IN_BYTES = 1024 * 1024 * 10; // 10 MB
+
+    public static final String REMOTE_LOGGING_HIDE_SECRETS = "RemoteLogging.HideSecrets";
 }
