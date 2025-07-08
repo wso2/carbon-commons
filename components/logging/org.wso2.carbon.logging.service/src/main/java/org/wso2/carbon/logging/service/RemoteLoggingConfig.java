@@ -221,14 +221,14 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         try {
             remoteServerConfig = RemoteLoggingConfigDataHolder.getInstance()
                     .getRemoteLoggingConfigDAO().getRemoteServerConfig(LogType.valueOf(logType));
-            remoteServerConfig.ifPresent(data -> {
-                if (!includeSecrets) {
-                    // If secrets are not to be included, clear the sensitive fields.
-                    data.setPassword(null);
-                    data.setKeystorePassword(null);
-                    data.setTruststorePassword(null);
-                }
-            });
+            if (remoteServerConfig.isPresent() && !includeSecrets) {
+                RemoteServerLoggerData data = remoteServerConfig.get();
+                // If secrets are not to be included, clear the sensitive fields.
+                data.setPassword(null);
+                data.setKeystorePassword(null);
+                data.setTruststorePassword(null);
+                return data;
+            }
             return remoteServerConfig.orElse(null);
         } catch (RemoteLoggingServerException e) {
             throw new ConfigurationException(e);
