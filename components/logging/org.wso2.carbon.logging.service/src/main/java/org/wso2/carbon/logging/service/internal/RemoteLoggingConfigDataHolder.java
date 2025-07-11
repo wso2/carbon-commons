@@ -96,7 +96,6 @@ public class RemoteLoggingConfigDataHolder {
         this.remoteLoggingConfigDAO = remoteLoggingConfigDAO;
     }
 
-
     public void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
 
         this.serverConfigurationService = serverConfigurationService;

@@ -145,8 +145,6 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         }
     }
 
-
-
     private void logAuditForConfigUpdate(String url, String appenderName) {
 
         Date currentTime = Calendar.getInstance().getTime();
