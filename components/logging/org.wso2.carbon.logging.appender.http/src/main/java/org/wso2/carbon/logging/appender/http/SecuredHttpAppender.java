@@ -37,6 +37,9 @@ import org.apache.logging.log4j.core.config.plugins.validation.constraints.Requi
 import org.apache.logging.log4j.core.net.ssl.KeyStoreConfiguration;
 import org.apache.logging.log4j.core.net.ssl.StoreConfigurationException;
 import org.apache.logging.log4j.core.net.ssl.TrustStoreConfiguration;
+import org.wso2.carbon.base.ServerConfiguration;
+import org.wso2.carbon.core.util.CryptoException;
+import org.wso2.carbon.core.util.CryptoUtil;
 import org.wso2.carbon.logging.appender.http.models.HttpConnectionConfig;
 import org.wso2.carbon.logging.appender.http.models.SslConfiguration;
 import org.wso2.carbon.logging.appender.http.utils.AppenderConstants;
@@ -47,6 +50,7 @@ import org.wso2.securevault.SecretResolverFactory;
 
 import java.io.Serializable;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Objects;
@@ -440,6 +444,15 @@ public class SecuredHttpAppender extends AbstractAppender {
                 if (secretResolver.isTokenProtected(alias)) {
                     return secretResolver.resolve(alias);
                 }
+            }
+        } else if (Boolean.parseBoolean(
+                ServerConfiguration.getInstance().getFirstProperty(AppenderConstants.REMOTE_LOGGING_HIDE_SECRETS))) {
+            try {
+                return new String(CryptoUtil.getDefaultCryptoUtil().base64DecodeAndDecrypt(password),
+                        StandardCharsets.UTF_8);
+            } catch (CryptoException e) {
+                // Return the original password if decryption fails.
+                return password;
             }
         }
         return password;

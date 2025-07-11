@@ -77,6 +77,18 @@ public interface RemoteLoggingConfigService {
     List<RemoteServerLoggerData> getRemoteServerConfigs() throws ConfigurationException;
 
     /**
+     * This method is used to get the remote server configurations.
+     * @param includeSecrets  Boolean value to indicate whether to include secrets in the response or not.
+     *
+     * @return List of RemoteServerLoggerData objects that contains the remote server configurations.
+     * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
+     */
+    default List<RemoteServerLoggerData> getRemoteServerConfigs(boolean includeSecrets) throws ConfigurationException {
+
+        return getRemoteServerConfigs();
+    }
+
+    /**
      * This method is used to get the remote server configuration for a given log type.
      * @param logType  The log type of the remote server configuration.
      * @return RemoteServerLoggerData object that contains the remote server configuration.
@@ -84,6 +96,20 @@ public interface RemoteLoggingConfigService {
      */
     RemoteServerLoggerData getRemoteServerConfig(String logType)
             throws ConfigurationException;
+
+    /**
+     * This method is used to get the remote server configuration for a given log type.
+     * @param logType  The log type of the remote server configuration.
+     * @param includeSecrets  Boolean value to indicate whether to include secrets in the response or not.
+     *
+     * @return RemoteServerLoggerData object that contains the remote server configuration.
+     * @throws ConfigurationException If an error occurs while loading the log4j2.properties file.
+     */
+    default RemoteServerLoggerData getRemoteServerConfig(String logType, boolean includeSecrets)
+            throws ConfigurationException{
+
+        return getRemoteServerConfig(logType);
+    }
 
     /**
      * This method is used to sync the remote server configurations with the remote server.

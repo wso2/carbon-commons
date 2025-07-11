@@ -28,6 +28,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.core.util.CryptoException;
+import org.wso2.carbon.core.util.CryptoUtil;
 import org.wso2.carbon.logging.service.LoggingConstants.LogType;
 import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 import org.wso2.carbon.logging.service.internal.RemoteLoggingConfigDataHolder;
@@ -39,6 +41,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -108,9 +111,38 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         }
         loadConfigs();
         ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
+        encryptRemoteServerCredentials(data);
         applyRemoteConfigurations(data, list, appenderName);
         applyConfigs();
         logAuditForConfigUpdate(url, appenderName);
+    }
+
+    private void encryptRemoteServerCredentials(RemoteServerLoggerData data) throws ConfigurationException {
+
+        data.setPassword(encryptRemoteServerCredential(data.getPassword()));
+        data.setKeystorePassword(encryptRemoteServerCredential(data.getKeystorePassword()));
+        data.setTruststorePassword(encryptRemoteServerCredential(data.getTruststorePassword()));
+    }
+
+    private String encryptRemoteServerCredential(String secretValue) throws ConfigurationException {
+
+        if (StringUtils.isBlank(secretValue)) {
+            return StringUtils.EMPTY;
+        }
+        if (secretValue.startsWith("$secret{") && secretValue.endsWith("}")) {
+            // If the secret is already encrypted using CipherTool, return it as is.
+            return secretValue;
+        }
+        if (!Boolean.parseBoolean(RemoteLoggingConfigDataHolder.getInstance().getServerConfigurationService()
+                .getFirstProperty(LoggingConstants.REMOTE_LOGGING_HIDE_SECRETS))) {
+            return secretValue;
+        }
+        try {
+            return CryptoUtil.getDefaultCryptoUtil()
+                    .encryptAndBase64Encode(secretValue.getBytes(StandardCharsets.UTF_8));
+        } catch (CryptoException e) {
+            throw new ConfigurationException("Error while adding the secret", e);
+        }
     }
 
     private void logAuditForConfigUpdate(String url, String appenderName) {
@@ -173,6 +205,12 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     @Override
     public RemoteServerLoggerData getRemoteServerConfig(String logType) throws ConfigurationException {
 
+        return getRemoteServerConfig(logType, true);
+    }
+
+    @Override
+    public RemoteServerLoggerData getRemoteServerConfig(String logType, boolean includeSecrets) throws ConfigurationException {
+
         if (StringUtils.isBlank(logType)) {
             throw new ConfigurationException("Log type cannot be empty.");
         }
@@ -181,6 +219,14 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         try {
             remoteServerConfig = RemoteLoggingConfigDataHolder.getInstance()
                     .getRemoteLoggingConfigDAO().getRemoteServerConfig(LogType.valueOf(logType));
+            if (remoteServerConfig.isPresent() && !includeSecrets) {
+                RemoteServerLoggerData data = remoteServerConfig.get();
+                // If secrets are not to be included, clear the sensitive fields.
+                data.setPassword(null);
+                data.setKeystorePassword(null);
+                data.setTruststorePassword(null);
+                return data;
+            }
             return remoteServerConfig.orElse(null);
         } catch (RemoteLoggingServerException e) {
             throw new ConfigurationException(e);
@@ -232,12 +278,18 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     @Override
     public List<RemoteServerLoggerData> getRemoteServerConfigs() throws ConfigurationException {
 
+        return getRemoteServerConfigs(true);
+    }
+
+    @Override
+    public List<RemoteServerLoggerData> getRemoteServerConfigs(boolean includeSecrets) throws ConfigurationException {
+
         List<String> logTypes = new ArrayList<>();
         logTypes.add(LoggingConstants.AUDIT);
         logTypes.add(LoggingConstants.CARBON);
         List<RemoteServerLoggerData> remoteServerLoggerDataList = new ArrayList<>();
         for (String logType : logTypes) {
-            RemoteServerLoggerData remoteServerLoggerData = getRemoteServerConfig(logType);
+            RemoteServerLoggerData remoteServerLoggerData = getRemoteServerConfig(logType, includeSecrets);
             if (remoteServerLoggerData != null) {
                 remoteServerLoggerDataList.add(remoteServerLoggerData);
             }
