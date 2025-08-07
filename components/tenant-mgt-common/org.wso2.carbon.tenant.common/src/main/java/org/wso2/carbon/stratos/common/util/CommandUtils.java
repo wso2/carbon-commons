@@ -42,20 +42,21 @@ public class CommandUtils {
         Process p = r.exec(command);
 
         StringBuilder output = new StringBuilder();
-        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        while ((line = in.readLine()) != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("output = " + line);
-            }
-            output.append(line).append(NEW_LINE);
-        }
         StringBuilder errors = new StringBuilder();
-        BufferedReader error = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-        while ((line = error.readLine()) != null) {
-            if (log.isDebugEnabled()) {
-                log.debug("error = " + line);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                BufferedReader error = new BufferedReader(new InputStreamReader(p.getErrorStream()))) {
+            while ((line = in.readLine()) != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("output = " + line);
+                }
+                output.append(line).append(NEW_LINE);
             }
-            errors.append(line).append(NEW_LINE);
+            while ((line = error.readLine()) != null) {
+                if (log.isDebugEnabled()) {
+                    log.debug("error = " + line);
+                }
+                errors.append(line).append(NEW_LINE);
+            }
         }
         if (errors.length() > 0) {
             throw new RuntimeException("Command execution failed: " + NEW_LINE + errors.toString());
