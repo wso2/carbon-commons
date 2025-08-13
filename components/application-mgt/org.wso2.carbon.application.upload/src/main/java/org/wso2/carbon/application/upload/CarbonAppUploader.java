@@ -44,7 +44,9 @@ public class CarbonAppUploader extends AbstractAdmin {
 
         String fileExtension = "";
         int i = fileName.lastIndexOf('.');
-        if (i >= 0) { fileExtension = fileName.substring(i+1); }
+        if (i >= 0) {
+            fileExtension = fileName.substring(i + 1);
+        }
 
         if (!fileExtension.equals("jar")){
             throw new AxisFault("Invalid file type : " + fileExtension);
@@ -115,7 +117,7 @@ public class CarbonAppUploader extends AbstractAdmin {
             log.error("Cannot find the file", e);
             throw e;
         } catch (IOException e) {
-            log.error("IO error.");
+            log.error("IO error.", e);
             throw e;
         } finally {
             try {
