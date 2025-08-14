@@ -19,9 +19,9 @@
 
 package org.wso2.carbon.logging.service;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.PropertiesConfigurationLayout;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfigurationLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -131,14 +131,21 @@ public class LoggingAdmin {
         applyConfigs();
     }
 
-    private void loadConfigs() throws FileNotFoundException, ConfigurationException {
+    private void loadConfigs() throws ConfigurationException, IOException {
         config = new PropertiesConfiguration();
-        layout = new PropertiesConfigurationLayout(config);
-        layout.load(new InputStreamReader(new FileInputStream(logPropFile)));
+//        layout = new PropertiesConfigurationLayout(config);
+//        layout.load(new InputStreamReader(new FileInputStream(logPropFile)));
+        layout = new PropertiesConfigurationLayout();
+        try (InputStreamReader reader = new InputStreamReader(new FileInputStream(logPropFile))) {
+            layout.load(config, reader);
+        }
     }
 
     private void applyConfigs() throws IOException, ConfigurationException {
-        layout.save(new FileWriter(filePath, false));
+        try (FileWriter writer = new FileWriter(filePath, false)) {
+            layout.save(config, writer);
+        }
+        //layout.save(new FileWriter(filePath, false));
     }
 
     public boolean isLoggerExist(String loggerName) throws IOException {
