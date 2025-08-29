@@ -19,9 +19,9 @@
 
 package org.wso2.carbon.logging.service;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.PropertiesConfigurationLayout;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfigurationLayout;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -71,8 +71,8 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     private void loadConfigs() throws IOException, ConfigurationException {
 
         config = new PropertiesConfiguration();
-        layout = new PropertiesConfigurationLayout(config);
-        layout.load(new InputStreamReader(new FileInputStream(logPropFile)));
+        layout = new PropertiesConfigurationLayout();
+        layout.load(config, new InputStreamReader(new FileInputStream(logPropFile)));
     }
 
     /**
@@ -473,7 +473,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     private void applyConfigs() throws IOException, ConfigurationException {
 
-        layout.save(new FileWriter(filePath, false));
+        layout.save(config, new FileWriter(filePath, false));
     }
 
     private void updateRemoteServerConfigInRegistry(RemoteServerLoggerData data, String appenderName)

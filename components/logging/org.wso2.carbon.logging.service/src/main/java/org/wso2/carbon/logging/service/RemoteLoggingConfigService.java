@@ -18,7 +18,7 @@
 
 package org.wso2.carbon.logging.service;
 
-import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 
 import java.io.IOException;
