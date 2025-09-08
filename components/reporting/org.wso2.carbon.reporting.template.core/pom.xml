@@ -26,11 +26,10 @@
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
-             <dependency>
-                  <groupId>commons-logging</groupId>
-                  <artifactId>commons-logging</artifactId>
-                  <version>1.1.1</version>
-              </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
           <dependency>
             <groupId>org.wso2.carbon</groupId>
             <artifactId>org.wso2.carbon.core</artifactId>

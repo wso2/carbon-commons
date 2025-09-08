@@ -71,8 +71,8 @@
                                 </properties>
                             </adviceFile>
                             <bundles>
+                                <bundleDef>org.apache.commons:commons-configuration2:${commons-configuration.version}</bundleDef>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.service:${carbon.commons.version}</bundleDef>
-                                <bundleDef>commons-configuration:commons-configuration:${commons.configuration.version}</bundleDef>
                             </bundles>
                             <includedFeatures>
                                 <includedFeatureDef>
