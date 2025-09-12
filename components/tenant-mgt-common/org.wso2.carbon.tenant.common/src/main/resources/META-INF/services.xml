@@ -25,6 +25,10 @@
             org.wso2.carbon.stratos.common.services.PackageInfoService
         </parameter>
         <parameter name="adminService" locked="ture">false</parameter>
+        <operation name="getPackageInfos">
+            <parameter name="AuthorizationAction" locked="true">/permission/admin/manage
+            </parameter>
+        </operation>
     </service>
 
     <parameter name="hiddenService" locked="ture">true</parameter>
