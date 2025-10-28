@@ -66,13 +66,13 @@
                             <propertiesFile>../../../etc/feature.properties</propertiesFile>
                             <adviceFile>
                                 <properties>
-                                    <propertyDef>org.wso2.carbon.p2.category.type:console</propertyDef>
+                                    <propertyDef>org.wso2.carbon.p2.category.type:server</propertyDef>
                                     <propertyDef>org.eclipse.equinox.p2.type.group:false</propertyDef>
                                 </properties>
                             </adviceFile>
                             <bundles>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.service:${project.version}</bundleDef>
-                                <bundleDef>commons-configuration:commons-configuration:${commons.configuration.version}</bundleDef>
+                                <bundleDef>org.apache.commons:commons-configuration2:${commons.configuration2.version}</bundleDef>
                             </bundles>
                             <includedFeatures>
                                 <includedFeatureDef>

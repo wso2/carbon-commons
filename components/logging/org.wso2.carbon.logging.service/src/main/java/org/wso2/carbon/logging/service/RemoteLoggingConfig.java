@@ -19,9 +19,10 @@
 
 package org.wso2.carbon.logging.service;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.PropertiesConfigurationLayout;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfigurationLayout;
+import org.apache.commons.configuration2.io.FileHandler;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -37,10 +38,7 @@ import org.wso2.carbon.logging.service.util.Utils;
 import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,6 +62,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     private PropertiesConfiguration config;
     private PropertiesConfigurationLayout layout;
+    private FileHandler fileHandler;
 
     public RemoteLoggingConfig() throws IOException {
 
@@ -72,8 +71,11 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     private void loadConfigs() throws IOException, ConfigurationException {
 
         config = new PropertiesConfiguration();
-        layout = new PropertiesConfigurationLayout(config);
-        layout.load(new InputStreamReader(new FileInputStream(logPropFile)));
+        layout = new PropertiesConfigurationLayout();
+        config.setLayout(layout);
+        fileHandler = new FileHandler(config);
+        fileHandler.setFile(logPropFile);
+        fileHandler.load();
     }
 
     /**
@@ -489,9 +491,9 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                 LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX, filterLevel);
     }
 
-    private void applyConfigs() throws IOException, ConfigurationException {
+    private void applyConfigs() throws ConfigurationException {
 
-        layout.save(new FileWriter(filePath, false));
+        fileHandler.save();
     }
 
     private void updateRemoteServerConfigInRegistry(RemoteServerLoggerData data, String appenderName)
