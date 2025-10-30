@@ -31,7 +31,6 @@ import org.wso2.carbon.logging.service.util.Utils;
 import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
