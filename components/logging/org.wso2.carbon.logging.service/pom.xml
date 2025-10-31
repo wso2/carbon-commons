@@ -49,9 +49,9 @@
                         <Import-Package>
                             !org.wso2.carbon.logging.service.*,
                             org.apache.axis2.*; version="${axis2.osgi.version.range}",
-                            org.apache.commons.logging,
+                            org.apache.commons.logging; version="${import.package.version.commons.logging}",
                             org.osgi.service.cm;version="${version.eclipse.equinox.cm}",
-                            org.apache.commons.configuration;version="${commons.configuration.version}",
+                            org.apache.commons.configuration2*;version="${import.package.version.commons.configuration2}",
                             *;resolution:=optional,
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
@@ -87,9 +87,9 @@
             <artifactId>spring.framework</artifactId>
         </dependency>
         <dependency>
-            <groupId>commons-configuration</groupId>
-            <artifactId>commons-configuration</artifactId>
-            <version>${commons.configuration.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-configuration2</artifactId>
+            <version>${commons.configuration2.version}</version>
         </dependency>
     </dependencies>
 </project>

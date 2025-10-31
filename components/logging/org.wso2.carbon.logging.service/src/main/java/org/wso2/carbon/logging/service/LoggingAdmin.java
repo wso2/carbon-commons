@@ -19,9 +19,10 @@
 
 package org.wso2.carbon.logging.service;
 
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.PropertiesConfigurationLayout;
+import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.PropertiesConfiguration;
+import org.apache.commons.configuration2.PropertiesConfigurationLayout;
+import org.apache.commons.configuration2.io.FileHandler;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,11 +31,7 @@ import org.wso2.carbon.logging.service.util.Utils;
 import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,6 +51,7 @@ public class LoggingAdmin {
 
     private PropertiesConfiguration config;
     private PropertiesConfigurationLayout layout;
+    private FileHandler fileHandler;
 
     private static final String LOGGER_PREFIX = "logger.";
     private static final String LOGGER_LEVEL_SUFFIX = ".level";
@@ -131,14 +129,17 @@ public class LoggingAdmin {
         applyConfigs();
     }
 
-    private void loadConfigs() throws FileNotFoundException, ConfigurationException {
+    private void loadConfigs() throws ConfigurationException {
         config = new PropertiesConfiguration();
-        layout = new PropertiesConfigurationLayout(config);
-        layout.load(new InputStreamReader(new FileInputStream(logPropFile)));
+        layout = new PropertiesConfigurationLayout();
+        config.setLayout(layout);
+        fileHandler = new FileHandler(config);
+        fileHandler.setFile(logPropFile);
+        fileHandler.load();
     }
 
-    private void applyConfigs() throws IOException, ConfigurationException {
-        layout.save(new FileWriter(filePath, false));
+    private void applyConfigs() throws ConfigurationException {
+        fileHandler.save();
     }
 
     public boolean isLoggerExist(String loggerName) throws IOException {

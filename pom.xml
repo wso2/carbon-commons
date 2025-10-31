@@ -2015,7 +2015,8 @@
         <import.package.version.apache.logging.log4j>[2.12.4,3.0.0)</import.package.version.apache.logging.log4j>
         <version.eclipse.equinox.cm>1.3.100</version.eclipse.equinox.cm>
         <version.eclipse.equinox.event>1.5.100</version.eclipse.equinox.event>
-        <commons.configuration.version>1.10</commons.configuration.version>
+        <commons.configuration2.version>2.10.1</commons.configuration2.version>
+        <import.package.version.commons.configuration2>[2.0.0,3.0.0)</import.package.version.commons.configuration2>
     </properties>
 
     <repositories>
