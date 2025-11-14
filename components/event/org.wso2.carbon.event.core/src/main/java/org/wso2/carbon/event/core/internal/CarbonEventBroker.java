@@ -17,6 +17,7 @@
 package org.wso2.carbon.event.core.internal;
 
 import org.apache.axiom.util.UIDGenerator;
+import org.osgi.annotation.bundle.Capability;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.event.core.EventBroker;
 import org.wso2.carbon.event.core.Message;
@@ -40,6 +41,13 @@ import java.util.concurrent.ExecutorService;
  * The following class contains the carbon eventing implementation related to subscriptions and
  * topics.
  */
+@Capability(
+        namespace = "osgi.service",
+        attribute = {
+                "objectClass=org.wso2.carbon.event.core.EventBroker",
+                "service.scope=singleton"
+        }
+)
 @Deprecated
 public class CarbonEventBroker implements EventBroker {
 
