@@ -6,7 +6,7 @@
     <groupId>org.wso2.carbon.commons</groupId>
     <artifactId>carbon-commons</artifactId>
     <packaging>pom</packaging>
-    <version>v4.11.1-SNAPSHOT</version>
+    <version>4.11.1-SNAPSHOT</version>
     <name>WSO2 Carbon - Platform Aggregator Pom</name>
     <url>http://wso2.org</url>
 
@@ -39,7 +39,7 @@
         <module>service-stubs/message-flows</module>
 
         <!-- Components -->
-	<module>components/tenant-mgt-common</module>
+	    <module>components/tenant-mgt-common</module>
         <module>components/authentication</module>
         <module>components/deployment-synchronizer</module>
         <module>components/application-mgt</module>
