@@ -46,7 +46,7 @@ public class CarbonAppUploader extends AbstractAdmin {
         int i = fileName.lastIndexOf('.');
         if (i >= 0) { fileExtension = fileName.substring(i+1); }
 
-        if (!fileExtension.equals("jar")){
+        if (!(fileExtension.equalsIgnoreCase("jar") || fileExtension.equalsIgnoreCase("car"))) {
             throw new AxisFault("Invalid file type : " + fileExtension);
         }
 
