@@ -14,15 +14,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Behavior:
- *  - preserves unrelated lines and comments
- *  - detects keys of the form "appender.<APPENDER_NAME>.*"
- *  - replaces existing keys' values
- *  - inserts missing keys contiguously inside the appender block (or after last appender.*)
- *  - can remove all existing appender.<APPENDER>.* keys (useful for reset)
- *  - writes atomically using a temp file and ATOMIC_MOVE (falls back to non-atomic rename when not supported)
- */
+import static org.apache.catalina.ha.tcp.SimpleTcpCluster.log;
+
 public final class Log4j2PropertiesEditor {
 
     private static final String APPENDER_PREFIX = "appender.";
@@ -35,18 +28,15 @@ public final class Log4j2PropertiesEditor {
     /**
      * Read the file as raw lines using UTF-8.
      */
-    public static List<String> readAllLines(File file) throws IOException {
-        if (!file.exists()) {
-            return new ArrayList<>();
-        }
-        return Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+    public static ArrayList<String> readAllLines(File file) throws IOException {
+        return (ArrayList<String>) Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
     }
 
     /**
      * Return a list of keys present for the given appender
      */
     public static ArrayList<String> getKeysOfAppender(File file, String appenderName) throws IOException {
-        List<String> lines = readAllLines(file);
+        ArrayList<String> lines = readAllLines(file);
         ArrayList<String> keys = new ArrayList<>();
         String prefix = APPENDER_PREFIX + appenderName + ".";
         for (String raw : lines) {
@@ -73,7 +63,7 @@ public final class Log4j2PropertiesEditor {
      * Return a map of key -> value for all keys belonging to the given appender.
      */
     public static Map<String, String> getKeyValuesOfAppender(File file, String appenderName) throws IOException {
-        List<String> lines = readAllLines(file);
+        ArrayList<String> lines = readAllLines(file);
         LinkedHashMap<String, String> map = new LinkedHashMap<>();
         String prefix = APPENDER_PREFIX + appenderName + ".";
         for (String raw : lines) {
@@ -98,7 +88,7 @@ public final class Log4j2PropertiesEditor {
      * Return the property value for a given key (first occurrence) or null if not found.
      */
     public static String getProperty(File file, String key) throws IOException {
-        List<String> lines = readAllLines(file);
+        ArrayList<String> lines = readAllLines(file);
         for (String raw : lines) {
             String line = raw.trim();
             if (line.isEmpty() || isCommentLine(line)) {
@@ -118,24 +108,14 @@ public final class Log4j2PropertiesEditor {
 
     /**
      * Update the properties for the given appenderName using newProps.
-     *
-     * If removeExistingAppenderKeys == true, all existing lines that belong to this appender
-     * will be removed before inserting newProps.
-     *
-     * If false, existing keys that match newProps are updated, missing ones are inserted,
-     * and unrelated lines are preserved.
      */
     public static void writeUpdatedAppender(File file,
                                             String appenderName,
-                                            Map<String, String> newProps,
-                                            boolean removeExistingAppenderKeys) throws IOException {
+                                            Map<String, String> newProps) throws IOException {
 
-        List<String> lines = readAllLines(file);
-        if (lines == null) {
-            lines = new ArrayList<>();
-        }
-
+        ArrayList<String> lines = readAllLines(file);
         String targetPrefix = APPENDER_PREFIX + appenderName + ".";
+
         // 1) build index maps for existing appender-related keys and for all appender.* keys
         Map<String, Integer> existingAppenderKeyLineIdx = new LinkedHashMap<>();
         Map<String, Integer> allAppenderKeyLineIdx = new LinkedHashMap<>();
@@ -165,45 +145,14 @@ public final class Log4j2PropertiesEditor {
             insertionIndex = Collections.max(existingAppenderKeyLineIdx.values()) + 1;
         } else if (!allAppenderKeyLineIdx.isEmpty()) {
             // no keys for this appender; insert after last "appender.*" line
-            insertionIndex = Collections.max(allAppenderKeyLineIdx.values()) + 1;
+            insertionIndex = Collections.max(allAppenderKeyLineIdx.values()) + 2;
         } else {
             // no appender.* keys at all; append at end of file
             insertionIndex = lines.size();
         }
 
-        // 3) If removeExistingAppenderKeys, remove all existing lines for this appender
-        if (removeExistingAppenderKeys && !existingAppenderKeyLineIdx.isEmpty()) {
-            // Remove by building a new list skipping those indices
-            List<String> newLines = new ArrayList<>();
-            for (int i = 0; i < lines.size(); i++) {
-                if (!existingAppenderKeyLineIdx.containsValue(i)) {
-                    newLines.add(lines.get(i));
-                }
-            }
-            lines = newLines;
-            // Recompute insertionIndex: if any earlier lines removed before old insertionIndex, adjust.
-            // It's simpler to recompute insertionIndex: find last appender.* now
-            int newLastAppenderIdx = -1;
-            for (int i = 0; i < lines.size(); i++) {
-                String trimmed = lines.get(i).trim();
-                if (trimmed.isEmpty() || isCommentLine(trimmed)) {
-                    continue;
-                }
-                int sep = findKeyValueSeparator(trimmed);
-                if (sep <= 0) {
-                    continue;
-                }
-                String key = trimmed.substring(0, sep).trim();
-                if (key.startsWith(APPENDER_PREFIX)) {
-                    newLastAppenderIdx = i;
-                }
-            }
-            insertionIndex = (newLastAppenderIdx >= 0) ? newLastAppenderIdx + 1 : lines.size();
-        }
-
-        // 4) Update existing keys where applicable (only if not removing them)
-        // Note: when removeExistingAppenderKeys==true we already removed old lines; updates are not needed.
-        if (!removeExistingAppenderKeys && !existingAppenderKeyLineIdx.isEmpty()) {
+        // 4) Update existing keys where applicable
+        if (!existingAppenderKeyLineIdx.isEmpty()) {
             for (Map.Entry<String, String> e : newProps.entrySet()) {
                 String key = e.getKey();
                 String value = safeToString(e.getValue());
@@ -220,29 +169,26 @@ public final class Log4j2PropertiesEditor {
         for (Map.Entry<String, String> e : newProps.entrySet()) {
             String key = e.getKey();
             String value = safeToString(e.getValue());
-            boolean exists = (!removeExistingAppenderKeys && existingAppenderKeyLineIdx.containsKey(key))
-                    || (removeExistingAppenderKeys && false); // removed earlier
+            boolean exists = (existingAppenderKeyLineIdx.containsKey(key));
             if (!exists) {
                 toInsert.add(key + " = " + value);
             }
         }
+        log.debug("Final props to insert for " + appenderName + ": " + toInsert);
+        log.debug("Final props to insert for " + appenderName + ": " + newProps);
 
         // 6) Insert missing lines at insertionIndex preserving order given by newProps iteration order
         if (!toInsert.isEmpty()) {
-            // Insert in batch
-            List<String> before = new ArrayList<>();
-            List<String> after = new ArrayList<>();
-            for (int i = 0; i < insertionIndex && i < lines.size(); i++) {
-                before.add(lines.get(i));
+            // Clamp insertionIndex to the valid range [0, lines.size()] to avoid IndexOutOfBoundsException.
+            if (insertionIndex < 0) {
+                insertionIndex = 0;
             }
-            for (int i = insertionIndex; i < lines.size(); i++) {
-                after.add(lines.get(i));
+            if (insertionIndex > lines.size()) {
+                insertionIndex = lines.size();
             }
-            List<String> merged = new ArrayList<>(before.size() + toInsert.size() + after.size());
-            merged.addAll(before);
-            merged.addAll(toInsert);
-            merged.addAll(after);
-            lines = merged;
+
+            // Insert missing lines at the calculated index preserving the order of toInsert.
+            lines.addAll(insertionIndex, toInsert);
         }
 
         // 7) Write lines atomically
@@ -250,7 +196,6 @@ public final class Log4j2PropertiesEditor {
     }
 
     private static int findKeyValueSeparator(String line) {
-        // support both '=' and ':'? In properties typically '=' or ':' but original code used '='
         int eq = line.indexOf(KV_SEPARATOR);
         if (eq >= 0) {
             return eq;
@@ -259,7 +204,7 @@ public final class Log4j2PropertiesEditor {
     }
 
     private static boolean isCommentLine(String trimmed) {
-        return trimmed.startsWith("#") || trimmed.startsWith("!");
+        return trimmed.startsWith("#");
     }
 
     private static String safeToString(Object o) {

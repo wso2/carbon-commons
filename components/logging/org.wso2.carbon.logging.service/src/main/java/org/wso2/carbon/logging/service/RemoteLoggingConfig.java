@@ -71,11 +71,8 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     }
 
-    // // no-op loader retained for compatibility with older callers
+
     // private void loadConfigs() {
-    //     // previously used Apache Commons Configuration to load file into `config`.
-    //     // New implementation uses Log4j2PropertiesEditor which operates on the file directly,
-    //     // so loading into an in-memory config is unnecessary.
     // }
 
     /**
@@ -117,33 +114,27 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         //applyRemoteConfigurations(data, list, appenderName);
         //applyConfigs();
         // Load file as raw lines
-    // Build the map of new key-value pairs for the appender
-    Map<String, String> newProps = buildAppenderProperties(data, appenderName);
+        // Build the map of new key-value pairs for the appender
+        Map<String, String> newProps = buildAppenderProperties(data, appenderName);
 
-    // Debug: log what we're going to write so missing keys can be diagnosed
-    if (log.isDebugEnabled()) {
-        log.debug("Writing appender properties to file: " + logPropFile.getAbsolutePath() + " props: " + newProps);
+        if (log.isDebugEnabled()) {
+            log.debug("Writing appender properties to file: " + logPropFile.getAbsolutePath() + " props: " + newProps);
+        }
+
+        Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps);   // do NOT remove existing keys; update + insert missing ones
+
+
+        // Audit log entry
+        logAuditForConfigUpdate(url, appenderName);
     }
 
-    // Write to log4j2.properties using the raw-file utilities
-    // - preserves unrelated lines
-    // - updates existing keys
-    // - inserts missing keys contiguously
-    // - atomic write
-    Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps, false);   // do NOT remove existing keys; update + insert missing ones
-
-
-    // Audit log entry
-    logAuditForConfigUpdate(url, appenderName);
-}
-
-  /**
+    /**
      * Build a LinkedHashMap of appender properties from RemoteServerLoggerData.
      * Maintains insertion order for consistent property file updates.
      */
     private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data, String appenderName) {
         Map<String, String> map = new LinkedHashMap<>();
-    String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
+        String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
 
         map.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
         map.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
@@ -232,12 +223,10 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (!isPeriodicalSyncRequest) {
             resetRemoteServerConfigInRegistry(appenderName);
         }
-    // load existing file state (no-op with new util)
-    //loadConfigs();
-    ArrayList<String> list = Log4j2PropertiesEditor.getKeysOfAppender(logPropFile, appenderName);
-    resetRemoteConfigurations(list, appenderName);
-    // applyConfigs is no-op now since Log4j2PropertiesEditor writes atomically
-    //applyConfigs();
+        //loadConfigs();
+        ArrayList<String> list = Log4j2PropertiesEditor.getKeysOfAppender(logPropFile, appenderName);
+        resetRemoteConfigurations(list, appenderName);
+        //applyConfigs();
 
         logAuditForConfigReset(appenderName);
     }
@@ -356,60 +345,60 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
      * @param appenderName           name of the appender
      */
     private void resetRemoteConfigurations(ArrayList<String> appenderPropertiesList, String appenderName) {
-    // Build a map of default properties for the appender and write them, removing existing keys.
-    Map<String, String> defaults = new LinkedHashMap<>();
+        // Build a map of default properties for the appender and write them, removing existing keys.
+        Map<String, String> defaults = new LinkedHashMap<>();
         String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
 
-    defaults.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
-    defaults.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.ROLLING_FILE);
+        defaults.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
+        defaults.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.ROLLING_FILE);
 
-    String fileName = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATH;
-    String filePattern = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATTERN;
-    if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
-        fileName = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATH;
-        filePattern = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATTERN;
-    }
-    defaults.put(prefix + LoggingConstants.FILE_NAME_SUFFIX, fileName);
-    defaults.put(prefix + LoggingConstants.FILE_PATTERN_SUFFIX, filePattern);
-    defaults.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-        LoggingConstants.PATTERN_LAYOUT_TYPE);
+        String fileName = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATH;
+        String filePattern = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATTERN;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            fileName = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATH;
+            filePattern = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATTERN;
+        }
+        defaults.put(prefix + LoggingConstants.FILE_NAME_SUFFIX, fileName);
+        defaults.put(prefix + LoggingConstants.FILE_PATTERN_SUFFIX, filePattern);
+        defaults.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.PATTERN_LAYOUT_TYPE);
 
-    String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
-    if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
-        layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
-    }
-    defaults.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX, layoutPattern);
+        String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
+        }
+        defaults.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX, layoutPattern);
 
-    defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-        LoggingConstants.POLICIES);
-    defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
-        LoggingConstants.TYPE_SUFFIX, LoggingConstants.TIME_BASED_TRIGGERING_POLICY);
-    defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
-        LoggingConstants.INTERVAL_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_INTERVAL));
-    defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
-        LoggingConstants.MODULATE_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_MODULATE));
-    defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX +
-        LoggingConstants.TYPE_SUFFIX, LoggingConstants.SIZE_BASED_TRIGGERING_POLICY);
-    defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX +
-        LoggingConstants.SIZE_SUFFIX, LoggingConstants.DEFAULT_SIZE);
-    defaults.put(prefix + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-        LoggingConstants.DEFAULT_ROLLOVER_STRATEGY);
-    defaults.put(prefix + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.MAX_SUFFIX,
-        String.valueOf(LoggingConstants.DEFAULT_MAX));
-    defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-        LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
-    String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
-    if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
-        filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
-    }
-    defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-        LoggingConstants.LEVEL_SUFFIX, filterLevel);
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.POLICIES);
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX, LoggingConstants.TIME_BASED_TRIGGERING_POLICY);
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
+                LoggingConstants.INTERVAL_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_INTERVAL));
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
+                LoggingConstants.MODULATE_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_MODULATE));
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX, LoggingConstants.SIZE_BASED_TRIGGERING_POLICY);
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX +
+                LoggingConstants.SIZE_SUFFIX, LoggingConstants.DEFAULT_SIZE);
+        defaults.put(prefix + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.DEFAULT_ROLLOVER_STRATEGY);
+        defaults.put(prefix + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.MAX_SUFFIX,
+                String.valueOf(LoggingConstants.DEFAULT_MAX));
+        defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
+        String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
+        }
+        defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.LEVEL_SUFFIX, filterLevel);
 
-    try {
-        Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, defaults, true);
-    } catch (IOException e) {
-        log.error("Error resetting appender properties for " + appenderName, e);
-    }
+        try {
+            Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, defaults);
+        } catch (IOException e) {
+            log.error("Error resetting appender properties for " + appenderName, e);
+        }
     }
 
     /**
@@ -433,79 +422,78 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
      */
     private void applyRemoteConfigurations(RemoteServerLoggerData data, ArrayList<String> appenderPropertiesList,
                                            String appenderName) throws IOException {
-    String layoutTypeKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX +
-        LoggingConstants.TYPE_SUFFIX;
-    String layoutTypePatternKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX +
-        LoggingConstants.PATTERN_SUFFIX;
-    String layoutTypePatternDefaultValue = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
-    if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
-        layoutTypePatternDefaultValue = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
-    }
-    String layoutTypePatternValue = null;
-    for (String key : appenderPropertiesList) {
-        if (layoutTypeKey.equals(key)) {
-        String layoutTypeValue = Log4j2PropertiesEditor.getProperty(logPropFile, key);
-        if (LoggingConstants.PATTERN_LAYOUT_TYPE.equals(layoutTypeValue)) {
-            layoutTypePatternValue = Log4j2PropertiesEditor.getProperty(logPropFile, layoutTypePatternKey);
+        String layoutTypeKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX;
+        String layoutTypePatternKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX +
+                LoggingConstants.PATTERN_SUFFIX;
+        String layoutTypePatternDefaultValue = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
+        if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
+            layoutTypePatternDefaultValue = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
         }
+        String layoutTypePatternValue = null;
+        for (String key : appenderPropertiesList) {
+            if (layoutTypeKey.equals(key)) {
+                String layoutTypeValue = Log4j2PropertiesEditor.getProperty(logPropFile, key);
+                if (LoggingConstants.PATTERN_LAYOUT_TYPE.equals(layoutTypeValue)) {
+                    layoutTypePatternValue = Log4j2PropertiesEditor.getProperty(logPropFile, layoutTypePatternKey);
+                }
+            }
         }
-    }
 
-    Map<String, String> newProps = new LinkedHashMap<>();
-    String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
+        Map<String, String> newProps = new LinkedHashMap<>();
+        String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
 
-    newProps.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
-    newProps.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
-    newProps.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-        LoggingConstants.PATTERN_LAYOUT_TYPE);
-    newProps.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX,
-        (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) ? layoutTypePatternValue :
-            layoutTypePatternDefaultValue);
-    newProps.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
+        newProps.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
+        newProps.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
+        newProps.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.PATTERN_LAYOUT_TYPE);
+        newProps.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX,
+                (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) ? layoutTypePatternValue :
+                        layoutTypePatternDefaultValue);
+        newProps.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
 
-    if (!StringUtils.isEmpty(data.getConnectTimeoutMillis())) {
-        newProps.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
-    }
+        if (!StringUtils.isEmpty(data.getConnectTimeoutMillis())) {
+            newProps.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
+        }
 
-    if (!StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
-        newProps.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
-        newProps.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
-    }
+        if (!StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
+            newProps.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
+            newProps.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
+        }
 
-    newProps.put(prefix + LoggingConstants.PROCESSING_LIMIT_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_PROCESSING_LIMIT));
+        newProps.put(prefix + LoggingConstants.PROCESSING_LIMIT_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_PROCESSING_LIMIT));
 
-    if (!StringUtils.isEmpty(data.getKeystoreLocation()) && !StringUtils.isEmpty(data.getKeystorePassword()) &&
-        !StringUtils.isEmpty(data.getTruststoreLocation()) && !StringUtils.isEmpty(data.getTruststorePassword())) {
-        newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-            LoggingConstants.DEFAULT_SSLCONF_TYPE);
-        newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
-            LoggingConstants.DEFAULT_SSL_PROTOCOL);
-        newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
-            data.getKeystoreLocation());
-        newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
-            data.getKeystorePassword());
-        newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
-            data.getTruststoreLocation());
-        newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
-            data.getTruststorePassword());
-        newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.VERIFY_HOSTNAME_SUFFIX,
-            Boolean.toString(data.isVerifyHostname()));
-    }
+        if (!StringUtils.isEmpty(data.getKeystoreLocation()) && !StringUtils.isEmpty(data.getKeystorePassword()) &&
+                !StringUtils.isEmpty(data.getTruststoreLocation()) && !StringUtils.isEmpty(data.getTruststorePassword())) {
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                    LoggingConstants.DEFAULT_SSLCONF_TYPE);
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
+                    LoggingConstants.DEFAULT_SSL_PROTOCOL);
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
+                    data.getKeystoreLocation());
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
+                    data.getKeystorePassword());
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
+                    data.getTruststoreLocation());
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
+                    data.getTruststorePassword());
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.VERIFY_HOSTNAME_SUFFIX,
+                    Boolean.toString(data.isVerifyHostname()));
+        }
 
-    newProps.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-        LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
-    String filterLevel2 = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
-    if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
-        filterLevel2 = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
-    }
-    newProps.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-        LoggingConstants.LEVEL_SUFFIX, filterLevel2);
+        newProps.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
+        String filterLevel2 = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            filterLevel2 = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
+        }
+        newProps.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.LEVEL_SUFFIX, filterLevel2);
 
-    Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps, false);
+        Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps);
     }
 
     // private void applyConfigs() {
-    //     // Log4j2PropertiesEditor writes the file atomically. No further apply step required.
     // }
 
     private void updateRemoteServerConfigInRegistry(RemoteServerLoggerData data, String appenderName)
@@ -545,7 +533,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
         String appenderName = logType.equals(LoggingConstants.AUDIT) ? LoggingConstants.AUDIT_LOGFILE :
                 LoggingConstants.CARBON_LOGFILE;
-    Map<String, String> appenderProperties = Log4j2PropertiesEditor.getKeyValuesOfAppender(logPropFile, appenderName);
+        Map<String, String> appenderProperties = Log4j2PropertiesEditor.getKeyValuesOfAppender(logPropFile, appenderName);
 
         if (remoteServerLoggerData == null) {
             return !LoggingConstants.ROLLING_FILE.equals(appenderProperties.get(
