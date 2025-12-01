@@ -130,18 +130,61 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         Map<String, String> map = new LinkedHashMap<>();
         String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
 
+    // Always keep an explicit name for the appender so logger references resolve.
+    map.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
+
+    // Switch the appender to our HTTP plugin type.
+    map.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
+
+    // Layout: use PatternLayout with sensible defaults per appender.
+    map.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+        LoggingConstants.PATTERN_LAYOUT_TYPE);
+    String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
+    if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+        layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
+    }
+    map.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX, layoutPattern);
+
         map.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
         map.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
         map.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
-        //map.put(prefix + LoggingConstants.TYPE_SUFFIX, data.getLogType());
-        map.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
-        map.put(prefix + LoggingConstants.KEYSTORE_LOCATION_SUFFIX, data.getKeystoreLocation());
-        map.put(prefix + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX, data.getKeystorePassword());
-        map.put(prefix + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX, data.getTruststoreLocation());
-        map.put(prefix + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX, data.getTruststorePassword());
-        map.put(prefix + LoggingConstants.VERIFY_HOSTNAME_SUFFIX, Boolean.toString(data.isVerifyHostname()));
+    // Use the builder attribute name expected by the plugin (verifyHostname) at the top level.
+    map.put(prefix + ".verifyHostname", Boolean.toString(data.isVerifyHostname()));
         map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
         map.put(prefix + LoggingConstants.PROCESSING_LIMIT_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_PROCESSING_LIMIT));
+
+    // Configure ThresholdFilter per appender defaults.
+    map.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+        LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
+    String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
+    if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+        filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
+    }
+    map.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+        LoggingConstants.LEVEL_SUFFIX, filterLevel);
+
+    // If SSL material is provided, add nested sslconf.* properties as expected by the plugin.
+    boolean hasKeystore = StringUtils.isNotBlank(data.getKeystoreLocation()) &&
+        StringUtils.isNotBlank(data.getKeystorePassword());
+    boolean hasTruststore = StringUtils.isNotBlank(data.getTruststoreLocation()) &&
+        StringUtils.isNotBlank(data.getTruststorePassword());
+    if (hasKeystore && hasTruststore) {
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+            LoggingConstants.DEFAULT_SSLCONF_TYPE);
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
+            LoggingConstants.DEFAULT_SSL_PROTOCOL);
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
+            data.getKeystoreLocation());
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
+            data.getKeystorePassword());
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
+            data.getTruststoreLocation());
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
+            data.getTruststorePassword());
+        // Nested SSL plugin uses verifyHostName (note the capital N) as per SslConfiguration.
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.VERIFY_HOSTNAME_SUFFIX,
+            Boolean.toString(data.isVerifyHostname()));
+    }
         return map;
     }
 
