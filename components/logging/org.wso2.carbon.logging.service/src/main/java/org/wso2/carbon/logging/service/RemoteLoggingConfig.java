@@ -20,8 +20,8 @@
 package org.wso2.carbon.logging.service;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.PropertiesConfigurationLayout;
+//import org.apache.commons.configuration2.PropertiesConfiguration;
+//import org.apache.commons.configuration2.PropertiesConfigurationLayout;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -30,6 +30,7 @@ import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 import org.wso2.carbon.logging.service.internal.RemoteLoggingConfigDataHolder;
+import org.wso2.carbon.logging.service.util.Log4j2PropertiesEditor;
 import org.wso2.carbon.logging.service.util.Utils;
 import org.wso2.carbon.registry.core.Registry;
 import org.wso2.carbon.registry.core.Resource;
@@ -41,11 +42,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,19 +64,19 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             System.getProperty(ServerConstants.CARBON_CONFIG_DIR_PATH) + File.separator + "log4j2.properties";
     private final File logPropFile = new File(filePath);
 
-    private PropertiesConfiguration config;
-    private PropertiesConfigurationLayout layout;
+    //private PropertiesConfiguration config;
+    //private PropertiesConfigurationLayout layout;
 
     public RemoteLoggingConfig() throws IOException {
 
     }
 
-    private void loadConfigs() throws IOException, ConfigurationException {
-
-        config = new PropertiesConfiguration();
-        layout = new PropertiesConfigurationLayout();
-        layout.load(config, new InputStreamReader(new FileInputStream(logPropFile)));
-    }
+//    private void loadConfigs() throws IOException, ConfigurationException {
+//
+//        config = new PropertiesConfiguration();
+//        layout = new PropertiesConfigurationLayout();
+//        layout.load(config, new InputStreamReader(new FileInputStream(logPropFile)));
+//    }
 
     /**
      * This method is used to add a remote server configuration
@@ -110,11 +113,36 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (!isPeriodicalSyncRequest) {
             updateRemoteServerConfigInRegistry(data, appenderName);
         }
-        loadConfigs();
-        ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
-        applyRemoteConfigurations(data, list, appenderName);
-        applyConfigs();
+        //loadConfigs();
+        //ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
+        //applyRemoteConfigurations(data, list, appenderName);
+        //applyConfigs();
+        Map<String, String> newProps = buildAppenderProperties(data, appenderName);
+        Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps);
         logAuditForConfigUpdate(url, appenderName);
+    }
+
+    /**
+     * Build a LinkedHashMap of appender properties from RemoteServerLoggerData.
+     * Maintains insertion order for consistent property file updates.
+     */
+    private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data, String appenderName) {
+        Map<String, String> map = new LinkedHashMap<>();
+        String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
+
+        map.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
+        map.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
+        map.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
+        //map.put(prefix + LoggingConstants.TYPE_SUFFIX, data.getLogType());
+        map.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
+        map.put(prefix + LoggingConstants.KEYSTORE_LOCATION_SUFFIX, data.getKeystoreLocation());
+        map.put(prefix + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX, data.getKeystorePassword());
+        map.put(prefix + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX, data.getTruststoreLocation());
+        map.put(prefix + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX, data.getTruststorePassword());
+        map.put(prefix + LoggingConstants.VERIFY_HOSTNAME_SUFFIX, Boolean.toString(data.isVerifyHostname()));
+        map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
+        map.put(prefix + LoggingConstants.PROCESSING_LIMIT_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_PROCESSING_LIMIT));
+        return map;
     }
 
     private void logAuditForConfigUpdate(String url, String appenderName) {
@@ -156,10 +184,10 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (!isPeriodicalSyncRequest) {
             resetRemoteServerConfigInRegistry(appenderName);
         }
-        loadConfigs();
-        ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
+        //loadConfigs();
+        ArrayList<String> list = Log4j2PropertiesEditor.getKeysOfAppender(logPropFile, appenderName);
         resetRemoteConfigurations(list, appenderName);
-        applyConfigs();
+        //applyConfigs();
 
         logAuditForConfigReset(appenderName);
     }
@@ -202,7 +230,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         List<RemoteServerLoggerData> remoteServerLoggerResponseDataList = getRemoteServerConfigs();
         List<RemoteServerLoggerData> modifiedRemoteServerLoggerDataList = new ArrayList<>();
         List<RemoteServerLoggerData> removedRemoteServerLoggerDataList = new ArrayList<>();
-        loadConfigs();
+        //loadConfigs();
 
         for (String logType : new String[]{LoggingConstants.AUDIT, LoggingConstants.CARBON, LoggingConstants.API}) {
             RemoteServerLoggerData remoteServerLoggerData =
@@ -280,76 +308,61 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
      */
     private void resetRemoteConfigurations(ArrayList<String> appenderPropertiesList, String appenderName) {
 
-        for (String key : appenderPropertiesList) {
-            config.clearProperty(key);
-        }
+        // Build a map of default properties for the appender and write them, removing existing keys.
+        Map<String, String> defaults = new LinkedHashMap<>();
+        String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
 
-        // appender.CARBON_LOGFILE.name = CARBON_LOGFILE
-        config.setProperty(getKey(appenderName, LoggingConstants.NAME_SUFFIX), appenderName);
-        // appender.CARBON_LOGFILE.type = RollingFile
-        config.setProperty(getKey(appenderName, LoggingConstants.TYPE_SUFFIX), LoggingConstants.ROLLING_FILE);
+        defaults.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
+        defaults.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.ROLLING_FILE);
+
         String fileName = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATH;
         String filePattern = LoggingConstants.DEFAULT_CARBON_LOGFILE_PATTERN;
         if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
             fileName = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATH;
             filePattern = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATTERN;
-        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
-            fileName = LoggingConstants.DEFAULT_API_LOGFILE_PATH;
-            filePattern = LoggingConstants.DEFAULT_API_LOGFILE_PATTERN;
         }
-        // appender.CARBON_LOGFILE.fileName = ${sys:carbon.home}/repository/logs/wso2carbon.log
-        config.setProperty(getKey(appenderName, LoggingConstants.FILE_NAME_SUFFIX), fileName);
-        // appender.CARBON_LOGFILE.filePattern = ${sys:carbon.home}/repository/logs/wso2carbon-%d{MM-dd-yyyy}-%i.log
-        config.setProperty(getKey(appenderName, LoggingConstants.FILE_PATTERN_SUFFIX), filePattern);
-        // appender.CARBON_LOGFILE.layout.type = PatternLayout
-        config.setProperty(getKey(appenderName, LoggingConstants.LAYOUT_SUFFIX, LoggingConstants.TYPE_SUFFIX),
+        defaults.put(prefix + LoggingConstants.FILE_NAME_SUFFIX, fileName);
+        defaults.put(prefix + LoggingConstants.FILE_PATTERN_SUFFIX, filePattern);
+        defaults.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.PATTERN_LAYOUT_TYPE);
+
         String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
         if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
             layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
-        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
-            layoutPattern = LoggingConstants.API_LOGS_DEFAULT_LAYOUT_PATTERN;
         }
-        // appender.CARBON_LOGFILE.layout.pattern = TID: [%tenantId] [%appName] [%d] %5p {%c} - %m%ex%n
-        config.setProperty(getKey(appenderName, LoggingConstants.LAYOUT_SUFFIX, LoggingConstants.PATTERN_SUFFIX),
-                layoutPattern);
-        // appender.CARBON_LOGFILE.policies.type = Policies
-        config.setProperty(getKey(appenderName, LoggingConstants.POLICIES_SUFFIX, LoggingConstants.TYPE_SUFFIX),
+        defaults.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX, layoutPattern);
+
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.POLICIES);
-        // appender.CARBON_LOGFILE.policies.time.type = TimeBasedTriggeringPolicy
-        config.setProperty(getKey(appenderName, LoggingConstants.POLICIES_SUFFIX, LoggingConstants.TIME_SUFFIX,
-                LoggingConstants.TYPE_SUFFIX), LoggingConstants.TIME_BASED_TRIGGERING_POLICY);
-        // appender.CARBON_LOGFILE.policies.time.interval = 1
-        config.setProperty(getKey(appenderName, LoggingConstants.POLICIES_SUFFIX, LoggingConstants.TIME_SUFFIX,
-                LoggingConstants.INTERVAL_SUFFIX), LoggingConstants.DEFAULT_INTERVAL);
-        // appender.CARBON_LOGFILE.policies.time.modulate = true
-        config.setProperty(getKey(appenderName, LoggingConstants.POLICIES_SUFFIX, LoggingConstants.TIME_SUFFIX,
-                LoggingConstants.MODULATE_SUFFIX), LoggingConstants.DEFAULT_MODULATE);
-        // appender.CARBON_LOGFILE.policies.size.type = SizeBasedTriggeringPolicy
-        config.setProperty(getKey(appenderName, LoggingConstants.POLICIES_SUFFIX, LoggingConstants.SIZE_SUFFIX,
-                LoggingConstants.TYPE_SUFFIX), LoggingConstants.SIZE_BASED_TRIGGERING_POLICY);
-        // appender.CARBON_LOGFILE.policies.size.size = 10MB
-        config.setProperty(getKey(appenderName, LoggingConstants.POLICIES_SUFFIX, LoggingConstants.SIZE_SUFFIX,
-                LoggingConstants.SIZE_SUFFIX), LoggingConstants.DEFAULT_SIZE);
-        // appender.CARBON_LOGFILE.strategy.type = DefaultRolloverStrategy
-        config.setProperty(getKey(appenderName, LoggingConstants.STRATEGY_SUFFIX, LoggingConstants.TYPE_SUFFIX),
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX, LoggingConstants.TIME_BASED_TRIGGERING_POLICY);
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
+                LoggingConstants.INTERVAL_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_INTERVAL));
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
+                LoggingConstants.MODULATE_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_MODULATE));
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX, LoggingConstants.SIZE_BASED_TRIGGERING_POLICY);
+        defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.SIZE_SUFFIX +
+                LoggingConstants.SIZE_SUFFIX, LoggingConstants.DEFAULT_SIZE);
+        defaults.put(prefix + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.DEFAULT_ROLLOVER_STRATEGY);
-        // appender.CARBON_LOGFILE.strategy.max = 20
-        config.setProperty(getKey(appenderName, LoggingConstants.STRATEGY_SUFFIX, LoggingConstants.MAX_SUFFIX),
-                LoggingConstants.DEFAULT_MAX);
-        // appender.CARBON_LOGFILE.filter.threshold.type = ThresholdFilter
-        config.setProperty(getKey(appenderName, LoggingConstants.FILTER_SUFFIX, LoggingConstants.THRESHOLD_SUFFIX,
-                LoggingConstants.TYPE_SUFFIX), LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
-        // CARBON and API logs have default threshold filter level DEBUG
+        defaults.put(prefix + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.MAX_SUFFIX,
+                String.valueOf(LoggingConstants.DEFAULT_MAX));
+        defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
         String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
         if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
             filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
         }
-        // appender.CARBON_LOGFILE.filter.threshold.level = DEBUG
-        config.setProperty(getKey(appenderName, LoggingConstants.FILTER_SUFFIX, LoggingConstants.THRESHOLD_SUFFIX,
-                LoggingConstants.LEVEL_SUFFIX), filterLevel);
-    }
+        defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.LEVEL_SUFFIX, filterLevel);
 
+        try {
+            Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, defaults);
+        } catch (IOException e) {
+            log.error("Error resetting appender properties for " + appenderName, e);
+        }
+    }
     /**
      * This method is used to generate the appender properties key based on the given tokens
      *
@@ -379,102 +392,71 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         String layoutTypePatternDefaultValue = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
         if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
             layoutTypePatternDefaultValue = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
-        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
-            layoutTypePatternDefaultValue = LoggingConstants.API_LOGS_DEFAULT_LAYOUT_PATTERN;
         }
         String layoutTypePatternValue = null;
         for (String key : appenderPropertiesList) {
             if (layoutTypeKey.equals(key)) {
-                String layoutTypeValue = Utils.getProperty(logPropFile, key);
+                String layoutTypeValue = Log4j2PropertiesEditor.getProperty(logPropFile, key);
                 if (LoggingConstants.PATTERN_LAYOUT_TYPE.equals(layoutTypeValue)) {
-                    layoutTypePatternValue = Utils.getProperty(logPropFile, layoutTypePatternKey);
+                    layoutTypePatternValue = Log4j2PropertiesEditor.getProperty(logPropFile, layoutTypePatternKey);
                 }
             }
-            config.clearProperty(key);
         }
-        // appender.CARBON_LOGFILE.type = SecuredHttp
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.TYPE_SUFFIX,
-                LoggingConstants.HTTP_APPENDER_TYPE);
-        // appender.CARBON_LOGFILE.name = CARBON_LOGFILE
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.NAME_SUFFIX,
-                appenderName);
-        // appender.CARBON_LOGFILE.layout.type = PatternLayout
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX +
-                LoggingConstants.TYPE_SUFFIX, LoggingConstants.PATTERN_LAYOUT_TYPE);
-        // appender.CARBON_LOGFILE.layout.pattern = TID: [%tenantId] [%appName] [%d] %5p {%c} - %m%ex%n
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX +
-                        LoggingConstants.PATTERN_SUFFIX,
+        Map<String, String> newProps = new LinkedHashMap<>();
+        String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
+
+        newProps.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
+        newProps.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
+        newProps.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.PATTERN_LAYOUT_TYPE);
+        newProps.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX,
                 (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) ? layoutTypePatternValue :
                         layoutTypePatternDefaultValue);
-        // appender.CARBON_LOGFILE.url = https://localhost:3000
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.URL_SUFFIX,
-                data.getUrl());
+        newProps.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
 
-        // Set the connection timeout if available
         if (!StringUtils.isEmpty(data.getConnectTimeoutMillis())) {
-            config.setProperty(
-                    LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX,
-                    data.getConnectTimeoutMillis());
+            newProps.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
         }
 
-        // Set the username and password if available
         if (!StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
-            // appender.CARBON_LOGFILE.username = user
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.AUTH_USERNAME_SUFFIX,
-                    data.getUsername());
-            // appender.CARBON_LOGFILE.password = pass
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.AUTH_PASSWORD_SUFFIX,
-                    data.getPassword());
+            newProps.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
+            newProps.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
         }
+        newProps.put(prefix + LoggingConstants.PROCESSING_LIMIT_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_PROCESSING_LIMIT));
 
-        // appender.CARBON_LOGFILE.processingLimit = 1000
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.PROCESSING_LIMIT_SUFFIX,
-                LoggingConstants.DEFAULT_PROCESSING_LIMIT);
-
-        // Set the SSL configurations if available
         if (!StringUtils.isEmpty(data.getKeystoreLocation()) && !StringUtils.isEmpty(data.getKeystorePassword()) &&
-                !StringUtils.isEmpty(data.getTruststoreLocation()) &&
-                !StringUtils.isEmpty(data.getTruststorePassword())) {
-            // appender.CARBON_LOGFILE.sslconf.type = SSLConf
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX +
-                    LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_SSLCONF_TYPE);
-            // appender.CARBON_LOGFILE.sslconf.protocol = SSL
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX +
-                    LoggingConstants.PROTOCOL_SUFFIX, LoggingConstants.DEFAULT_SSL_PROTOCOL);
-            // appender.CARBON_LOGFILE.sslconf.keyStoreLocation = repository/resources/security/wso2carbon.jks
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX +
-                    LoggingConstants.KEYSTORE_LOCATION_SUFFIX, data.getKeystoreLocation());
-            // appender.CARBON_LOGFILE.sslconf.keyStorePassword = $secret{log4j2_keystore_pass}
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX +
-                    LoggingConstants.KEYSTORE_PASSWORD_SUFFIX, data.getKeystorePassword());
-            // appender.CARBON_LOGFILE.sslconf.trustStoreLocation =repository/resources/security/client-truststore.jks
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX +
-                    LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX, data.getTruststoreLocation());
-            // appender.CARBON_LOGFILE.sslconf.trustStorePassword = $secret{log4j2_truststore_pass}
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX +
-                    LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX, data.getTruststorePassword());
-            // appender.CARBON_LOGFILE.sslconf.verifyHostName = false
-            config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.SSL_SUFFIX +
-                    LoggingConstants.VERIFY_HOSTNAME_SUFFIX, data.isVerifyHostname());
+                !StringUtils.isEmpty(data.getTruststoreLocation()) && !StringUtils.isEmpty(data.getTruststorePassword())) {
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                    LoggingConstants.DEFAULT_SSLCONF_TYPE);
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
+                    LoggingConstants.DEFAULT_SSL_PROTOCOL);
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
+                    data.getKeystoreLocation());
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
+                    data.getKeystorePassword());
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
+                    data.getTruststoreLocation());
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
+                    data.getTruststorePassword());
+            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.VERIFY_HOSTNAME_SUFFIX,
+                    Boolean.toString(data.isVerifyHostname()));
         }
-        // appender.CARBON_LOGFILE.filter.threshold.type = ThresholdFilter
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX +
-                        LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-                LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
-        // CARBON and API logs have default threshold filter level DEBUG
-        String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
+
+        newProps.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
+        String filterLevel2 = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
         if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
-            filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
+            filterLevel2 = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
         }
-        // appender.CARBON_LOGFILE.filter.threshold.level = DEBUG
-        config.setProperty(LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.FILTER_SUFFIX +
-                        LoggingConstants.THRESHOLD_SUFFIX + LoggingConstants.LEVEL_SUFFIX, filterLevel);
-    }
+        newProps.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.LEVEL_SUFFIX, filterLevel2);
 
-    private void applyConfigs() throws IOException, ConfigurationException {
-
-        layout.save(config, new FileWriter(filePath, false));
+        Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps);
     }
+//    private void applyConfigs() throws IOException, ConfigurationException {
+//
+//        layout.save(config, new FileWriter(filePath, false));
+//    }
 
     private void updateRemoteServerConfigInRegistry(RemoteServerLoggerData data, String appenderName)
             throws ConfigurationException {
@@ -510,7 +492,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     }
 
     private Resource getResourceFromRemoteServerLoggerData(RemoteServerLoggerData data, Registry registry,
-                                                                  String logType) throws RegistryException {
+                                                           String logType) throws RegistryException {
 
         Resource resource = registry.newResource();
         resource.addProperty(LoggingConstants.URL, data.getUrl());
@@ -583,7 +565,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         } else if (LoggingConstants.API.equals(logType)) {
             appenderName = LoggingConstants.API_LOGFILE;
         }
-        Map<String, String> appenderProperties = Utils.getKeyValuesOfAppender(logPropFile, appenderName);
+        Map<String, String> appenderProperties = Log4j2PropertiesEditor.getKeyValuesOfAppender(logPropFile, appenderName);
 
         if (remoteServerLoggerData == null) {
             return !LoggingConstants.ROLLING_FILE.equals(appenderProperties.get(
