@@ -117,91 +117,111 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         //ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
         //applyRemoteConfigurations(data, list, appenderName);
         //applyConfigs();
-        Map<String, String> newProps = buildAppenderProperties(data, appenderName);
-        Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps);
-        logAuditForConfigUpdate(url, appenderName);
+        try{
+            Map<String, String> newProps = buildAppenderProperties(data, appenderName);
+            Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps,true);
+            logAuditForConfigUpdate(url, appenderName);
+        } catch (IllegalArgumentException e) {
+            throw new ConfigurationException("Error occurred while trying to add remote server config", e);
+        }
     }
 
     /**
      * Build a LinkedHashMap of appender properties from RemoteServerLoggerData.
      * Maintains insertion order for consistent property file updates.
      */
-    
 
 
-private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data, String appenderName) {
-    if (data == null) {
-        throw new IllegalArgumentException("RemoteServerLoggerData cannot be null");
-    }
-    if (StringUtils.isBlank(appenderName)) {
-        throw new IllegalArgumentException("Appender name cannot be null or empty");
-    }
-    
-    Map<String, String> map = new LinkedHashMap<>();
-    String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
 
-    map.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
-    map.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
-    map.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-            LoggingConstants.PATTERN_LAYOUT_TYPE);
+    private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data, String appenderName) {
+        if (data == null) {
+            throw new IllegalArgumentException("RemoteServerLoggerData cannot be null");
+        }
+        if (StringUtils.isBlank(appenderName)) {
+            throw new IllegalArgumentException("Appender name cannot be null or empty");
+        }
 
-    String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
-    if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
-        layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
-    }
-    map.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX, layoutPattern);
+        Map<String, String> map = new LinkedHashMap<>();
+        String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
 
-    // Only add properties with valid values
-    if (StringUtils.isNotBlank(data.getUrl())) {
-        map.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
-    }
-    if (StringUtils.isNotBlank(data.getUsername())) {
-        map.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
-    }
-    if (StringUtils.isNotBlank(data.getPassword())) {
-        map.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
-    }
-    if (StringUtils.isNotBlank(data.getConnectTimeoutMillis())) {
-        map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
-    } else {
-        map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, "5000");
-    }
-    map.put(prefix + LoggingConstants.PROCESSING_LIMIT_SUFFIX,
-            String.valueOf(LoggingConstants.DEFAULT_PROCESSING_LIMIT));
+        // Mark RollingFile-specific properties for removal
+        map.put(prefix + LoggingConstants.FILE_NAME_SUFFIX, "__REMOVE__");
+        map.put(prefix + LoggingConstants.FILE_PATTERN_SUFFIX, "__REMOVE__");
+        map.put(prefix + ".policies.type", "__REMOVE__");
+        map.put(prefix + ".policies.time.type", "__REMOVE__");
+        map.put(prefix + ".policies.time.interval", "__REMOVE__");
+        map.put(prefix + ".policies.time.modulate", "__REMOVE__");
+        map.put(prefix + ".policies.size.type", "__REMOVE__");
+        map.put(prefix + ".policies.size.size", "__REMOVE__");
+        map.put(prefix + ".strategy.type", "__REMOVE__");
+        map.put(prefix + ".strategy.max", "__REMOVE__");
 
-    // Configure ThresholdFilter per appender defaults.
-    map.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-            LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
-    String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
-    if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
-        filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
-    }
-    map.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-            LoggingConstants.LEVEL_SUFFIX, filterLevel);
+        // Core HTTP appender properties
+        map.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
+        map.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
 
-    // If SSL material is provided, add nested sslconf.* properties as expected by the plugin.
-    boolean hasKeystore = StringUtils.isNotBlank(data.getKeystoreLocation()) &&
-            StringUtils.isNotBlank(data.getKeystorePassword());
-    boolean hasTruststore = StringUtils.isNotBlank(data.getTruststoreLocation()) &&
-            StringUtils.isNotBlank(data.getTruststorePassword());
-    if (hasKeystore && hasTruststore) {
-        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-                LoggingConstants.DEFAULT_SSLCONF_TYPE);
-        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
-                LoggingConstants.DEFAULT_SSL_PROTOCOL);
-        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
-                data.getKeystoreLocation());
-        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
-                data.getKeystorePassword());
-        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
-                data.getTruststoreLocation());
-        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
-                data.getTruststorePassword());
-        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.VERIFY_HOSTNAME_SUFFIX,
-                String.valueOf(data.isVerifyHostname()));
+        // Layout configuration
+        map.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.PATTERN_LAYOUT_TYPE);
+
+        String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
+        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
+            layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
+        }
+        map.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX, layoutPattern);
+
+        // HTTP-specific properties
+        if (StringUtils.isNotBlank(data.getUrl())) {
+            map.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
+        }
+        if (StringUtils.isNotBlank(data.getUsername())) {
+            map.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
+        }
+        if (StringUtils.isNotBlank(data.getPassword())) {
+            map.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
+        }
+
+        String timeout = StringUtils.isNotBlank(data.getConnectTimeoutMillis())
+                ? data.getConnectTimeoutMillis()
+                : "5000";
+        map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, timeout);
+
+        // Filter configuration
+        map.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
+        String filterLevel = LoggingConstants.AUDIT_LOGFILE.equals(appenderName)
+                ? LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO
+                : LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
+        map.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
+                LoggingConstants.LEVEL_SUFFIX, filterLevel);
+
+        // SSL configuration (if both keystore and truststore are provided)
+        boolean hasKeystore = StringUtils.isNotBlank(data.getKeystoreLocation()) &&
+                StringUtils.isNotBlank(data.getKeystorePassword());
+        boolean hasTruststore = StringUtils.isNotBlank(data.getTruststoreLocation()) &&
+                StringUtils.isNotBlank(data.getTruststorePassword());
+
+        if (hasKeystore && hasTruststore) {
+            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                    LoggingConstants.DEFAULT_SSLCONF_TYPE);
+            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
+                    LoggingConstants.DEFAULT_SSL_PROTOCOL);
+            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
+                    data.getKeystoreLocation());
+            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
+                    data.getKeystorePassword());
+            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
+                    data.getTruststoreLocation());
+            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
+                    data.getTruststorePassword());
+            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.VERIFY_HOSTNAME_SUFFIX,
+                    String.valueOf(data.isVerifyHostname()));
+        }
+
+        return map;
     }
-    return map;
-}
+
+
 
 
 
@@ -418,7 +438,7 @@ private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data,
                 LoggingConstants.LEVEL_SUFFIX, filterLevel);
 
         try {
-            Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, defaults);
+            Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, defaults, false);
         } catch (IOException e) {
             log.error("Error resetting appender properties for " + appenderName, e);
         }
@@ -511,7 +531,7 @@ private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data,
         newProps.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
                 LoggingConstants.LEVEL_SUFFIX, filterLevel2);
 
-        Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps);
+        Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps, false);
     }
 //    private void applyConfigs() throws IOException, ConfigurationException {
 //

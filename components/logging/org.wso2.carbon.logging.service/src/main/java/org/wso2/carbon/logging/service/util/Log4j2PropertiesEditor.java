@@ -111,17 +111,81 @@ public final class Log4j2PropertiesEditor {
      */
     public static void writeUpdatedAppender(File file,
                                             String appenderName,
-                                            Map<String, String> newProps) throws IOException {
+                                            Map<String, String> newProps,
+                                            boolean merge) throws IOException {
 
         ArrayList<String> lines = readAllLines(file);
         String targetPrefix = APPENDER_PREFIX + appenderName + ".";
 
-        // 1) build index maps for existing appender-related keys and for all appender.* keys
-        Map<String, Integer> existingAppenderKeyLineIdx = new LinkedHashMap<>();
-        Map<String, Integer> allAppenderKeyLineIdx = new LinkedHashMap<>();
-        for (int i = 0; i < lines.size(); i++) {
-            String raw = lines.get(i);
-            String trimmed = raw.trim();
+        if (!merge) {
+            // Original behavior: remove all existing lines for this appender
+            lines.removeIf(line -> {
+                String trimmed = line.trim();
+                if (trimmed.isEmpty() || isCommentLine(trimmed)) {
+                    return false;
+                }
+                int sep = findKeyValueSeparator(trimmed);
+                if (sep <= 0) {
+                    return false;
+                }
+                String key = trimmed.substring(0, sep).trim();
+                return key.startsWith(targetPrefix);
+            });
+        } else {
+            // Merge behavior: update existing keys, keep others, handle removals
+            Map<String, Integer> existingKeys = new LinkedHashMap<>();
+            for (int i = 0; i < lines.size(); i++) {
+                String trimmed = lines.get(i).trim();
+                if (trimmed.isEmpty() || isCommentLine(trimmed)) {
+                    continue;
+                }
+                int sep = findKeyValueSeparator(trimmed);
+                if (sep <= 0) {
+                    continue;
+                }
+                String key = trimmed.substring(0, sep).trim();
+                if (key.startsWith(targetPrefix)) {
+                    existingKeys.put(key, i);
+                }
+            }
+
+            // Track lines to remove (for null values or properties to delete)
+            List<Integer> linesToRemove = new ArrayList<>();
+
+            // Update existing properties or mark for deletion
+            for (Map.Entry<String, String> entry : newProps.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+
+                if (existingKeys.containsKey(key)) {
+                    int lineIndex = existingKeys.get(key);
+                    if (value == null || "__REMOVE__".equals(value)) {
+                        // Mark line for removal
+                        linesToRemove.add(lineIndex);
+                    } else {
+                        lines.set(lineIndex, key + " = " + safeToString(value));
+                    }
+                }
+            }
+
+            // Remove lines in reverse order to maintain indices
+            Collections.sort(linesToRemove, Collections.reverseOrder());
+            for (int index : linesToRemove) {
+                lines.remove(index);
+            }
+
+            // Remove updated/deleted keys from newProps so we only insert new ones
+            newProps.entrySet().removeIf(e ->
+                    e.getValue() == null ||
+                            "__REMOVE__".equals(e.getValue()) ||
+                            existingKeys.containsKey(e.getKey())
+            );
+        }
+
+        // Find insertion point (after last appender.* line)
+        int insertionIndex = -1;
+        for (int i = lines.size() - 1; i >= 0; i--) {
+            String trimmed = lines.get(i).trim();
             if (trimmed.isEmpty() || isCommentLine(trimmed)) {
                 continue;
             }
@@ -131,69 +195,29 @@ public final class Log4j2PropertiesEditor {
             }
             String key = trimmed.substring(0, sep).trim();
             if (key.startsWith(APPENDER_PREFIX)) {
-                allAppenderKeyLineIdx.put(key, i);
-                if (key.startsWith(targetPrefix)) {
-                    existingAppenderKeyLineIdx.put(key, i);
-                }
+                insertionIndex = i + 1;
+                break;
             }
         }
 
-        // 2) compute insertion index
-        int insertionIndex = -1;
-        if (!existingAppenderKeyLineIdx.isEmpty()) {
-            // Insert after last existing key for this appender
-            insertionIndex = Collections.max(existingAppenderKeyLineIdx.values()) + 1;
-        } else if (!allAppenderKeyLineIdx.isEmpty()) {
-            // no keys for this appender; insert after last "appender.*" line
-            insertionIndex = Collections.max(allAppenderKeyLineIdx.values()) + 2;
-        } else {
-            // no appender.* keys at all; append at end of file
+        if (insertionIndex < 0) {
             insertionIndex = lines.size();
         }
 
-        // 4) Update existing keys where applicable
-        if (!existingAppenderKeyLineIdx.isEmpty()) {
-            for (Map.Entry<String, String> e : newProps.entrySet()) {
-                String key = e.getKey();
-                String value = safeToString(e.getValue());
-                Integer idx = existingAppenderKeyLineIdx.get(key);
-                if (idx != null && idx >= 0 && idx < lines.size()) {
-                    // Replace the entire line with "key = value" (preserve key exactly)
-                    lines.set(idx, key + " = " + value);
-                }
-            }
-        }
-
-        // 5) Determine which props are missing and prepare insertion list
+        // Insert new properties
         List<String> toInsert = new ArrayList<>();
         for (Map.Entry<String, String> e : newProps.entrySet()) {
-            String key = e.getKey();
-            String value = safeToString(e.getValue());
-            boolean exists = (existingAppenderKeyLineIdx.containsKey(key));
-            if (!exists) {
-                toInsert.add(key + " = " + value);
-            }
-        }
-        log.debug("Final props to insert for " + appenderName + ": " + toInsert);
-        log.debug("Final props to insert for " + appenderName + ": " + newProps);
-
-        // 6) Insert missing lines at insertionIndex preserving order given by newProps iteration order
-        if (!toInsert.isEmpty()) {
-            // Clamp insertionIndex to the valid range [0, lines.size()] to avoid IndexOutOfBoundsException.
-            if (insertionIndex < 0) {
-                insertionIndex = 0;
-            }
-            if (insertionIndex > lines.size()) {
-                insertionIndex = lines.size();
-            }
-
-            // Insert missing lines at the calculated index preserving the order of toInsert.
-            lines.addAll(insertionIndex, toInsert);
+            toInsert.add(e.getKey() + " = " + safeToString(e.getValue()));
         }
 
-        // 7) Write lines atomically
+        lines.addAll(insertionIndex, toInsert);
+
+        // Write atomically
         writeLinesAtomically(file.toPath(), lines);
     }
+
+
+
 
     private static int findKeyValueSeparator(String line) {
         int eq = line.indexOf(KV_SEPARATOR);
