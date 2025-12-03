@@ -14,8 +14,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.catalina.ha.tcp.SimpleTcpCluster.log;
-
 public final class Log4j2PropertiesEditor {
 
     private static final String APPENDER_PREFIX = "appender.";
@@ -30,33 +28,6 @@ public final class Log4j2PropertiesEditor {
      */
     public static ArrayList<String> readAllLines(File file) throws IOException {
         return (ArrayList<String>) Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Return a list of keys present for the given appender
-     */
-    public static ArrayList<String> getKeysOfAppender(File file, String appenderName) throws IOException {
-        ArrayList<String> lines = readAllLines(file);
-        ArrayList<String> keys = new ArrayList<>();
-        String prefix = APPENDER_PREFIX + appenderName + ".";
-        for (String raw : lines) {
-            String line = raw.trim();
-            if (line.isEmpty()) {
-                continue;
-            }
-            if (isCommentLine(line)) {
-                continue;
-            }
-            int idx = findKeyValueSeparator(line);
-            if (idx <= 0) {
-                continue;
-            }
-            String key = line.substring(0, idx).trim();
-            if (key.startsWith(prefix)) {
-                keys.add(key);
-            }
-        }
-        return keys;
     }
 
     /**
@@ -103,7 +74,7 @@ public final class Log4j2PropertiesEditor {
                 return line.substring(idx + 1).trim();
             }
         }
-        return null;
+        return "Property not found";
     }
 
     /**
@@ -117,8 +88,27 @@ public final class Log4j2PropertiesEditor {
         ArrayList<String> lines = readAllLines(file);
         String targetPrefix = APPENDER_PREFIX + appenderName + ".";
 
+        // Record original block position before any edits
+        int originalFirstIdx = -1;
+        for (int i = 0; i < lines.size(); i++) {
+            String trimmed = lines.get(i).trim();
+            if (trimmed.isEmpty() || isCommentLine(trimmed)) {
+                continue;
+            }
+            int sep = findKeyValueSeparator(trimmed);
+            if (sep <= 0) {
+                continue;
+            }
+            String key = trimmed.substring(0, sep).trim();
+            if (key.startsWith(targetPrefix)) {
+                if (originalFirstIdx == -1) {
+                    originalFirstIdx = i;
+                }
+            }
+        }
+
         if (!merge) {
-            // Original behavior: remove all existing lines for this appender
+            // Replace: remove the whole block; we will insert back at originalFirstIdx
             lines.removeIf(line -> {
                 String trimmed = line.trim();
                 if (trimmed.isEmpty() || isCommentLine(trimmed)) {
@@ -132,7 +122,7 @@ public final class Log4j2PropertiesEditor {
                 return key.startsWith(targetPrefix);
             });
         } else {
-            // Merge behavior: update existing keys, keep others, handle removals
+            // Merge: update existing keys in place, remove ones marked to be removed
             Map<String, Integer> existingKeys = new LinkedHashMap<>();
             for (int i = 0; i < lines.size(); i++) {
                 String trimmed = lines.get(i).trim();
@@ -149,32 +139,25 @@ public final class Log4j2PropertiesEditor {
                 }
             }
 
-            // Track lines to remove (for null values or properties to delete)
             List<Integer> linesToRemove = new ArrayList<>();
-
-            // Update existing properties or mark for deletion
             for (Map.Entry<String, String> entry : newProps.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
-
                 if (existingKeys.containsKey(key)) {
                     int lineIndex = existingKeys.get(key);
                     if (value == null || "__REMOVE__".equals(value)) {
-                        // Mark line for removal
                         linesToRemove.add(lineIndex);
                     } else {
                         lines.set(lineIndex, key + " = " + safeToString(value));
                     }
                 }
             }
-
-            // Remove lines in reverse order to maintain indices
-            Collections.sort(linesToRemove, Collections.reverseOrder());
+            linesToRemove.sort(Collections.reverseOrder());
             for (int index : linesToRemove) {
                 lines.remove(index);
             }
 
-            // Remove updated/deleted keys from newProps so we only insert new ones
+            // Only insert truly new keys
             newProps.entrySet().removeIf(e ->
                     e.getValue() == null ||
                             "__REMOVE__".equals(e.getValue()) ||
@@ -182,9 +165,9 @@ public final class Log4j2PropertiesEditor {
             );
         }
 
-        // Find insertion point (after last appender.* line)
-        int insertionIndex = -1;
-        for (int i = lines.size() - 1; i >= 0; i--) {
+        // Recompute current last index of the block after edits (for merge)
+        int currentLastIdx = -1;
+        for (int i = 0; i < lines.size(); i++) {
             String trimmed = lines.get(i).trim();
             if (trimmed.isEmpty() || isCommentLine(trimmed)) {
                 continue;
@@ -194,29 +177,58 @@ public final class Log4j2PropertiesEditor {
                 continue;
             }
             String key = trimmed.substring(0, sep).trim();
-            if (key.startsWith(APPENDER_PREFIX)) {
-                insertionIndex = i + 1;
-                break;
+            if (key.startsWith(targetPrefix)) {
+                currentLastIdx = i;
             }
         }
 
-        if (insertionIndex < 0) {
-            insertionIndex = lines.size();
+        // Decide insertion index to keep the block in-place
+        int insertionIndex;
+        if (merge) {
+            if (currentLastIdx != -1) {
+                insertionIndex = currentLastIdx + 1; // append after existing keys of this appender
+            } else {
+                insertionIndex = getInsertionIndex(lines, originalFirstIdx);
+            }
+        } else {
+            // Replace: insert exactly where the block originally started if we had one
+            insertionIndex = getInsertionIndex(lines, originalFirstIdx);
         }
 
-        // Insert new properties
         List<String> toInsert = new ArrayList<>();
         for (Map.Entry<String, String> e : newProps.entrySet()) {
             toInsert.add(e.getKey() + " = " + safeToString(e.getValue()));
         }
 
         lines.addAll(insertionIndex, toInsert);
-
-        // Write atomically
         writeLinesAtomically(file.toPath(), lines);
     }
 
-
+    private static int getInsertionIndex(ArrayList<String> lines, int originalFirstIdx) {
+        int insertionIndex;
+        if (originalFirstIdx != -1) {
+            insertionIndex = originalFirstIdx;   // original spot where the block used to be
+        } else {
+            // Fallback: after last appender.* line
+            insertionIndex = lines.size();
+            for (int i = lines.size() - 1; i >= 0; i--) {
+                String trimmed = lines.get(i).trim();
+                if (trimmed.isEmpty() || isCommentLine(trimmed)) {
+                    continue;
+                }
+                int sep = findKeyValueSeparator(trimmed);
+                if (sep <= 0) {
+                    continue;
+                }
+                String key = trimmed.substring(0, sep).trim();
+                if (key.startsWith(APPENDER_PREFIX)) {
+                    insertionIndex = i + 1;
+                    break;
+                }
+            }
+        }
+        return insertionIndex;
+    }
 
 
     private static int findKeyValueSeparator(String line) {

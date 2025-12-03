@@ -20,8 +20,6 @@
 package org.wso2.carbon.logging.service;
 
 import org.apache.commons.configuration2.ex.ConfigurationException;
-//import org.apache.commons.configuration2.PropertiesConfiguration;
-//import org.apache.commons.configuration2.PropertiesConfigurationLayout;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -31,7 +29,6 @@ import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 import org.wso2.carbon.logging.service.internal.RemoteLoggingConfigDataHolder;
 import org.wso2.carbon.logging.service.util.Log4j2PropertiesEditor;
-import org.wso2.carbon.logging.service.util.Utils;
 import org.wso2.carbon.registry.core.Registry;
 import org.wso2.carbon.registry.core.Resource;
 import org.wso2.carbon.registry.core.exceptions.RegistryException;
@@ -39,11 +36,7 @@ import org.wso2.carbon.registry.core.jdbc.utils.Transaction;
 import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -53,45 +46,36 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This is the Admin service used for configuring the remote server logging configurations
+ * Admin service used for configuring the remote server logging configurations
  */
 public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     private static final Log log = LogFactory.getLog(RemoteLoggingConfig.class);
     private static final Log auditLog = CarbonConstants.AUDIT_LOG;
+    private static final String REMOVE_MARKER = "__REMOVE__";
+    private static final String DEFAULT_TIMEOUT = "5000";
 
     private final String filePath =
             System.getProperty(ServerConstants.CARBON_CONFIG_DIR_PATH) + File.separator + "log4j2.properties";
     private final File logPropFile = new File(filePath);
 
-    //private PropertiesConfiguration config;
-    //private PropertiesConfigurationLayout layout;
-
     public RemoteLoggingConfig() throws IOException {
 
     }
 
-//    private void loadConfigs() throws IOException, ConfigurationException {
-//
-//        config = new PropertiesConfiguration();
-//        layout = new PropertiesConfigurationLayout();
-//        layout.load(config, new InputStreamReader(new FileInputStream(logPropFile)));
-//    }
-
     /**
      * This method is used to add a remote server configuration
      *
-     * @param data RemoteServerLoggerData object that contains the remote server configuration
+     * @param data                    RemoteServerLoggerData object that contains the remote server configuration
      * @throws IOException            if an error occurs while writing to the log4j2.properties file
      * @throws ConfigurationException if an error occurs while loading the log4j2.properties file
      */
     public void addRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException {
-
         addRemoteServerConfig(data, false);
     }
 
     @Override
-    public void addRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest)
+    public void addRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest) 
             throws IOException, ConfigurationException {
 
         if (data == null) {
@@ -109,14 +93,9 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (StringUtils.isBlank(url)) {
             throw new ConfigurationException("URL cannot be empty");
         }
-
         if (!isPeriodicalSyncRequest) {
             updateRemoteServerConfigInRegistry(data, appenderName);
         }
-        //loadConfigs();
-        //ArrayList<String> list = Utils.getKeysOfAppender(logPropFile, appenderName);
-        //applyRemoteConfigurations(data, list, appenderName);
-        //applyConfigs();
         try{
             Map<String, String> newProps = buildAppenderProperties(data, appenderName);
             Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps,true);
@@ -128,12 +107,9 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     /**
      * Build a LinkedHashMap of appender properties from RemoteServerLoggerData.
-     * Maintains insertion order for consistent property file updates.
      */
-
-
-
     private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data, String appenderName) {
+
         if (data == null) {
             throw new IllegalArgumentException("RemoteServerLoggerData cannot be null");
         }
@@ -202,27 +178,27 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                 StringUtils.isNotBlank(data.getTruststorePassword());
 
         if (hasKeystore && hasTruststore) {
-            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-                    LoggingConstants.DEFAULT_SSLCONF_TYPE);
-            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
-                    LoggingConstants.DEFAULT_SSL_PROTOCOL);
-            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
-                    data.getKeystoreLocation());
-            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
-                    data.getKeystorePassword());
-            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
-                    data.getTruststoreLocation());
-            map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
-                    data.getTruststorePassword());
+            addSslConfiguration(data, map, prefix);
             map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.VERIFY_HOSTNAME_SUFFIX,
                     String.valueOf(data.isVerifyHostname()));
         }
-
         return map;
     }
 
-
-
+    private void addSslConfiguration(RemoteServerLoggerData data, Map<String, String> map, String prefix) {
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
+                LoggingConstants.DEFAULT_SSLCONF_TYPE);
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
+                LoggingConstants.DEFAULT_SSL_PROTOCOL);
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
+                data.getKeystoreLocation());
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
+                data.getKeystorePassword());
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
+                data.getTruststoreLocation());
+        map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
+                data.getTruststorePassword());
+    }
 
 
     private void logAuditForConfigUpdate(String url, String appenderName) {
@@ -239,9 +215,9 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     }
 
     /**
-     * This method is used to reset the remote server configurations to the defaults
+     * Reset the remote server configurations to the defaults
      *
-     * @param data RemoteServerLoggerData object that contains the remote server configuration
+     * @param data                    RemoteServerLoggerData object that contains the remote server configuration
      * @throws IOException            if an error occurs while writing to the log4j2.properties file
      * @throws ConfigurationException if an error occurs while loading the log4j2.properties file
      */
@@ -264,10 +240,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (!isPeriodicalSyncRequest) {
             resetRemoteServerConfigInRegistry(appenderName);
         }
-        //loadConfigs();
-        ArrayList<String> list = Log4j2PropertiesEditor.getKeysOfAppender(logPropFile, appenderName);
-        resetRemoteConfigurations(list, appenderName);
-        //applyConfigs();
+        resetRemoteConfigurations(appenderName);
 
         logAuditForConfigReset(appenderName);
     }
@@ -294,7 +267,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + logType;
             if (!RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
                     .resourceExists(resourcePath)) {
-                return null;
+                throw new ConfigurationException("resourcepath cannot be empty.");
             }
             Resource resource =
                     RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
@@ -310,7 +283,6 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         List<RemoteServerLoggerData> remoteServerLoggerResponseDataList = getRemoteServerConfigs();
         List<RemoteServerLoggerData> modifiedRemoteServerLoggerDataList = new ArrayList<>();
         List<RemoteServerLoggerData> removedRemoteServerLoggerDataList = new ArrayList<>();
-        //loadConfigs();
 
         for (String logType : new String[]{LoggingConstants.AUDIT, LoggingConstants.CARBON, LoggingConstants.API}) {
             RemoteServerLoggerData remoteServerLoggerData =
@@ -383,10 +355,9 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     /**
      * This method is used to rewrite the log4j2.properties file with the default values
      *
-     * @param appenderPropertiesList list of properties of the appender
      * @param appenderName           name of the appender
      */
-    private void resetRemoteConfigurations(ArrayList<String> appenderPropertiesList, String appenderName) {
+    private void resetRemoteConfigurations(String appenderName) {
 
         // Build a map of default properties for the appender and write them, removing existing keys.
         Map<String, String> defaults = new LinkedHashMap<>();
@@ -411,7 +382,6 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
         }
         defaults.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX, layoutPattern);
-
         defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.POLICIES);
         defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TIME_SUFFIX +
@@ -428,6 +398,16 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                 LoggingConstants.DEFAULT_ROLLOVER_STRATEGY);
         defaults.put(prefix + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.MAX_SUFFIX,
                 String.valueOf(LoggingConstants.DEFAULT_MAX));
+        resetMap(appenderName, defaults, prefix);
+
+        try {
+            Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, defaults, false);
+        } catch (IOException e) {
+            log.error("Error resetting appender properties for " + appenderName, e);
+        }
+    }
+
+    private void resetMap(String appenderName, Map<String, String> defaults, String prefix) {
         defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
                 LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
         String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
@@ -436,107 +416,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         }
         defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
                 LoggingConstants.LEVEL_SUFFIX, filterLevel);
-
-        try {
-            Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, defaults, false);
-        } catch (IOException e) {
-            log.error("Error resetting appender properties for " + appenderName, e);
-        }
     }
-    /**
-     * This method is used to generate the appender properties key based on the given tokens
-     *
-     * @param tokens tokens to be joined
-     * @return generated key
-     */
-    private static String getKey(String... tokens) {
-
-        return LoggingConstants.APPENDER_PREFIX + String.join("", tokens);
-    }
-
-    /**
-     * This method is used to define the remote server configuration parameters
-     *
-     * @param data                   RemoteServerLoggerData object that contains the remote server configuration
-     * @param appenderPropertiesList ArrayList of existing appender properties
-     * @param appenderName           name of the appender
-     * @throws IOException if an error occurs while reading from the log4j2.properties file
-     */
-    private void applyRemoteConfigurations(RemoteServerLoggerData data, ArrayList<String> appenderPropertiesList,
-                                           String appenderName) throws IOException {
-
-        String layoutTypeKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX +
-                LoggingConstants.TYPE_SUFFIX;
-        String layoutTypePatternKey = LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.LAYOUT_SUFFIX +
-                LoggingConstants.PATTERN_SUFFIX;
-        String layoutTypePatternDefaultValue = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
-        if (LoggingConstants.CARBON_LOGFILE.equals(appenderName)) {
-            layoutTypePatternDefaultValue = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
-        }
-        String layoutTypePatternValue = null;
-        for (String key : appenderPropertiesList) {
-            if (layoutTypeKey.equals(key)) {
-                String layoutTypeValue = Log4j2PropertiesEditor.getProperty(logPropFile, key);
-                if (LoggingConstants.PATTERN_LAYOUT_TYPE.equals(layoutTypeValue)) {
-                    layoutTypePatternValue = Log4j2PropertiesEditor.getProperty(logPropFile, layoutTypePatternKey);
-                }
-            }
-        }
-        Map<String, String> newProps = new LinkedHashMap<>();
-        String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
-
-        newProps.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
-        newProps.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
-        newProps.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-                LoggingConstants.PATTERN_LAYOUT_TYPE);
-        newProps.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX,
-                (layoutTypePatternValue != null && !layoutTypePatternValue.isEmpty()) ? layoutTypePatternValue :
-                        layoutTypePatternDefaultValue);
-        newProps.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
-
-        if (!StringUtils.isEmpty(data.getConnectTimeoutMillis())) {
-            newProps.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
-        }
-
-        if (!StringUtils.isEmpty(data.getUsername()) && !StringUtils.isEmpty(data.getPassword())) {
-            newProps.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
-            newProps.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
-        }
-        newProps.put(prefix + LoggingConstants.PROCESSING_LIMIT_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_PROCESSING_LIMIT));
-
-        if (!StringUtils.isEmpty(data.getKeystoreLocation()) && !StringUtils.isEmpty(data.getKeystorePassword()) &&
-                !StringUtils.isEmpty(data.getTruststoreLocation()) && !StringUtils.isEmpty(data.getTruststorePassword())) {
-            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-                    LoggingConstants.DEFAULT_SSLCONF_TYPE);
-            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
-                    LoggingConstants.DEFAULT_SSL_PROTOCOL);
-            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
-                    data.getKeystoreLocation());
-            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
-                    data.getKeystorePassword());
-            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
-                    data.getTruststoreLocation());
-            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
-                    data.getTruststorePassword());
-            newProps.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.VERIFY_HOSTNAME_SUFFIX,
-                    Boolean.toString(data.isVerifyHostname()));
-        }
-
-        newProps.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-                LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
-        String filterLevel2 = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
-        if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
-            filterLevel2 = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
-        }
-        newProps.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-                LoggingConstants.LEVEL_SUFFIX, filterLevel2);
-
-        Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps, false);
-    }
-//    private void applyConfigs() throws IOException, ConfigurationException {
-//
-//        layout.save(config, new FileWriter(filePath, false));
-//    }
 
     private void updateRemoteServerConfigInRegistry(RemoteServerLoggerData data, String appenderName)
             throws ConfigurationException {
@@ -645,6 +525,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         } else if (LoggingConstants.API.equals(logType)) {
             appenderName = LoggingConstants.API_LOGFILE;
         }
+
         Map<String, String> appenderProperties = Log4j2PropertiesEditor.getKeyValuesOfAppender(logPropFile, appenderName);
 
         if (remoteServerLoggerData == null) {
@@ -712,5 +593,4 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             }
         }
     }
-
 }
