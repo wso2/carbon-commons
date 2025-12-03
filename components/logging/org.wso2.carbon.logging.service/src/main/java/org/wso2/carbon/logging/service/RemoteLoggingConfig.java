@@ -126,67 +126,84 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
      * Build a LinkedHashMap of appender properties from RemoteServerLoggerData.
      * Maintains insertion order for consistent property file updates.
      */
-    private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data, String appenderName) {
-        Map<String, String> map = new LinkedHashMap<>();
-        String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
+    
 
-    // Always keep an explicit name for the appender so logger references resolve.
+
+private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data, String appenderName) {
+    if (data == null) {
+        throw new IllegalArgumentException("RemoteServerLoggerData cannot be null");
+    }
+    if (StringUtils.isBlank(appenderName)) {
+        throw new IllegalArgumentException("Appender name cannot be null or empty");
+    }
+    
+    Map<String, String> map = new LinkedHashMap<>();
+    String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
+
     map.put(prefix + LoggingConstants.NAME_SUFFIX, appenderName);
-
-    // Switch the appender to our HTTP plugin type.
     map.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
-
-    // Layout: use PatternLayout with sensible defaults per appender.
     map.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-        LoggingConstants.PATTERN_LAYOUT_TYPE);
+            LoggingConstants.PATTERN_LAYOUT_TYPE);
+
     String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
     if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
         layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
     }
     map.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX, layoutPattern);
 
+    // Only add properties with valid values
+    if (StringUtils.isNotBlank(data.getUrl())) {
         map.put(prefix + LoggingConstants.URL_SUFFIX, data.getUrl());
+    }
+    if (StringUtils.isNotBlank(data.getUsername())) {
         map.put(prefix + LoggingConstants.AUTH_USERNAME_SUFFIX, data.getUsername());
+    }
+    if (StringUtils.isNotBlank(data.getPassword())) {
         map.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
-    // Use the builder attribute name expected by the plugin (verifyHostname) at the top level.
-    map.put(prefix + ".verifyHostname", Boolean.toString(data.isVerifyHostname()));
+    }
+    if (StringUtils.isNotBlank(data.getConnectTimeoutMillis())) {
         map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
-        map.put(prefix + LoggingConstants.PROCESSING_LIMIT_SUFFIX, String.valueOf(LoggingConstants.DEFAULT_PROCESSING_LIMIT));
+    } else {
+        map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, "5000");
+    }
+    map.put(prefix + LoggingConstants.PROCESSING_LIMIT_SUFFIX,
+            String.valueOf(LoggingConstants.DEFAULT_PROCESSING_LIMIT));
 
     // Configure ThresholdFilter per appender defaults.
     map.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-        LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
+            LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
     String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
     if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
         filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_INFO;
     }
     map.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
-        LoggingConstants.LEVEL_SUFFIX, filterLevel);
+            LoggingConstants.LEVEL_SUFFIX, filterLevel);
 
     // If SSL material is provided, add nested sslconf.* properties as expected by the plugin.
     boolean hasKeystore = StringUtils.isNotBlank(data.getKeystoreLocation()) &&
-        StringUtils.isNotBlank(data.getKeystorePassword());
+            StringUtils.isNotBlank(data.getKeystorePassword());
     boolean hasTruststore = StringUtils.isNotBlank(data.getTruststoreLocation()) &&
-        StringUtils.isNotBlank(data.getTruststorePassword());
+            StringUtils.isNotBlank(data.getTruststorePassword());
     if (hasKeystore && hasTruststore) {
         map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
-            LoggingConstants.DEFAULT_SSLCONF_TYPE);
+                LoggingConstants.DEFAULT_SSLCONF_TYPE);
         map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.PROTOCOL_SUFFIX,
-            LoggingConstants.DEFAULT_SSL_PROTOCOL);
+                LoggingConstants.DEFAULT_SSL_PROTOCOL);
         map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_LOCATION_SUFFIX,
-            data.getKeystoreLocation());
+                data.getKeystoreLocation());
         map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.KEYSTORE_PASSWORD_SUFFIX,
-            data.getKeystorePassword());
+                data.getKeystorePassword());
         map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_LOCATION_SUFFIX,
-            data.getTruststoreLocation());
+                data.getTruststoreLocation());
         map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TRUSTSTORE_PASSWORD_SUFFIX,
-            data.getTruststorePassword());
-        // Nested SSL plugin uses verifyHostName (note the capital N) as per SslConfiguration.
+                data.getTruststorePassword());
         map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.VERIFY_HOSTNAME_SUFFIX,
-            Boolean.toString(data.isVerifyHostname()));
+                String.valueOf(data.isVerifyHostname()));
     }
-        return map;
-    }
+    return map;
+}
+
+
 
     private void logAuditForConfigUpdate(String url, String appenderName) {
 
