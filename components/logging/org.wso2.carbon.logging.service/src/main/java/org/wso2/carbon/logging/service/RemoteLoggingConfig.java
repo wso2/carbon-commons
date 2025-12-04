@@ -104,7 +104,13 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     }
 
     /**
-     * Build a LinkedHashMap of appender properties from RemoteServerLoggerData.
+     * Builds a LinkedHashMap of appender properties from the provided {@link RemoteServerLoggerData}.
+     * Marks RollingFile-specific properties for removal and sets HTTP appender properties.
+     *
+     * @param data the remote server logger configuration data
+     * @param appenderName the name of the appender to configure
+     * @return a map of property keys to values for the appender
+     * @throws IllegalArgumentException if {@code data} is null or {@code appenderName} is blank
      */
     private Map<String, String> buildAppenderProperties(RemoteServerLoggerData data, String appenderName) {
 
