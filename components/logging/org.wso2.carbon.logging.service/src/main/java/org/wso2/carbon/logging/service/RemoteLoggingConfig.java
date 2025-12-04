@@ -420,6 +420,13 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         }
     }
 
+    /**
+     * Adds filter configuration to the default properties map for appender reset.
+     *
+     * @param appenderName the name of the appender being reset
+     * @param defaults the map of default properties to add filter configuration to
+     * @param prefix the appender property key prefix
+     */
     private void resetMap(String appenderName, Map<String, String> defaults, String prefix) {
         defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
                 LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
