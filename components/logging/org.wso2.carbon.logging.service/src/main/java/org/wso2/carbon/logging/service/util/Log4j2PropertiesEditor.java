@@ -78,7 +78,28 @@ public final class Log4j2PropertiesEditor {
     }
 
     /**
-     * Update the properties for the given appenderName using newProps.
+     * Updates the properties for the given appender in the log4j2.properties file.
+     * <p>
+     * The {@code newProps} map specifies the properties to apply to the appender. If a property value is
+     * {@code "__REMOVE__"} (the literal string) or {@code null}, that property will be removed from the appender's
+     * configuration in the file.
+     * <p>
+     * The {@code merge} parameter controls how the update is performed:
+     * <ul>
+     *   <li>If {@code merge} is {@code true}, the properties in {@code newProps} are merged with the existing
+     *   properties for the appender. Properties with values of {@code "__REMOVE__"} or {@code null} are deleted.
+     *   All other properties in {@code newProps} are added or updated, while properties not mentioned in
+     *   {@code newProps} are left unchanged.</li>
+     *   <li>If {@code merge} is {@code false}, the entire appender block is replaced with only the properties
+     *   specified in {@code newProps} (except those with values of {@code "__REMOVE__"} or {@code null}, which
+     *   are omitted).</li>
+     * </ul>
+     *
+     * @param file the log4j2.properties file to update
+     * @param appenderName the name of the appender to update
+     * @param newProps map of properties to apply; values of {@code "__REMOVE__"} or {@code null} mark properties for deletion
+     * @param merge if true, merges new properties with existing ones; if false, replaces the entire appender block
+     * @throws IOException if an I/O error occurs reading from or writing to the file
      */
     public static void writeUpdatedAppender(File file,
                                             String appenderName,
