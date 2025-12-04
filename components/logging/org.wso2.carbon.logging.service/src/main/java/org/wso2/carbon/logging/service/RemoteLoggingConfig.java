@@ -263,7 +263,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + logType;
             if (!RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
                     .resourceExists(resourcePath)) {
-                throw new ConfigurationException("resourcepath cannot be empty.");
+                return null;
             }
             Resource resource =
                     RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
