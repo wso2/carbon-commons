@@ -24,7 +24,11 @@ public final class Log4j2PropertiesEditor {
     }
 
     /**
-     * Read the file as raw lines using UTF-8.
+     * Reads all lines from the specified file using UTF-8 encoding.
+     *
+     * @param file the properties file to read
+     * @return an ArrayList containing all lines from the file
+     * @throws IOException if an I/O error occurs reading from the file
      */
     public static ArrayList<String> readAllLines(File file) throws IOException {
         return (ArrayList<String>) Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
