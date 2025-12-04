@@ -73,7 +73,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     }
 
     @Override
-    public void addRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest) 
+    public void addRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest)
             throws IOException, ConfigurationException {
 
         if (data == null) {
