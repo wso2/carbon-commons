@@ -162,7 +162,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (StringUtils.isNotBlank(data.getPassword())) {
             map.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
         }
-        if( StringUtils.isNotBlank(data.getConnectTimeoutMillis())) {
+        if ( StringUtils.isNotBlank(data.getConnectTimeoutMillis())) {
             map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
         }
 
