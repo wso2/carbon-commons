@@ -74,7 +74,7 @@ public final class Log4j2PropertiesEditor {
                 return line.substring(idx + 1).trim();
             }
         }
-        return "Property not found";
+        return null;
     }
 
     /**
