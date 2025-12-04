@@ -269,7 +269,12 @@ public final class Log4j2PropertiesEditor {
     }
 
     /**
-     * Write lines to a temporary file and move into place using ATOMIC_MOVE, with fallback.
+     * Writes lines to a file atomically using a temporary file and atomic move operation.
+     * Falls back to non-atomic move if ATOMIC_MOVE is not supported by the filesystem.
+     *
+     * @param target the target file path to write to
+     * @param lines the list of lines to write
+     * @throws IOException if an I/O error occurs during writing or moving the file, or if the target has no parent directory
      */
     private static void writeLinesAtomically(Path target, List<String> lines) throws IOException {
         Path parent = target.getParent();
