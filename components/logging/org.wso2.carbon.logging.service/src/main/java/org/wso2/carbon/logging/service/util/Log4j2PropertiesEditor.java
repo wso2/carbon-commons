@@ -285,10 +285,8 @@ public final class Log4j2PropertiesEditor {
         try (BufferedWriter w = Files.newBufferedWriter(tmp, StandardCharsets.UTF_8)) {
             for (int i = 0; i < lines.size(); i++) {
                 w.write(lines.get(i));
-                // keep unix newline
-                if (i < lines.size() - 1) {
-                    w.newLine();
-                }
+                // always write a newline after each line, including the last one
+                w.newLine();
             }
         }
 
