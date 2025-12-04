@@ -378,6 +378,8 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         String layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
         if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
             layoutPattern = LoggingConstants.AUDIT_LOGS_DEFAULT_LAYOUT_PATTERN;
+        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
+            layoutPattern = LoggingConstants.CARBON_LOGS_DEFAULT_LAYOUT_PATTERN;
         }
         defaults.put(prefix + LoggingConstants.LAYOUT_SUFFIX + LoggingConstants.PATTERN_SUFFIX, layoutPattern);
         defaults.put(prefix + LoggingConstants.POLICIES_SUFFIX + LoggingConstants.TYPE_SUFFIX,
