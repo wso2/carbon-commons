@@ -52,8 +52,6 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     private static final Log log = LogFactory.getLog(RemoteLoggingConfig.class);
     private static final Log auditLog = CarbonConstants.AUDIT_LOG;
-    private static final String REMOVE_MARKER = "__REMOVE__";
-    private static final String DEFAULT_TIMEOUT = "5000";
 
     private final String filePath =
             System.getProperty(ServerConstants.CARBON_CONFIG_DIR_PATH) + File.separator + "log4j2.properties";
@@ -156,11 +154,9 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (StringUtils.isNotBlank(data.getPassword())) {
             map.put(prefix + LoggingConstants.AUTH_PASSWORD_SUFFIX, data.getPassword());
         }
-
-        String timeout = StringUtils.isNotBlank(data.getConnectTimeoutMillis())
-                ? data.getConnectTimeoutMillis()
-                : "5000";
-        map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, timeout);
+        if( StringUtils.isNotBlank(data.getConnectTimeoutMillis())) {
+            map.put(prefix + LoggingConstants.CONNECTION_TIMEOUT_SUFFIX, data.getConnectTimeoutMillis());
+        }
 
         // Filter configuration
         map.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
