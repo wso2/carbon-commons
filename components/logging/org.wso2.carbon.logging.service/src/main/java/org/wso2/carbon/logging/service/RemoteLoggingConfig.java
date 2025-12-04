@@ -94,7 +94,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (!isPeriodicalSyncRequest) {
             updateRemoteServerConfigInRegistry(data, appenderName);
         }
-        try{
+        try {
             Map<String, String> newProps = buildAppenderProperties(data, appenderName);
             Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps,true);
             logAuditForConfigUpdate(url, appenderName);
