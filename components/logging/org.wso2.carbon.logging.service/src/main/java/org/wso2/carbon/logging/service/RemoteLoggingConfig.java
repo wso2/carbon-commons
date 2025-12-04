@@ -99,7 +99,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps,true);
             logAuditForConfigUpdate(url, appenderName);
         } catch (IllegalArgumentException e) {
-            throw new ConfigurationException("Error occurred while trying to add remote server config", e);
+            throw new ConfigurationException("Invalid parameters for remote server config: " + e.getMessage(), e);
         }
     }
 
