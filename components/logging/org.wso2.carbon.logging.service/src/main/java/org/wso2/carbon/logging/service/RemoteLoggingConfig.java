@@ -189,6 +189,13 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         return map;
     }
 
+    /**
+     * Adds SSL configuration properties to the appender properties map.
+     *
+     * @param data   the remote server logger data containing SSL configuration
+     * @param map    the properties map to add SSL configuration to
+     * @param prefix the appender property key prefix
+     */
     private void addSslConfiguration(RemoteServerLoggerData data, Map<String, String> map, String prefix) {
         map.put(prefix + LoggingConstants.SSL_SUFFIX + LoggingConstants.TYPE_SUFFIX,
                 LoggingConstants.DEFAULT_SSLCONF_TYPE);
