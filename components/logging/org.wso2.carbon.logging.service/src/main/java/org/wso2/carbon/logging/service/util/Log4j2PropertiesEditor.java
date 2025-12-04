@@ -35,7 +35,12 @@ public final class Log4j2PropertiesEditor {
     }
 
     /**
-     * Return a map of key -> value for all keys belonging to the given appender.
+     * Returns a map of key-value pairs for all properties belonging to the given appender.
+     *
+     * @param file the log4j2.properties file to read
+     * @param appenderName the name of the appender whose properties should be extracted
+     * @return a LinkedHashMap containing all key-value pairs for the specified appender
+     * @throws IOException if an I/O error occurs reading from the file
      */
     public static Map<String, String> getKeyValuesOfAppender(File file, String appenderName) throws IOException {
         ArrayList<String> lines = readAllLines(file);
