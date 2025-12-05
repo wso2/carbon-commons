@@ -53,6 +53,9 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     private static final Log log = LogFactory.getLog(RemoteLoggingConfig.class);
     private static final Log auditLog = CarbonConstants.AUDIT_LOG;
 
+    // Centralized remove marker
+    private static final String REMOVE_MARKER = "__REMOVE__";
+
     private final String filePath =
             System.getProperty(ServerConstants.CARBON_CONFIG_DIR_PATH) + File.separator + "log4j2.properties";
     private final File logPropFile = new File(filePath);
@@ -125,16 +128,16 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         String prefix = LoggingConstants.APPENDER_PREFIX + appenderName;
 
         // Mark RollingFile-specific properties for removal
-        map.put(prefix + LoggingConstants.FILE_NAME_SUFFIX, "__REMOVE__");
-        map.put(prefix + LoggingConstants.FILE_PATTERN_SUFFIX, "__REMOVE__");
-        map.put(prefix + ".policies.type", "__REMOVE__");
-        map.put(prefix + ".policies.time.type", "__REMOVE__");
-        map.put(prefix + ".policies.time.interval", "__REMOVE__");
-        map.put(prefix + ".policies.time.modulate", "__REMOVE__");
-        map.put(prefix + ".policies.size.type", "__REMOVE__");
-        map.put(prefix + ".policies.size.size", "__REMOVE__");
-        map.put(prefix + ".strategy.type", "__REMOVE__");
-        map.put(prefix + ".strategy.max", "__REMOVE__");
+        map.put(prefix + LoggingConstants.FILE_NAME_SUFFIX, REMOVE_MARKER);
+        map.put(prefix + LoggingConstants.FILE_PATTERN_SUFFIX, REMOVE_MARKER);
+        map.put(prefix + ".policies.type", REMOVE_MARKER);
+        map.put(prefix + ".policies.time.type", REMOVE_MARKER);
+        map.put(prefix + ".policies.time.interval", REMOVE_MARKER);
+        map.put(prefix + ".policies.time.modulate", REMOVE_MARKER);
+        map.put(prefix + ".policies.size.type", REMOVE_MARKER);
+        map.put(prefix + ".policies.size.size", REMOVE_MARKER);
+        map.put(prefix + ".strategy.type", REMOVE_MARKER);
+        map.put(prefix + ".strategy.max", REMOVE_MARKER);
 
         // Core HTTP appender properties
         map.put(prefix + LoggingConstants.TYPE_SUFFIX, LoggingConstants.HTTP_APPENDER_TYPE);
