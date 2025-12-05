@@ -19,6 +19,9 @@
 
 package org.wso2.carbon.logging.service.util;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -34,6 +37,8 @@ import java.util.List;
 import java.util.Map;
 
 public final class Log4j2PropertiesEditor {
+
+    private static final Log LOG = LogFactory.getLog(Log4j2PropertiesEditor.class);
 
     private static final String APPENDER_PREFIX = "appender.";
     private static final String KV_SEPARATOR = "=";
@@ -134,6 +139,7 @@ public final class Log4j2PropertiesEditor {
                                             Map<String, String> newProps,
                                             boolean merge) throws IOException {
 
+        LOG.info("Updating properties for appender: {} with merge mode: {} "+appenderName+merge);
         ArrayList<String> lines = readAllLines(file);
         String targetPrefix = APPENDER_PREFIX + appenderName + ".";
 

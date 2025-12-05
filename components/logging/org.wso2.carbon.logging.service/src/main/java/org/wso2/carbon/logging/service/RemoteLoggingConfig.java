@@ -381,6 +381,9 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (LoggingConstants.AUDIT_LOGFILE.equals(appenderName)) {
             fileName = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATH;
             filePattern = LoggingConstants.DEFAULT_AUDIT_LOGFILE_PATTERN;
+        } else if (LoggingConstants.API_LOGFILE.equals(appenderName)) {
+            fileName = LoggingConstants.DEFAULT_API_LOGFILE_PATH;
+            filePattern = LoggingConstants.DEFAULT_API_LOGFILE_PATTERN;
         }
         defaults.put(prefix + LoggingConstants.FILE_NAME_SUFFIX, fileName);
         defaults.put(prefix + LoggingConstants.FILE_PATTERN_SUFFIX, filePattern);
