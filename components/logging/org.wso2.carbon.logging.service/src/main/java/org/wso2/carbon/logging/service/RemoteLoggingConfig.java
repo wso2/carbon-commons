@@ -417,6 +417,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, defaults, false);
         } catch (IOException e) {
             log.error("Error resetting appender properties for " + appenderName, e);
+            throw new RuntimeException("Failed to reset appender properties for " + appenderName, e);
         }
     }
 

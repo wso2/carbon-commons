@@ -300,10 +300,22 @@ public final class Log4j2PropertiesEditor {
         }
 
         try {
-            Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-        } catch (AtomicMoveNotSupportedException amnse) {
-            // fallback to non-atomic move
-            Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING);
+            try {
+                Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+            } catch (AtomicMoveNotSupportedException amnse) {
+                // fallback to non-atomic move
+                Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException moveEx) {
+            // Clean up temp file if move fails
+            try {
+                Files.deleteIfExists(tmp);
+            } catch (IOException deleteEx) {
+                throw new IOException("Failed to move temp file to target and failed to delete temp file: " +
+                        tmp, deleteEx);
+            }
+            throw moveEx;
         }
+
     }
 }
