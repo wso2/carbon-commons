@@ -19,8 +19,6 @@
 
 package org.wso2.carbon.logging.service;
 
-import org.apache.commons.configuration2.ex.ConfigurationException;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -69,18 +67,17 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
      *
      * @param data                    RemoteServerLoggerData object that contains the remote server configuration
      * @throws IOException            if an error occurs while writing to the log4j2.properties file
-     * @throws ConfigurationException if an error occurs while loading the log4j2.properties file
      */
-    public void addRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException {
+    public void addRemoteServerConfig(RemoteServerLoggerData data) throws IOException {
         addRemoteServerConfig(data, false);
     }
 
     @Override
     public void addRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest)
-            throws IOException, ConfigurationException {
+            throws IOException {
 
         if (data == null) {
-            throw new ConfigurationException("Data cannot be null");
+            throw new IOException("Data cannot be null");
         }
 
         String url = data.getUrl();
@@ -92,7 +89,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             appenderName = LoggingConstants.API_LOGFILE;
         }
         if (StringUtils.isBlank(url)) {
-            throw new ConfigurationException("URL cannot be empty");
+            throw new IOException("URL cannot be empty");
         }
         if (!isPeriodicalSyncRequest) {
             updateRemoteServerConfigInRegistry(data, appenderName);
@@ -102,7 +99,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps,true);
             logAuditForConfigUpdate(url, appenderName);
         } catch (IllegalArgumentException e) {
-            throw new ConfigurationException("Invalid parameters for remote server config: " + e.getMessage(), e);
+            throw new IOException("Invalid parameters for remote server config: " + e.getMessage(), e);
         }
     }
 
@@ -233,15 +230,14 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
      *
      * @param data                    RemoteServerLoggerData object that contains the remote server configuration
      * @throws IOException            if an error occurs while writing to the log4j2.properties file
-     * @throws ConfigurationException if an error occurs while loading the log4j2.properties file
      */
-    public void resetRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException {
+    public void resetRemoteServerConfig(RemoteServerLoggerData data) throws IOException {
 
         resetRemoteServerConfig(data, false);
     }
 
     public void resetRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest)
-            throws IOException, ConfigurationException {
+            throws IOException {
 
         String logType = data.getLogType();
         String appenderName = LoggingConstants.AUDIT_LOGFILE;
@@ -272,11 +268,11 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     }
 
     @Override
-    public RemoteServerLoggerData getRemoteServerConfig(String logType) throws ConfigurationException {
+    public RemoteServerLoggerData getRemoteServerConfig(String logType) throws IOException {
 
         try {
             if (StringUtils.isBlank(logType)) {
-                throw new ConfigurationException("Log type cannot be empty.");
+                throw new IOException("Log type cannot be empty.");
             }
             String resourcePath = LoggingConstants.REMOTE_SERVER_LOGGER_RESOURCE_PATH + "/" + logType;
             if (!RemoteLoggingConfigDataHolder.getInstance().getRegistryService().getConfigSystemRegistry()
@@ -288,11 +284,11 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                             .get(resourcePath);
             return getRemoteServerLoggerDataFromResource(resource);
         } catch (RegistryException e) {
-            throw new ConfigurationException(e);
+            throw new IOException(e);
         }
     }
 
-    public void syncRemoteServerConfigs() throws ConfigurationException, IOException {
+    public void syncRemoteServerConfigs() throws IOException {
 
         List<RemoteServerLoggerData> remoteServerLoggerResponseDataList = getRemoteServerConfigs();
         List<RemoteServerLoggerData> modifiedRemoteServerLoggerDataList = new ArrayList<>();
@@ -350,7 +346,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     }
 
     @Override
-    public List<RemoteServerLoggerData> getRemoteServerConfigs() throws ConfigurationException {
+    public List<RemoteServerLoggerData> getRemoteServerConfigs() throws IOException {
 
         List<String> logTypes = new ArrayList<>();
         logTypes.add(LoggingConstants.AUDIT);
@@ -414,7 +410,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                 LoggingConstants.DEFAULT_ROLLOVER_STRATEGY);
         defaults.put(prefix + LoggingConstants.STRATEGY_SUFFIX + LoggingConstants.MAX_SUFFIX,
                 String.valueOf(LoggingConstants.DEFAULT_MAX));
-        resetMap(appenderName, defaults, prefix);
+        addFilterConfiguration(appenderName, defaults, prefix);
 
         try {
             Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, defaults, false);
@@ -431,7 +427,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
      * @param defaults the map of default properties to add filter configuration to
      * @param prefix the appender property key prefix
      */
-    private void resetMap(String appenderName, Map<String, String> defaults, String prefix) {
+    private void addFilterConfiguration(String appenderName, Map<String, String> defaults, String prefix) {
         defaults.put(prefix + LoggingConstants.FILTER_SUFFIX + LoggingConstants.THRESHOLD_SUFFIX +
                 LoggingConstants.TYPE_SUFFIX, LoggingConstants.DEFAULT_THRESHOLD_FILTER_TYPE);
         String filterLevel = LoggingConstants.THRESHOLD_FILTER_LEVEL_DEBUG;
@@ -443,7 +439,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     }
 
     private void updateRemoteServerConfigInRegistry(RemoteServerLoggerData data, String appenderName)
-            throws ConfigurationException {
+            throws IOException {
 
         try {
             Registry registry =
@@ -468,10 +464,10 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                 }
             } catch (Exception e) {
                 registry.rollbackTransaction();
-                throw new ConfigurationException(e);
+                throw new IOException(e);
             }
         } catch (RegistryException e) {
-            throw new ConfigurationException("Error while updating the remote server logging configurations");
+            throw new IOException("Error while updating the remote server logging configurations");
         }
     }
 
@@ -493,7 +489,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         return resource;
     }
 
-    private void resetRemoteServerConfigInRegistry(String appenderName) throws ConfigurationException {
+    private void resetRemoteServerConfigInRegistry(String appenderName) throws IOException {
 
         try {
             String logType = LoggingConstants.AUDIT;
@@ -523,10 +519,10 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                 }
             } catch (Exception e) {
                 registry.rollbackTransaction();
-                throw new ConfigurationException(e);
+                throw new IOException(e);
             }
         } catch (RegistryException e) {
-            throw new ConfigurationException("Error while resetting the remote server logging configurations");
+            throw new IOException("Error while resetting the remote server logging configurations");
         }
     }
 
@@ -612,7 +608,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                 } else {
                     addRemoteServerConfig(remoteServerLoggerData, true);
                 }
-            } catch (IOException | ConfigurationException e) {
+            } catch (IOException e) {
                 log.error("Error occurred while syncing remote server configurations", e);
             }
         }
