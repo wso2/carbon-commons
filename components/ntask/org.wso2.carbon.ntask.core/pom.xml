@@ -83,6 +83,9 @@
                             !org.wso2.carbon.ntask.internal,
                             org.wso2.carbon.ntask.core.*; version="${carbon.commons.exp.package.version}",
                         </Export-Package>
+                        <Provide-Capability>
+                            osgi.service;objectClass=org.wso2.carbon.ntask.core.service.TaskService
+                        </Provide-Capability>
 			<Carbon-Component>UIBundle</Carbon-Component>
                     </instructions>
                 </configuration>
