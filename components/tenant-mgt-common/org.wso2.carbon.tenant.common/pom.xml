@@ -51,6 +51,9 @@
                             org.apache.axiom.*; version="${axiom.osgi.version.range}",
                             *;resolution:=optional
                         </Import-Package>
+                        <Provide-Capability>
+                            osgi.service;objectClass=org.wso2.carbon.stratos.common.util.StratosConfiguration
+                        </Provide-Capability>
                     </instructions>
                 </configuration>
             </plugin>
