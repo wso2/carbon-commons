@@ -85,7 +85,7 @@
                             org.osgi.service.component;version="${osgi.service.imp.pkg.version}",
                             org.osgi.framework;version="${osgi.framework.imp.pkg.version}",
                             org.w3c.dom,
-                            javax.xml.bind
+                            javax.xml.bind; resolution:=optional
                         </Import-Package>
                         <WSO2-Application-Deployer>Data Source Capp Deployer</WSO2-Application-Deployer>
                     </instructions>

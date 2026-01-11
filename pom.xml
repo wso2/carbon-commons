@@ -1531,6 +1531,11 @@
                 <version>${version.eclipse.equinox.cm}</version>
             </dependency>
             <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.service.coordinator</artifactId>
+                <version>${version.osgi.service.coordinator}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.eclipse.platform</groupId>
                 <artifactId>org.eclipse.equinox.event</artifactId>
                 <version>${version.eclipse.equinox.event}</version>
@@ -1996,6 +2001,7 @@
         <import.package.version.commons.logging>[1.2.0,2.0.0)</import.package.version.commons.logging>
         <import.package.version.apache.logging.log4j>[2.12.4,3.0.0)</import.package.version.apache.logging.log4j>
         <version.eclipse.equinox.cm>1.6.0</version.eclipse.equinox.cm>
+        <version.osgi.service.coordinator>1.0.2</version.osgi.service.coordinator>
         <version.eclipse.equinox.event>1.7.0</version.eclipse.equinox.event>
         <version.jaxb.api>2.4.0-b180830.0359</version.jaxb.api>
     </properties>
