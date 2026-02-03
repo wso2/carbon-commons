@@ -4,6 +4,10 @@
 <%@ page import="org.owasp.encoder.Encode" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <%
+    if (!"post".equalsIgnoreCase(request.getMethod())) {
+        response.sendError(405);
+        return;
+    }
     String dsName = request.getParameter("dsName");
 	
     boolean canAdd ;
