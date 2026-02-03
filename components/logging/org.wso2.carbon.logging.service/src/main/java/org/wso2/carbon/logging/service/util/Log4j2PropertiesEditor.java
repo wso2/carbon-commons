@@ -38,7 +38,7 @@ import java.util.Map;
 
 public final class Log4j2PropertiesEditor {
 
-    private static final Log LOG = LogFactory.getLog(Log4j2PropertiesEditor.class);
+    private static final Log log = LogFactory.getLog(Log4j2PropertiesEditor.class);
 
     private static final String APPENDER_PREFIX = "appender.";
     private static final String KV_SEPARATOR = "=";
@@ -139,7 +139,7 @@ public final class Log4j2PropertiesEditor {
                                             Map<String, String> newProps,
                                             boolean merge) throws IOException {
 
-        LOG.info("Updating properties for appender: {} with merge mode: {} "+appenderName+merge);
+        log.info("Updating properties for appender: {} with merge mode: {} "+appenderName+merge);
         ArrayList<String> lines = readAllLines(file);
         String targetPrefix = APPENDER_PREFIX + appenderName + ".";
 
