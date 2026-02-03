@@ -139,7 +139,7 @@ public final class Log4j2PropertiesEditor {
                                             Map<String, String> newProps,
                                             boolean merge) throws IOException {
 
-        log.info("Updating properties for appender: {} with merge mode: {} "+appenderName+merge);
+        log.debug("Updating properties for appender: {} with merge mode: {} "+appenderName+merge);
         ArrayList<String> lines = readAllLines(file);
         String targetPrefix = APPENDER_PREFIX + appenderName + ".";
 
