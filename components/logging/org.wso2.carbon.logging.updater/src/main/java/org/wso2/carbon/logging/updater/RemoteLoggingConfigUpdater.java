@@ -18,6 +18,7 @@
 
 package org.wso2.carbon.logging.updater;
 
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.base.MultitenantConstants;
@@ -48,7 +49,7 @@ public class RemoteLoggingConfigUpdater implements Runnable {
             remoteLoggingConfigService.syncRemoteServerConfigs();
             LOG.debug("successfully updated remote logging configurations");
 
-        } catch (IOException e) {
+        } catch (ConfigurationException | IOException e) {
             LOG.error("Error while updating logging configuration", e);
         } finally {
             PrivilegedCarbonContext.endTenantFlow();
