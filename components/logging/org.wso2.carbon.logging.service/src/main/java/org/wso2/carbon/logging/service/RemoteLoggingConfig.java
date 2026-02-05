@@ -232,6 +232,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
      *
      * @param data                    RemoteServerLoggerData object that contains the remote server configuration
      * @throws IOException            if an error occurs while writing to the log4j2.properties file
+     * @throws ConfigurationException if an error occurs while loading the log4j2.properties file
      */
     public void resetRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException {
 
