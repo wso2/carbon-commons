@@ -34,7 +34,7 @@ public interface RemoteLoggingConfigService {
      *
      * @param data                      RemoteServerLoggerData object that contains the remote server configuration.
      * @throws IOException              If an error occurs while writing to the log4j2.properties file.
-     * * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
+     * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
      */
     void addRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException;
 
