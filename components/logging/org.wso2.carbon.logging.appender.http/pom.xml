@@ -92,6 +92,8 @@
                                     org.apache.logging.log4j.core.config.plugins.processor.PluginProcessor
                                 </annotationProcessor>
                             </annotationProcessors>
+                            <source>21</source>
+                            <target>21</target>
                         </configuration>
                     </execution>
                 </executions>
