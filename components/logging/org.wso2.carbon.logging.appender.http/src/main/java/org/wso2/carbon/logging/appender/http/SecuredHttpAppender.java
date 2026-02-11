@@ -20,6 +20,8 @@
 
 package org.wso2.carbon.logging.appender.http;
 
+import org.apache.commons.lang.StringUtils;
+
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
@@ -32,6 +34,9 @@ import org.apache.logging.log4j.core.config.plugins.validation.constraints.Requi
 import org.apache.logging.log4j.core.net.ssl.KeyStoreConfiguration;
 import org.apache.logging.log4j.core.net.ssl.StoreConfigurationException;
 import org.apache.logging.log4j.core.net.ssl.TrustStoreConfiguration;
+import org.wso2.carbon.base.ServerConfiguration;
+import org.wso2.carbon.core.util.CryptoException;
+import org.wso2.carbon.core.util.CryptoUtil;
 import org.wso2.carbon.logging.appender.http.models.SslConfiguration;
 import org.wso2.carbon.logging.appender.http.utils.AppenderConstants;
 import org.wso2.carbon.logging.appender.http.models.HttpConnectionConfig;
@@ -40,8 +45,14 @@ import org.wso2.securevault.SecretResolverFactory;
 
 import java.io.Serializable;
 import java.net.URL;
-import java.util.*;
-import java.util.concurrent.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Plugin(name = "SecuredHttp", category = "Core", elementType = "appender", printObject = true)
 public class SecuredHttpAppender extends AbstractAppender {
@@ -332,6 +343,17 @@ public class SecuredHttpAppender extends AbstractAppender {
         return AppenderConstants.BASIC_AUTH_PREFIX + new String(Base64.getEncoder().encode(authString.getBytes()));
     }
 
+    /**
+     * Resolves and decrypts passwords for runtime use based on configuration flags.
+     * 
+     * This method handles three types of password resolution:
+     * 1. SecretResolver tokens ($secret{...}) - always resolved regardless of flags
+     * 2. Encrypted passwords from log4j2.properties - decrypted when HIDE_SECRETS=true
+     * 3. Plain text passwords - returned as-is when HIDE_SECRETS=false
+     * 
+     * @param password the password to resolve (may be plain text, encrypted, or SecretResolver token)
+     * @return resolved plain text password for runtime use
+     */
     private String resolveSecretPassword(String password) {
         if (password.startsWith("$secret{") && password.endsWith("}")) {
             String alias = password.substring(password.indexOf("{") + 1, password.lastIndexOf("}"));
@@ -342,6 +364,14 @@ public class SecuredHttpAppender extends AbstractAppender {
                 if (secretResolver.isTokenProtected(alias)) {
                     return secretResolver.resolve(alias);
                 }
+            }
+        } else if (Boolean.parseBoolean(
+                ServerConfiguration.getInstance().getFirstProperty(AppenderConstants.REMOTE_LOGGING_HIDE_SECRETS))){
+            try {
+                return new String(CryptoUtil.getDefaultCryptoUtil().base64DecodeAndDecrypt(password),
+                        StandardCharsets.UTF_8);
+            } catch (CryptoException e) {
+                return StringUtils.EMPTY;
             }
         }
         return password;

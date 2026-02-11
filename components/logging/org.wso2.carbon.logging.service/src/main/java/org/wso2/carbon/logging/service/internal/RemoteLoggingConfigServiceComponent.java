@@ -27,6 +27,7 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.wso2.carbon.base.api.ServerConfigurationService;
 import org.wso2.carbon.logging.service.RemoteLoggingConfig;
 import org.wso2.carbon.logging.service.RemoteLoggingConfigService;
 import org.wso2.carbon.registry.core.service.RegistryService;
@@ -83,5 +84,28 @@ public class RemoteLoggingConfigServiceComponent {
             LOG.debug("Unsetting the RegistryService");
         }
         RemoteLoggingConfigDataHolder.getInstance().setRegistryService(null);
+    }
+
+    @Reference(
+            name = "server.configuration.service",
+            service = org.wso2.carbon.base.api.ServerConfigurationService.class,
+            cardinality = ReferenceCardinality.MANDATORY,
+            policy = ReferencePolicy.DYNAMIC,
+            unbind = "unsetServerConfigurationService"
+    )
+    protected void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Setting the ServerConfigurationService");
+        }
+        RemoteLoggingConfigDataHolder.getInstance().setServerConfigurationService(serverConfigurationService);
+    }
+
+    protected void unsetServerConfigurationService(ServerConfigurationService serverConfigurationService) {
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("Unsetting the ServerConfigurationService");
+        }
+        RemoteLoggingConfigDataHolder.getInstance().setServerConfigurationService(null);
     }
 }
