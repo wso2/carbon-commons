@@ -27,6 +27,8 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.annotation.bundle.Capability;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.context.CarbonContext;
+import org.wso2.carbon.core.util.CryptoException;
+import org.wso2.carbon.core.util.CryptoUtil;
 import org.wso2.carbon.logging.service.data.RemoteServerLoggerData;
 import org.wso2.carbon.logging.service.internal.RemoteLoggingConfigDataHolder;
 import org.wso2.carbon.logging.service.util.Log4j2PropertiesEditor;
@@ -38,6 +40,7 @@ import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -104,6 +107,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         if (!isPeriodicalSyncRequest) {
             updateRemoteServerConfigInRegistry(data, appenderName);
         }
+        encryptRemoteServerCredentials(data);
         try {
             Map<String, String> newProps = buildAppenderProperties(data, appenderName);
             Log4j2PropertiesEditor.writeUpdatedAppender(logPropFile, appenderName, newProps,true);
@@ -221,6 +225,47 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                 data.getTruststorePassword());
     }
 
+    /**
+     * Encrypts remote server credentials for storage in log4j2.properties.
+     * Encryption is controlled by REMOTE_LOGGING_HIDE_SECRETS flag.
+     * 
+     * @param data RemoteServerLoggerData containing credentials to encrypt for log4j2.properties
+     * @throws ConfigurationException if encryption fails when HIDE_SECRETS is enabled
+     */
+    private void encryptRemoteServerCredentials(RemoteServerLoggerData data) throws ConfigurationException {
+
+        data.setPassword(encryptRemoteServerCredential(data.getPassword()));
+        data.setKeystorePassword(encryptRemoteServerCredential(data.getKeystorePassword()));
+        data.setTruststorePassword(encryptRemoteServerCredential(data.getTruststorePassword()));
+    }
+
+    /**
+     * Encrypts credentials for storage in log4j2.properties based on HIDE_SECRETS flag.
+     * 
+     * @param secretValue the credential to potentially encrypt
+     * @return encrypted credential if HIDE_SECRETS=true, plain text if HIDE_SECRETS=false
+     * @throws ConfigurationException if encryption fails when HIDE_SECRETS is enabled
+     */
+    private String encryptRemoteServerCredential(String secretValue) throws ConfigurationException {
+
+        if (StringUtils.isBlank(secretValue)) {
+            return StringUtils.EMPTY;
+        }
+        if (secretValue.startsWith("$secret{") && secretValue.endsWith("}")) {
+            // If the secret is already encrypted using CipherTool, return it as is.
+            return secretValue;
+        }
+        if (!Boolean.parseBoolean(RemoteLoggingConfigDataHolder.getInstance().getServerConfigurationService()
+                .getFirstProperty(LoggingConstants.REMOTE_LOGGING_HIDE_SECRETS))) {
+            return secretValue;
+        }
+        try {
+            return CryptoUtil.getDefaultCryptoUtil()
+                    .encryptAndBase64Encode(secretValue.getBytes(StandardCharsets.UTF_8));
+        } catch (CryptoException e) {
+            throw new ConfigurationException("Error while adding the secret", e);
+        }
+    }
 
     private void logAuditForConfigUpdate(String url, String appenderName) {
 
@@ -301,6 +346,13 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
                 }
                 return null;
             }
+            if (Boolean.parseBoolean(RemoteLoggingConfigDataHolder.getInstance().getServerConfigurationService()
+                    .getFirstProperty(LoggingConstants.REMOTE_LOGGING_HIDE_SECRETS))) {
+                // Hide secrets in API responses when HIDE_SECRETS=true
+                data.setPassword(StringUtils.EMPTY);
+                data.setKeystorePassword(StringUtils.EMPTY);
+                data.setTruststorePassword(StringUtils.EMPTY);
+            }
             return data;
         } catch (RegistryException e) {
             throw new ConfigurationException(e);
@@ -363,11 +415,11 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         }
         data.setConnectTimeoutMillis(timeout);
         data.setUsername(resource.getProperty(LoggingConstants.USERNAME));
-        data.setPassword(resource.getProperty(LoggingConstants.PASSWORD));
+        data.setPassword(getDecryptedSecret(resource, LoggingConstants.PASSWORD));
         data.setKeystoreLocation(resource.getProperty(LoggingConstants.KEYSTORE_LOCATION));
-        data.setKeystorePassword(resource.getProperty(LoggingConstants.KEYSTORE_PASSWORD));
+        data.setKeystorePassword(getDecryptedSecret(resource, LoggingConstants.KEYSTORE_PASSWORD));
         data.setTruststoreLocation(resource.getProperty(LoggingConstants.TRUSTSTORE_LOCATION));
-        data.setTruststorePassword(resource.getProperty(LoggingConstants.TRUSTSTORE_PASSWORD));
+        data.setTruststorePassword(getDecryptedSecret(resource, LoggingConstants.TRUSTSTORE_PASSWORD));
         String verifyHostname = resource.getProperty(LoggingConstants.VERIFY_HOSTNAME);
         data.setVerifyHostname(Boolean.parseBoolean(verifyHostname));
         data.setLogType(resource.getProperty(LoggingConstants.LOG_TYPE));
@@ -504,21 +556,77 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     }
 
     private Resource getResourceFromRemoteServerLoggerData(RemoteServerLoggerData data, Registry registry,
-                                                           String logType) throws RegistryException {
+                                                           String logType) throws RegistryException, ConfigurationException {
 
         Resource resource = registry.newResource();
         resource.addProperty(LoggingConstants.URL, data.getUrl());
         resource.addProperty(LoggingConstants.USERNAME, data.getUsername());
-        resource.addProperty(LoggingConstants.PASSWORD, data.getPassword());
+        resource.addProperty(LoggingConstants.PASSWORD,
+                getEncryptedSecret(data.getPassword(), LoggingConstants.PASSWORD));
         resource.addProperty(LoggingConstants.KEYSTORE_LOCATION, data.getKeystoreLocation());
-        resource.addProperty(LoggingConstants.KEYSTORE_PASSWORD, data.getKeystorePassword());
+        resource.addProperty(LoggingConstants.KEYSTORE_PASSWORD,
+                getEncryptedSecret(data.getKeystorePassword(), LoggingConstants.KEYSTORE_PASSWORD));
         resource.addProperty(LoggingConstants.TRUSTSTORE_LOCATION, data.getTruststoreLocation());
-        resource.addProperty(LoggingConstants.TRUSTSTORE_PASSWORD, data.getTruststorePassword());
+        resource.addProperty(LoggingConstants.TRUSTSTORE_PASSWORD,
+                getEncryptedSecret(data.getTruststorePassword(), LoggingConstants.TRUSTSTORE_PASSWORD));
         resource.addProperty(LoggingConstants.VERIFY_HOSTNAME, String.valueOf(data.isVerifyHostname()));
         resource.addProperty(LoggingConstants.LOG_TYPE, logType);
         resource.addProperty(LoggingConstants.CONNECT_TIMEOUT_MILLIS, data.getConnectTimeoutMillis());
         resource.addProperty(LoggingConstants.CONNECTION_TIMEOUT, data.getConnectTimeoutMillis());
         return resource;
+    }
+
+    /**
+     * Encrypts credentials for Registry storage based on ENABLE_ENCRYPTION flag.
+     * 
+     * @param secretValue the credential to potentially encrypt
+     * @param name the name of the credential for error reporting
+     * @return encrypted credential if ENABLE_ENCRYPTION=true, plain text if ENABLE_ENCRYPTION=false
+     * @throws ConfigurationException if encryption fails when ENABLE_ENCRYPTION is enabled
+     */
+    private String getEncryptedSecret(String secretValue, String name) throws  ConfigurationException {
+
+        if (StringUtils.isBlank(secretValue)) {
+            return StringUtils.EMPTY;
+        }
+        if (!Boolean.parseBoolean(RemoteLoggingConfigDataHolder.getInstance().getServerConfigurationService()
+                .getFirstProperty(LoggingConstants.REMOTE_LOGGING_ENABLE_ENCRYPTION))) {
+            return secretValue;
+        }
+        try {
+            return CryptoUtil.getDefaultCryptoUtil().encryptAndBase64Encode(
+                    secretValue.getBytes(StandardCharsets.UTF_8));
+        } catch (CryptoException e) {
+            throw new ConfigurationException("Error while adding the secret : " + name, e);
+        }
+    }
+
+    /**
+     * Decrypts credentials from Registry storage based on ENABLE_ENCRYPTION flag.
+     * 
+     * @param resource the Registry resource containing the credential
+     * @param name the name of the credential property
+     * @return decrypted credential if ENABLE_ENCRYPTION=true, plain text if ENABLE_ENCRYPTION=false
+     */
+    private String getDecryptedSecret(Resource resource, String name) {
+
+        String secretValue = resource.getProperty(name);
+        if (StringUtils.isBlank(secretValue)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Empty or blank secret value found for property: " + name);
+            }
+            return StringUtils.EMPTY;
+        }
+        if (!Boolean.parseBoolean(RemoteLoggingConfigDataHolder.getInstance().getServerConfigurationService()
+                .getFirstProperty(LoggingConstants.REMOTE_LOGGING_ENABLE_ENCRYPTION))) {
+            return secretValue;
+        }
+        try {
+            return new String(CryptoUtil.getDefaultCryptoUtil().base64DecodeAndDecrypt(
+                    secretValue), StandardCharsets.UTF_8);
+        } catch (CryptoException e) {
+            return StringUtils.EMPTY;
+        }
     }
 
     private void resetRemoteServerConfigInRegistry(String appenderName) throws ConfigurationException {

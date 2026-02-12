@@ -102,4 +102,7 @@ public final class LoggingConstants {
     public static final String CARBON = "CARBON";
     public static final String API = "API";
     public static final String LOG_TYPE = "logType";
+
+    public static final String REMOTE_LOGGING_HIDE_SECRETS = "RemoteLogging.HideSecrets";
+    public static final String REMOTE_LOGGING_ENABLE_ENCRYPTION = "RemoteLogging.EnableEncryption";
 }

@@ -19,6 +19,7 @@
 package org.wso2.carbon.logging.service.internal;
 
 import org.apache.axis2.clustering.ClusteringAgent;
+import org.wso2.carbon.base.api.ServerConfigurationService;
 import org.wso2.carbon.logging.service.RemoteLoggingConfigService;
 import org.wso2.carbon.registry.core.service.RegistryService;
 
@@ -31,6 +32,7 @@ public class RemoteLoggingConfigDataHolder {
     private RegistryService registryService;
     private RemoteLoggingConfigService remoteLoggingConfigService;
     private ClusteringAgent clusteringAgent;
+    private ServerConfigurationService serverConfigurationService;
 
     private RemoteLoggingConfigDataHolder() {
 
@@ -75,5 +77,21 @@ public class RemoteLoggingConfigDataHolder {
     public void setClusteringAgent(ClusteringAgent clusteringAgent) {
 
         this.clusteringAgent = clusteringAgent;
+    }
+
+    /**
+     * ServerConfigurationService setter
+     */
+    public void setServerConfigurationService(ServerConfigurationService serverConfigurationService) {
+
+        this.serverConfigurationService = serverConfigurationService;
+    }
+
+    /**
+     * ServerConfigurationService getter
+     */
+    public ServerConfigurationService getServerConfigurationService() {
+
+        return serverConfigurationService;
     }
 }
