@@ -73,7 +73,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.3</version>
+                <version>3.2.5</version>
+                <configuration>
+                    <argLine>${argLine} -Xms512m -Xmx1024m</argLine>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -97,6 +100,9 @@
                             javax.xml.namespace; version=0.0.0,
                             *;resolution:=optional,
                         </Import-Package>
+                        <Provide-Capability>
+                            osgi.service;objectClass=org.wso2.carbon.event.core.EventBroker
+                        </Provide-Capability>
                         <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                 </configuration>
