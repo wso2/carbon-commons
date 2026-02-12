@@ -604,6 +604,9 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
         String secretValue = resource.getProperty(name);
         if (StringUtils.isBlank(secretValue)) {
+            if (log.isDebugEnabled()) {
+                log.debug("Empty or blank secret value found for property: " + name);
+            }
             return StringUtils.EMPTY;
         }
         if (!Boolean.parseBoolean(RemoteLoggingConfigDataHolder.getInstance().getServerConfigurationService()
