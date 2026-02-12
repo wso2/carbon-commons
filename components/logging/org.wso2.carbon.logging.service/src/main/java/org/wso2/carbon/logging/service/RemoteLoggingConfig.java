@@ -27,6 +27,7 @@ import org.apache.commons.configuration2.io.FileHandler;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.osgi.annotation.bundle.Capability;
 import org.wso2.carbon.CarbonConstants;
 import org.wso2.carbon.context.CarbonContext;
 import org.wso2.carbon.core.util.CryptoException;
@@ -51,6 +52,13 @@ import java.util.Optional;
 /**
  * This is the Admin service used for configuring the remote server logging configurations
  */
+@Capability(
+        namespace = "osgi.service",
+        attribute = {
+                "objectClass=org.wso2.carbon.logging.service.RemoteLoggingConfigService",
+                "service.scope=singleton"
+        }
+)
 public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     private static final Log log = LogFactory.getLog(RemoteLoggingConfig.class);

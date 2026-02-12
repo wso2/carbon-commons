@@ -41,6 +41,10 @@
             <artifactId>org.eclipse.equinox.cm</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.coordinator</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.eclipse.platform</groupId>
             <artifactId>org.eclipse.equinox.event</artifactId>
         </dependency>
@@ -71,6 +75,7 @@
                             <bundles>
                                 <bundleDef>org.wso2.carbon.commons:org.wso2.carbon.logging.updater</bundleDef>
                                 <bundleDef>org.eclipse.platform:org.eclipse.equinox.cm</bundleDef>
+                                <bundleDef>org.osgi:org.osgi.service.coordinator</bundleDef>
                                 <bundleDef>org.eclipse.platform:org.eclipse.equinox.event</bundleDef>
                             </bundles>
                         </configuration>
