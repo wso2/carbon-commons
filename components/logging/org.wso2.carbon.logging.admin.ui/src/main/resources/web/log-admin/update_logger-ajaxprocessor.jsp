@@ -24,6 +24,10 @@
 <%@ page import="org.wso2.carbon.CarbonConstants" %>
 <fmt:bundle basename="org.wso2.carbon.logging.admin.ui.i18n.Resources">
     <%
+        if (!"post".equalsIgnoreCase(request.getMethod())) {
+            response.sendError(405);
+            return;
+        }
         response.setHeader("Cache-Control", "no-cache");
         String loggerName = request.getParameter("loggerName");
         String logLevel = request.getParameter("logLevel");
