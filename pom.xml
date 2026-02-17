@@ -2013,7 +2013,7 @@
         <version.org.wso2.orbit.javax.activation>1.1.1.wso2v2</version.org.wso2.orbit.javax.activation>
         <jacoco.maven.plugin.version>0.8.12</jacoco.maven.plugin.version>
         <pax.logging.api.version>1.11.0</pax.logging.api.version>
-        <pax.logging.api.version.range>[1.11.0,2.2.0)</pax.logging.api.version.range>
+        <pax.logging.api.version.range>[1.11.0,2.3.0)</pax.logging.api.version.range>
         <import.package.version.commons.logging>[1.2.0,2.0.0)</import.package.version.commons.logging>
         <import.package.version.apache.logging.log4j>[2.12.4,3.0.0)</import.package.version.apache.logging.log4j>
         <version.eclipse.equinox.cm>1.6.300</version.eclipse.equinox.cm>
