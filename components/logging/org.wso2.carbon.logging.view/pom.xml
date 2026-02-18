@@ -3,7 +3,7 @@
     <parent>
         <artifactId>logging</artifactId>
         <groupId>org.wso2.carbon.commons</groupId>
-        <version>4.14.1</version>
+        <version>4.14.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
