@@ -29,7 +29,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jaxen.JaxenException;
 import org.wso2.carbon.reporting.api.ReportingException;
-import sun.reflect.generics.tree.ReturnType;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
