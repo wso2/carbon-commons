@@ -1837,7 +1837,7 @@
         <xmlunit.version>1.1</xmlunit.version>
 
         <jgit.version>2.3.1.wso2v2</jgit.version>
-        <jsch.version>0.1.49.wso2v1</jsch.version>
+        <jsch.version>0.1.54</jsch.version>
         <gitblit.version>1.2.0.wso2v1</gitblit.version>
 
         <!-- for maven release process -->
