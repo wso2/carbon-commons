@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.wso2.carbon.commons</groupId>
         <artifactId>logging</artifactId>
-        <version>4.14.1-SNAPSHOT</version>
+        <version>4.14.2-SNAPSHOT</version>
 	<relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -36,7 +36,6 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
-                <version>1.4.0</version> 
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
