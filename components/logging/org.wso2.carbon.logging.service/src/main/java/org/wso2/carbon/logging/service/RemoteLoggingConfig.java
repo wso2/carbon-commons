@@ -89,6 +89,17 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     public void addRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest)
             throws IOException, ConfigurationException {
 
+        addRemoteServerConfig(data, Boolean.valueOf(isPeriodicalSyncRequest));
+    }
+
+    @Override
+    public void addRemoteServerConfig(RemoteServerLoggerData data, Boolean isPeriodicalSyncRequest)
+            throws IOException, ConfigurationException {
+
+        if (isPeriodicalSyncRequest == null) {
+            isPeriodicalSyncRequest = false;
+        }
+
         if (data == null) {
             throw new ConfigurationException("Data cannot be null");
         }
@@ -294,6 +305,17 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     public void resetRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest)
             throws IOException, ConfigurationException {
+
+        resetRemoteServerConfig(data, Boolean.valueOf(isPeriodicalSyncRequest));
+    }
+
+    @Override
+    public void resetRemoteServerConfig(RemoteServerLoggerData data, Boolean isPeriodicalSyncRequest)
+            throws IOException, ConfigurationException {
+
+        if (isPeriodicalSyncRequest == null) {
+            isPeriodicalSyncRequest = false;
+        }
 
         String logType = data.getLogType();
         String appenderName = LoggingConstants.AUDIT_LOGFILE;
