@@ -46,16 +46,6 @@ public interface RemoteLoggingConfigService {
      * @throws IOException              If an error occurs while writing to the log4j2.properties file.
      * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
      */
-    void addRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest) throws IOException, ConfigurationException;
-
-    /**
-     * This method is used to add a remote server configuration.
-     *
-     * @param data                      RemoteServerLoggerData object that contains the remote server configuration.
-     * @param isPeriodicalSyncRequest   Boolean value to indicate whether the request is a periodical sync request or not.
-     * @throws IOException              If an error occurs while writing to the log4j2.properties file.
-     * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
-     */
     void addRemoteServerConfig(RemoteServerLoggerData data, Boolean isPeriodicalSyncRequest) throws IOException, ConfigurationException;
 
     /**
@@ -66,16 +56,6 @@ public interface RemoteLoggingConfigService {
      * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
      */
     void resetRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException;
-
-    /**
-     * This method is used to reset the remote server configurations to the defaults.
-     *
-     * @param data                      RemoteServerLoggerData object that contains the remote server configuration.
-     * @param isPeriodicalSyncRequest   Boolean value to indicate whether the request is a periodical sync request or not.
-     * @throws IOException              If an error occurs while writing to the log4j2.properties file.
-     * @throws ConfigurationException   If an error occurs while loading the log4j2.properties file.
-     */
-    void resetRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest) throws IOException, ConfigurationException;
 
     /**
      * This method is used to reset the remote server configurations to the defaults.

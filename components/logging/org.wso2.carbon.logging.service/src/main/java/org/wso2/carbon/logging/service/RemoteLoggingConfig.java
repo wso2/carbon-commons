@@ -86,13 +86,6 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     }
 
     @Override
-    public void addRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest)
-            throws IOException, ConfigurationException {
-
-        addRemoteServerConfig(data, Boolean.valueOf(isPeriodicalSyncRequest));
-    }
-
-    @Override
     public void addRemoteServerConfig(RemoteServerLoggerData data, Boolean isPeriodicalSyncRequest)
             throws IOException, ConfigurationException {
 
@@ -301,12 +294,6 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     public void resetRemoteServerConfig(RemoteServerLoggerData data) throws IOException, ConfigurationException {
 
         resetRemoteServerConfig(data, false);
-    }
-
-    public void resetRemoteServerConfig(RemoteServerLoggerData data, boolean isPeriodicalSyncRequest)
-            throws IOException, ConfigurationException {
-
-        resetRemoteServerConfig(data, Boolean.valueOf(isPeriodicalSyncRequest));
     }
 
     @Override
