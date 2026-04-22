@@ -41,6 +41,7 @@ public final class Log4j2PropertiesEditor {
     private static final Log log = LogFactory.getLog(Log4j2PropertiesEditor.class);
 
     private static final String APPENDER_PREFIX = "appender.";
+    private static final String APPENDER_LIST_KEY = "appenders";
     private static final String KV_SEPARATOR = "=";
 
     private Log4j2PropertiesEditor() {
@@ -260,7 +261,46 @@ public final class Log4j2PropertiesEditor {
         }
 
         lines.addAll(insertionIndex, toInsert);
+        addAppenderToAppendersList(lines, appenderName);
         writeLinesAtomically(file.toPath(), lines);
+    }
+
+    /**
+     * Ensures the given appender name is present in the {@code appenders} list property.
+     * If the property does not exist, it is appended at the end of the lines.
+     * If the appender is already listed, the lines are left unchanged.
+     *
+     * @param lines the current lines of the properties file (modified in place)
+     * @param appenderName the appender name to add
+     */
+    private static void addAppenderToAppendersList(ArrayList<String> lines, String appenderName) {
+        for (int i = 0; i < lines.size(); i++) {
+            String trimmed = lines.get(i).trim();
+            if (trimmed.isEmpty() || isCommentLine(trimmed)) {
+                continue;
+            }
+            int sep = findKeyValueSeparator(trimmed);
+            if (sep <= 0) {
+                continue;
+            }
+            String key = trimmed.substring(0, sep).trim();
+            if (key.equals(APPENDER_LIST_KEY)) {
+                String value = trimmed.substring(sep + 1).trim();
+                // Check if already listed (comma-separated)
+                String[] parts = value.split(",");
+                for (String part : parts) {
+                    if (part.trim().equals(appenderName)) {
+                        return; // already present, nothing to do
+                    }
+                }
+                // Append the new appender name
+                String newValue = value.isEmpty() ? appenderName : appenderName + ", " + value;
+                lines.set(i, key + " = " + newValue);
+                return;
+            }
+        }
+        // Property not found; add it at the end
+        lines.add(APPENDER_LIST_KEY + " = " + appenderName);
     }
 
     private static int getInsertionIndex(ArrayList<String> lines, int originalFirstIdx) {

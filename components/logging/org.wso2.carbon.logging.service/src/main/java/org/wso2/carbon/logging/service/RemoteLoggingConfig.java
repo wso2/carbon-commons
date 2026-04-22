@@ -239,7 +239,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
     /**
      * Encrypts remote server credentials for storage in log4j2.properties.
      * Encryption is controlled by REMOTE_LOGGING_HIDE_SECRETS flag.
-     * 
+     *
      * @param data RemoteServerLoggerData containing credentials to encrypt for log4j2.properties
      * @throws ConfigurationException if encryption fails when HIDE_SECRETS is enabled
      */
@@ -252,7 +252,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     /**
      * Encrypts credentials for storage in log4j2.properties based on HIDE_SECRETS flag.
-     * 
+     *
      * @param secretValue the credential to potentially encrypt
      * @return encrypted credential if HIDE_SECRETS=true, plain text if HIDE_SECRETS=false
      * @throws ConfigurationException if encryption fails when HIDE_SECRETS is enabled
@@ -600,7 +600,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     /**
      * Encrypts credentials for Registry storage based on ENABLE_ENCRYPTION flag.
-     * 
+     *
      * @param secretValue the credential to potentially encrypt
      * @param name the name of the credential for error reporting
      * @return encrypted credential if ENABLE_ENCRYPTION=true, plain text if ENABLE_ENCRYPTION=false
@@ -625,7 +625,7 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
 
     /**
      * Decrypts credentials from Registry storage based on ENABLE_ENCRYPTION flag.
-     * 
+     *
      * @param resource the Registry resource containing the credential
      * @param name the name of the credential property
      * @return decrypted credential if ENABLE_ENCRYPTION=true, plain text if ENABLE_ENCRYPTION=false
@@ -766,7 +766,10 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         for (RemoteServerLoggerData remoteServerLoggerData : dataList) {
             try {
                 if (isReset) {
-                    resetRemoteServerConfig(remoteServerLoggerData, true);
+                    String url = remoteServerLoggerData.getUrl();
+                    if (StringUtils.isNotBlank(url)) {
+                        resetRemoteServerConfig(remoteServerLoggerData, true);
+                    }
                 } else {
                     addRemoteServerConfig(remoteServerLoggerData, true);
                 }
