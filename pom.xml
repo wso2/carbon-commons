@@ -2033,7 +2033,7 @@
         <version.osgi.service.coordinator>1.0.2</version.osgi.service.coordinator>
         <import.package.version.osgi.service.cm>[1.6.0, 1.7.0)</import.package.version.osgi.service.cm>
         <version.eclipse.equinox.event>1.5.100</version.eclipse.equinox.event>
-        <commons.configuration2.version>2.10.1</commons.configuration2.version>
+        <commons.configuration2.version>2.15.0</commons.configuration2.version>
         <import.package.version.commons.configuration2>[2.0.0,3.0.0)</import.package.version.commons.configuration2>
     </properties>
 
