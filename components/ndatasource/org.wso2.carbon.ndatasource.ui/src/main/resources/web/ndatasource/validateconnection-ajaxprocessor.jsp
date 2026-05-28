@@ -3,7 +3,6 @@
 <%@ page import="org.wso2.carbon.ndatasource.ui.stub.core.services.xsd.WSDataSourceMetaInfo"%>
 <%@ page import="org.owasp.encoder.Encode" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
-<%@ page import="org.owasp.encoder.Encode" %>
 <%
     if (!"post".equalsIgnoreCase(request.getMethod())) {
         response.sendError(405);
@@ -23,7 +22,11 @@
 <%=canAdd%>
 <%
 } catch (Throwable e) {
-%><%=Encode.forHtml(e.getMessage())%><%
+				String errorMessage = e.getMessage();
+				if (errorMessage == null || errorMessage.isEmpty()) {
+					errorMessage = e.getClass().getSimpleName();
+				}
+%><%=Encode.forJavaScript(errorMessage)%><%
         }
     }
 %>

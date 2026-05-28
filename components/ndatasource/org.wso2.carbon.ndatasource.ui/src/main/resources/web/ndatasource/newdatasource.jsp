@@ -271,7 +271,7 @@ function addDataSourceProperties() {
 
 function populateDataSourceProperties() {
 	//edit mode
-	var str = '<%=givenDataSourceProps%>'; 
+	var str = '<%=Encode.forJavaScript(givenDataSourceProps == null ? "" : givenDataSourceProps)%>'; 
 	if (str == 'null' && document.getElementById('dsproviderProperties') != null) {
 		str = document.getElementById('dsproviderProperties').value;
 	}
@@ -288,7 +288,7 @@ function populateDataSourceProperties() {
 
 function populateJNDIProperties() {
 	//edit mode
-	var str = '<%=givenJNDIProps%>'; 
+	var str = '<%=Encode.forJavaScript(givenJNDIProps == null ? "" : givenJNDIProps)%>'; 
 	if (str == 'null' && document.getElementById('jndiProperties') != null) {
 		str = document.getElementById('jndiProperties').value;
 	}
