@@ -20,6 +20,7 @@
 <%@ page import="org.wso2.carbon.ndatasource.ui.NDataSourceAdminServiceClient"%>
 <%@ page import="org.wso2.carbon.ndatasource.ui.NDataSourceHelper"%>
 <%@ page import="org.wso2.carbon.ndatasource.ui.stub.core.services.xsd.WSDataSourceMetaInfo"%>
+<%@ page import="org.owasp.encoder.Encode" %>
 
 <script type="text/javascript" src="global-params.js"></script>
 <script type="text/javascript" src="dscommon.js"></script>
@@ -59,7 +60,7 @@
 				
 		<script type="text/javascript">
               jQuery(document).ready(function() {
-                  CARBON.showWarningDialog("<fmt:message key="cannot.add.a.data.source"/>"+"<fmt:message key="a.datasource.with.name"/> " + '<%=name%>' + " <fmt:message key="already.exists"/>", 
+                  CARBON.showWarningDialog("<fmt:message key="cannot.add.a.data.source"/>"+"<fmt:message key="a.datasource.with.name"/> " + '<%=Encode.forJavaScript(name == null ? "" : name)%>' + " <fmt:message key="already.exists"/>", 
                   	function() {
                   	 goBackOnePage();
                       }, function () {
@@ -86,10 +87,14 @@
 				<%}
 			} catch (Throwable e) {
 				request.getSession().setAttribute("", e);
+				String errorMessage = e.getMessage();
+				if (errorMessage == null || errorMessage.isEmpty()) {
+					errorMessage = e.getClass().getSimpleName();
+				}
 	%>
 	<script type="text/javascript">
         jQuery(document).ready(function() {
-            CARBON.showErrorDialog("<%=e.getMessage()%>", function () {
+            CARBON.showErrorDialog("<%=Encode.forJavaScript(errorMessage)%>", function () {
                 goBackOnePage();
             }, function () {
                 goBackOnePage();

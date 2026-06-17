@@ -167,10 +167,14 @@ public class NDataSourceHelper {
 					handleException(bundle.getString("ds.url.cannotfound.msg"));
 				}
 				String username = sanitizeInput(request.getParameter("username"));
-				try {
-					username = URLDecoder.decode(username, "UTF-8");
-				} catch (UnsupportedEncodingException e) {
-					throw new IllegalArgumentException("Username does not conform to UTF-8 charset");
+				if (username == null) {
+					username = "";
+				} else {
+					try {
+						username = URLDecoder.decode(username, "UTF-8");
+					} catch (UnsupportedEncodingException e) {
+						throw new IllegalArgumentException("Username does not conform to UTF-8 charset");
+					}
 				}
 				String password = null;
 				
@@ -180,10 +184,14 @@ public class NDataSourceHelper {
 					changePassword = (changePassword == null || changePassword.equals("false")) ? "false" : "true";
 					if (Boolean.parseBoolean(changePassword)) {
 						password = request.getParameter("newPassword");
-						try {
-							password = URLDecoder.decode(password, "UTF-8");
-						} catch (UnsupportedEncodingException e) {
-							throw new IllegalArgumentException("Password does not conform to UTF-8 charset");
+						if (password != null) {
+							try {
+								password = URLDecoder.decode(password, "UTF-8");
+							} catch (UnsupportedEncodingException e) {
+								throw new IllegalArgumentException("Password does not conform to UTF-8 charset");
+							}
+						} else {
+							password = "";
 						}
 					} else {
 						WSDataSourceInfo dataSourceInfo = client.getDataSource(request.getParameter("dsName"));
@@ -194,10 +202,14 @@ public class NDataSourceHelper {
 					}
 				} else {
 					password = request.getParameter("password");
-					try {
-						password = URLDecoder.decode(password, "UTF-8");
-					} catch (UnsupportedEncodingException e) {
-						throw new IllegalArgumentException("Password does not conform to UTF-8 charset");
+					if (password != null) {
+						try {
+							password = URLDecoder.decode(password, "UTF-8");
+						} catch (UnsupportedEncodingException e) {
+							throw new IllegalArgumentException("Password does not conform to UTF-8 charset");
+						}
+					} else {
+						password = "";
 					}
 				}
 
