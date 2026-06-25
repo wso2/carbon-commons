@@ -39,6 +39,7 @@ import org.wso2.carbon.logging.service.util.Utils;
 import org.wso2.carbon.utils.ServerConstants;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -48,6 +49,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 
 /**
  * This is the Admin service used for configuring the remote server logging configurations
@@ -544,8 +546,21 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
         Map<String, String> appenderProperties = Utils.getKeyValuesOfAppender(logPropFile, appenderName);
 
         if (remoteServerLoggerData == null) {
-            return !LoggingConstants.ROLLING_FILE.equals(appenderProperties.get(
-                    LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.TYPE_SUFFIX));
+            String typeProp = appenderProperties.get(
+                    LoggingConstants.APPENDER_PREFIX + appenderName + LoggingConstants.TYPE_SUFFIX);
+
+            if (typeProp == null) {
+                /*
+                 * If the configuration block is missing, check if the appender is still declared
+                 * in the top-level 'appenders' list. If not, it was completely removed, so no reset is needed.
+                 * If the appender is declared but missing its configuration, proceed with the standard
+                 * reset path to restore it.
+                 */
+                if (!isAppenderListed(logPropFile, appenderName)) {
+                    return false;
+                }
+            }
+            return !LoggingConstants.ROLLING_FILE.equals(typeProp);
         }
 
         return !remoteServerLoggerData.getUrl().equals(appenderProperties.get(
@@ -616,5 +631,23 @@ public class RemoteLoggingConfig implements RemoteLoggingConfigService {
             logType = LogType.CARBON;
         }
         return logType;
+    }
+
+    private static boolean isAppenderListed(File propFile, String appenderName) throws IOException {
+
+        try (FileInputStream fis = new FileInputStream(propFile)) {
+            Properties properties = new Properties();
+            properties.load(fis);
+            String appendersValue = properties.getProperty("appenders");
+            if (StringUtils.isBlank(appendersValue)) {
+                return false;
+            }
+            for (String token : StringUtils.split(appendersValue, ',')) {
+                if (appenderName.equals(token.trim())) {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
