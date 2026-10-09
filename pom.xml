@@ -1906,7 +1906,7 @@
         <orbit.version.commons.lang>2.6.0.wso2v1</orbit.version.commons.lang>
         <commons.beanutils.wso2.version>1.8.0.wso2v1</commons.beanutils.wso2.version>
         <commons-collections.version>3.2</commons-collections.version>
-        <commons-beanutils.version>1.8.0</commons-beanutils.version>
+        <commons-beanutils.version>1.11.0</commons-beanutils.version>
         <commons-collections.version>3.2</commons-collections.version>
         <commons-digester.version>1.8</commons-digester.version>
         <commons-dbcp.version>1.2.2</commons-dbcp.version>
